@@ -1,0 +1,15 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm --version)",
+      "Bash(node -e ' *)",
+      "Bash(npm run *)",
+      "Bash(python -c ' *)",
+      "Bash(pip install *)",
+      "Bash(python -c \"import fitz; print\\('fitz ok, version:', fitz.__version__\\)\")"
+    ],
+    "additionalDirectories": [
+      "C:\\Users\\57318\\Desktop\\LANDING PALMIRA"
+    ]
+  }
+}

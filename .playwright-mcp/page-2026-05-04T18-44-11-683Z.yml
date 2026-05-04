@@ -1,0 +1,827 @@
+- generic [active] [ref=e1]:
+  - main [ref=e2]:
+    - generic [ref=e4]:
+      - generic [ref=e6]:
+        - img [ref=e7]
+        - generic [ref=e8]: QUEENS
+      - paragraph [ref=e9]: La belleza que mereces
+    - generic [ref=e12]:
+      - link "Queens Cosmetics inicio" [ref=e13] [cursor=pointer]:
+        - /url: "#hero"
+        - generic [ref=e14]:
+          - img "Queens Cosmetics" [ref=e15]
+          - generic [ref=e16]: QUEENS
+      - navigation [ref=e17]:
+        - link "Catálogo" [ref=e18] [cursor=pointer]:
+          - /url: "#catalogo"
+          - text: Catálogo
+        - link "Cat. Virtual" [ref=e19] [cursor=pointer]:
+          - /url: "#catalogo-digital"
+          - text: Cat. Virtual
+        - link "Por qué Queens" [ref=e20] [cursor=pointer]:
+          - /url: "#por-que"
+          - text: Por qué Queens
+        - link "Galería" [ref=e21] [cursor=pointer]:
+          - /url: "#galeria"
+          - text: Galería
+        - link "Ubicación" [ref=e22] [cursor=pointer]:
+          - /url: "#ubicacion"
+          - text: Ubicación
+      - generic [ref=e23]:
+        - button "Carrito con 0 items" [ref=e24]:
+          - img [ref=e25]
+        - link "Visítanos" [ref=e28] [cursor=pointer]:
+          - /url: https://wa.me/573148677230?text=Hola%20Queens!%20%F0%9F%91%91%20Quiero%20visitar%20la%20tienda%20en%20Unicentro%20Palmira%2C%20tienen%20disponibilidad%3F
+    - generic [ref=e29]:
+      - img "Cosméticos premium Queens" [ref=e31]
+      - generic [ref=e34]:
+        - generic [ref=e38]: Cosmética Premium · Palmira
+        - heading "La belleza que mereces" [level=1] [ref=e40]:
+          - generic [ref=e41]: La belleza
+          - generic [ref=e42]: que mereces
+        - paragraph [ref=e44]: Cosméticos premium seleccionados para ti. Maquillaje, skincare, esmaltes y línea capilar en Local 128, Unicentro Palmira.
+        - generic [ref=e46]:
+          - link "Ver catálogo" [ref=e47] [cursor=pointer]:
+            - /url: "#catalogo"
+            - img [ref=e48]
+            - text: Ver catálogo
+          - link "Escríbenos" [ref=e51] [cursor=pointer]:
+            - /url: https://wa.me/573148677230?text=Hola%20Queens!%20%F0%9F%91%91%20Quiero%20visitar%20la%20tienda%20en%20Unicentro%20Palmira%2C%20tienen%20disponibilidad%3F
+            - img [ref=e52]
+            - text: Escríbenos
+      - link "Ver catálogo" [ref=e54] [cursor=pointer]:
+        - /url: "#catalogo"
+        - img [ref=e55]
+    - generic [ref=e58]:
+      - generic [ref=e59]:
+        - generic [ref=e60]: Cosmética Premium
+        - img [ref=e61]
+      - generic [ref=e64]:
+        - generic [ref=e65]: Envíos a todo Palmira
+        - img [ref=e66]
+      - generic [ref=e69]:
+        - generic [ref=e70]: Productos 100% Originales
+        - img [ref=e71]
+      - generic [ref=e74]:
+        - generic [ref=e75]: Asesoría Personalizada
+        - img [ref=e76]
+      - generic [ref=e79]:
+        - generic [ref=e80]: Muestras Gratis
+        - img [ref=e81]
+      - generic [ref=e84]:
+        - generic [ref=e85]: Pagos Seguros
+        - img [ref=e86]
+      - generic [ref=e89]:
+        - generic [ref=e90]: Cosmética Premium
+        - img [ref=e91]
+      - generic [ref=e94]:
+        - generic [ref=e95]: Envíos a todo Palmira
+        - img [ref=e96]
+      - generic [ref=e99]:
+        - generic [ref=e100]: Productos 100% Originales
+        - img [ref=e101]
+      - generic [ref=e104]:
+        - generic [ref=e105]: Asesoría Personalizada
+        - img [ref=e106]
+      - generic [ref=e109]:
+        - generic [ref=e110]: Muestras Gratis
+        - img [ref=e111]
+      - generic [ref=e114]:
+        - generic [ref=e115]: Pagos Seguros
+        - img [ref=e116]
+    - generic [ref=e122]:
+      - generic [ref=e123]:
+        - generic [ref=e124]: Nuestro catálogo
+        - heading "Productos que te harán sentir única" [level=2] [ref=e125]
+        - paragraph [ref=e126]: Explora por categoría y agrega tus favoritos al carrito. Confirmamos tu pedido por WhatsApp.
+      - generic [ref=e127]:
+        - tablist [ref=e129]:
+          - tab "Labiales" [selected] [ref=e130]
+          - tab "Rostro" [ref=e131]
+          - tab "Ojos" [ref=e132]
+          - tab "Skin Care" [ref=e133]
+          - tab "Uñas" [ref=e134]
+          - tab "Línea Capilar" [ref=e135]
+        - tabpanel "Labiales" [ref=e136]:
+          - paragraph [ref=e138]: Besos de seda y color
+          - generic [ref=e139]:
+            - article [ref=e140]:
+              - generic [ref=e141]:
+                - img "Maybelline Superstay Matte Ink" [ref=e142]
+                - generic [ref=e144]: Bestseller
+              - generic [ref=e146]:
+                - heading "Maybelline Superstay Matte Ink" [level=3] [ref=e147]
+                - paragraph [ref=e148]: Labial líquido mate de hasta 16 horas.
+                - generic [ref=e149]:
+                  - combobox "Seleccionar tono" [ref=e150]:
+                    - option "Elige un tono…" [selected]
+                    - option "Dreamer"
+                    - option "Lover"
+                    - option "Pioneer"
+                    - option "Seductress"
+                    - option "Inspirer"
+                    - option "Mover"
+                    - option "Revolutionary"
+                    - option "Artist"
+                  - img
+                - generic [ref=e151]:
+                  - generic [ref=e152]: $ 46.000
+                  - button "Agregar Maybelline Superstay Matte Ink al carrito" [disabled] [ref=e153]:
+                    - img [ref=e154]
+                - paragraph [ref=e155]: Elige un tono para agregar
+            - article [ref=e156]:
+              - img "Spiral Gloss Montoc" [ref=e158]
+              - generic [ref=e160]:
+                - heading "Spiral Gloss Montoc" [level=3] [ref=e161]
+                - paragraph [ref=e162]: Gloss cremoso con acabado brillante.
+                - generic [ref=e163]:
+                  - button "Susu" [ref=e164]
+                  - button "Yasu" [ref=e165]
+                  - button "Tacey" [ref=e166]
+                  - button "Kafu" [ref=e167]
+                - generic [ref=e168]:
+                  - generic [ref=e169]: $ 24.000
+                  - button "Agregar Spiral Gloss Montoc al carrito" [disabled] [ref=e170]:
+                    - img [ref=e171]
+                - paragraph [ref=e172]: Elige un tono para agregar
+            - article [ref=e173]:
+              - img "GlowFusion Montoc" [ref=e175]
+              - generic [ref=e177]:
+                - heading "GlowFusion Montoc" [level=3] [ref=e178]
+                - paragraph [ref=e179]: Gloss hidratante de larga duración.
+                - generic [ref=e180]:
+                  - button "Alba" [ref=e181]
+                  - button "Lyra" [ref=e182]
+                  - button "Ariel" [ref=e183]
+                  - button "Aurora" [ref=e184]
+                - generic [ref=e185]:
+                  - generic [ref=e186]: $ 25.000
+                  - button "Agregar GlowFusion Montoc al carrito" [disabled] [ref=e187]:
+                    - img [ref=e188]
+                - paragraph [ref=e189]: Elige un tono para agregar
+            - article [ref=e190]:
+              - img "Labial Vogue Resist 14H" [ref=e192]
+              - generic [ref=e194]:
+                - heading "Labial Vogue Resist 14H" [level=3] [ref=e195]
+                - paragraph [ref=e196]: Labial líquido mate de larga duración.
+                - generic [ref=e197]:
+                  - button "Elegante" [ref=e198]
+                  - button "Fabulosa" [ref=e199]
+                  - button "Encantadora" [ref=e200]
+                  - button "Valiente" [ref=e201]
+                  - button "Apasionada" [ref=e202]
+                  - button "Atrevida" [ref=e203]
+                - generic [ref=e204]:
+                  - generic [ref=e205]: $ 23.000
+                  - button "Agregar Labial Vogue Resist 14H al carrito" [disabled] [ref=e206]:
+                    - img [ref=e207]
+                - paragraph [ref=e208]: Elige un tono para agregar
+            - article [ref=e209]:
+              - generic [ref=e210]:
+                - img "Lip Gloss Atenea 1stScene" [ref=e211]
+                - generic [ref=e213]: Nuevo
+              - generic [ref=e215]:
+                - heading "Lip Gloss Atenea 1stScene" [level=3] [ref=e216]
+                - paragraph [ref=e217]: Gloss brillante con efecto plumping.
+                - generic [ref=e218]:
+                  - button "Coco" [ref=e219]
+                  - button "Shell Coral" [ref=e220]
+                  - button "Cool Ice" [ref=e221]
+                  - button "Coral Haze" [ref=e222]
+                  - button "Bright Pink" [ref=e223]
+                - generic [ref=e224]:
+                  - generic [ref=e225]: $ 30.000
+                  - button "Agregar Lip Gloss Atenea 1stScene al carrito" [disabled] [ref=e226]:
+                    - img [ref=e227]
+                - paragraph [ref=e228]: Elige un tono para agregar
+            - article [ref=e229]:
+              - img "Labial Líquido Mate Feels Ruby Rose" [ref=e231]
+              - generic [ref=e233]:
+                - heading "Labial Líquido Mate Feels Ruby Rose" [level=3] [ref=e234]
+                - paragraph [ref=e235]: Acabado mate aterciopelado de larga duración.
+                - generic [ref=e236]:
+                  - button "129" [ref=e237]
+                  - button "356" [ref=e238]
+                  - button "362" [ref=e239]
+                  - button "366" [ref=e240]
+                  - button "376" [ref=e241]
+                  - button "066" [ref=e242]
+                - generic [ref=e243]:
+                  - generic [ref=e244]: $ 11.000
+                  - button "Agregar Labial Líquido Mate Feels Ruby Rose al carrito" [disabled] [ref=e245]:
+                    - img [ref=e246]
+                - paragraph [ref=e247]: Elige un tono para agregar
+            - article [ref=e248]:
+              - img "Labial Duo Fells Ruby Rose" [ref=e250]
+              - generic [ref=e252]:
+                - heading "Labial Duo Fells Ruby Rose" [level=3] [ref=e253]
+                - paragraph [ref=e254]: Labial en barra con acabado satinado.
+                - generic [ref=e255]:
+                  - combobox "Seleccionar tono" [ref=e256]:
+                    - option "Elige un tono…" [selected]
+                    - option "312"
+                    - option "302"
+                    - option "316"
+                    - option "360"
+                    - option "311"
+                    - option "362"
+                    - option "361"
+                    - option "211"
+                  - img
+                - generic [ref=e257]:
+                  - generic [ref=e258]: $ 12.500
+                  - button "Agregar Labial Duo Fells Ruby Rose al carrito" [disabled] [ref=e259]:
+                    - img [ref=e260]
+                - paragraph [ref=e261]: Elige un tono para agregar
+            - article [ref=e262]:
+              - img "Labial en Barra 3b" [ref=e264]
+              - generic [ref=e266]:
+                - heading "Labial en Barra 3b" [level=3] [ref=e267]
+                - paragraph [ref=e268]: Labial cremoso clásico.
+                - generic [ref=e269]:
+                  - button "Aventura" [ref=e270]
+                  - button "Frutos Rojos" [ref=e271]
+                  - button "Nude" [ref=e272]
+                  - button "Pimienta" [ref=e273]
+                  - button "Rosa" [ref=e274]
+                  - button "Vital" [ref=e275]
+                - generic [ref=e276]:
+                  - generic [ref=e277]: $ 13.000
+                  - button "Agregar Labial en Barra 3b al carrito" [disabled] [ref=e278]:
+                    - img [ref=e279]
+                - paragraph [ref=e280]: Elige un tono para agregar
+            - article [ref=e281]:
+              - img "Tinta Lip Tatto Engol" [ref=e283]
+              - generic [ref=e285]:
+                - heading "Tinta Lip Tatto Engol" [level=3] [ref=e286]
+                - paragraph [ref=e287]: Tinte buildable para un look natural y duradero.
+                - generic [ref=e288]:
+                  - button "01" [ref=e289]
+                  - button "02" [ref=e290]
+                  - button "03" [ref=e291]
+                  - button "04" [ref=e292]
+                - generic [ref=e293]:
+                  - generic [ref=e294]: $ 5.000
+                  - button "Agregar Tinta Lip Tatto Engol al carrito" [disabled] [ref=e295]:
+                    - img [ref=e296]
+                - paragraph [ref=e297]: Elige un tono para agregar
+            - article [ref=e298]:
+              - img "Brillo Labial Essence Juicy Bomb" [ref=e300]
+              - generic [ref=e302]:
+                - heading "Brillo Labial Essence Juicy Bomb" [level=3] [ref=e303]
+                - paragraph [ref=e304]: Brillo jugoso con aroma afrutado.
+                - generic [ref=e305]:
+                  - button "Lovely" [ref=e306]
+                  - button "Witty" [ref=e307]
+                  - button "Proud" [ref=e308]
+                  - button "Poppin" [ref=e309]
+                - generic [ref=e310]:
+                  - generic [ref=e311]: $ 9.000
+                  - button "Agregar Brillo Labial Essence Juicy Bomb al carrito" [disabled] [ref=e312]:
+                    - img [ref=e313]
+                - paragraph [ref=e314]: Elige un tono para agregar
+            - article [ref=e315]:
+              - img "Labial Mate Nailen en Barra" [ref=e317]
+              - generic [ref=e319]:
+                - heading "Labial Mate Nailen en Barra" [level=3] [ref=e320]
+                - paragraph [ref=e321]: Labial en barra acabado mate.
+                - generic [ref=e322]:
+                  - button "Aventura" [ref=e323]
+                  - button "Frutos Rojos" [ref=e324]
+                  - button "Nude" [ref=e325]
+                  - button "Pimienta" [ref=e326]
+                  - button "Rosa" [ref=e327]
+                  - button "Vital" [ref=e328]
+                - generic [ref=e329]:
+                  - generic [ref=e330]: $ 10.700
+                  - button "Agregar Labial Mate Nailen en Barra al carrito" [disabled] [ref=e331]:
+                    - img [ref=e332]
+                - paragraph [ref=e333]: Elige un tono para agregar
+            - article [ref=e334]:
+              - img "Samy Labial Líquido Matte" [ref=e336]
+              - generic [ref=e338]:
+                - heading "Samy Labial Líquido Matte" [level=3] [ref=e339]
+                - paragraph [ref=e340]: Labial líquido mate de larga duración.
+                - generic [ref=e341]:
+                  - button "01" [ref=e342]
+                  - button "02" [ref=e343]
+                  - button "03" [ref=e344]
+                  - button "06" [ref=e345]
+                  - button "08" [ref=e346]
+                  - button "12" [ref=e347]
+                  - button "15" [ref=e348]
+                - generic [ref=e349]:
+                  - generic [ref=e350]: $ 10.800
+                  - button "Agregar Samy Labial Líquido Matte al carrito" [disabled] [ref=e351]:
+                    - img [ref=e352]
+                - paragraph [ref=e353]: Elige un tono para agregar
+    - generic [ref=e355]:
+      - generic [ref=e356]: Catálogo virtual
+      - heading "Explora todo nuestro catálogo" [level=2] [ref=e357]
+      - paragraph [ref=e358]: Revisa todos nuestros productos, marcas y precios actualizados en nuestro catálogo digital. ¡Pídelo directo por WhatsApp!
+      - generic [ref=e359]:
+        - button "Ver página 1" [ref=e360]:
+          - img "Catálogo Queens página 1" [ref=e361]
+          - img [ref=e363]
+        - button "Ver página 3" [ref=e366]:
+          - img "Catálogo Queens página 3" [ref=e367]
+          - img [ref=e369]
+        - button "Ver página 4" [ref=e372]:
+          - img "Catálogo Queens página 4" [ref=e373]
+          - img [ref=e375]
+        - button "Ver página 5" [ref=e378]:
+          - img "Catálogo Queens página 5" [ref=e379]
+          - img [ref=e381]
+        - button "Ver página 6" [ref=e384]:
+          - img "Catálogo Queens página 6" [ref=e385]
+          - img [ref=e387]
+      - button "Ver catálogo completo" [ref=e390]:
+        - img [ref=e391]
+        - text: Ver catálogo completo
+    - generic [ref=e394]:
+      - generic [ref=e395]:
+        - generic [ref=e396]: Por qué elegir Queens
+        - heading "Más que cosméticos, una experiencia" [level=2] [ref=e397]
+      - generic [ref=e398]:
+        - generic [ref=e399]:
+          - img [ref=e401]
+          - heading "100% Originales" [level=3] [ref=e404]
+          - paragraph [ref=e405]: Solo trabajamos con marcas auténticas y distribuidores autorizados. Sin réplicas.
+          - generic [ref=e406]: "01"
+        - generic [ref=e407]:
+          - img [ref=e409]
+          - heading "Asesoría Personalizada" [level=3] [ref=e412]
+          - paragraph [ref=e413]: Te ayudamos a encontrar el tono, producto y rutina perfecta para ti.
+          - generic [ref=e414]: "02"
+        - generic [ref=e415]:
+          - img [ref=e417]
+          - heading "Envíos el Mismo Día" [level=3] [ref=e422]
+          - paragraph [ref=e423]: En Palmira recibes tu pedido en pocas horas. También enviamos a todo el Valle.
+          - generic [ref=e424]: "03"
+        - generic [ref=e425]:
+          - img [ref=e427]
+          - heading "Muestras Gratis" [level=3] [ref=e431]
+          - paragraph [ref=e432]: En tu primera compra incluimos muestras de nuestros productos más pedidos.
+          - generic [ref=e433]: "04"
+        - generic [ref=e434]:
+          - img [ref=e436]
+          - heading "Pagos Seguros" [level=3] [ref=e438]
+          - paragraph [ref=e439]: Nequi, Daviplata, transferencia bancaria o efectivo. Como tú prefieras.
+          - generic [ref=e440]: "05"
+    - generic [ref=e442]:
+      - generic [ref=e443]:
+        - generic [ref=e444]: Galería
+        - heading "Momentos Queens" [level=2] [ref=e445]:
+          - text: Momentos
+          - emphasis [ref=e446]: Queens
+      - generic [ref=e447]:
+        - generic [ref=e448]:
+          - img "Labiales exhibidos" [ref=e449]
+          - paragraph [ref=e452]: Nuestra colección signature
+        - img "Mujer con maquillaje dorado" [ref=e454]
+        - img "Productos rosa y dorado" [ref=e457]
+        - img "Brochas premium" [ref=e460]
+        - img "Aplicación de maquillaje" [ref=e463]
+    - generic [ref=e465]:
+      - generic [ref=e467]:
+        - generic [ref=e468]: Testimonios
+        - heading "Lo que dicen nuestras clientes" [level=2] [ref=e469]
+      - generic [ref=e470]:
+        - generic [ref=e471]:
+          - generic [ref=e472]:
+            - generic [ref=e473]:
+              - generic [ref=e474]: VR
+              - generic [ref=e475]:
+                - paragraph [ref=e476]: Valentina R.
+                - generic [ref=e477]:
+                  - img [ref=e478]
+                  - img [ref=e480]
+                  - img [ref=e482]
+                  - img [ref=e484]
+                  - img [ref=e486]
+            - paragraph [ref=e488]: Mi base favorita la conseguí aquí. Me asesoraron perfecto con el tono y ahora es mi base holy grail. 💕
+          - generic [ref=e489]:
+            - generic [ref=e490]:
+              - generic [ref=e491]: CM
+              - generic [ref=e492]:
+                - paragraph [ref=e493]: Camila M.
+                - generic [ref=e494]:
+                  - img [ref=e495]
+                  - img [ref=e497]
+                  - img [ref=e499]
+                  - img [ref=e501]
+                  - img [ref=e503]
+            - paragraph [ref=e505]: El labial matte dura TODO el día. Compré 3 tonos más. La atención es divina, se sienten como amigas.
+          - generic [ref=e506]:
+            - generic [ref=e507]:
+              - generic [ref=e508]: SP
+              - generic [ref=e509]:
+                - paragraph [ref=e510]: Sofía P.
+                - generic [ref=e511]:
+                  - img [ref=e512]
+                  - img [ref=e514]
+                  - img [ref=e516]
+                  - img [ref=e518]
+                  - img [ref=e520]
+            - paragraph [ref=e522]: La paleta Smoky Night es INSANA. Pigmentada, sin fall out. Definitivamente volveré por más.
+          - generic [ref=e523]:
+            - generic [ref=e524]:
+              - generic [ref=e525]: DL
+              - generic [ref=e526]:
+                - paragraph [ref=e527]: Daniela L.
+                - generic [ref=e528]:
+                  - img [ref=e529]
+                  - img [ref=e531]
+                  - img [ref=e533]
+                  - img [ref=e535]
+                  - img [ref=e537]
+            - paragraph [ref=e539]: El serum de vitamina C me cambió la piel en dos semanas. Ahora todo mi skincare lo compro aquí.
+          - generic [ref=e540]:
+            - generic [ref=e541]:
+              - generic [ref=e542]: VR
+              - generic [ref=e543]:
+                - paragraph [ref=e544]: Valentina R.
+                - generic [ref=e545]:
+                  - img [ref=e546]
+                  - img [ref=e548]
+                  - img [ref=e550]
+                  - img [ref=e552]
+                  - img [ref=e554]
+            - paragraph [ref=e556]: Mi base favorita la conseguí aquí. Me asesoraron perfecto con el tono y ahora es mi base holy grail. 💕
+          - generic [ref=e557]:
+            - generic [ref=e558]:
+              - generic [ref=e559]: CM
+              - generic [ref=e560]:
+                - paragraph [ref=e561]: Camila M.
+                - generic [ref=e562]:
+                  - img [ref=e563]
+                  - img [ref=e565]
+                  - img [ref=e567]
+                  - img [ref=e569]
+                  - img [ref=e571]
+            - paragraph [ref=e573]: El labial matte dura TODO el día. Compré 3 tonos más. La atención es divina, se sienten como amigas.
+          - generic [ref=e574]:
+            - generic [ref=e575]:
+              - generic [ref=e576]: SP
+              - generic [ref=e577]:
+                - paragraph [ref=e578]: Sofía P.
+                - generic [ref=e579]:
+                  - img [ref=e580]
+                  - img [ref=e582]
+                  - img [ref=e584]
+                  - img [ref=e586]
+                  - img [ref=e588]
+            - paragraph [ref=e590]: La paleta Smoky Night es INSANA. Pigmentada, sin fall out. Definitivamente volveré por más.
+          - generic [ref=e591]:
+            - generic [ref=e592]:
+              - generic [ref=e593]: DL
+              - generic [ref=e594]:
+                - paragraph [ref=e595]: Daniela L.
+                - generic [ref=e596]:
+                  - img [ref=e597]
+                  - img [ref=e599]
+                  - img [ref=e601]
+                  - img [ref=e603]
+                  - img [ref=e605]
+            - paragraph [ref=e607]: El serum de vitamina C me cambió la piel en dos semanas. Ahora todo mi skincare lo compro aquí.
+          - generic [ref=e608]:
+            - generic [ref=e609]:
+              - generic [ref=e610]: VR
+              - generic [ref=e611]:
+                - paragraph [ref=e612]: Valentina R.
+                - generic [ref=e613]:
+                  - img [ref=e614]
+                  - img [ref=e616]
+                  - img [ref=e618]
+                  - img [ref=e620]
+                  - img [ref=e622]
+            - paragraph [ref=e624]: Mi base favorita la conseguí aquí. Me asesoraron perfecto con el tono y ahora es mi base holy grail. 💕
+          - generic [ref=e625]:
+            - generic [ref=e626]:
+              - generic [ref=e627]: CM
+              - generic [ref=e628]:
+                - paragraph [ref=e629]: Camila M.
+                - generic [ref=e630]:
+                  - img [ref=e631]
+                  - img [ref=e633]
+                  - img [ref=e635]
+                  - img [ref=e637]
+                  - img [ref=e639]
+            - paragraph [ref=e641]: El labial matte dura TODO el día. Compré 3 tonos más. La atención es divina, se sienten como amigas.
+          - generic [ref=e642]:
+            - generic [ref=e643]:
+              - generic [ref=e644]: SP
+              - generic [ref=e645]:
+                - paragraph [ref=e646]: Sofía P.
+                - generic [ref=e647]:
+                  - img [ref=e648]
+                  - img [ref=e650]
+                  - img [ref=e652]
+                  - img [ref=e654]
+                  - img [ref=e656]
+            - paragraph [ref=e658]: La paleta Smoky Night es INSANA. Pigmentada, sin fall out. Definitivamente volveré por más.
+          - generic [ref=e659]:
+            - generic [ref=e660]:
+              - generic [ref=e661]: DL
+              - generic [ref=e662]:
+                - paragraph [ref=e663]: Daniela L.
+                - generic [ref=e664]:
+                  - img [ref=e665]
+                  - img [ref=e667]
+                  - img [ref=e669]
+                  - img [ref=e671]
+                  - img [ref=e673]
+            - paragraph [ref=e675]: El serum de vitamina C me cambió la piel en dos semanas. Ahora todo mi skincare lo compro aquí.
+        - generic [ref=e676]:
+          - generic [ref=e677]:
+            - generic [ref=e678]:
+              - generic [ref=e679]: IG
+              - generic [ref=e680]:
+                - paragraph [ref=e681]: Isabella G.
+                - generic [ref=e682]:
+                  - img [ref=e683]
+                  - img [ref=e685]
+                  - img [ref=e687]
+                  - img [ref=e689]
+                  - img [ref=e691]
+            - paragraph [ref=e693]: Queens Essence es mi nueva fragancia signature. Todos me preguntan qué me eché.
+          - generic [ref=e694]:
+            - generic [ref=e695]:
+              - generic [ref=e696]: MT
+              - generic [ref=e697]:
+                - paragraph [ref=e698]: Mariana T.
+                - generic [ref=e699]:
+                  - img [ref=e700]
+                  - img [ref=e702]
+                  - img [ref=e704]
+                  - img [ref=e706]
+                  - img [ref=e708]
+            - paragraph [ref=e710]: El espejo LED es una joyita. Llegó al día siguiente. Super recomendado.
+          - generic [ref=e711]:
+            - generic [ref=e712]:
+              - generic [ref=e713]: JS
+              - generic [ref=e714]:
+                - paragraph [ref=e715]: Juliana S.
+                - generic [ref=e716]:
+                  - img [ref=e717]
+                  - img [ref=e719]
+                  - img [ref=e721]
+                  - img [ref=e723]
+                  - img [ref=e725]
+            - paragraph [ref=e727]: Me encantaron las muestras que me regalaron en mi primera compra. Detalles así enamoran.
+          - generic [ref=e728]:
+            - generic [ref=e729]:
+              - generic [ref=e730]: NC
+              - generic [ref=e731]:
+                - paragraph [ref=e732]: Natalia C.
+                - generic [ref=e733]:
+                  - img [ref=e734]
+                  - img [ref=e736]
+                  - img [ref=e738]
+                  - img [ref=e740]
+                  - img [ref=e742]
+            - paragraph [ref=e744]: El set de brochas vale cada peso. Son sedosas y duran. Servicio 10/10.
+          - generic [ref=e745]:
+            - generic [ref=e746]:
+              - generic [ref=e747]: IG
+              - generic [ref=e748]:
+                - paragraph [ref=e749]: Isabella G.
+                - generic [ref=e750]:
+                  - img [ref=e751]
+                  - img [ref=e753]
+                  - img [ref=e755]
+                  - img [ref=e757]
+                  - img [ref=e759]
+            - paragraph [ref=e761]: Queens Essence es mi nueva fragancia signature. Todos me preguntan qué me eché.
+          - generic [ref=e762]:
+            - generic [ref=e763]:
+              - generic [ref=e764]: MT
+              - generic [ref=e765]:
+                - paragraph [ref=e766]: Mariana T.
+                - generic [ref=e767]:
+                  - img [ref=e768]
+                  - img [ref=e770]
+                  - img [ref=e772]
+                  - img [ref=e774]
+                  - img [ref=e776]
+            - paragraph [ref=e778]: El espejo LED es una joyita. Llegó al día siguiente. Super recomendado.
+          - generic [ref=e779]:
+            - generic [ref=e780]:
+              - generic [ref=e781]: JS
+              - generic [ref=e782]:
+                - paragraph [ref=e783]: Juliana S.
+                - generic [ref=e784]:
+                  - img [ref=e785]
+                  - img [ref=e787]
+                  - img [ref=e789]
+                  - img [ref=e791]
+                  - img [ref=e793]
+            - paragraph [ref=e795]: Me encantaron las muestras que me regalaron en mi primera compra. Detalles así enamoran.
+          - generic [ref=e796]:
+            - generic [ref=e797]:
+              - generic [ref=e798]: NC
+              - generic [ref=e799]:
+                - paragraph [ref=e800]: Natalia C.
+                - generic [ref=e801]:
+                  - img [ref=e802]
+                  - img [ref=e804]
+                  - img [ref=e806]
+                  - img [ref=e808]
+                  - img [ref=e810]
+            - paragraph [ref=e812]: El set de brochas vale cada peso. Son sedosas y duran. Servicio 10/10.
+          - generic [ref=e813]:
+            - generic [ref=e814]:
+              - generic [ref=e815]: IG
+              - generic [ref=e816]:
+                - paragraph [ref=e817]: Isabella G.
+                - generic [ref=e818]:
+                  - img [ref=e819]
+                  - img [ref=e821]
+                  - img [ref=e823]
+                  - img [ref=e825]
+                  - img [ref=e827]
+            - paragraph [ref=e829]: Queens Essence es mi nueva fragancia signature. Todos me preguntan qué me eché.
+          - generic [ref=e830]:
+            - generic [ref=e831]:
+              - generic [ref=e832]: MT
+              - generic [ref=e833]:
+                - paragraph [ref=e834]: Mariana T.
+                - generic [ref=e835]:
+                  - img [ref=e836]
+                  - img [ref=e838]
+                  - img [ref=e840]
+                  - img [ref=e842]
+                  - img [ref=e844]
+            - paragraph [ref=e846]: El espejo LED es una joyita. Llegó al día siguiente. Super recomendado.
+          - generic [ref=e847]:
+            - generic [ref=e848]:
+              - generic [ref=e849]: JS
+              - generic [ref=e850]:
+                - paragraph [ref=e851]: Juliana S.
+                - generic [ref=e852]:
+                  - img [ref=e853]
+                  - img [ref=e855]
+                  - img [ref=e857]
+                  - img [ref=e859]
+                  - img [ref=e861]
+            - paragraph [ref=e863]: Me encantaron las muestras que me regalaron en mi primera compra. Detalles así enamoran.
+          - generic [ref=e864]:
+            - generic [ref=e865]:
+              - generic [ref=e866]: NC
+              - generic [ref=e867]:
+                - paragraph [ref=e868]: Natalia C.
+                - generic [ref=e869]:
+                  - img [ref=e870]
+                  - img [ref=e872]
+                  - img [ref=e874]
+                  - img [ref=e876]
+                  - img [ref=e878]
+            - paragraph [ref=e880]: El set de brochas vale cada peso. Son sedosas y duran. Servicio 10/10.
+    - generic [ref=e882]:
+      - generic [ref=e883]:
+        - generic [ref=e884]: Preguntas frecuentes
+        - heading "Preguntas frecuentes" [level=2] [ref=e885]
+      - generic [ref=e886]:
+        - heading "¿Sus productos son originales?" [level=3] [ref=e888]:
+          - button "¿Sus productos son originales?" [ref=e889]:
+            - text: ¿Sus productos son originales?
+            - img [ref=e890]
+        - heading "¿Hacen envíos fuera de Palmira?" [level=3] [ref=e893]:
+          - button "¿Hacen envíos fuera de Palmira?" [ref=e894]:
+            - text: ¿Hacen envíos fuera de Palmira?
+            - img [ref=e895]
+        - heading "¿Qué métodos de pago aceptan?" [level=3] [ref=e898]:
+          - button "¿Qué métodos de pago aceptan?" [ref=e899]:
+            - text: ¿Qué métodos de pago aceptan?
+            - img [ref=e900]
+        - heading "¿Puedo devolver un producto?" [level=3] [ref=e903]:
+          - button "¿Puedo devolver un producto?" [ref=e904]:
+            - text: ¿Puedo devolver un producto?
+            - img [ref=e905]
+        - heading "¿Ofrecen asesoría personalizada?" [level=3] [ref=e908]:
+          - button "¿Ofrecen asesoría personalizada?" [ref=e909]:
+            - text: ¿Ofrecen asesoría personalizada?
+            - img [ref=e910]
+        - heading "¿Tienen descuentos o promociones?" [level=3] [ref=e913]:
+          - button "¿Tienen descuentos o promociones?" [ref=e914]:
+            - text: ¿Tienen descuentos o promociones?
+            - img [ref=e915]
+    - generic [ref=e919]:
+      - img [ref=e920]
+      - heading "¿Lista para encontrar tu próximo favorito?" [level=2] [ref=e923]
+      - paragraph [ref=e924]: Escríbenos por WhatsApp y te asesoramos con los productos perfectos para ti. Local 128, Unicentro Palmira.
+      - generic [ref=e925]:
+        - link "Asesoría gratis por WhatsApp" [ref=e926] [cursor=pointer]:
+          - /url: https://wa.me/573148677230?text=Hola%20Queens!%20%F0%9F%91%91%20Me%20gustar%C3%ADa%20una%20asesor%C3%ADa%20personalizada%20de%20productos.
+          - img [ref=e927]
+          - text: Asesoría gratis por WhatsApp
+        - link "Ver catálogo" [ref=e929] [cursor=pointer]:
+          - /url: "#catalogo"
+    - generic [ref=e931]:
+      - generic [ref=e932]:
+        - generic [ref=e933]: Visítanos
+        - heading "Nuestra tienda en Unicentro Palmira" [level=2] [ref=e934]:
+          - text: Nuestra tienda en
+          - emphasis [ref=e935]: Unicentro Palmira
+        - paragraph [ref=e936]: Ven y vive la experiencia Queens en persona. Te esperamos con un espacio pensado para consentirte.
+      - generic [ref=e937]:
+        - iframe [ref=e939]
+        - generic [ref=e940]:
+          - generic [ref=e941]:
+            - img [ref=e943]
+            - generic [ref=e946]:
+              - heading "Dirección" [level=3] [ref=e947]
+              - paragraph [ref=e948]: Local 128, Unicentro Palmira
+              - paragraph [ref=e949]: Valle del Cauca, Colombia
+          - generic [ref=e950]:
+            - img [ref=e952]
+            - generic [ref=e955]:
+              - heading "Horario" [level=3] [ref=e956]
+              - paragraph [ref=e957]: Lunes a Domingo
+              - paragraph [ref=e958]: 10:00 AM – 8:00 PM
+          - generic [ref=e959]:
+            - img [ref=e961]
+            - generic [ref=e963]:
+              - heading "Contacto" [level=3] [ref=e964]
+              - paragraph [ref=e965]: "WhatsApp: +57 314 867 7230"
+          - link "Síguenos @queenscosmeticss" [ref=e966] [cursor=pointer]:
+            - /url: https://www.instagram.com/queenscosmeticss/
+            - generic [ref=e967]:
+              - img [ref=e969]
+              - generic [ref=e972]:
+                - heading "Síguenos" [level=3] [ref=e973]
+                - paragraph [ref=e974]: "@queenscosmeticss"
+          - link "Confirmar disponibilidad" [ref=e976] [cursor=pointer]:
+            - /url: https://wa.me/573148677230?text=Hola%20Queens!%20%F0%9F%91%91%20Quiero%20visitar%20la%20tienda%20en%20Unicentro%20Palmira%2C%20tienen%20disponibilidad%3F
+            - img [ref=e977]
+            - text: Confirmar disponibilidad
+    - generic [ref=e981]:
+      - generic [ref=e982]:
+        - generic [ref=e983]:
+          - generic [ref=e984]:
+            - img "Queens Cosmetics" [ref=e985]
+            - generic [ref=e986]: QUEENS
+          - paragraph [ref=e987]: Cosmética premium en Palmira. La belleza que mereces, con la calidad que te cuidas.
+          - generic [ref=e988]:
+            - link "Instagram" [ref=e989] [cursor=pointer]:
+              - /url: https://www.instagram.com/queenscosmeticss/
+              - img [ref=e990]
+            - link "WhatsApp" [ref=e993] [cursor=pointer]:
+              - /url: https://wa.me/573148677230?text=Hola%20Queens!%20%F0%9F%91%91%20Me%20gustar%C3%ADa%20recibir%20informaci%C3%B3n%20sobre%20sus%20productos.
+              - img [ref=e994]
+        - generic [ref=e996]:
+          - heading "Tienda" [level=4] [ref=e997]
+          - list [ref=e998]:
+            - listitem [ref=e999]:
+              - link "Catálogo" [ref=e1000] [cursor=pointer]:
+                - /url: "#catalogo"
+            - listitem [ref=e1001]:
+              - link "Labiales" [ref=e1002] [cursor=pointer]:
+                - /url: "#catalogo"
+            - listitem [ref=e1003]:
+              - link "Skincare" [ref=e1004] [cursor=pointer]:
+                - /url: "#catalogo"
+            - listitem [ref=e1005]:
+              - link "Fragancias" [ref=e1006] [cursor=pointer]:
+                - /url: "#catalogo"
+            - listitem [ref=e1007]:
+              - link "Accesorios" [ref=e1008] [cursor=pointer]:
+                - /url: "#catalogo"
+        - generic [ref=e1009]:
+          - heading "Queens" [level=4] [ref=e1010]
+          - list [ref=e1011]:
+            - listitem [ref=e1012]:
+              - link "Por qué Queens" [ref=e1013] [cursor=pointer]:
+                - /url: "#por-que"
+            - listitem [ref=e1014]:
+              - link "Galería" [ref=e1015] [cursor=pointer]:
+                - /url: "#galeria"
+            - listitem [ref=e1016]:
+              - link "Testimonios" [ref=e1017] [cursor=pointer]:
+                - /url: "#por-que"
+            - listitem [ref=e1018]:
+              - link "Ubicación" [ref=e1019] [cursor=pointer]:
+                - /url: "#ubicacion"
+        - generic [ref=e1020]:
+          - heading "Contacto" [level=4] [ref=e1021]
+          - list [ref=e1022]:
+            - listitem [ref=e1023]:
+              - img [ref=e1024]
+              - generic [ref=e1027]: Local 128, Unicentro Palmira
+            - listitem [ref=e1028]:
+              - img [ref=e1029]
+              - link "+57 314 867 7230" [ref=e1031] [cursor=pointer]:
+                - /url: https://wa.me/573148677230?text=Hola%20Queens!%20%F0%9F%91%91%20Me%20gustar%C3%ADa%20recibir%20informaci%C3%B3n%20sobre%20sus%20productos.
+            - listitem [ref=e1032]:
+              - img [ref=e1033]
+              - link "@queenscosmeticss" [ref=e1036] [cursor=pointer]:
+                - /url: https://www.instagram.com/queenscosmeticss/
+      - heading "QUEENS" [level=3] [ref=e1038]
+      - generic [ref=e1039]:
+        - paragraph [ref=e1040]: © 2026 Queens Cosmetics. Todos los derechos reservados.
+        - paragraph [ref=e1041]: Palmira, Valle del Cauca · Colombia 🇨🇴
+    - link "Chatear por WhatsApp" [ref=e1043] [cursor=pointer]:
+      - /url: https://wa.me/573148677230?text=Hola%20Queens!%20%F0%9F%91%91%20Me%20gustar%C3%ADa%20recibir%20informaci%C3%B3n%20sobre%20sus%20productos.
+      - img [ref=e1045]
+  - button "Open Next.js Dev Tools" [ref=e1052] [cursor=pointer]:
+    - img [ref=e1053]
