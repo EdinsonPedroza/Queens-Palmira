@@ -1,0 +1,1327 @@
+- generic [ref=e1]:
+  - main [ref=e2]:
+    - generic [ref=e12]:
+      - link "Queens Cosmetics inicio" [ref=e13] [cursor=pointer]:
+        - /url: "#hero"
+        - generic [ref=e14]:
+          - img "Queens Cosmetics" [ref=e15]
+          - generic [ref=e16]: QUEENS
+      - navigation [ref=e17]:
+        - link "Catálogo" [ref=e18] [cursor=pointer]:
+          - /url: "#catalogo"
+          - text: Catálogo
+        - link "Cat. Virtual" [ref=e19] [cursor=pointer]:
+          - /url: "#catalogo-digital"
+          - text: Cat. Virtual
+        - link "Por qué Queens" [ref=e20] [cursor=pointer]:
+          - /url: "#por-que"
+          - text: Por qué Queens
+        - link "Galería" [ref=e21] [cursor=pointer]:
+          - /url: "#galeria"
+          - text: Galería
+        - link "Ubicación" [ref=e22] [cursor=pointer]:
+          - /url: "#ubicacion"
+          - text: Ubicación
+      - generic [ref=e23]:
+        - button "Carrito con 0 items" [ref=e24]:
+          - img [ref=e25]
+        - link "Visítanos" [ref=e28] [cursor=pointer]:
+          - /url: https://wa.me/573148677230?text=Hola%20Queens!%20%F0%9F%91%91%20Quiero%20visitar%20la%20tienda%20en%20Unicentro%20Palmira%2C%20tienen%20disponibilidad%3F
+    - generic [ref=e29]:
+      - img "Cosméticos premium Queens" [ref=e31]
+      - generic [ref=e34]:
+        - generic [ref=e38]: Cosmética Premium · Palmira
+        - heading "La belleza que mereces" [level=1] [ref=e40]:
+          - generic [ref=e41]: La belleza
+          - generic [ref=e42]: que mereces
+        - paragraph [ref=e44]: Cosméticos premium seleccionados para ti. Maquillaje, skincare, esmaltes y línea capilar en Local 128, Unicentro Palmira.
+        - generic [ref=e46]:
+          - link "Ver catálogo" [ref=e47] [cursor=pointer]:
+            - /url: "#catalogo"
+            - img [ref=e48]
+            - text: Ver catálogo
+          - link "Escríbenos" [ref=e51] [cursor=pointer]:
+            - /url: https://wa.me/573148677230?text=Hola%20Queens!%20%F0%9F%91%91%20Quiero%20visitar%20la%20tienda%20en%20Unicentro%20Palmira%2C%20tienen%20disponibilidad%3F
+            - img [ref=e52]
+            - text: Escríbenos
+      - link "Ver catálogo" [ref=e54] [cursor=pointer]:
+        - /url: "#catalogo"
+        - img [ref=e55]
+    - generic [ref=e58]:
+      - generic [ref=e59]:
+        - generic [ref=e60]: Cosmética Premium
+        - img [ref=e61]
+      - generic [ref=e64]:
+        - generic [ref=e65]: Envíos a todo Palmira
+        - img [ref=e66]
+      - generic [ref=e69]:
+        - generic [ref=e70]: Productos 100% Originales
+        - img [ref=e71]
+      - generic [ref=e74]:
+        - generic [ref=e75]: Asesoría Personalizada
+        - img [ref=e76]
+      - generic [ref=e79]:
+        - generic [ref=e80]: Muestras Gratis
+        - img [ref=e81]
+      - generic [ref=e84]:
+        - generic [ref=e85]: Pagos Seguros
+        - img [ref=e86]
+      - generic [ref=e89]:
+        - generic [ref=e90]: Cosmética Premium
+        - img [ref=e91]
+      - generic [ref=e94]:
+        - generic [ref=e95]: Envíos a todo Palmira
+        - img [ref=e96]
+      - generic [ref=e99]:
+        - generic [ref=e100]: Productos 100% Originales
+        - img [ref=e101]
+      - generic [ref=e104]:
+        - generic [ref=e105]: Asesoría Personalizada
+        - img [ref=e106]
+      - generic [ref=e109]:
+        - generic [ref=e110]: Muestras Gratis
+        - img [ref=e111]
+      - generic [ref=e114]:
+        - generic [ref=e115]: Pagos Seguros
+        - img [ref=e116]
+    - generic [ref=e122]:
+      - generic [ref=e123]:
+        - generic [ref=e124]: Nuestro catálogo
+        - heading "Productos que te harán sentir única" [level=2] [ref=e125]
+        - paragraph [ref=e126]: Explora por categoría y agrega tus favoritos al carrito. Confirmamos tu pedido por WhatsApp.
+      - generic [ref=e127]:
+        - tablist [ref=e129]:
+          - tab "Labiales" [ref=e130]
+          - tab "Rostro" [ref=e131]
+          - tab "Ojos" [ref=e132]
+          - tab "Skin Care" [ref=e133]
+          - tab "Uñas" [ref=e134]
+          - tab "Línea Capilar" [active] [selected] [ref=e135]
+        - tabpanel "Línea Capilar" [ref=e1547]:
+          - paragraph [ref=e1549]: Cabello de reina
+          - generic [ref=e1550]:
+            - article [ref=e1551]:
+              - generic [ref=e1552]:
+                - img "Salon In Liss Control" [ref=e1553]
+                - generic [ref=e1555]: Bestseller
+              - generic [ref=e1557]:
+                - heading "Salon In Liss Control" [level=3] [ref=e1558]
+                - paragraph [ref=e1559]: Shampoo y acondicionador alisador profesional antifrizz. Valor unitario.
+                - generic [ref=e1560]:
+                  - button "Shampoo" [ref=e1561]
+                  - button "Acondicionador" [ref=e1562]
+                - generic [ref=e1563]:
+                  - generic [ref=e1564]: $ 65.400
+                  - button "Agregar Salon In Liss Control al carrito" [disabled] [ref=e1565]:
+                    - img [ref=e1566]
+                - paragraph [ref=e1567]: Elige un tono para agregar
+            - article [ref=e1568]:
+              - img "Salon In Hydra Repair" [ref=e1570]
+              - generic [ref=e1572]:
+                - heading "Salon In Hydra Repair" [level=3] [ref=e1573]
+                - paragraph [ref=e1574]: Shampoo y acondicionador reparador para cabello dañado. Valor unitario.
+                - generic [ref=e1575]:
+                  - button "Shampoo" [ref=e1576]
+                  - button "Acondicionador" [ref=e1577]
+                - generic [ref=e1578]:
+                  - generic [ref=e1579]: $ 65.400
+                  - button "Agregar Salon In Hydra Repair al carrito" [disabled] [ref=e1580]:
+                    - img [ref=e1581]
+                - paragraph [ref=e1582]: Elige un tono para agregar
+            - article [ref=e1583]:
+              - img "Elvive Ácido Glicólico" [ref=e1585]
+              - generic [ref=e1587]:
+                - heading "Elvive Ácido Glicólico" [level=3] [ref=e1588]
+                - paragraph [ref=e1589]: Shampoo y acondicionador con ácido glicólico. Valor unitario.
+                - generic [ref=e1590]:
+                  - button "Shampoo" [ref=e1591]
+                  - button "Acondicionador" [ref=e1592]
+                - generic [ref=e1593]:
+                  - generic [ref=e1594]: $ 38.000
+                  - button "Agregar Elvive Ácido Glicólico al carrito" [disabled] [ref=e1595]:
+                    - img [ref=e1596]
+                - paragraph [ref=e1597]: Elige un tono para agregar
+            - article [ref=e1598]:
+              - img "Versatil Cebolla" [ref=e1600]
+              - generic [ref=e1602]:
+                - heading "Versatil Cebolla" [level=3] [ref=e1603]
+                - paragraph [ref=e1604]: Shampoo y acondicionador anticaída con cebolla. Valor unitario.
+                - generic [ref=e1605]:
+                  - button "Shampoo" [ref=e1606]
+                  - button "Acondicionador" [ref=e1607]
+                - generic [ref=e1608]:
+                  - generic [ref=e1609]: $ 28.000
+                  - button "Agregar Versatil Cebolla al carrito" [disabled] [ref=e1610]:
+                    - img [ref=e1611]
+                - paragraph [ref=e1612]: Elige un tono para agregar
+            - article [ref=e1613]:
+              - img "Versatil Equino" [ref=e1615]
+              - generic [ref=e1617]:
+                - heading "Versatil Equino" [level=3] [ref=e1618]
+                - paragraph [ref=e1619]: Shampoo y acondicionador fortalecedor con proteínas equinas. Valor unitario.
+                - generic [ref=e1620]:
+                  - button "Shampoo" [ref=e1621]
+                  - button "Acondicionador" [ref=e1622]
+                - generic [ref=e1623]:
+                  - generic [ref=e1624]: $ 28.000
+                  - button "Agregar Versatil Equino al carrito" [disabled] [ref=e1625]:
+                    - img [ref=e1626]
+                - paragraph [ref=e1627]: Elige un tono para agregar
+            - article [ref=e1628]:
+              - img "Versatil Protección Color" [ref=e1630]
+              - generic [ref=e1632]:
+                - heading "Versatil Protección Color" [level=3] [ref=e1633]
+                - paragraph [ref=e1634]: Shampoo y acondicionador protector de color. Valor unitario.
+                - generic [ref=e1635]:
+                  - button "Shampoo" [ref=e1636]
+                  - button "Acondicionador" [ref=e1637]
+                - generic [ref=e1638]:
+                  - generic [ref=e1639]: $ 28.000
+                  - button "Agregar Versatil Protección Color al carrito" [disabled] [ref=e1640]:
+                    - img [ref=e1641]
+                - paragraph [ref=e1642]: Elige un tono para agregar
+            - article [ref=e1643]:
+              - img "Shampoo Hialurónico Elvive L'Oréal" [ref=e1645]
+              - generic [ref=e1647]:
+                - heading "Shampoo Hialurónico Elvive L'Oréal" [level=3] [ref=e1648]
+                - paragraph [ref=e1649]: Shampoo con ácido hialurónico para hidratación profunda.
+                - generic [ref=e1650]:
+                  - generic [ref=e1651]: $ 45.000
+                  - button "Agregar Shampoo Hialurónico Elvive L'Oréal al carrito" [ref=e1652]:
+                    - img [ref=e1653]
+            - article [ref=e1654]:
+              - generic [ref=e1655]:
+                - img "Shampoo Absolut Repair L'Oréal Professionnel" [ref=e1656]
+                - generic [ref=e1658]: Nuevo
+              - generic [ref=e1660]:
+                - heading "Shampoo Absolut Repair L'Oréal Professionnel" [level=3] [ref=e1661]
+                - paragraph [ref=e1662]: Shampoo profesional de reparación intensa.
+                - generic [ref=e1663]:
+                  - generic [ref=e1664]: $ 95.000
+                  - button "Agregar Shampoo Absolut Repair L'Oréal Professionnel al carrito" [ref=e1665]:
+                    - img [ref=e1666]
+            - article [ref=e1667]:
+              - img "Shampoo Densificador Serioxyl Advanced L'Oréal" [ref=e1669]
+              - generic [ref=e1671]:
+                - heading "Shampoo Densificador Serioxyl Advanced L'Oréal" [level=3] [ref=e1672]
+                - paragraph [ref=e1673]: Shampoo anticaída con tecnología densificadora.
+                - generic [ref=e1674]:
+                  - generic [ref=e1675]: $ 85.000
+                  - button "Agregar Shampoo Densificador Serioxyl Advanced L'Oréal al carrito" [ref=e1676]:
+                    - img [ref=e1677]
+            - article [ref=e1678]:
+              - img "Shampoo 2 en 1 Control Caspa Versatil" [ref=e1680]
+              - generic [ref=e1682]:
+                - heading "Shampoo 2 en 1 Control Caspa Versatil" [level=3] [ref=e1683]
+                - paragraph [ref=e1684]: Shampoo anticaspa 2 en 1 para uso diario.
+                - generic [ref=e1685]:
+                  - generic [ref=e1686]: $ 22.000
+                  - button "Agregar Shampoo 2 en 1 Control Caspa Versatil al carrito" [ref=e1687]:
+                    - img [ref=e1688]
+            - article [ref=e1689]:
+              - img "Shampoo Control Caspa Deep Roots" [ref=e1691]
+              - generic [ref=e1693]:
+                - heading "Shampoo Control Caspa Deep Roots" [level=3] [ref=e1694]
+                - paragraph [ref=e1695]: Shampoo anticaspa de acción profunda.
+                - generic [ref=e1696]:
+                  - generic [ref=e1697]: $ 24.000
+                  - button "Agregar Shampoo Control Caspa Deep Roots al carrito" [ref=e1698]:
+                    - img [ref=e1699]
+            - article [ref=e1700]:
+              - img "Shampoo Control Caída Barber Duvy Class" [ref=e1702]
+              - generic [ref=e1704]:
+                - heading "Shampoo Control Caída Barber Duvy Class" [level=3] [ref=e1705]
+                - paragraph [ref=e1706]: Shampoo anticaída para cabello masculino.
+                - generic [ref=e1707]:
+                  - generic [ref=e1708]: $ 20.000
+                  - button "Agregar Shampoo Control Caída Barber Duvy Class al carrito" [ref=e1709]:
+                    - img [ref=e1710]
+            - article [ref=e1711]:
+              - img "Shampoo Control Grasa Cebolla Fresh&Co" [ref=e1713]
+              - generic [ref=e1715]:
+                - heading "Shampoo Control Grasa Cebolla Fresh&Co" [level=3] [ref=e1716]
+                - paragraph [ref=e1717]: Shampoo para cabello graso con extracto de cebolla.
+                - generic [ref=e1718]:
+                  - generic [ref=e1719]: $ 22.000
+                  - button "Agregar Shampoo Control Grasa Cebolla Fresh&Co al carrito" [ref=e1720]:
+                    - img [ref=e1721]
+            - article [ref=e1722]:
+              - img "Shampoo Protección Color Fresh&Co" [ref=e1724]
+              - generic [ref=e1726]:
+                - heading "Shampoo Protección Color Fresh&Co" [level=3] [ref=e1727]
+                - paragraph [ref=e1728]: Shampoo para preservar el color del cabello teñido.
+                - generic [ref=e1729]:
+                  - generic [ref=e1730]: $ 22.000
+                  - button "Agregar Shampoo Protección Color Fresh&Co al carrito" [ref=e1731]:
+                    - img [ref=e1732]
+            - article [ref=e1733]:
+              - img "Shampoo Nutritive Yellow Alfaparf" [ref=e1735]
+              - generic [ref=e1737]:
+                - heading "Shampoo Nutritive Yellow Alfaparf" [level=3] [ref=e1738]
+                - paragraph [ref=e1739]: Shampoo nutritivo profesional Alfaparf.
+                - generic [ref=e1740]:
+                  - generic [ref=e1741]: $ 55.000
+                  - button "Agregar Shampoo Nutritive Yellow Alfaparf al carrito" [ref=e1742]:
+                    - img [ref=e1743]
+            - article [ref=e1744]:
+              - img "Shampoo Ponto Sachet" [ref=e1746]
+              - generic [ref=e1748]:
+                - heading "Shampoo Ponto Sachet" [level=3] [ref=e1749]
+                - paragraph [ref=e1750]: Shampoo reparador en sachet.
+                - generic [ref=e1751]:
+                  - generic [ref=e1752]: $ 4.000
+                  - button "Agregar Shampoo Ponto Sachet al carrito" [ref=e1753]:
+                    - img [ref=e1754]
+            - article [ref=e1755]:
+              - img "Shampoo Cebolla Versatil Sachet" [ref=e1757]
+              - generic [ref=e1759]:
+                - heading "Shampoo Cebolla Versatil Sachet" [level=3] [ref=e1760]
+                - paragraph [ref=e1761]: Shampoo anticaída con cebolla en sachet.
+                - generic [ref=e1762]:
+                  - generic [ref=e1763]: $ 3.500
+                  - button "Agregar Shampoo Cebolla Versatil Sachet al carrito" [ref=e1764]:
+                    - img [ref=e1765]
+            - article [ref=e1766]:
+              - img "Shampoo Vitamino Color L'Oréal" [ref=e1768]
+              - generic [ref=e1770]:
+                - heading "Shampoo Vitamino Color L'Oréal" [level=3] [ref=e1771]
+                - paragraph [ref=e1772]: Shampoo protector de color con Omega 6.
+                - generic [ref=e1773]:
+                  - button "Shampoo" [ref=e1774]
+                  - button "Termo protector" [ref=e1775]
+                - generic [ref=e1776]:
+                  - generic [ref=e1777]: $ 80.000
+                  - button "Agregar Shampoo Vitamino Color L'Oréal al carrito" [disabled] [ref=e1778]:
+                    - img [ref=e1779]
+                - paragraph [ref=e1780]: Elige un tono para agregar
+            - article [ref=e1781]:
+              - img "Acondicionador Keratin Ultra Force Salon In" [ref=e1783]
+              - generic [ref=e1785]:
+                - heading "Acondicionador Keratin Ultra Force Salon In" [level=3] [ref=e1786]
+                - paragraph [ref=e1787]: Acondicionador con keratina para cabello muy dañado.
+                - generic [ref=e1788]:
+                  - generic [ref=e1789]: $ 52.000
+                  - button "Agregar Acondicionador Keratin Ultra Force Salon In al carrito" [ref=e1790]:
+                    - img [ref=e1791]
+            - article [ref=e1792]:
+              - img "Acondicionador Liss Yellow Alfaparf" [ref=e1794]
+              - generic [ref=e1796]:
+                - heading "Acondicionador Liss Yellow Alfaparf" [level=3] [ref=e1797]
+                - paragraph [ref=e1798]: Acondicionador alisador profesional Alfaparf.
+                - generic [ref=e1799]:
+                  - generic [ref=e1800]: $ 55.000
+                  - button "Agregar Acondicionador Liss Yellow Alfaparf al carrito" [ref=e1801]:
+                    - img [ref=e1802]
+            - article [ref=e1803]:
+              - img "Acondicionador Repair Yellow Alfaparf" [ref=e1805]
+              - generic [ref=e1807]:
+                - heading "Acondicionador Repair Yellow Alfaparf" [level=3] [ref=e1808]
+                - paragraph [ref=e1809]: Acondicionador reparador profesional Alfaparf.
+                - generic [ref=e1810]:
+                  - generic [ref=e1811]: $ 55.000
+                  - button "Agregar Acondicionador Repair Yellow Alfaparf al carrito" [ref=e1812]:
+                    - img [ref=e1813]
+            - article [ref=e1814]:
+              - generic [ref=e1815]:
+                - img "Tratamiento Metal Detox L'Oréal" [ref=e1816]
+                - generic [ref=e1818]: Nuevo
+              - generic [ref=e1820]:
+                - heading "Tratamiento Metal Detox L'Oréal" [level=3] [ref=e1821]
+                - paragraph [ref=e1822]: Pre-tratamiento profesional que neutraliza metales y protege el cabello.
+                - generic [ref=e1823]:
+                  - generic [ref=e1824]: $ 135.000
+                  - button "Agregar Tratamiento Metal Detox L'Oréal al carrito" [ref=e1825]:
+                    - img [ref=e1826]
+            - article [ref=e1827]:
+              - img "Cristal Líquido Sublime Semi Di Lino Alfaparf" [ref=e1829]
+              - generic [ref=e1831]:
+                - heading "Cristal Líquido Sublime Semi Di Lino Alfaparf" [level=3] [ref=e1832]
+                - paragraph [ref=e1833]: Sérum de acabado cristalizado para brillo y suavidad extrema.
+                - generic [ref=e1834]:
+                  - generic [ref=e1835]: $ 110.000
+                  - button "Agregar Cristal Líquido Sublime Semi Di Lino Alfaparf al carrito" [ref=e1836]:
+                    - img [ref=e1837]
+            - article [ref=e1838]:
+              - img "Nikols Tratamiento Fitokeratina" [ref=e1840]
+              - generic [ref=e1842]:
+                - heading "Nikols Tratamiento Fitokeratina" [level=3] [ref=e1843]
+                - paragraph [ref=e1844]: Tratamiento de keratina vegetal que sella la cutícula y da brillo.
+                - generic [ref=e1845]:
+                  - generic [ref=e1846]: $ 20.000
+                  - button "Agregar Nikols Tratamiento Fitokeratina al carrito" [ref=e1847]:
+                    - img [ref=e1848]
+            - article [ref=e1849]:
+              - img "Ampolletas Capilares Hair Saloon Pluss" [ref=e1851]
+              - generic [ref=e1853]:
+                - heading "Ampolletas Capilares Hair Saloon Pluss" [level=3] [ref=e1854]
+                - paragraph [ref=e1855]: Ampolletas nutritivas de acción intensiva.
+                - generic [ref=e1856]:
+                  - generic [ref=e1857]: $ 8.000
+                  - button "Agregar Ampolletas Capilares Hair Saloon Pluss al carrito" [ref=e1858]:
+                    - img [ref=e1859]
+            - article [ref=e1860]:
+              - img "Ampolletas Capilares Alfaparf" [ref=e1862]
+              - generic [ref=e1864]:
+                - heading "Ampolletas Capilares Alfaparf" [level=3] [ref=e1865]
+                - paragraph [ref=e1866]: Ampolletas de tratamiento profesional Alfaparf.
+                - generic [ref=e1867]:
+                  - generic [ref=e1868]: $ 15.000
+                  - button "Agregar Ampolletas Capilares Alfaparf al carrito" [ref=e1869]:
+                    - img [ref=e1870]
+            - article [ref=e1871]:
+              - img "Recamier Deco White 9 Sachet" [ref=e1873]
+              - generic [ref=e1875]:
+                - heading "Recamier Deco White 9 Sachet" [level=3] [ref=e1876]
+                - paragraph [ref=e1877]: Decolorante en sachet hasta 9 niveles de aclaramiento.
+                - generic [ref=e1878]:
+                  - generic [ref=e1879]: $ 11.300
+                  - button "Agregar Recamier Deco White 9 Sachet al carrito" [ref=e1880]:
+                    - img [ref=e1881]
+            - article [ref=e1882]:
+              - img "Recamier Deco Black 9" [ref=e1884]
+              - generic [ref=e1886]:
+                - heading "Recamier Deco Black 9" [level=3] [ref=e1887]
+                - paragraph [ref=e1888]: Decolorante premium hasta 9 niveles.
+                - generic [ref=e1889]:
+                  - generic [ref=e1890]: $ 18.000
+                  - button "Agregar Recamier Deco Black 9 al carrito" [ref=e1891]:
+                    - img [ref=e1892]
+            - article [ref=e1893]:
+              - img "Decolorante Alfaparf BB BLEACH Sachet" [ref=e1895]
+              - generic [ref=e1897]:
+                - heading "Decolorante Alfaparf BB BLEACH Sachet" [level=3] [ref=e1898]
+                - paragraph [ref=e1899]: Decolorante de alta performace, hasta 9 niveles High Lift.
+                - generic [ref=e1900]:
+                  - generic [ref=e1901]: $ 11.000
+                  - button "Agregar Decolorante Alfaparf BB BLEACH Sachet al carrito" [ref=e1902]:
+                    - img [ref=e1903]
+            - article [ref=e1904]:
+              - img "Polvo Decolorante Plex Duvy Class" [ref=e1906]
+              - generic [ref=e1908]:
+                - heading "Polvo Decolorante Plex Duvy Class" [level=3] [ref=e1909]
+                - paragraph [ref=e1910]: Decolorante en polvo con tecnología Plex.
+                - generic [ref=e1911]:
+                  - generic [ref=e1912]: $ 18.000
+                  - button "Agregar Polvo Decolorante Plex Duvy Class al carrito" [ref=e1913]:
+                    - img [ref=e1914]
+            - article [ref=e1915]:
+              - img "Agua Oxigenada Óxido 10 Alfaparf" [ref=e1917]
+              - generic [ref=e1919]:
+                - heading "Agua Oxigenada Óxido 10 Alfaparf" [level=3] [ref=e1920]
+                - paragraph [ref=e1921]: Agua oxigenada de 10 volúmenes para tintes.
+                - generic [ref=e1922]:
+                  - generic [ref=e1923]: $ 14.000
+                  - button "Agregar Agua Oxigenada Óxido 10 Alfaparf al carrito" [ref=e1924]:
+                    - img [ref=e1925]
+            - article [ref=e1926]:
+              - img "L'Oréal Agua Oxigenada Majicreme 20" [ref=e1928]
+              - generic [ref=e1930]:
+                - heading "L'Oréal Agua Oxigenada Majicreme 20" [level=3] [ref=e1931]
+                - paragraph [ref=e1932]: Oxidante cremoso 20 volúmenes L'Oréal.
+                - generic [ref=e1933]:
+                  - generic [ref=e1934]: $ 16.000
+                  - button "Agregar L'Oréal Agua Oxigenada Majicreme 20 al carrito" [ref=e1935]:
+                    - img [ref=e1936]
+            - article [ref=e1937]:
+              - img "Oxy Cream 20 Duvy Class" [ref=e1939]
+              - generic [ref=e1941]:
+                - heading "Oxy Cream 20 Duvy Class" [level=3] [ref=e1942]
+                - paragraph [ref=e1943]: Crema oxidante 20 volúmenes.
+                - generic [ref=e1944]:
+                  - generic [ref=e1945]: $ 14.000
+                  - button "Agregar Oxy Cream 20 Duvy Class al carrito" [ref=e1946]:
+                    - img [ref=e1947]
+            - article [ref=e1948]:
+              - img "Tinte Casting Sin Amoniaco L'Oréal" [ref=e1950]
+              - generic [ref=e1952]:
+                - heading "Tinte Casting Sin Amoniaco L'Oréal" [level=3] [ref=e1953]
+                - paragraph [ref=e1954]: Tinte semipermanente sin amoniaco, brillo duradero.
+                - generic [ref=e1955]:
+                  - generic [ref=e1956]: $ 42.000
+                  - button "Agregar Tinte Casting Sin Amoniaco L'Oréal al carrito" [ref=e1957]:
+                    - img [ref=e1958]
+            - article [ref=e1959]:
+              - img "Tinte Colorwear Sin Amoniaco Alfaparf" [ref=e1961]
+              - generic [ref=e1963]:
+                - heading "Tinte Colorwear Sin Amoniaco Alfaparf" [level=3] [ref=e1964]
+                - paragraph [ref=e1965]: Tinte sin amoniaco profesional Alfaparf.
+                - generic [ref=e1966]:
+                  - generic [ref=e1967]: $ 45.000
+                  - button "Agregar Tinte Colorwear Sin Amoniaco Alfaparf al carrito" [ref=e1968]:
+                    - img [ref=e1969]
+            - article [ref=e1970]:
+              - img "Tinte Garnier Cor Intensa" [ref=e1972]
+              - generic [ref=e1974]:
+                - heading "Tinte Garnier Cor Intensa" [level=3] [ref=e1975]
+                - paragraph [ref=e1976]: Tinte de alta cobertura con aceites naturales.
+                - generic [ref=e1977]:
+                  - generic [ref=e1978]: $ 29.000
+                  - button "Agregar Tinte Garnier Cor Intensa al carrito" [ref=e1979]:
+                    - img [ref=e1980]
+            - article [ref=e1981]:
+              - img "Tinte Recamier Green Forest Salon In" [ref=e1983]
+              - generic [ref=e1985]:
+                - heading "Tinte Recamier Green Forest Salon In" [level=3] [ref=e1986]
+                - paragraph [ref=e1987]: Tinte vegano con extractos naturales.
+                - generic [ref=e1988]:
+                  - generic [ref=e1989]: $ 32.000
+                  - button "Agregar Tinte Recamier Green Forest Salon In al carrito" [ref=e1990]:
+                    - img [ref=e1991]
+            - article [ref=e1992]:
+              - img "Tinte Recamier Techni Tone" [ref=e1994]
+              - generic [ref=e1996]:
+                - heading "Tinte Recamier Techni Tone" [level=3] [ref=e1997]
+                - paragraph [ref=e1998]: Tinte profesional de larga duración.
+                - generic [ref=e1999]:
+                  - generic [ref=e2000]: $ 32.000
+                  - button "Agregar Tinte Recamier Techni Tone al carrito" [ref=e2001]:
+                    - img [ref=e2002]
+            - article [ref=e2003]:
+              - img "Tinte Tratamiento Deep Roots" [ref=e2005]
+              - generic [ref=e2007]:
+                - heading "Tinte Tratamiento Deep Roots" [level=3] [ref=e2008]
+                - paragraph [ref=e2009]: Tinte con tratamiento nutritivo integrado.
+                - generic [ref=e2010]:
+                  - generic [ref=e2011]: $ 28.000
+                  - button "Agregar Tinte Tratamiento Deep Roots al carrito" [ref=e2012]:
+                    - img [ref=e2013]
+            - article [ref=e2014]:
+              - img "Tinte Vision Color Duvy Class" [ref=e2016]
+              - generic [ref=e2018]:
+                - heading "Tinte Vision Color Duvy Class" [level=3] [ref=e2019]
+                - paragraph [ref=e2020]: Tinte profesional de alta cobertura.
+                - generic [ref=e2021]:
+                  - generic [ref=e2022]: $ 22.000
+                  - button "Agregar Tinte Vision Color Duvy Class al carrito" [ref=e2023]:
+                    - img [ref=e2024]
+            - article [ref=e2025]:
+              - img "Tinte Vision Touch Color" [ref=e2027]
+              - generic [ref=e2029]:
+                - heading "Tinte Vision Touch Color" [level=3] [ref=e2030]
+                - paragraph [ref=e2031]: Tinte de larga duración con brillo intenso.
+                - generic [ref=e2032]:
+                  - generic [ref=e2033]: $ 22.000
+                  - button "Agregar Tinte Vision Touch Color al carrito" [ref=e2034]:
+                    - img [ref=e2035]
+            - article [ref=e2036]:
+              - img "Lissia Tinte Biotina Keratina" [ref=e2038]
+              - generic [ref=e2040]:
+                - heading "Lissia Tinte Biotina Keratina" [level=3] [ref=e2041]
+                - paragraph [ref=e2042]: Tinte sin amoniaco con biotina y keratina.
+                - generic [ref=e2043]:
+                  - generic [ref=e2044]: $ 28.000
+                  - button "Agregar Lissia Tinte Biotina Keratina al carrito" [ref=e2045]:
+                    - img [ref=e2046]
+            - article [ref=e2047]:
+              - img "Tratamiento Cubre Canas Fresh&Co" [ref=e2049]
+              - generic [ref=e2051]:
+                - heading "Tratamiento Cubre Canas Fresh&Co" [level=3] [ref=e2052]
+                - paragraph [ref=e2053]: Cobertura de canas sin amoníaco ni peróxido.
+                - button "Castaño Oscuro" [pressed] [ref=e2055]
+                - generic [ref=e2056]:
+                  - generic [ref=e2057]: $ 26.500
+                  - button "Agregar Tratamiento Cubre Canas Fresh&Co al carrito" [ref=e2058]:
+                    - img [ref=e2059]
+            - article [ref=e2060]:
+              - img "Recamier Tratamiento Vegano Keratina y Colágeno" [ref=e2062]
+              - generic [ref=e2064]:
+                - heading "Recamier Tratamiento Vegano Keratina y Colágeno" [level=3] [ref=e2065]
+                - paragraph [ref=e2066]: Tratamiento vegano intensivo con keratina y colágeno.
+                - generic [ref=e2067]:
+                  - generic [ref=e2068]: $ 38.000
+                  - button "Agregar Recamier Tratamiento Vegano Keratina y Colágeno al carrito" [ref=e2069]:
+                    - img [ref=e2070]
+            - article [ref=e2071]:
+              - img "Tratamiento Amino Keratina Deep Roots" [ref=e2073]
+              - generic [ref=e2075]:
+                - heading "Tratamiento Amino Keratina Deep Roots" [level=3] [ref=e2076]
+                - paragraph [ref=e2077]: Tratamiento con aminoácidos y keratina.
+                - generic [ref=e2078]:
+                  - generic [ref=e2079]: $ 28.000
+                  - button "Agregar Tratamiento Amino Keratina Deep Roots al carrito" [ref=e2080]:
+                    - img [ref=e2081]
+            - article [ref=e2082]:
+              - img "Tratamiento Bio Repair Deep Roots" [ref=e2084]
+              - generic [ref=e2086]:
+                - heading "Tratamiento Bio Repair Deep Roots" [level=3] [ref=e2087]
+                - paragraph [ref=e2088]: Tratamiento reparador biológico.
+                - generic [ref=e2089]:
+                  - generic [ref=e2090]: $ 28.000
+                  - button "Agregar Tratamiento Bio Repair Deep Roots al carrito" [ref=e2091]:
+                    - img [ref=e2092]
+            - article [ref=e2093]:
+              - img "Tratamiento Bio Reparador Argán Meicys" [ref=e2095]
+              - generic [ref=e2097]:
+                - heading "Tratamiento Bio Reparador Argán Meicys" [level=3] [ref=e2098]
+                - paragraph [ref=e2099]: Tratamiento reparador con aceite de argán.
+                - generic [ref=e2100]:
+                  - generic [ref=e2101]: $ 30.000
+                  - button "Agregar Tratamiento Bio Reparador Argán Meicys al carrito" [ref=e2102]:
+                    - img [ref=e2103]
+            - article [ref=e2104]:
+              - img "Tratamiento Cabello Tinturado Deep Roots" [ref=e2106]
+              - generic [ref=e2108]:
+                - heading "Tratamiento Cabello Tinturado Deep Roots" [level=3] [ref=e2109]
+                - paragraph [ref=e2110]: Tratamiento especial para cabello teñido.
+                - generic [ref=e2111]:
+                  - generic [ref=e2112]: $ 28.000
+                  - button "Agregar Tratamiento Cabello Tinturado Deep Roots al carrito" [ref=e2113]:
+                    - img [ref=e2114]
+            - article [ref=e2115]:
+              - img "Tratamiento Capilar Base de Frutas Deep Roots" [ref=e2117]
+              - generic [ref=e2119]:
+                - heading "Tratamiento Capilar Base de Frutas Deep Roots" [level=3] [ref=e2120]
+                - paragraph [ref=e2121]: Tratamiento nutritivo con base de frutas.
+                - generic [ref=e2122]:
+                  - generic [ref=e2123]: $ 28.000
+                  - button "Agregar Tratamiento Capilar Base de Frutas Deep Roots al carrito" [ref=e2124]:
+                    - img [ref=e2125]
+            - article [ref=e2126]:
+              - img "Tratamiento Color Intensifier Salon In" [ref=e2128]
+              - generic [ref=e2130]:
+                - heading "Tratamiento Color Intensifier Salon In" [level=3] [ref=e2131]
+                - paragraph [ref=e2132]: Tratamiento que intensifica y protege el color.
+                - generic [ref=e2133]:
+                  - generic [ref=e2134]: $ 32.000
+                  - button "Agregar Tratamiento Color Intensifier Salon In al carrito" [ref=e2135]:
+                    - img [ref=e2136]
+            - article [ref=e2137]:
+              - img "Tratamiento Color Sachet Deep Roots" [ref=e2139]
+              - generic [ref=e2141]:
+                - heading "Tratamiento Color Sachet Deep Roots" [level=3] [ref=e2142]
+                - paragraph [ref=e2143]: Tratamiento sachet para cabello teñido.
+                - generic [ref=e2144]:
+                  - generic [ref=e2145]: $ 5.000
+                  - button "Agregar Tratamiento Color Sachet Deep Roots al carrito" [ref=e2146]:
+                    - img [ref=e2147]
+            - article [ref=e2148]:
+              - img "Tratamiento Complex Fresh&Co" [ref=e2150]
+              - generic [ref=e2152]:
+                - heading "Tratamiento Complex Fresh&Co" [level=3] [ref=e2153]
+                - paragraph [ref=e2154]: Tratamiento capilar complejo revitalizante.
+                - generic [ref=e2155]:
+                  - generic [ref=e2156]: $ 22.000
+                  - button "Agregar Tratamiento Complex Fresh&Co al carrito" [ref=e2157]:
+                    - img [ref=e2158]
+            - article [ref=e2159]:
+              - img "Tratamiento Embrión de Pato Fresh&Co" [ref=e2161]
+              - generic [ref=e2163]:
+                - heading "Tratamiento Embrión de Pato Fresh&Co" [level=3] [ref=e2164]
+                - paragraph [ref=e2165]: Tratamiento regenerador con embrión de pato.
+                - generic [ref=e2166]:
+                  - generic [ref=e2167]: $ 28.000
+                  - button "Agregar Tratamiento Embrión de Pato Fresh&Co al carrito" [ref=e2168]:
+                    - img [ref=e2169]
+            - article [ref=e2170]:
+              - img "Tratamiento Maracuyá Skala" [ref=e2172]
+              - generic [ref=e2174]:
+                - heading "Tratamiento Maracuyá Skala" [level=3] [ref=e2175]
+                - paragraph [ref=e2176]: Tratamiento nutritivo con maracuyá.
+                - generic [ref=e2177]:
+                  - generic [ref=e2178]: $ 18.000
+                  - button "Agregar Tratamiento Maracuyá Skala al carrito" [ref=e2179]:
+                    - img [ref=e2180]
+            - article [ref=e2181]:
+              - img "Tratamiento Maxybelt Ácido Hialurónico" [ref=e2183]
+              - generic [ref=e2185]:
+                - heading "Tratamiento Maxybelt Ácido Hialurónico" [level=3] [ref=e2186]
+                - paragraph [ref=e2187]: Tratamiento con ácido hialurónico para hidratación extrema.
+                - generic [ref=e2188]:
+                  - generic [ref=e2189]: $ 35.000
+                  - button "Agregar Tratamiento Maxybelt Ácido Hialurónico al carrito" [ref=e2190]:
+                    - img [ref=e2191]
+            - article [ref=e2192]:
+              - img "Tratamiento Maxybelt Aminoácidos" [ref=e2194]
+              - generic [ref=e2196]:
+                - heading "Tratamiento Maxybelt Aminoácidos" [level=3] [ref=e2197]
+                - paragraph [ref=e2198]: Tratamiento con aminoácidos para reparación estructural.
+                - generic [ref=e2199]:
+                  - generic [ref=e2200]: $ 35.000
+                  - button "Agregar Tratamiento Maxybelt Aminoácidos al carrito" [ref=e2201]:
+                    - img [ref=e2202]
+            - article [ref=e2203]:
+              - img "Tratamiento Romero y Quina Fresh&Co" [ref=e2205]
+              - generic [ref=e2207]:
+                - heading "Tratamiento Romero y Quina Fresh&Co" [level=3] [ref=e2208]
+                - paragraph [ref=e2209]: Tratamiento anticaída con romero y quina.
+                - generic [ref=e2210]:
+                  - generic [ref=e2211]: $ 22.000
+                  - button "Agregar Tratamiento Romero y Quina Fresh&Co al carrito" [ref=e2212]:
+                    - img [ref=e2213]
+            - article [ref=e2214]:
+              - img "Meicys Tratamiento Termoprotector" [ref=e2216]
+              - generic [ref=e2218]:
+                - heading "Meicys Tratamiento Termoprotector" [level=3] [ref=e2219]
+                - paragraph [ref=e2220]: Termoprotector que protege hasta 230°C.
+                - generic [ref=e2221]:
+                  - generic [ref=e2222]: $ 28.000
+                  - button "Agregar Meicys Tratamiento Termoprotector al carrito" [ref=e2223]:
+                    - img [ref=e2224]
+            - article [ref=e2225]:
+              - img "Mascarilla Capilar Caviar Meicys" [ref=e2227]
+              - generic [ref=e2229]:
+                - heading "Mascarilla Capilar Caviar Meicys" [level=3] [ref=e2230]
+                - paragraph [ref=e2231]: Mascarilla nutritiva con extracto de caviar.
+                - generic [ref=e2232]:
+                  - generic [ref=e2233]: $ 35.000
+                  - button "Agregar Mascarilla Capilar Caviar Meicys al carrito" [ref=e2234]:
+                    - img [ref=e2235]
+            - article [ref=e2236]:
+              - img "Laca Fijación Fuerte Yellow Alfaparf" [ref=e2238]
+              - generic [ref=e2240]:
+                - heading "Laca Fijación Fuerte Yellow Alfaparf" [level=3] [ref=e2241]
+                - paragraph [ref=e2242]: Laca de fijación fuerte profesional Alfaparf.
+                - generic [ref=e2243]:
+                  - generic [ref=e2244]: $ 48.000
+                  - button "Agregar Laca Fijación Fuerte Yellow Alfaparf al carrito" [ref=e2245]:
+                    - img [ref=e2246]
+            - article [ref=e2247]:
+              - img "Crema para Peinar Mais Lisos Skala" [ref=e2249]
+              - generic [ref=e2251]:
+                - heading "Crema para Peinar Mais Lisos Skala" [level=3] [ref=e2252]
+                - paragraph [ref=e2253]: Crema alisadora para cabello con frizz.
+                - generic [ref=e2254]:
+                  - generic [ref=e2255]: $ 16.000
+                  - button "Agregar Crema para Peinar Mais Lisos Skala al carrito" [ref=e2256]:
+                    - img [ref=e2257]
+            - article [ref=e2258]:
+              - img "Crema para Peinar Patato do Amor Skala" [ref=e2260]
+              - generic [ref=e2262]:
+                - heading "Crema para Peinar Patato do Amor Skala" [level=3] [ref=e2263]
+                - paragraph [ref=e2264]: Crema para peinar con aceite de patata.
+                - generic [ref=e2265]:
+                  - generic [ref=e2266]: $ 16.000
+                  - button "Agregar Crema para Peinar Patato do Amor Skala al carrito" [ref=e2267]:
+                    - img [ref=e2268]
+            - article [ref=e2269]:
+              - img "Espuma Adapta Foam Mousse Salon In" [ref=e2271]
+              - generic [ref=e2273]:
+                - heading "Espuma Adapta Foam Mousse Salon In" [level=3] [ref=e2274]
+                - paragraph [ref=e2275]: Mousse de fijación adaptable para todo tipo de cabello.
+                - generic [ref=e2276]:
+                  - generic [ref=e2277]: $ 38.000
+                  - button "Agregar Espuma Adapta Foam Mousse Salon In al carrito" [ref=e2278]:
+                    - img [ref=e2279]
+            - article [ref=e2280]:
+              - img "Encrespador Montoc Amore Curl" [ref=e2282]
+              - generic [ref=e2284]:
+                - heading "Encrespador Montoc Amore Curl" [level=3] [ref=e2285]
+                - paragraph [ref=e2286]: Definidor de rizos para cabello ondulado y rizado.
+                - generic [ref=e2287]:
+                  - generic [ref=e2288]: $ 32.000
+                  - button "Agregar Encrespador Montoc Amore Curl al carrito" [ref=e2289]:
+                    - img [ref=e2290]
+            - article [ref=e2291]:
+              - img "CPC 12 Reparación Anticaída Meicys" [ref=e2293]
+              - generic [ref=e2295]:
+                - heading "CPC 12 Reparación Anticaída Meicys" [level=3] [ref=e2296]
+                - paragraph [ref=e2297]: Tratamiento anticaída con 12 complejos activos.
+                - generic [ref=e2298]:
+                  - generic [ref=e2299]: $ 38.000
+                  - button "Agregar CPC 12 Reparación Anticaída Meicys al carrito" [ref=e2300]:
+                    - img [ref=e2301]
+            - article [ref=e2302]:
+              - img "Tónico Control Caída Barber Duvy Class" [ref=e2304]
+              - generic [ref=e2306]:
+                - heading "Tónico Control Caída Barber Duvy Class" [level=3] [ref=e2307]
+                - paragraph [ref=e2308]: Tónico anticaída para uso masculino.
+                - generic [ref=e2309]:
+                  - generic [ref=e2310]: $ 20.000
+                  - button "Agregar Tónico Control Caída Barber Duvy Class al carrito" [ref=e2311]:
+                    - img [ref=e2312]
+            - article [ref=e2313]:
+              - img "Kit Ponto Salvavidas" [ref=e2315]
+              - generic [ref=e2317]:
+                - heading "Kit Ponto Salvavidas" [level=3] [ref=e2318]
+                - paragraph [ref=e2319]: Kit de recuperación intensiva para cabello muy dañado.
+                - generic [ref=e2320]:
+                  - generic [ref=e2321]: $ 22.000
+                  - button "Agregar Kit Ponto Salvavidas al carrito" [ref=e2322]:
+                    - img [ref=e2323]
+            - article [ref=e2324]:
+              - img "Cepillo Cabello Montoc Luna Pink" [ref=e2326]
+              - generic [ref=e2328]:
+                - heading "Cepillo Cabello Montoc Luna Pink" [level=3] [ref=e2329]
+                - paragraph [ref=e2330]: Cepillo desenredante de alta calidad.
+                - generic [ref=e2331]:
+                  - button "Coral" [ref=e2332]
+                  - button "Rosa pastel" [ref=e2333]
+                - generic [ref=e2334]:
+                  - generic [ref=e2335]: $ 19.000
+                  - button "Agregar Cepillo Cabello Montoc Luna Pink al carrito" [disabled] [ref=e2336]:
+                    - img [ref=e2337]
+                - paragraph [ref=e2338]: Elige un tono para agregar
+            - article [ref=e2339]:
+              - img "Kanekalon Queen" [ref=e2341]
+              - generic [ref=e2343]:
+                - heading "Kanekalon Queen" [level=3] [ref=e2344]
+                - paragraph [ref=e2345]: Extensiones de cabello sintético premium.
+                - generic [ref=e2346]:
+                  - generic [ref=e2347]: $ 25.000
+                  - button "Agregar Kanekalon Queen al carrito" [ref=e2348]:
+                    - img [ref=e2349]
+            - article [ref=e2350]:
+              - img "Kanekalon Soft Jumbo Bijoux" [ref=e2352]
+              - generic [ref=e2354]:
+                - heading "Kanekalon Soft Jumbo Bijoux" [level=3] [ref=e2355]
+                - paragraph [ref=e2356]: Extensiones jumbo de fibra suave.
+                - generic [ref=e2357]:
+                  - generic [ref=e2358]: $ 28.000
+                  - button "Agregar Kanekalon Soft Jumbo Bijoux al carrito" [ref=e2359]:
+                    - img [ref=e2360]
+            - article [ref=e2361]:
+              - img "Ganchos para Cabello Enkor" [ref=e2363]
+              - generic [ref=e2365]:
+                - heading "Ganchos para Cabello Enkor" [level=3] [ref=e2366]
+                - paragraph [ref=e2367]: Ganchos para cabello de alta durabilidad.
+                - generic [ref=e2368]:
+                  - generic [ref=e2369]: $ 5.000
+                  - button "Agregar Ganchos para Cabello Enkor al carrito" [ref=e2370]:
+                    - img [ref=e2371]
+            - article [ref=e2372]:
+              - img "Ligas para Cabello Enkor" [ref=e2374]
+              - generic [ref=e2376]:
+                - heading "Ligas para Cabello Enkor" [level=3] [ref=e2377]
+                - paragraph [ref=e2378]: Ligas elásticas para cabello sin daño.
+                - generic [ref=e2379]:
+                  - generic [ref=e2380]: $ 4.000
+                  - button "Agregar Ligas para Cabello Enkor al carrito" [ref=e2381]:
+                    - img [ref=e2382]
+            - article [ref=e2383]:
+              - img "Rulos Esponja Enkor" [ref=e2385]
+              - generic [ref=e2387]:
+                - heading "Rulos Esponja Enkor" [level=3] [ref=e2388]
+                - paragraph [ref=e2389]: Rulos de esponja para rizos suaves sin calor.
+                - generic [ref=e2390]:
+                  - generic [ref=e2391]: $ 12.000
+                  - button "Agregar Rulos Esponja Enkor al carrito" [ref=e2392]:
+                    - img [ref=e2393]
+            - article [ref=e2394]:
+              - img "Rulos con Tapa Enkor" [ref=e2396]
+              - generic [ref=e2398]:
+                - heading "Rulos con Tapa Enkor" [level=3] [ref=e2399]
+                - paragraph [ref=e2400]: Rulos con tapa para mayor fijación del rizo.
+                - generic [ref=e2401]:
+                  - generic [ref=e2402]: $ 15.000
+                  - button "Agregar Rulos con Tapa Enkor al carrito" [ref=e2403]:
+                    - img [ref=e2404]
+            - article [ref=e2405]:
+              - img "Color 1 Sachet" [ref=e2407]
+              - generic [ref=e2409]:
+                - heading "Color 1 Sachet" [level=3] [ref=e2410]
+                - paragraph [ref=e2411]: Tinte en sachet para aplicación rápida.
+                - generic [ref=e2412]:
+                  - generic [ref=e2413]: $ 3.500
+                  - button "Agregar Color 1 Sachet al carrito" [ref=e2414]:
+                    - img [ref=e2415]
+    - generic [ref=e377]:
+      - generic [ref=e378]: Catálogo virtual
+      - heading "Explora todo nuestro catálogo" [level=2] [ref=e379]
+      - paragraph [ref=e380]: Revisa todos nuestros productos, marcas y precios actualizados en nuestro catálogo digital. ¡Pídelo directo por WhatsApp!
+      - generic [ref=e381]:
+        - button "Ver página 1" [ref=e382]:
+          - img "Catálogo Queens página 1" [ref=e383]
+          - img [ref=e385]
+        - button "Ver página 3" [ref=e388]:
+          - img "Catálogo Queens página 3" [ref=e389]
+          - img [ref=e391]
+        - button "Ver página 4" [ref=e394]:
+          - img "Catálogo Queens página 4" [ref=e395]
+          - img [ref=e397]
+        - button "Ver página 5" [ref=e400]:
+          - img "Catálogo Queens página 5" [ref=e401]
+          - img [ref=e403]
+        - button "Ver página 6" [ref=e406]:
+          - img "Catálogo Queens página 6" [ref=e407]
+          - img [ref=e409]
+      - button "Ver catálogo completo" [ref=e412]:
+        - img [ref=e413]
+        - text: Ver catálogo completo
+    - generic [ref=e416]:
+      - generic [ref=e417]:
+        - generic [ref=e418]: Por qué elegir Queens
+        - heading "Más que cosméticos, una experiencia" [level=2] [ref=e419]
+      - generic [ref=e420]:
+        - generic [ref=e421]:
+          - img [ref=e423]
+          - heading "100% Originales" [level=3] [ref=e426]
+          - paragraph [ref=e427]: Solo trabajamos con marcas auténticas y distribuidores autorizados. Sin réplicas.
+          - generic [ref=e428]: "01"
+        - generic [ref=e429]:
+          - img [ref=e431]
+          - heading "Asesoría Personalizada" [level=3] [ref=e434]
+          - paragraph [ref=e435]: Te ayudamos a encontrar el tono, producto y rutina perfecta para ti.
+          - generic [ref=e436]: "02"
+        - generic [ref=e437]:
+          - img [ref=e439]
+          - heading "Envíos el Mismo Día" [level=3] [ref=e444]
+          - paragraph [ref=e445]: En Palmira recibes tu pedido en pocas horas. También enviamos a todo el Valle.
+          - generic [ref=e446]: "03"
+        - generic [ref=e447]:
+          - img [ref=e449]
+          - heading "Muestras Gratis" [level=3] [ref=e453]
+          - paragraph [ref=e454]: En tu primera compra incluimos muestras de nuestros productos más pedidos.
+          - generic [ref=e455]: "04"
+        - generic [ref=e456]:
+          - img [ref=e458]
+          - heading "Pagos Seguros" [level=3] [ref=e460]
+          - paragraph [ref=e461]: Nequi, Daviplata, transferencia bancaria o efectivo. Como tú prefieras.
+          - generic [ref=e462]: "05"
+    - generic [ref=e464]:
+      - generic [ref=e465]:
+        - generic [ref=e466]: Galería
+        - heading "Momentos Queens" [level=2] [ref=e467]:
+          - text: Momentos
+          - emphasis [ref=e468]: Queens
+      - generic [ref=e469]:
+        - generic [ref=e470]:
+          - img "Labiales exhibidos" [ref=e471]
+          - paragraph [ref=e474]: Nuestra colección signature
+        - img "Mujer con maquillaje dorado" [ref=e476]
+        - img "Productos rosa y dorado" [ref=e479]
+        - img "Brochas premium" [ref=e482]
+        - img "Aplicación de maquillaje" [ref=e485]
+    - generic [ref=e487]:
+      - generic [ref=e489]:
+        - generic [ref=e490]: Testimonios
+        - heading "Lo que dicen nuestras clientes" [level=2] [ref=e491]
+      - generic [ref=e492]:
+        - generic [ref=e493]:
+          - generic [ref=e494]:
+            - generic [ref=e495]:
+              - generic [ref=e496]: VR
+              - generic [ref=e497]:
+                - paragraph [ref=e498]: Valentina R.
+                - generic [ref=e499]:
+                  - img [ref=e500]
+                  - img [ref=e502]
+                  - img [ref=e504]
+                  - img [ref=e506]
+                  - img [ref=e508]
+            - paragraph [ref=e510]: Mi base favorita la conseguí aquí. Me asesoraron perfecto con el tono y ahora es mi base holy grail. 💕
+          - generic [ref=e511]:
+            - generic [ref=e512]:
+              - generic [ref=e513]: CM
+              - generic [ref=e514]:
+                - paragraph [ref=e515]: Camila M.
+                - generic [ref=e516]:
+                  - img [ref=e517]
+                  - img [ref=e519]
+                  - img [ref=e521]
+                  - img [ref=e523]
+                  - img [ref=e525]
+            - paragraph [ref=e527]: El labial matte dura TODO el día. Compré 3 tonos más. La atención es divina, se sienten como amigas.
+          - generic [ref=e528]:
+            - generic [ref=e529]:
+              - generic [ref=e530]: SP
+              - generic [ref=e531]:
+                - paragraph [ref=e532]: Sofía P.
+                - generic [ref=e533]:
+                  - img [ref=e534]
+                  - img [ref=e536]
+                  - img [ref=e538]
+                  - img [ref=e540]
+                  - img [ref=e542]
+            - paragraph [ref=e544]: La paleta Smoky Night es INSANA. Pigmentada, sin fall out. Definitivamente volveré por más.
+          - generic [ref=e545]:
+            - generic [ref=e546]:
+              - generic [ref=e547]: DL
+              - generic [ref=e548]:
+                - paragraph [ref=e549]: Daniela L.
+                - generic [ref=e550]:
+                  - img [ref=e551]
+                  - img [ref=e553]
+                  - img [ref=e555]
+                  - img [ref=e557]
+                  - img [ref=e559]
+            - paragraph [ref=e561]: El serum de vitamina C me cambió la piel en dos semanas. Ahora todo mi skincare lo compro aquí.
+          - generic [ref=e562]:
+            - generic [ref=e563]:
+              - generic [ref=e564]: VR
+              - generic [ref=e565]:
+                - paragraph [ref=e566]: Valentina R.
+                - generic [ref=e567]:
+                  - img [ref=e568]
+                  - img [ref=e570]
+                  - img [ref=e572]
+                  - img [ref=e574]
+                  - img [ref=e576]
+            - paragraph [ref=e578]: Mi base favorita la conseguí aquí. Me asesoraron perfecto con el tono y ahora es mi base holy grail. 💕
+          - generic [ref=e579]:
+            - generic [ref=e580]:
+              - generic [ref=e581]: CM
+              - generic [ref=e582]:
+                - paragraph [ref=e583]: Camila M.
+                - generic [ref=e584]:
+                  - img [ref=e585]
+                  - img [ref=e587]
+                  - img [ref=e589]
+                  - img [ref=e591]
+                  - img [ref=e593]
+            - paragraph [ref=e595]: El labial matte dura TODO el día. Compré 3 tonos más. La atención es divina, se sienten como amigas.
+          - generic [ref=e596]:
+            - generic [ref=e597]:
+              - generic [ref=e598]: SP
+              - generic [ref=e599]:
+                - paragraph [ref=e600]: Sofía P.
+                - generic [ref=e601]:
+                  - img [ref=e602]
+                  - img [ref=e604]
+                  - img [ref=e606]
+                  - img [ref=e608]
+                  - img [ref=e610]
+            - paragraph [ref=e612]: La paleta Smoky Night es INSANA. Pigmentada, sin fall out. Definitivamente volveré por más.
+          - generic [ref=e613]:
+            - generic [ref=e614]:
+              - generic [ref=e615]: DL
+              - generic [ref=e616]:
+                - paragraph [ref=e617]: Daniela L.
+                - generic [ref=e618]:
+                  - img [ref=e619]
+                  - img [ref=e621]
+                  - img [ref=e623]
+                  - img [ref=e625]
+                  - img [ref=e627]
+            - paragraph [ref=e629]: El serum de vitamina C me cambió la piel en dos semanas. Ahora todo mi skincare lo compro aquí.
+          - generic [ref=e630]:
+            - generic [ref=e631]:
+              - generic [ref=e632]: VR
+              - generic [ref=e633]:
+                - paragraph [ref=e634]: Valentina R.
+                - generic [ref=e635]:
+                  - img [ref=e636]
+                  - img [ref=e638]
+                  - img [ref=e640]
+                  - img [ref=e642]
+                  - img [ref=e644]
+            - paragraph [ref=e646]: Mi base favorita la conseguí aquí. Me asesoraron perfecto con el tono y ahora es mi base holy grail. 💕
+          - generic [ref=e647]:
+            - generic [ref=e648]:
+              - generic [ref=e649]: CM
+              - generic [ref=e650]:
+                - paragraph [ref=e651]: Camila M.
+                - generic [ref=e652]:
+                  - img [ref=e653]
+                  - img [ref=e655]
+                  - img [ref=e657]
+                  - img [ref=e659]
+                  - img [ref=e661]
+            - paragraph [ref=e663]: El labial matte dura TODO el día. Compré 3 tonos más. La atención es divina, se sienten como amigas.
+          - generic [ref=e664]:
+            - generic [ref=e665]:
+              - generic [ref=e666]: SP
+              - generic [ref=e667]:
+                - paragraph [ref=e668]: Sofía P.
+                - generic [ref=e669]:
+                  - img [ref=e670]
+                  - img [ref=e672]
+                  - img [ref=e674]
+                  - img [ref=e676]
+                  - img [ref=e678]
+            - paragraph [ref=e680]: La paleta Smoky Night es INSANA. Pigmentada, sin fall out. Definitivamente volveré por más.
+          - generic [ref=e681]:
+            - generic [ref=e682]:
+              - generic [ref=e683]: DL
+              - generic [ref=e684]:
+                - paragraph [ref=e685]: Daniela L.
+                - generic [ref=e686]:
+                  - img [ref=e687]
+                  - img [ref=e689]
+                  - img [ref=e691]
+                  - img [ref=e693]
+                  - img [ref=e695]
+            - paragraph [ref=e697]: El serum de vitamina C me cambió la piel en dos semanas. Ahora todo mi skincare lo compro aquí.
+        - generic [ref=e698]:
+          - generic [ref=e699]:
+            - generic [ref=e700]:
+              - generic [ref=e701]: IG
+              - generic [ref=e702]:
+                - paragraph [ref=e703]: Isabella G.
+                - generic [ref=e704]:
+                  - img [ref=e705]
+                  - img [ref=e707]
+                  - img [ref=e709]
+                  - img [ref=e711]
+                  - img [ref=e713]
+            - paragraph [ref=e715]: Queens Essence es mi nueva fragancia signature. Todos me preguntan qué me eché.
+          - generic [ref=e716]:
+            - generic [ref=e717]:
+              - generic [ref=e718]: MT
+              - generic [ref=e719]:
+                - paragraph [ref=e720]: Mariana T.
+                - generic [ref=e721]:
+                  - img [ref=e722]
+                  - img [ref=e724]
+                  - img [ref=e726]
+                  - img [ref=e728]
+                  - img [ref=e730]
+            - paragraph [ref=e732]: El espejo LED es una joyita. Llegó al día siguiente. Super recomendado.
+          - generic [ref=e733]:
+            - generic [ref=e734]:
+              - generic [ref=e735]: JS
+              - generic [ref=e736]:
+                - paragraph [ref=e737]: Juliana S.
+                - generic [ref=e738]:
+                  - img [ref=e739]
+                  - img [ref=e741]
+                  - img [ref=e743]
+                  - img [ref=e745]
+                  - img [ref=e747]
+            - paragraph [ref=e749]: Me encantaron las muestras que me regalaron en mi primera compra. Detalles así enamoran.
+          - generic [ref=e750]:
+            - generic [ref=e751]:
+              - generic [ref=e752]: NC
+              - generic [ref=e753]:
+                - paragraph [ref=e754]: Natalia C.
+                - generic [ref=e755]:
+                  - img [ref=e756]
+                  - img [ref=e758]
+                  - img [ref=e760]
+                  - img [ref=e762]
+                  - img [ref=e764]
+            - paragraph [ref=e766]: El set de brochas vale cada peso. Son sedosas y duran. Servicio 10/10.
+          - generic [ref=e767]:
+            - generic [ref=e768]:
+              - generic [ref=e769]: IG
+              - generic [ref=e770]:
+                - paragraph [ref=e771]: Isabella G.
+                - generic [ref=e772]:
+                  - img [ref=e773]
+                  - img [ref=e775]
+                  - img [ref=e777]
+                  - img [ref=e779]
+                  - img [ref=e781]
+            - paragraph [ref=e783]: Queens Essence es mi nueva fragancia signature. Todos me preguntan qué me eché.
+          - generic [ref=e784]:
+            - generic [ref=e785]:
+              - generic [ref=e786]: MT
+              - generic [ref=e787]:
+                - paragraph [ref=e788]: Mariana T.
+                - generic [ref=e789]:
+                  - img [ref=e790]
+                  - img [ref=e792]
+                  - img [ref=e794]
+                  - img [ref=e796]
+                  - img [ref=e798]
+            - paragraph [ref=e800]: El espejo LED es una joyita. Llegó al día siguiente. Super recomendado.
+          - generic [ref=e801]:
+            - generic [ref=e802]:
+              - generic [ref=e803]: JS
+              - generic [ref=e804]:
+                - paragraph [ref=e805]: Juliana S.
+                - generic [ref=e806]:
+                  - img [ref=e807]
+                  - img [ref=e809]
+                  - img [ref=e811]
+                  - img [ref=e813]
+                  - img [ref=e815]
+            - paragraph [ref=e817]: Me encantaron las muestras que me regalaron en mi primera compra. Detalles así enamoran.
+          - generic [ref=e818]:
+            - generic [ref=e819]:
+              - generic [ref=e820]: NC
+              - generic [ref=e821]:
+                - paragraph [ref=e822]: Natalia C.
+                - generic [ref=e823]:
+                  - img [ref=e824]
+                  - img [ref=e826]
+                  - img [ref=e828]
+                  - img [ref=e830]
+                  - img [ref=e832]
+            - paragraph [ref=e834]: El set de brochas vale cada peso. Son sedosas y duran. Servicio 10/10.
+          - generic [ref=e835]:
+            - generic [ref=e836]:
+              - generic [ref=e837]: IG
+              - generic [ref=e838]:
+                - paragraph [ref=e839]: Isabella G.
+                - generic [ref=e840]:
+                  - img [ref=e841]
+                  - img [ref=e843]
+                  - img [ref=e845]
+                  - img [ref=e847]
+                  - img [ref=e849]
+            - paragraph [ref=e851]: Queens Essence es mi nueva fragancia signature. Todos me preguntan qué me eché.
+          - generic [ref=e852]:
+            - generic [ref=e853]:
+              - generic [ref=e854]: MT
+              - generic [ref=e855]:
+                - paragraph [ref=e856]: Mariana T.
+                - generic [ref=e857]:
+                  - img [ref=e858]
+                  - img [ref=e860]
+                  - img [ref=e862]
+                  - img [ref=e864]
+                  - img [ref=e866]
+            - paragraph [ref=e868]: El espejo LED es una joyita. Llegó al día siguiente. Super recomendado.
+          - generic [ref=e869]:
+            - generic [ref=e870]:
+              - generic [ref=e871]: JS
+              - generic [ref=e872]:
+                - paragraph [ref=e873]: Juliana S.
+                - generic [ref=e874]:
+                  - img [ref=e875]
+                  - img [ref=e877]
+                  - img [ref=e879]
+                  - img [ref=e881]
+                  - img [ref=e883]
+            - paragraph [ref=e885]: Me encantaron las muestras que me regalaron en mi primera compra. Detalles así enamoran.
+          - generic [ref=e886]:
+            - generic [ref=e887]:
+              - generic [ref=e888]: NC
+              - generic [ref=e889]:
+                - paragraph [ref=e890]: Natalia C.
+                - generic [ref=e891]:
+                  - img [ref=e892]
+                  - img [ref=e894]
+                  - img [ref=e896]
+                  - img [ref=e898]
+                  - img [ref=e900]
+            - paragraph [ref=e902]: El set de brochas vale cada peso. Son sedosas y duran. Servicio 10/10.
+    - generic [ref=e904]:
+      - generic [ref=e905]:
+        - generic [ref=e906]: Preguntas frecuentes
+        - heading "Preguntas frecuentes" [level=2] [ref=e907]
+      - generic [ref=e908]:
+        - heading "¿Sus productos son originales?" [level=3] [ref=e910]:
+          - button "¿Sus productos son originales?" [ref=e911]:
+            - text: ¿Sus productos son originales?
+            - img [ref=e912]
+        - heading "¿Hacen envíos fuera de Palmira?" [level=3] [ref=e915]:
+          - button "¿Hacen envíos fuera de Palmira?" [ref=e916]:
+            - text: ¿Hacen envíos fuera de Palmira?
+            - img [ref=e917]
+        - heading "¿Qué métodos de pago aceptan?" [level=3] [ref=e920]:
+          - button "¿Qué métodos de pago aceptan?" [ref=e921]:
+            - text: ¿Qué métodos de pago aceptan?
+            - img [ref=e922]
+        - heading "¿Puedo devolver un producto?" [level=3] [ref=e925]:
+          - button "¿Puedo devolver un producto?" [ref=e926]:
+            - text: ¿Puedo devolver un producto?
+            - img [ref=e927]
+        - heading "¿Ofrecen asesoría personalizada?" [level=3] [ref=e930]:
+          - button "¿Ofrecen asesoría personalizada?" [ref=e931]:
+            - text: ¿Ofrecen asesoría personalizada?
+            - img [ref=e932]
+        - heading "¿Tienen descuentos o promociones?" [level=3] [ref=e935]:
+          - button "¿Tienen descuentos o promociones?" [ref=e936]:
+            - text: ¿Tienen descuentos o promociones?
+            - img [ref=e937]
+    - generic [ref=e941]:
+      - img [ref=e942]
+      - heading "¿Lista para encontrar tu próximo favorito?" [level=2] [ref=e945]
+      - paragraph [ref=e946]: Escríbenos por WhatsApp y te asesoramos con los productos perfectos para ti. Local 128, Unicentro Palmira.
+      - generic [ref=e947]:
+        - link "Asesoría gratis por WhatsApp" [ref=e948] [cursor=pointer]:
+          - /url: https://wa.me/573148677230?text=Hola%20Queens!%20%F0%9F%91%91%20Me%20gustar%C3%ADa%20una%20asesor%C3%ADa%20personalizada%20de%20productos.
+          - img [ref=e949]
+          - text: Asesoría gratis por WhatsApp
+        - link "Ver catálogo" [ref=e951] [cursor=pointer]:
+          - /url: "#catalogo"
+    - generic [ref=e953]:
+      - generic [ref=e954]:
+        - generic [ref=e955]: Visítanos
+        - heading "Nuestra tienda en Unicentro Palmira" [level=2] [ref=e956]:
+          - text: Nuestra tienda en
+          - emphasis [ref=e957]: Unicentro Palmira
+        - paragraph [ref=e958]: Ven y vive la experiencia Queens en persona. Te esperamos con un espacio pensado para consentirte.
+      - generic [ref=e959]:
+        - iframe [ref=e961]
+        - generic [ref=e962]:
+          - generic [ref=e963]:
+            - img [ref=e965]
+            - generic [ref=e968]:
+              - heading "Dirección" [level=3] [ref=e969]
+              - paragraph [ref=e970]: Local 128, Unicentro Palmira
+              - paragraph [ref=e971]: Valle del Cauca, Colombia
+          - generic [ref=e972]:
+            - img [ref=e974]
+            - generic [ref=e977]:
+              - heading "Horario" [level=3] [ref=e978]
+              - paragraph [ref=e979]: Lunes a Domingo
+              - paragraph [ref=e980]: 10:00 AM – 8:00 PM
+          - generic [ref=e981]:
+            - img [ref=e983]
+            - generic [ref=e985]:
+              - heading "Contacto" [level=3] [ref=e986]
+              - paragraph [ref=e987]: "WhatsApp: +57 314 867 7230"
+          - link "Síguenos @queenscosmeticss" [ref=e988] [cursor=pointer]:
+            - /url: https://www.instagram.com/queenscosmeticss/
+            - generic [ref=e989]:
+              - img [ref=e991]
+              - generic [ref=e994]:
+                - heading "Síguenos" [level=3] [ref=e995]
+                - paragraph [ref=e996]: "@queenscosmeticss"
+          - link "Confirmar disponibilidad" [ref=e998] [cursor=pointer]:
+            - /url: https://wa.me/573148677230?text=Hola%20Queens!%20%F0%9F%91%91%20Quiero%20visitar%20la%20tienda%20en%20Unicentro%20Palmira%2C%20tienen%20disponibilidad%3F
+            - img [ref=e999]
+            - text: Confirmar disponibilidad
+    - generic [ref=e1003]:
+      - generic [ref=e1004]:
+        - generic [ref=e1005]:
+          - generic [ref=e1006]:
+            - img "Queens Cosmetics" [ref=e1007]
+            - generic [ref=e1008]: QUEENS
+          - paragraph [ref=e1009]: Cosmética premium en Palmira. La belleza que mereces, con la calidad que te cuidas.
+          - generic [ref=e1010]:
+            - link "Instagram" [ref=e1011] [cursor=pointer]:
+              - /url: https://www.instagram.com/queenscosmeticss/
+              - img [ref=e1012]
+            - link "WhatsApp" [ref=e1015] [cursor=pointer]:
+              - /url: https://wa.me/573148677230?text=Hola%20Queens!%20%F0%9F%91%91%20Me%20gustar%C3%ADa%20recibir%20informaci%C3%B3n%20sobre%20sus%20productos.
+              - img [ref=e1016]
+        - generic [ref=e1018]:
+          - heading "Tienda" [level=4] [ref=e1019]
+          - list [ref=e1020]:
+            - listitem [ref=e1021]:
+              - link "Catálogo" [ref=e1022] [cursor=pointer]:
+                - /url: "#catalogo"
+            - listitem [ref=e1023]:
+              - link "Labiales" [ref=e1024] [cursor=pointer]:
+                - /url: "#catalogo"
+            - listitem [ref=e1025]:
+              - link "Skincare" [ref=e1026] [cursor=pointer]:
+                - /url: "#catalogo"
+            - listitem [ref=e1027]:
+              - link "Fragancias" [ref=e1028] [cursor=pointer]:
+                - /url: "#catalogo"
+            - listitem [ref=e1029]:
+              - link "Accesorios" [ref=e1030] [cursor=pointer]:
+                - /url: "#catalogo"
+        - generic [ref=e1031]:
+          - heading "Queens" [level=4] [ref=e1032]
+          - list [ref=e1033]:
+            - listitem [ref=e1034]:
+              - link "Por qué Queens" [ref=e1035] [cursor=pointer]:
+                - /url: "#por-que"
+            - listitem [ref=e1036]:
+              - link "Galería" [ref=e1037] [cursor=pointer]:
+                - /url: "#galeria"
+            - listitem [ref=e1038]:
+              - link "Testimonios" [ref=e1039] [cursor=pointer]:
+                - /url: "#por-que"
+            - listitem [ref=e1040]:
+              - link "Ubicación" [ref=e1041] [cursor=pointer]:
+                - /url: "#ubicacion"
+        - generic [ref=e1042]:
+          - heading "Contacto" [level=4] [ref=e1043]
+          - list [ref=e1044]:
+            - listitem [ref=e1045]:
+              - img [ref=e1046]
+              - generic [ref=e1049]: Local 128, Unicentro Palmira
+            - listitem [ref=e1050]:
+              - img [ref=e1051]
+              - link "+57 314 867 7230" [ref=e1053] [cursor=pointer]:
+                - /url: https://wa.me/573148677230?text=Hola%20Queens!%20%F0%9F%91%91%20Me%20gustar%C3%ADa%20recibir%20informaci%C3%B3n%20sobre%20sus%20productos.
+            - listitem [ref=e1054]:
+              - img [ref=e1055]
+              - link "@queenscosmeticss" [ref=e1058] [cursor=pointer]:
+                - /url: https://www.instagram.com/queenscosmeticss/
+      - heading "QUEENS" [level=3] [ref=e1060]
+      - generic [ref=e1061]:
+        - paragraph [ref=e1062]: © 2026 Queens Cosmetics. Todos los derechos reservados.
+        - paragraph [ref=e1063]: Palmira, Valle del Cauca · Colombia 🇨🇴
+    - link "Chatear por WhatsApp" [ref=e1065] [cursor=pointer]:
+      - /url: https://wa.me/573148677230?text=Hola%20Queens!%20%F0%9F%91%91%20Me%20gustar%C3%ADa%20recibir%20informaci%C3%B3n%20sobre%20sus%20productos.
+      - img [ref=e1067]
+  - button "Open Next.js Dev Tools" [ref=e1074] [cursor=pointer]:
+    - img [ref=e1075]
+  - alert [ref=e1079]

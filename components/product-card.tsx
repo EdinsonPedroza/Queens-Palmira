@@ -1,6 +1,5 @@
 "use client"
 
-import Image from "next/image"
 import { Plus, Check, ChevronDown } from "lucide-react"
 import { useState } from "react"
 import type { Product } from "@/lib/products"
@@ -44,16 +43,16 @@ export function ProductCard({ product }: { product: Product }) {
       data-testid={`product-${product.id}`}
     >
       {/* Image */}
-      <div className="relative aspect-square overflow-hidden bg-[var(--rose-pastel)]/15">
-        <Image
+      <div className="aspect-square flex items-center justify-center overflow-hidden bg-(--rose-pastel)/10 relative">
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
           src={product.image}
           alt={product.name}
-          fill
-          sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 20vw"
-          className="object-cover transition-transform duration-700 group-hover:scale-110"
+          className="w-4/5 h-4/5 object-contain transition-transform duration-500 group-hover:scale-105"
+          loading="lazy"
         />
         {badgeInfo && (
-          <div className="absolute left-3 top-3">
+          <div className="absolute left-3 top-3 z-10">
             <Badge variant={badgeInfo.variant}>{badgeInfo.text}</Badge>
           </div>
         )}
