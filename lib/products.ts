@@ -141,14 +141,8 @@ export const PRODUCTS: Product[] = [
     image: "/images/products/Samy Labial Liquido Matte.png",
     variants: ["01", "02", "03", "06", "08", "12", "15"],
   },
-  {
-    id: "lip-engol-highlighter",
-    name: "Brillo Holográfico Engol",
-    price: 5000,
-    category: "labiales",
-    description: "Gloss con destellos holográficos.",
-    image: "/images/products/Brillo Holografico Engloss.png",
-  },
+  // Brillo Holográfico Engol: imagen con texto incrustado — reemplazar PNG cuando haya foto limpia
+  // { id: "lip-engol-highlighter", name: "Brillo Holográfico Engol", price: 5000, ... }
   {
     id: "lip-lipgloss-engol",
     name: "Lipgloss Engol",

@@ -49,6 +49,7 @@ export function ProductCard({ product }: { product: Product }) {
           src={product.image}
           alt={product.name}
           className="w-4/5 h-4/5 object-contain transition-transform duration-500 group-hover:scale-105"
+          style={product.imagePosition ? { objectPosition: product.imagePosition } : undefined}
           loading="lazy"
         />
         {badgeInfo && (
