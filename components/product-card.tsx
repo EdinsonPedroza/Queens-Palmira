@@ -1,7 +1,7 @@
 "use client"
 
-import { Plus, Check, ChevronDown } from "lucide-react"
-import { useState } from "react"
+import { Plus, Check, ChevronDown, Palette } from "lucide-react"
+import { useState, useRef, useEffect } from "react"
 import type { Product } from "@/lib/products"
 import { Badge } from "./ui/badge"
 import { useCart } from "@/context/cart-context"
@@ -13,8 +13,116 @@ const BADGE_COPY: Record<NonNullable<Product["badge"]>, { text: string; variant:
   oferta:     { text: "Oferta",      variant: "offer" },
 }
 
-// Products with many variants use a <select>, few variants use pill buttons
-const PILL_THRESHOLD = 7
+// ≤4 variants → inline pills always visible
+// >4 variants → collapsed dropdown with chip panel inside
+const INLINE_THRESHOLD = 4
+
+function VariantChip({
+  label,
+  selected,
+  onClick,
+}: {
+  label: string
+  selected: boolean
+  onClick: () => void
+}) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      aria-pressed={selected}
+      className={[
+        "rounded-full border-2 px-3 py-1 text-xs font-medium leading-none transition-all duration-150 whitespace-nowrap",
+        selected
+          ? "border-[var(--gold-deep)] bg-[var(--gold-deep)] text-white shadow-sm"
+          : "border-[var(--rose-pastel)] text-[var(--ink)] hover:border-[var(--gold-deep)] hover:text-[var(--gold-deep)]",
+      ].join(" ")}
+    >
+      {label}
+    </button>
+  )
+}
+
+function VariantSelector({
+  variants,
+  selected,
+  onSelect,
+}: {
+  variants: string[]
+  selected: string
+  onSelect: (v: string) => void
+}) {
+  const [open, setOpen] = useState(false)
+  const ref = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    if (!open) return
+    function handleClick(e: MouseEvent) {
+      if (ref.current && !ref.current.contains(e.target as Node)) setOpen(false)
+    }
+    document.addEventListener("mousedown", handleClick)
+    return () => document.removeEventListener("mousedown", handleClick)
+  }, [open])
+
+  const isInline = variants.length <= INLINE_THRESHOLD
+
+  if (isInline) {
+    return (
+      <div className="mt-2 space-y-1.5">
+        <p className="text-[10px] font-semibold uppercase tracking-[0.15em] text-[var(--gold-deep)] flex items-center gap-1">
+          <Palette size={10} /> Tono
+        </p>
+        <div className="flex flex-wrap gap-1.5">
+          {variants.map((v) => (
+            <VariantChip key={v} label={v} selected={selected === v} onClick={() => onSelect(v)} />
+          ))}
+        </div>
+      </div>
+    )
+  }
+
+  // Dropdown mode for many variants
+  return (
+    <div className="mt-2 relative" ref={ref}>
+      <p className="text-[10px] font-semibold uppercase tracking-[0.15em] text-[var(--gold-deep)] flex items-center gap-1 mb-1.5">
+        <Palette size={10} /> Tono
+      </p>
+      <button
+        type="button"
+        onClick={() => setOpen((o) => !o)}
+        className={[
+          "w-full flex items-center justify-between gap-2 rounded-xl border-2 px-3 py-2 text-xs font-medium transition-all duration-150",
+          selected
+            ? "border-[var(--gold-deep)] bg-[var(--gold-deep)]/8 text-[var(--ink)]"
+            : "border-[var(--rose-pastel)] text-[var(--muted-foreground)] hover:border-[var(--gold-deep)]",
+        ].join(" ")}
+        aria-expanded={open}
+        aria-label="Seleccionar tono"
+      >
+        <span className="truncate">{selected || "Elige un tono…"}</span>
+        <ChevronDown
+          size={14}
+          className={`shrink-0 transition-transform duration-200 ${open ? "rotate-180" : ""}`}
+        />
+      </button>
+
+      {open && (
+        <div className="absolute z-30 left-0 right-0 top-[calc(100%+4px)] rounded-xl border border-[var(--rose-pastel)] bg-white shadow-xl p-3">
+          <div className="flex flex-wrap gap-1.5 max-h-36 overflow-y-auto">
+            {variants.map((v) => (
+              <VariantChip
+                key={v}
+                label={v}
+                selected={selected === v}
+                onClick={() => { onSelect(v); setOpen(false) }}
+              />
+            ))}
+          </div>
+        </div>
+      )}
+    </div>
+  )
+}
 
 export function ProductCard({ product }: { product: Product }) {
   const { addItem } = useCart()
@@ -24,9 +132,8 @@ export function ProductCard({ product }: { product: Product }) {
   )
 
   const hasVariants = (product.variants?.length ?? 0) > 0
-  const usePills    = hasVariants && (product.variants!.length <= PILL_THRESHOLD)
-  const useSelect   = hasVariants && (product.variants!.length > PILL_THRESHOLD)
   const canAdd      = !hasVariants || selectedVariant !== ""
+  const badgeInfo   = product.badge ? BADGE_COPY[product.badge] : null
 
   const handleAdd = () => {
     if (!canAdd) return
@@ -34,8 +141,6 @@ export function ProductCard({ product }: { product: Product }) {
     setJustAdded(true)
     setTimeout(() => setJustAdded(false), 1200)
   }
-
-  const badgeInfo = product.badge ? BADGE_COPY[product.badge] : null
 
   return (
     <article
@@ -49,7 +154,7 @@ export function ProductCard({ product }: { product: Product }) {
           src={product.image}
           alt={product.name}
           className="w-4/5 h-4/5 object-contain transition-transform duration-500 group-hover:scale-105"
-          style={product.imagePosition ? { objectPosition: product.imagePosition } : undefined}
+          style={product.imageStyle}
           loading="lazy"
         />
         {badgeInfo && (
@@ -61,56 +166,25 @@ export function ProductCard({ product }: { product: Product }) {
       </div>
 
       {/* Content */}
-      <div className="flex flex-1 flex-col gap-2 p-4">
+      <div className="flex flex-1 flex-col p-4">
         <h3 className="font-display text-base font-semibold leading-tight line-clamp-2 text-[var(--ink)]">
           {product.name}
         </h3>
-        <p className="text-xs text-[var(--muted-foreground)] line-clamp-2">
+        <p className="mt-1 text-xs text-[var(--muted-foreground)] line-clamp-2">
           {product.description}
         </p>
 
-        {/* Variant selector — pills */}
-        {usePills && (
-          <div className="flex flex-wrap gap-1 mt-1">
-            {product.variants!.map((v) => (
-              <button
-                key={v}
-                type="button"
-                onClick={() => setSelectedVariant(v)}
-                className={[
-                  "rounded-full border px-2 py-0.5 text-[10px] font-medium leading-none transition-all",
-                  selectedVariant === v
-                    ? "border-[var(--gold-deep)] bg-[var(--gold-deep)] text-white"
-                    : "border-[var(--rose-pastel)] text-[var(--muted-foreground)] hover:border-[var(--gold-deep)] hover:text-[var(--gold-deep)]",
-                ].join(" ")}
-                aria-pressed={selectedVariant === v}
-              >
-                {v}
-              </button>
-            ))}
-          </div>
-        )}
-
-        {/* Variant selector — dropdown for many options */}
-        {useSelect && (
-          <div className="relative mt-1">
-            <select
-              value={selectedVariant}
-              onChange={(e) => setSelectedVariant(e.target.value)}
-              className="w-full appearance-none rounded-lg border border-[var(--rose-pastel)] bg-white py-1.5 pl-3 pr-8 text-xs text-[var(--ink)] focus:outline-none focus:ring-1 focus:ring-[var(--gold-deep)]"
-              aria-label="Seleccionar tono"
-            >
-              <option value="">Elige un tono…</option>
-              {product.variants!.map((v) => (
-                <option key={v} value={v}>{v}</option>
-              ))}
-            </select>
-            <ChevronDown className="pointer-events-none absolute right-2 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-[var(--muted-foreground)]" />
-          </div>
+        {/* Variant selector */}
+        {hasVariants && (
+          <VariantSelector
+            variants={product.variants!}
+            selected={selectedVariant}
+            onSelect={setSelectedVariant}
+          />
         )}
 
         {/* Price + Add button */}
-        <div className="mt-auto flex items-end justify-between gap-2 pt-2">
+        <div className="mt-auto flex items-center justify-between gap-2 pt-3">
           <div className="font-display text-xl font-bold text-[var(--gold-deep)]">
             {formatCOP(product.price)}
           </div>
@@ -119,26 +193,25 @@ export function ProductCard({ product }: { product: Product }) {
             onClick={handleAdd}
             disabled={!canAdd}
             className={[
-              "group/btn relative flex h-10 w-10 items-center justify-center rounded-full text-white shadow-md transition-all",
+              "group/btn relative flex h-10 w-10 shrink-0 items-center justify-center rounded-full text-white shadow-md transition-all",
               canAdd
                 ? "bg-queens-gradient-intense hover:scale-110 hover:shadow-lg"
-                : "cursor-not-allowed bg-[var(--rose-pastel)] opacity-60",
+                : "cursor-not-allowed bg-[var(--rose-pastel)] opacity-50",
             ].join(" ")}
             aria-label={`Agregar ${product.name} al carrito`}
             data-testid={`add-${product.id}`}
           >
-            {justAdded ? (
-              <Check className="h-5 w-5 animate-fade-up" />
-            ) : (
-              <Plus className="h-5 w-5 transition-transform group-hover/btn:rotate-90" />
-            )}
+            {justAdded
+              ? <Check className="h-5 w-5" />
+              : <Plus className="h-5 w-5 transition-transform group-hover/btn:rotate-90" />
+            }
           </button>
         </div>
 
         {/* Hint when variant required but not chosen */}
         {hasVariants && !selectedVariant && (
-          <p className="text-[10px] text-center text-[var(--muted-foreground)] -mt-1">
-            Elige un tono para agregar
+          <p className="mt-1 text-[10px] text-center text-[var(--muted-foreground)]">
+            Selecciona un tono para agregar
           </p>
         )}
       </div>

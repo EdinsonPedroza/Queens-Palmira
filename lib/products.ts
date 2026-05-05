@@ -1,3 +1,5 @@
+import type React from "react"
+
 export type ProductCategory =
   | "labiales"
   | "rostro"
@@ -15,7 +17,7 @@ export interface Product {
   image: string
   variants?: string[]
   badge?: "nuevo" | "bestseller" | "oferta"
-  imagePosition?: string
+  imageStyle?: React.CSSProperties
 }
 
 export const CATEGORIES: { id: ProductCategory; label: string; tagline: string }[] = [
@@ -57,7 +59,7 @@ export const PRODUCTS: Product[] = [
     description: "Gloss hidratante de larga duración.",
     image: "/images/products/GlowFusion Montoc.png",
     variants: ["Alba", "Lyra", "Ariel", "Aurora"],
-    imagePosition: "70% 80%",
+    imageStyle: { transform: "scale(1.5) translate(-18%, -18%)" },
   },
   {
     id: "lip-vogue-resist-14h",
