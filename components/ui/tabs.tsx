@@ -13,7 +13,7 @@ const TabsList = React.forwardRef<
   <TabsPrimitive.List
     ref={ref}
     className={cn(
-      "inline-flex flex-wrap items-center justify-center gap-2 rounded-full bg-[var(--rose-pastel)]/30 p-2 backdrop-blur",
+      "inline-flex flex-wrap items-center justify-center gap-2 rounded-full bg-(--rose-pastel)/30 p-2 backdrop-blur",
       className,
     )}
     {...props}
@@ -28,9 +28,14 @@ const TabsTrigger = React.forwardRef<
   <TabsPrimitive.Trigger
     ref={ref}
     className={cn(
-      "inline-flex items-center justify-center rounded-full px-5 py-2.5 text-sm font-medium tracking-wide transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--gold)] disabled:pointer-events-none disabled:opacity-50",
-      "text-[var(--ink)]/70 hover:text-[var(--ink)]",
-      "data-[state=active]:bg-white data-[state=active]:text-[var(--ink)] data-[state=active]:shadow-[0_4px_16px_-4px_rgba(212,175,55,0.4)]",
+      "inline-flex items-center justify-center gap-1.5 rounded-full px-5 py-2.5 text-sm font-medium tracking-wide",
+      "transition-all duration-200 cursor-pointer select-none",
+      "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold",
+      "disabled:pointer-events-none disabled:opacity-50",
+      "text-(--ink)/60 hover:text-ink hover:bg-white/60 hover:scale-[1.03]",
+      "data-[state=active]:bg-white data-[state=active]:text-gold-deep data-[state=active]:font-semibold",
+      "data-[state=active]:shadow-[0_4px_20px_-4px_rgba(212,175,55,0.45),0_0_0_1.5px_rgba(212,175,55,0.25)]",
+      "data-[state=active]:scale-[1.04]",
       className,
     )}
     {...props}

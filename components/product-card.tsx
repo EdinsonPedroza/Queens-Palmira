@@ -32,10 +32,12 @@ function VariantChip({
       onClick={onClick}
       aria-pressed={selected}
       className={[
-        "rounded-full border-2 px-3 py-1 text-xs font-medium leading-none transition-all duration-150 whitespace-nowrap",
+        "rounded-full border-2 px-3 py-1 text-xs font-medium leading-none whitespace-nowrap",
+        "cursor-pointer select-none transition-all duration-150",
+        "active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold",
         selected
-          ? "border-[var(--gold-deep)] bg-[var(--gold-deep)] text-white shadow-sm"
-          : "border-[var(--rose-pastel)] text-[var(--ink)] hover:border-[var(--gold-deep)] hover:text-[var(--gold-deep)]",
+          ? "border-[var(--gold-deep)] bg-[var(--gold-deep)] text-white shadow-md scale-[1.05]"
+          : "border-[var(--rose-pastel)] text-(--ink)/70 hover:border-gold-deep hover:text-gold-deep hover:scale-[1.05] hover:shadow-sm",
       ].join(" ")}
     >
       {label}
@@ -91,10 +93,11 @@ function VariantSelector({
         type="button"
         onClick={() => setOpen((o) => !o)}
         className={[
-          "w-full flex items-center justify-between gap-2 rounded-xl border-2 px-3 py-2 text-xs font-medium transition-all duration-150",
+          "w-full flex items-center justify-between gap-2 rounded-xl border-2 px-3 py-2 text-xs font-medium",
+          "cursor-pointer select-none transition-all duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold",
           selected
             ? "border-[var(--gold-deep)] bg-[var(--gold-deep)]/8 text-[var(--ink)]"
-            : "border-[var(--rose-pastel)] text-[var(--muted-foreground)] hover:border-[var(--gold-deep)]",
+            : "border-[var(--rose-pastel)] text-[var(--muted-foreground)] hover:border-gold-deep hover:text-gold-deep",
         ].join(" ")}
         aria-expanded={open}
         aria-label="Seleccionar tono"

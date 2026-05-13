@@ -35,20 +35,20 @@ export function Hero() {
         }}
       >
         <Image
-          src="https://images.unsplash.com/photo-1596462502278-27bfdc403348?w=1920&q=85"
+          src="/images/herofondo.png"
           alt="Cosméticos premium Queens"
           fill
           sizes="100vw"
           priority
           className="object-cover"
-          style={{ objectPosition: "center 25%" }}
+          style={{ objectPosition: "center center" }}
         />
         {/* Soft overlay */}
         <div
           className="absolute inset-0"
           style={{
             background:
-              "linear-gradient(to right, rgba(0,0,0,0.92) 45%, rgba(0,0,0,0.4) 100%)",
+              "linear-gradient(to right, rgba(0,0,0,0.85) 40%, rgba(0,0,0,0.15) 100%)",
           }}
         />
         {/* Bottom fade */}

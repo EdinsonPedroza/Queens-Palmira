@@ -20,13 +20,13 @@ export interface Product {
   imageStyle?: React.CSSProperties
 }
 
-export const CATEGORIES: { id: ProductCategory; label: string; tagline: string }[] = [
-  { id: "labiales",  label: "Labiales",       tagline: "Besos de seda y color" },
-  { id: "rostro",    label: "Rostro",          tagline: "La base de tu belleza" },
-  { id: "ojos",      label: "Ojos",            tagline: "Miradas que hipnotizan" },
-  { id: "skincare",  label: "Skin Care",       tagline: "Tu ritual de reina" },
-  { id: "unas",      label: "Uñas",            tagline: "Detalles que enamoran" },
-  { id: "capilar",   label: "Línea Capilar",   tagline: "Cabello de reina" },
+export const CATEGORIES: { id: ProductCategory; label: string; icon: string; tagline: string }[] = [
+  { id: "labiales",  label: "Labiales",       icon: "💋", tagline: "Besos de seda y color" },
+  { id: "rostro",    label: "Rostro",          icon: "✨", tagline: "La base de tu belleza" },
+  { id: "ojos",      label: "Ojos",            icon: "👁️", tagline: "Miradas que hipnotizan" },
+  { id: "skincare",  label: "Skin Care",       icon: "🌸", tagline: "Tu ritual de reina" },
+  { id: "unas",      label: "Uñas",            icon: "💅", tagline: "Detalles que enamoran" },
+  { id: "capilar",   label: "Línea Capilar",   icon: "👑", tagline: "Cabello de reina" },
 ]
 
 export const PRODUCTS: Product[] = [

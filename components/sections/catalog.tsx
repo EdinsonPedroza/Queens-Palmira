@@ -43,6 +43,7 @@ export function Catalog() {
             <TabsList>
               {CATEGORIES.map((c) => (
                 <TabsTrigger key={c.id} value={c.id}>
+                  <span aria-hidden="true">{c.icon}</span>
                   {c.label}
                 </TabsTrigger>
               ))}
