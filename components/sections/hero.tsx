@@ -64,9 +64,8 @@ export function Hero() {
       <div className="relative z-10 mx-auto flex min-h-[100svh] max-w-7xl items-center px-6 md:px-10 pt-24 pb-16">
         <div className="w-full max-w-2xl">
           <div style={slide(0.2)}>
-            <div className="inline-flex items-center gap-2 rounded-full border border-[var(--gold)] bg-black/60 backdrop-blur px-4 py-1.5 mb-6">
-              <span className="inline-block h-2 w-2 rounded-full bg-[var(--gold)] animate-pulse" />
-              <span className="text-xs font-semibold tracking-[0.2em] text-[var(--gold)] uppercase">
+            <div className="mb-6">
+              <span className="text-[10px] font-semibold tracking-[0.25em] text-[var(--gold)]/80 uppercase">
                 Cosmética Premium · Palmira
               </span>
             </div>
@@ -76,8 +75,8 @@ export function Hero() {
             <h1
               className="font-display leading-[1.05] mb-6"
               style={{
-                fontSize: "clamp(2.8rem, 7vw, 5.5rem)",
-                letterSpacing: "-0.04em",
+                fontSize: "clamp(2rem, 5vw, 3.8rem)",
+                letterSpacing: "-0.03em",
               }}
             >
               <span className="block text-white font-medium">La belleza</span>
@@ -88,7 +87,7 @@ export function Hero() {
           </div>
 
           <div style={slide(0.5)}>
-            <p className="max-w-lg text-base md:text-lg leading-relaxed text-white/80 mb-10 font-body">
+            <p className="max-w-lg text-sm md:text-base leading-relaxed text-white/70 mb-10 font-body">
               Cosméticos premium seleccionados para ti. Maquillaje, skincare,
               esmaltes y línea capilar en Local 128, Unicentro Palmira.
             </p>

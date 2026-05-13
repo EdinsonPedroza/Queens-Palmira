@@ -35,8 +35,8 @@ export function Navbar() {
         className={cn(
           "fixed top-0 left-0 right-0 z-40 transition-all duration-500",
           scrolled
-            ? "bg-white/80 backdrop-blur-xl shadow-[0_4px_24px_-12px_rgba(255,105,180,0.25)]"
-            : "bg-transparent",
+            ? "bg-white/90 backdrop-blur-xl shadow-[0_4px_24px_-12px_rgba(255,105,180,0.25)]"
+            : "bg-black/30 backdrop-blur-sm border-b border-white/10",
         )}
       >
         <div className="mx-auto flex max-w-7xl items-center justify-between px-5 md:px-8 py-4">
@@ -49,7 +49,12 @@ export function Navbar() {
               <a
                 key={l.href}
                 href={l.href}
-                className="text-sm font-medium text-[var(--ink)]/80 hover:text-[var(--gold-deep)] transition-colors relative group"
+                className={cn(
+                  "text-sm font-medium transition-colors relative group",
+                  scrolled
+                    ? "text-(--ink)/80 hover:text-gold-deep"
+                    : "text-white/90 hover:text-gold drop-shadow-sm"
+                )}
               >
                 {l.label}
                 <span className="absolute bottom-[-4px] left-0 h-[2px] w-0 bg-queens-gradient-intense transition-all duration-300 group-hover:w-full" />
@@ -61,7 +66,12 @@ export function Navbar() {
             <button
               type="button"
               onClick={openCart}
-              className="relative rounded-full p-2.5 text-[var(--ink)] hover:bg-[var(--rose-pastel)]/30 transition"
+              className={cn(
+                "relative rounded-full p-2.5 transition",
+                scrolled
+                  ? "text-ink hover:bg-(--rose-pastel)/30"
+                  : "text-white hover:bg-white/15"
+              )}
               aria-label={`Carrito con ${count} items`}
               data-testid="cart-trigger"
             >
@@ -86,7 +96,10 @@ export function Navbar() {
 
             <button
               type="button"
-              className="lg:hidden rounded-full p-2 text-[var(--ink)]"
+              className={cn(
+                "lg:hidden rounded-full p-2 transition",
+                scrolled ? "text-ink" : "text-white"
+              )}
               onClick={() => setMobileOpen((v) => !v)}
               aria-label="Menú"
             >
