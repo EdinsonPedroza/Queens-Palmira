@@ -3,11 +3,12 @@ import { cn } from "@/lib/utils"
 
 interface QueensLogoProps {
   className?: string
-  variant?: "default" | "inline" | "white"
+  variant?: "default" | "white"
   size?: number
 }
 
-export function QueensLogo({ className, size = 48 }: QueensLogoProps) {
+export function QueensLogo({ className, variant = "default", size = 48 }: QueensLogoProps) {
+  const isWhite = variant === "white"
   return (
     <div className={cn("inline-flex items-center gap-2", className)}>
       <Image
@@ -16,10 +17,15 @@ export function QueensLogo({ className, size = 48 }: QueensLogoProps) {
         width={size}
         height={size}
         className="shrink-0"
-        style={{ mixBlendMode: "multiply" }}
+        style={isWhite ? { filter: "brightness(0) invert(1)" } : undefined}
         priority
       />
-      <span className="font-display tracking-[0.3em] font-bold text-lg text-[var(--ink)]">
+      <span
+        className={cn(
+          "font-display tracking-[0.3em] font-bold text-lg",
+          isWhite ? "text-white" : "text-ink"
+        )}
+      >
         QUEENS
       </span>
     </div>

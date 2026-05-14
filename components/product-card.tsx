@@ -151,15 +151,17 @@ export function ProductCard({ product }: { product: Product }) {
       data-testid={`product-${product.id}`}
     >
       {/* Image */}
-      <div className="aspect-square flex items-center justify-center overflow-hidden bg-(--rose-pastel)/10 relative">
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
-          src={product.image}
-          alt={product.name}
-          className="w-4/5 h-4/5 object-contain transition-transform duration-500 group-hover:scale-105"
-          style={product.imageStyle}
-          loading="lazy"
-        />
+      <div className="aspect-square relative overflow-hidden bg-(--rose-pastel)/10">
+        <div className="absolute inset-0 flex items-center justify-center p-6">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src={product.image}
+            alt={product.name}
+            className="max-w-full max-h-full w-auto h-auto object-contain transition-transform duration-500 group-hover:scale-105"
+            style={product.imageStyle}
+            loading="lazy"
+          />
+        </div>
         {badgeInfo && (
           <div className="absolute left-3 top-3 z-10">
             <Badge variant={badgeInfo.variant}>{badgeInfo.text}</Badge>
