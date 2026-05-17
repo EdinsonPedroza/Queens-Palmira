@@ -34,28 +34,18 @@ const fadeIn = {
 export function Hero() {
   const ref = useRef<HTMLElement>(null)
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start start", "end start"] })
-
-  const imgY = useTransform(scrollYProgress, [0, 1], ["0%", "20%"])
-  const imgScale = useTransform(scrollYProgress, [0, 1], [1, 1.03])
   const textY = useTransform(scrollYProgress, [0, 1], ["0%", "12%"])
-  const overlayOpacity = useTransform(scrollYProgress, [0, 0.6], [0.35, 0.55])
 
   return (
     <section
       ref={ref}
       id="hero"
-      className="relative min-h-[100svh] overflow-hidden bg-black"
+      className="relative min-h-[100svh] overflow-hidden bg-white"
     >
       {/* Background — parallax */}
-      <motion.div
-        className="absolute inset-0 z-0"
-        style={{ y: imgY, scale: imgScale }}
-        initial={{ opacity: 0, scale: 1.04 }}
-        animate={{ opacity: 1, scale: 1 }}
-        transition={{ duration: 2, ease: [0.16, 1, 0.3, 1] }}
-      >
+      <div className="absolute inset-0 z-0">
         <Image
-          src="/images/fondhe.png"
+          src="/images/kkk.png"
           alt="Cosméticos premium Queens"
           fill
           sizes="100vw"
@@ -64,17 +54,15 @@ export function Hero() {
           className="object-contain"
           style={{ objectPosition: "center center" }}
         />
-      </motion.div>
+      </div>
 
-      {/* Overlay — se oscurece al hacer scroll */}
-      <motion.div
-        className="absolute inset-0 z-[1]"
+      {/* Gradient left → right */}
+      <div
+        className="absolute inset-0 z-[1] pointer-events-none"
         style={{
-          opacity: overlayOpacity,
-          background: "linear-gradient(to right, rgba(0,0,0,0.6) 30%, rgba(0,0,0,0.1) 100%)",
+          background: "linear-gradient(to right, rgba(255,182,193,0.18) 0%, rgba(212,175,55,0.08) 50%, transparent 100%)",
         }}
       />
-
 
       {/* Content */}
       <motion.div
@@ -106,7 +94,7 @@ export function Hero() {
               }}
             >
               <motion.span
-                className="block text-white font-medium"
+                className="block text-[#2C1810] font-medium"
                 variants={fadeIn}
               >
                 La belleza
@@ -123,7 +111,7 @@ export function Hero() {
           {/* Description */}
           <motion.p
             variants={fadeUp}
-            className="max-w-md text-xs md:text-sm leading-relaxed text-white/60 mb-10 font-body"
+            className="max-w-md text-xs md:text-sm leading-relaxed text-[#2C1810]/60 mb-10 font-body"
           >
             Cosméticos premium seleccionados para ti. Maquillaje, skincare,
             esmaltes y línea capilar en Local 128, Unicentro Palmira.
@@ -147,7 +135,7 @@ export function Hero() {
                 asChild
                 variant="outline"
                 size="lg"
-                className="bg-transparent text-white border-white/30 hover:bg-white/10 hover:text-white"
+                className="bg-transparent text-[#2C1810] border-[#2C1810]/30 hover:bg-[#2C1810]/10 hover:text-[#2C1810]"
               >
                 <a href={WA_VISIT} target="_blank" rel="noopener noreferrer">
                   <MessageCircle className="h-5 w-5" />
@@ -163,7 +151,7 @@ export function Hero() {
       <motion.a
         href="#catalogo"
         aria-label="Ver catálogo"
-        className="absolute bottom-8 left-1/2 z-10 -translate-x-1/2 text-white/50 hover:text-[var(--gold)] transition-colors"
+        className="absolute bottom-8 left-1/2 z-10 -translate-x-1/2 text-[#2C1810]/40 hover:text-[var(--gold)] transition-colors"
         initial={{ opacity: 0, y: -8 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 1.8, duration: 0.8 }}

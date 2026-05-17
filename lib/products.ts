@@ -59,7 +59,7 @@ export const PRODUCTS: Product[] = [
     description: "Gloss hidratante de larga duración.",
     image: "/images/products/GlowFusion Montoc.png",
     variants: ["Alba", "Lyra", "Ariel", "Aurora"],
-    imageStyle: { transform: "scale(1.5) translate(-18%, -18%)" },
+    imageStyle: { transform: "translate(-28%, 8%)" },
   },
   {
     id: "lip-vogue-resist-14h",
@@ -88,6 +88,7 @@ export const PRODUCTS: Product[] = [
     description: "Acabado mate aterciopelado de larga duración.",
     image: "/images/products/Labial Liquido Mate Feels Ruby Rose.png",
     variants: ["129", "356", "362", "366", "376", "066"],
+    imageStyle: { transform: "translateX(-15%)" },
   },
   {
     id: "lip-duo-fells-ruby-rose",
@@ -97,6 +98,7 @@ export const PRODUCTS: Product[] = [
     description: "Labial en barra con acabado satinado.",
     image: "/images/products/Labial Duo Fells Ruby Rose.png",
     variants: ["312", "302", "316", "360", "311", "362", "361", "211"],
+    imageStyle: { transform: "translateX(35%)" },
   },
   {
     id: "lip-3b-barra",
@@ -106,6 +108,7 @@ export const PRODUCTS: Product[] = [
     description: "Labial cremoso clásico.",
     image: "/images/products/Labial en Barra 3b Jmart.png",
     variants: ["Aventura", "Frutos Rojos", "Nude", "Pimienta", "Rosa", "Vital"],
+    imageStyle: { transform: "translateX(40%)" },
   },
   {
     id: "lip-tinta-tatto-engol",
@@ -316,6 +319,7 @@ export const PRODUCTS: Product[] = [
     image: "/images/products/Rubor Compacto 1ST SCENE Atenea.png",
     badge: "nuevo",
     variants: ["Pink Pearl", "Peach Melba", "Dusty Rose", "Salmon"],
+    imageStyle: { transform: "translateY(28%)" },
   },
   {
     id: "rubor-nostalgic-montoc",
@@ -325,6 +329,7 @@ export const PRODUCTS: Product[] = [
     description: "Rubor en crema fácil de difuminar.",
     image: "/images/products/Rubor en crema Nostalgic MONTOC.png",
     variants: ["So pretty", "Darling", "Exquisite", "Honey"],
+    imageStyle: { transform: "translateY(35%)" },
   },
   {
     id: "rubor-humide-montoc",
@@ -343,6 +348,7 @@ export const PRODUCTS: Product[] = [
     description: "Rubor compacto de alta pigmentación.",
     image: "/images/products/Rubor Compacto Samy Blush.png",
     variants: ["Vanity", "Salmón", "Golden Rose", "Lady", "Satin Pink", "Tierra"],
+    imageStyle: { transform: "translateX(-30%)" },
   },
   {
     id: "rubor-nailen",
@@ -351,6 +357,7 @@ export const PRODUCTS: Product[] = [
     category: "rostro",
     description: "Rubor compacto con acabado natural.",
     image: "/images/products/Rubor Nailen.png",
+    imageStyle: { transform: "translateY(-15%)" },
   },
   {
     id: "rubor-pocket-blush-montoc",
@@ -359,6 +366,7 @@ export const PRODUCTS: Product[] = [
     category: "rostro",
     description: "Rubor compacto mini para llevar siempre.",
     image: "/images/products/Rubor Pocket Blush Montoc.png",
+    imageStyle: { transform: "translate(28%, 25%)" },
   },
   {
     id: "rubor-jelly-blush-engol",
@@ -781,6 +789,7 @@ export const PRODUCTS: Product[] = [
     category: "skincare",
     description: "Gel de afeitar profesional para piel suave.",
     image: "/images/products/Gel de Afeitar Barber Duvy Class.png",
+    imageStyle: { transform: "translateY(8%)" },
   },
   {
     id: "balsamo-after-shave",
@@ -1225,6 +1234,7 @@ export const PRODUCTS: Product[] = [
     category: "capilar",
     description: "Tinte sin amoniaco con biotina y keratina.",
     image: "/images/products/Lissia Tinte en Crema Biotina Keratina.png",
+    imageStyle: { transform: "translateX(-12%)" },
   },
   {
     id: "cubre-canas-fresh-co",
