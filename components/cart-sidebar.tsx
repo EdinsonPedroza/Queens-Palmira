@@ -16,7 +16,7 @@ export function CartSidebar() {
     const msg = buildOrderMessage(
       items.map((i) => ({ product: i.product, variant: i.variant, qty: i.qty })),
     )
-    window.open(waLink(msg), "_blank", "noopener,noreferrer")
+    window.location.href = waLink(msg)
   }
 
   return (
