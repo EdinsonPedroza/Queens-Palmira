@@ -36,9 +36,9 @@ export function Hero() {
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start start", "end start"] })
 
   const imgY = useTransform(scrollYProgress, [0, 1], ["0%", "20%"])
-  const imgScale = useTransform(scrollYProgress, [0, 1], [1, 1.08])
+  const imgScale = useTransform(scrollYProgress, [0, 1], [1, 1.03])
   const textY = useTransform(scrollYProgress, [0, 1], ["0%", "12%"])
-  const overlayOpacity = useTransform(scrollYProgress, [0, 0.6], [0.85, 0.95])
+  const overlayOpacity = useTransform(scrollYProgress, [0, 0.6], [0.35, 0.55])
 
   return (
     <section
@@ -50,17 +50,18 @@ export function Hero() {
       <motion.div
         className="absolute inset-0 z-0"
         style={{ y: imgY, scale: imgScale }}
-        initial={{ opacity: 0, scale: 1.1 }}
+        initial={{ opacity: 0, scale: 1.04 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 2, ease: [0.16, 1, 0.3, 1] }}
       >
         <Image
-          src="/images/herofondo.png"
+          src="/images/fondhe.png"
           alt="Cosméticos premium Queens"
           fill
           sizes="100vw"
           priority
-          className="object-cover"
+          quality={100}
+          className="object-contain"
           style={{ objectPosition: "center center" }}
         />
       </motion.div>
@@ -70,42 +71,10 @@ export function Hero() {
         className="absolute inset-0 z-[1]"
         style={{
           opacity: overlayOpacity,
-          background: "linear-gradient(to right, rgba(0,0,0,1) 35%, rgba(0,0,0,0.2) 100%)",
+          background: "linear-gradient(to right, rgba(0,0,0,0.6) 30%, rgba(0,0,0,0.1) 100%)",
         }}
       />
 
-      {/* Bottom fade */}
-      <div
-        className="absolute inset-x-0 bottom-0 z-[2] h-48 pointer-events-none"
-        style={{ background: "linear-gradient(to bottom, transparent, rgba(0,0,0,1))" }}
-      />
-
-      {/* Shimmer particles */}
-      <div className="absolute inset-0 z-[2] pointer-events-none overflow-hidden">
-        {[...Array(6)].map((_, i) => (
-          <motion.div
-            key={i}
-            className="absolute rounded-full bg-[#D4AF37]"
-            style={{
-              width: Math.random() * 3 + 1,
-              height: Math.random() * 3 + 1,
-              left: `${10 + i * 14}%`,
-              top: `${20 + (i % 3) * 20}%`,
-            }}
-            animate={{
-              opacity: [0, 0.6, 0],
-              y: [0, -30, -60],
-              scale: [0, 1, 0],
-            }}
-            transition={{
-              duration: 3 + i * 0.8,
-              repeat: Infinity,
-              delay: i * 0.9,
-              ease: "easeInOut",
-            }}
-          />
-        ))}
-      </div>
 
       {/* Content */}
       <motion.div
