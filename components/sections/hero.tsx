@@ -102,22 +102,9 @@ export function Hero() {
   return (
     <section ref={ref} id="hero" className="bg-white">
 
-      {/* ── MOBILE: imagen arriba, texto abajo ── */}
-      <div className="md:hidden pt-20">
-        <div className="relative w-full aspect-[4/3]">
-          <Image
-            src="/images/kkk.png"
-            alt="Cosméticos premium Queens"
-            fill
-            sizes="100vw"
-            priority
-            quality={100}
-            className="object-contain"
-          />
-        </div>
-        <div className="px-6 py-10">
-          {textContent}
-        </div>
+      {/* ── MOBILE: solo texto ── */}
+      <div className="md:hidden pt-24 pb-16 px-6 min-h-[60svh] flex items-center">
+        {textContent}
       </div>
 
       {/* ── DESKTOP: overlay clásico full-screen ── */}
