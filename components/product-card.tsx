@@ -2,6 +2,7 @@
 
 import { Plus, Check, ChevronDown, Palette } from "lucide-react"
 import { useState, useRef, useEffect } from "react"
+import { motion, AnimatePresence } from "framer-motion"
 import type { Product } from "@/lib/products"
 import { Badge } from "./ui/badge"
 import { useCart } from "@/context/cart-context"
@@ -146,9 +147,12 @@ export function ProductCard({ product }: { product: Product }) {
   }
 
   return (
-    <article
-      className="group product-card-lift relative flex flex-col overflow-hidden rounded-2xl bg-white border border-[var(--rose-pastel)]/40"
+    <motion.article
+      className="group relative flex flex-col overflow-hidden rounded-2xl bg-white border border-[var(--rose-pastel)]/40"
       data-testid={`product-${product.id}`}
+      whileHover={{ y: -6, boxShadow: "0 20px 40px -12px rgba(212,175,55,0.2), 0 0 0 1px rgba(212,175,55,0.12)" }}
+      transition={{ type: "spring", stiffness: 400, damping: 28 }}
+      style={{ cursor: "default" }}
     >
       {/* Image */}
       <div className="aspect-square relative overflow-hidden bg-(--rose-pastel)/10">
@@ -193,24 +197,59 @@ export function ProductCard({ product }: { product: Product }) {
           <div className="font-display text-xl font-bold text-[var(--gold-deep)]">
             {formatCOP(product.price)}
           </div>
-          <button
+          <motion.button
             type="button"
             onClick={handleAdd}
             disabled={!canAdd}
+            whileHover={canAdd ? { scale: 1.15 } : {}}
+            whileTap={canAdd ? { scale: 0.88 } : {}}
+            transition={{ type: "spring", stiffness: 500, damping: 22 }}
             className={[
-              "group/btn relative flex h-10 w-10 shrink-0 items-center justify-center rounded-full text-white shadow-md transition-all",
+              "relative flex h-10 w-10 shrink-0 items-center justify-center rounded-full text-white shadow-md",
               canAdd
-                ? "bg-queens-gradient-intense hover:scale-110 hover:shadow-lg"
+                ? "bg-queens-gradient-intense cursor-pointer"
                 : "cursor-not-allowed bg-[var(--rose-pastel)] opacity-50",
             ].join(" ")}
             aria-label={`Agregar ${product.name} al carrito`}
             data-testid={`add-${product.id}`}
           >
-            {justAdded
-              ? <Check className="h-5 w-5" />
-              : <Plus className="h-5 w-5 transition-transform group-hover/btn:rotate-90" />
-            }
-          </button>
+            {/* Ripple al agregar */}
+            <AnimatePresence>
+              {justAdded && (
+                <motion.span
+                  className="absolute inset-0 rounded-full bg-white/30"
+                  initial={{ scale: 0.6, opacity: 0.8 }}
+                  animate={{ scale: 2, opacity: 0 }}
+                  exit={{ opacity: 0 }}
+                  transition={{ duration: 0.5 }}
+                />
+              )}
+            </AnimatePresence>
+
+            <AnimatePresence mode="wait">
+              {justAdded ? (
+                <motion.span
+                  key="check"
+                  initial={{ scale: 0, rotate: -90 }}
+                  animate={{ scale: 1, rotate: 0 }}
+                  exit={{ scale: 0 }}
+                  transition={{ type: "spring", stiffness: 500, damping: 20 }}
+                >
+                  <Check className="h-5 w-5" />
+                </motion.span>
+              ) : (
+                <motion.span
+                  key="plus"
+                  initial={{ scale: 0, rotate: 90 }}
+                  animate={{ scale: 1, rotate: 0 }}
+                  exit={{ scale: 0 }}
+                  transition={{ type: "spring", stiffness: 500, damping: 20 }}
+                >
+                  <Plus className="h-5 w-5" />
+                </motion.span>
+              )}
+            </AnimatePresence>
+          </motion.button>
         </div>
 
         {/* Hint when variant required but not chosen */}
@@ -220,6 +259,6 @@ export function ProductCard({ product }: { product: Product }) {
           </p>
         )}
       </div>
-    </article>
+    </motion.article>
   )
 }
