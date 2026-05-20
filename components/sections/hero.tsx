@@ -34,11 +34,12 @@ const fadeIn = {
 export function Hero() {
   const ref = useRef<HTMLElement>(null)
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start start", "end start"] })
-  const textY = useTransform(scrollYProgress, [0, 1], ["0%", "12%"])
+  const textY = useTransform(scrollYProgress, [0, 1], ["0%", "10%"])
+  const imgScale = useTransform(scrollYProgress, [0, 1], [1, 1.06])
 
   const textContent = (
     <motion.div
-      className="w-full max-w-2xl"
+      className="w-full max-w-xl"
       variants={container}
       initial="hidden"
       animate="show"
@@ -54,7 +55,7 @@ export function Hero() {
       <motion.div variants={fadeUp}>
         <h1
           className="font-display leading-[1.05] mb-6"
-          style={{ fontSize: "clamp(2.8rem, 6.5vw, 5.2rem)", letterSpacing: "-0.03em" }}
+          style={{ fontSize: "clamp(2.8rem, 5.5vw, 5rem)", letterSpacing: "-0.03em" }}
         >
           <motion.span className="block text-[#2C1810] font-medium" variants={fadeIn}>
             La belleza
@@ -102,43 +103,100 @@ export function Hero() {
   return (
     <section ref={ref} id="hero" className="bg-white">
 
-      {/* ── MOBILE: solo texto ── */}
-      <div className="md:hidden pt-24 pb-16 px-6 min-h-[60svh] flex items-center">
-        {textContent}
-      </div>
-
-      {/* ── DESKTOP: overlay clásico full-screen ── */}
-      <div className="hidden md:block relative min-h-[100svh] overflow-hidden">
-        <div className="absolute inset-0 z-0">
+      {/* ── MOBILE: texto + imagen apilados ── */}
+      <div className="md:hidden flex flex-col min-h-[100svh]">
+        <div className="pt-24 pb-8 px-6 flex items-center flex-1">
+          {textContent}
+        </div>
+        <motion.div
+          className="relative mx-4 mb-6 rounded-3xl overflow-hidden"
+          style={{ height: "46svh" }}
+          initial={{ opacity: 0, y: 24 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 1, delay: 0.6, ease: [0.16, 1, 0.3, 1] }}
+        >
           <Image
-            src="/images/kkk.png"
-            alt="Cosméticos premium Queens"
+            src="/images/PORTADA.png"
+            alt="Queens Cosmetics — colección de maquillaje premium"
             fill
             sizes="100vw"
             priority
-            quality={100}
-            className="object-contain"
+            quality={95}
+            className="object-cover object-top"
           />
-        </div>
+          <div
+            className="absolute inset-0"
+            style={{
+              background:
+                "linear-gradient(to top, rgba(255,255,255,0.4) 0%, transparent 40%)",
+            }}
+          />
+        </motion.div>
+      </div>
 
-        <div
-          className="absolute inset-0 z-[1] pointer-events-none"
-          style={{
-            background: "linear-gradient(to right, rgba(255,182,193,0.18) 0%, rgba(212,175,55,0.08) 50%, transparent 100%)",
-          }}
-        />
+      {/* ── DESKTOP: split editorial ── */}
+      <div className="hidden md:flex min-h-[100svh] overflow-hidden">
 
+        {/* Left — texto */}
         <motion.div
-          className="relative z-10 mx-auto flex min-h-[100svh] max-w-7xl items-end px-10 pt-24 pb-28"
+          className="relative z-10 flex w-1/2 items-center px-12 lg:px-20 xl:px-28 pt-24 pb-20"
           style={{ y: textY }}
         >
           {textContent}
         </motion.div>
 
+        {/* Right — PORTADA */}
+        <div className="relative w-1/2 overflow-hidden">
+          <motion.div className="absolute inset-0" style={{ scale: imgScale }}>
+            <Image
+              src="/images/PORTADA.png"
+              alt="Queens Cosmetics — colección de maquillaje premium"
+              fill
+              sizes="50vw"
+              priority
+              quality={100}
+              className="object-cover object-center"
+            />
+          </motion.div>
+
+          {/* Fade suave hacia el lado del texto */}
+          <div
+            className="absolute inset-0 z-10 pointer-events-none"
+            style={{
+              background:
+                "linear-gradient(to right, rgba(255,255,255,0.85) 0%, rgba(255,255,255,0.2) 18%, transparent 38%)",
+            }}
+          />
+
+          {/* Brillo sutil inferior */}
+          <div
+            className="absolute inset-x-0 bottom-0 h-32 z-10 pointer-events-none"
+            style={{
+              background: "linear-gradient(to top, rgba(255,255,255,0.6) 0%, transparent 100%)",
+            }}
+          />
+
+          {/* Badge flotante premium */}
+          <motion.div
+            className="absolute bottom-10 right-8 z-20 flex flex-col items-end gap-1"
+            initial={{ opacity: 0, x: 16 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ delay: 1.4, duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+          >
+            <span className="text-[9px] font-semibold tracking-[0.25em] uppercase text-[var(--gold-deep)]/70">
+              Local 128
+            </span>
+            <span className="text-[9px] font-semibold tracking-[0.25em] uppercase text-[#2C1810]/40">
+              Unicentro Palmira
+            </span>
+          </motion.div>
+        </div>
+
+        {/* Scroll indicator */}
         <motion.a
           href="#catalogo"
           aria-label="Ver catálogo"
-          className="absolute bottom-8 left-1/2 z-10 -translate-x-1/2 text-[#2C1810]/40 hover:text-[var(--gold)] transition-colors"
+          className="absolute bottom-8 left-1/2 z-20 -translate-x-1/2 text-[#2C1810]/40 hover:text-[var(--gold)] transition-colors"
           initial={{ opacity: 0, y: -8 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 1.8, duration: 0.8 }}
