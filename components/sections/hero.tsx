@@ -111,21 +111,27 @@ export function Hero() {
           {textContent}
         </div>
         <motion.div
-          className="flex justify-center px-8 mb-8"
+          className="flex justify-center px-4 mb-8"
           initial={{ opacity: 0, y: 24 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1, delay: 0.6, ease: [0.16, 1, 0.3, 1] }}
         >
-          <div className="relative w-full max-w-[200px] bg-white rounded-3xl">
+          <div
+            className="relative w-full max-w-[240px]"
+            style={{
+              maskImage: "radial-gradient(ellipse 88% 82% at 50% 48%, black 42%, transparent 100%)",
+              WebkitMaskImage: "radial-gradient(ellipse 88% 82% at 50% 48%, black 42%, transparent 100%)",
+            }}
+          >
             <Image
               src="/images/PORTADA.png"
               alt="Queens Cosmetics — colección de maquillaje premium"
-              width={400}
-              height={533}
+              width={480}
+              height={640}
               priority
               quality={100}
-              sizes="200px"
-              className="w-full h-auto object-contain mix-blend-multiply"
+              sizes="240px"
+              className="w-full h-auto object-contain"
             />
           </div>
         </motion.div>
@@ -136,39 +142,65 @@ export function Hero() {
 
         {/* Left — texto */}
         <motion.div
-          className="relative z-10 flex w-1/2 items-center px-12 lg:px-20 xl:px-28 pt-24 pb-20"
+          className="relative z-10 flex w-[45%] items-center px-10 lg:px-16 xl:px-24 pt-24 pb-20"
           style={{ y: textY }}
         >
           {textContent}
         </motion.div>
 
-        {/* Right — PORTADA */}
-        <div className="relative w-1/2 flex items-center justify-center bg-white overflow-hidden">
+        {/* Right — dos imágenes */}
+        <div className="relative w-[55%] flex items-center justify-center bg-white overflow-hidden gap-0">
 
-          {/* Imagen contenida */}
+          {/* kkk.png — izquierda, ligeramente más pequeña */}
           <motion.div
-            className="relative z-10 px-8 py-12"
-            style={{ scale: imgScale, width: "100%", maxWidth: 380 }}
+            className="relative z-10 shrink-0"
+            style={{
+              scale: imgScale,
+              width: "46%",
+              paddingTop: "5rem",
+              paddingBottom: "3rem",
+              maskImage:
+                "radial-gradient(ellipse 82% 80% at 55% 52%, black 35%, transparent 100%)",
+              WebkitMaskImage:
+                "radial-gradient(ellipse 82% 80% at 55% 52%, black 35%, transparent 100%)",
+            }}
+          >
+            <Image
+              src="/images/kkk.png"
+              alt="Queens Cosmetics — productos de belleza"
+              width={600}
+              height={800}
+              priority
+              quality={100}
+              sizes="22vw"
+              className="w-full h-auto object-contain"
+            />
+          </motion.div>
+
+          {/* PORTADA — derecha, protagonista */}
+          <motion.div
+            className="relative z-10 shrink-0"
+            style={{
+              scale: imgScale,
+              width: "54%",
+              padding: "2.5rem 2rem 2.5rem 0",
+              maskImage:
+                "radial-gradient(ellipse 80% 90% at 45% 50%, black 40%, transparent 100%)",
+              WebkitMaskImage:
+                "radial-gradient(ellipse 80% 90% at 45% 50%, black 40%, transparent 100%)",
+            }}
           >
             <Image
               src="/images/PORTADA.png"
               alt="Queens Cosmetics — colección de maquillaje premium"
-              width={680}
-              height={906}
+              width={860}
+              height={1146}
               priority
               quality={100}
-              sizes="(max-width: 1280px) 32vw, 380px"
-              className="w-full h-auto object-contain mix-blend-multiply drop-shadow-xl"
+              sizes="(max-width: 1280px) 30vw, 380px"
+              className="w-full h-auto object-contain"
             />
           </motion.div>
-
-          {/* Fade hacia el texto */}
-          <div
-            className="absolute inset-0 z-20 pointer-events-none"
-            style={{
-              background: "linear-gradient(to right, rgba(255,255,255,0.7) 0%, transparent 20%)",
-            }}
-          />
 
           {/* Badge flotante */}
           <motion.div

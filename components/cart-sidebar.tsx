@@ -85,7 +85,7 @@ export function CartSidebar() {
                         <button
                           type="button"
                           onClick={() => setQty(key, qty - 1)}
-                          className="rounded-full p-1 hover:bg-white transition"
+                          className="rounded-full p-1 hover:bg-white transition cursor-pointer"
                           aria-label="Disminuir"
                         >
                           <Minus className="h-3.5 w-3.5" />
@@ -96,7 +96,7 @@ export function CartSidebar() {
                         <button
                           type="button"
                           onClick={() => addItem(product.id, variant)}
-                          className="rounded-full p-1 hover:bg-white transition"
+                          className="rounded-full p-1 hover:bg-white transition cursor-pointer"
                           aria-label="Aumentar"
                         >
                           <Plus className="h-3.5 w-3.5" />
@@ -105,7 +105,7 @@ export function CartSidebar() {
                       <button
                         type="button"
                         onClick={() => removeItem(key)}
-                        className="rounded-full p-1.5 text-muted-foreground hover:bg-red-50 hover:text-red-500 transition"
+                        className="rounded-full p-1.5 text-muted-foreground hover:bg-red-50 hover:text-red-500 transition cursor-pointer"
                         aria-label="Eliminar"
                       >
                         <Trash2 className="h-4 w-4" />
@@ -120,7 +120,7 @@ export function CartSidebar() {
               <button
                 type="button"
                 onClick={clear}
-                className="text-xs text-muted-foreground hover:text-red-500 underline underline-offset-2 mx-auto block"
+                className="text-xs text-muted-foreground hover:text-red-500 underline underline-offset-2 mx-auto block cursor-pointer"
               >
                 Vaciar carrito
               </button>
