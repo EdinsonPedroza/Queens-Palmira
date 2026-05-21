@@ -122,18 +122,11 @@ export function Catalog() {
                       className="relative z-10 flex items-center gap-1.5 transition-colors duration-200"
                       style={{ color: isActive ? "var(--gold-deep)" : "oklch(0.18 0.025 40 / 0.55)" }}
                     >
-                      <motion.span
-                        animate={{ scale: isActive ? 1.2 : 1, rotate: isActive ? [0, -8, 8, 0] : 0 }}
-                        transition={{ duration: 0.3, ease: "easeOut" }}
-                        className="text-sm leading-none"
-                      >
-                        {cat.icon}
-                      </motion.span>
-                      <span className={`hidden sm:inline ${isActive ? "font-semibold" : ""}`}>
+                      <span className={isActive ? "font-semibold" : ""}>
                         {cat.label}
                       </span>
                       <span
-                        className="hidden sm:inline text-[10px] font-bold px-1.5 py-0.5 rounded-full"
+                        className="text-[10px] font-bold px-1.5 py-0.5 rounded-full hidden sm:inline"
                         style={{
                           background: isActive ? "rgba(212,175,55,0.12)" : "rgba(0,0,0,0.06)",
                           color: isActive ? "var(--gold-deep)" : "oklch(0.18 0.025 40 / 0.4)",

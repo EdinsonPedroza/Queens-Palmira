@@ -109,28 +109,23 @@ export function Hero() {
           {textContent}
         </div>
         <motion.div
-          className="relative mx-4 mb-6 rounded-3xl overflow-hidden"
-          style={{ height: "46svh" }}
+          className="flex justify-center px-8 mb-8"
           initial={{ opacity: 0, y: 24 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1, delay: 0.6, ease: [0.16, 1, 0.3, 1] }}
         >
-          <Image
-            src="/images/PORTADA.png"
-            alt="Queens Cosmetics — colección de maquillaje premium"
-            fill
-            sizes="100vw"
-            priority
-            quality={95}
-            className="object-cover object-top"
-          />
-          <div
-            className="absolute inset-0"
-            style={{
-              background:
-                "linear-gradient(to top, rgba(255,255,255,0.4) 0%, transparent 40%)",
-            }}
-          />
+          <div className="relative w-full max-w-[280px] rounded-3xl overflow-hidden bg-gradient-to-b from-[var(--rose-pastel-soft)] to-[var(--rose-pastel)]/20">
+            <Image
+              src="/images/PORTADA.png"
+              alt="Queens Cosmetics — colección de maquillaje premium"
+              width={560}
+              height={748}
+              priority
+              quality={100}
+              sizes="280px"
+              className="w-full h-auto object-contain"
+            />
+          </div>
         </motion.div>
       </div>
 
@@ -146,40 +141,37 @@ export function Hero() {
         </motion.div>
 
         {/* Right — PORTADA */}
-        <div className="relative w-1/2 overflow-hidden">
-          <motion.div className="absolute inset-0" style={{ scale: imgScale }}>
+        <div className="relative w-1/2 flex items-center justify-center bg-gradient-to-br from-[var(--rose-pastel-soft)] via-white to-[var(--rose-pastel)]/20 overflow-hidden">
+
+          {/* Imagen contenida — no fill, tamaño fijo para evitar blur */}
+          <motion.div
+            className="relative z-10"
+            style={{ scale: imgScale, width: "72%", maxWidth: 420 }}
+          >
             <Image
               src="/images/PORTADA.png"
               alt="Queens Cosmetics — colección de maquillaje premium"
-              fill
-              sizes="50vw"
+              width={840}
+              height={1120}
               priority
               quality={100}
-              className="object-cover object-center"
+              sizes="(max-width: 1280px) 38vw, 420px"
+              className="w-full h-auto object-contain drop-shadow-2xl"
             />
           </motion.div>
 
-          {/* Fade suave hacia el lado del texto */}
+          {/* Fade hacia el texto */}
           <div
-            className="absolute inset-0 z-10 pointer-events-none"
+            className="absolute inset-0 z-20 pointer-events-none"
             style={{
-              background:
-                "linear-gradient(to right, rgba(255,255,255,0.85) 0%, rgba(255,255,255,0.2) 18%, transparent 38%)",
+              background: "linear-gradient(to right, rgba(255,255,255,0.7) 0%, transparent 20%)",
             }}
           />
 
-          {/* Brillo sutil inferior */}
-          <div
-            className="absolute inset-x-0 bottom-0 h-32 z-10 pointer-events-none"
-            style={{
-              background: "linear-gradient(to top, rgba(255,255,255,0.6) 0%, transparent 100%)",
-            }}
-          />
-
-          {/* Badge flotante premium */}
+          {/* Badge flotante */}
           <motion.div
-            className="absolute bottom-10 right-8 z-20 flex flex-col items-end gap-1"
-            initial={{ opacity: 0, x: 16 }}
+            className="absolute bottom-10 right-8 z-30 flex flex-col items-end gap-0.5"
+            initial={{ opacity: 0, x: 12 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: 1.4, duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
           >
