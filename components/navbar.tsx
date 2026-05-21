@@ -62,7 +62,7 @@ export function Navbar() {
             <button
               type="button"
               onClick={openCart}
-              className="relative rounded-full p-2.5 text-ink hover:bg-(--rose-pastel)/30 transition"
+              className="relative rounded-full p-2.5 text-ink hover:bg-(--rose-pastel)/30 transition cursor-pointer"
               aria-label={`Carrito con ${count} items`}
               data-testid="cart-trigger"
             >
@@ -87,7 +87,7 @@ export function Navbar() {
 
             <button
               type="button"
-              className="lg:hidden rounded-full p-2 text-ink transition"
+              className="lg:hidden rounded-full p-2 text-ink transition cursor-pointer"
               onClick={() => setMobileOpen((v) => !v)}
               aria-label="Menú"
             >

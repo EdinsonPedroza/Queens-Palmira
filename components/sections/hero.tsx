@@ -46,8 +46,10 @@ export function Hero() {
     >
       <motion.div variants={fadeUp}>
         <div className="mb-5">
-          <span className="text-[10px] font-semibold tracking-[0.3em] text-[var(--gold)]/70 uppercase">
+          <span className="inline-flex items-center gap-2 text-[11px] font-bold tracking-[0.28em] text-[var(--gold-deep)] uppercase">
+            <span className="inline-block h-px w-5 bg-[var(--gold-deep)]/50" />
             Cosmética Premium · Palmira
+            <span className="inline-block h-px w-5 bg-[var(--gold-deep)]/50" />
           </span>
         </div>
       </motion.div>
@@ -114,16 +116,16 @@ export function Hero() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1, delay: 0.6, ease: [0.16, 1, 0.3, 1] }}
         >
-          <div className="relative w-full max-w-[220px] rounded-3xl overflow-hidden bg-gradient-to-b from-[var(--rose-pastel-soft)] to-[var(--rose-pastel)]/20">
+          <div className="relative w-full max-w-[200px]">
             <Image
               src="/images/PORTADA.png"
               alt="Queens Cosmetics — colección de maquillaje premium"
-              width={440}
-              height={586}
+              width={400}
+              height={533}
               priority
               quality={100}
-              sizes="220px"
-              className="w-full h-auto object-contain"
+              sizes="200px"
+              className="w-full h-auto object-contain mix-blend-multiply"
             />
           </div>
         </motion.div>
@@ -145,8 +147,8 @@ export function Hero() {
 
           {/* Imagen contenida */}
           <motion.div
-            className="relative z-10"
-            style={{ scale: imgScale, width: "58%", maxWidth: 340 }}
+            className="relative z-10 px-8 py-12"
+            style={{ scale: imgScale, width: "100%", maxWidth: 380 }}
           >
             <Image
               src="/images/PORTADA.png"
@@ -155,8 +157,8 @@ export function Hero() {
               height={906}
               priority
               quality={100}
-              sizes="(max-width: 1280px) 30vw, 340px"
-              className="w-full h-auto object-contain drop-shadow-2xl"
+              sizes="(max-width: 1280px) 32vw, 380px"
+              className="w-full h-auto object-contain mix-blend-multiply drop-shadow-xl"
             />
           </motion.div>
 
