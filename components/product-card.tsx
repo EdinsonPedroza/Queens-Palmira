@@ -1,7 +1,7 @@
 "use client"
 
 import { createPortal } from "react-dom"
-import { ShoppingBag, Check, Palette, ChevronDown } from "lucide-react"
+import { ShoppingBag, Check, Palette, ChevronDown, Sparkles } from "lucide-react"
 import { useState, useRef, useEffect, useCallback } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import type { Product } from "@/lib/products"
@@ -15,37 +15,30 @@ const BADGE_COPY: Record<NonNullable<Product["badge"]>, { text: string; variant:
   oferta:     { text: "Oferta",      variant: "offer" },
 }
 
-/* ─── Chip de variante ───────────────────────────────────── */
-function VariantChip({ label, selected, onClick, size = "md" }: {
-  label: string; selected: boolean; onClick: () => void; size?: "sm" | "md"
-}) {
-  const sz = size === "sm"
-    ? "px-2 py-0.5 text-[10px] rounded-full"
-    : "px-3 py-1 text-xs rounded-full"
+/* ─── Chip de tono ─────────────────────────────────────────── */
+function Chip({ label, selected, onClick }: { label: string; selected: boolean; onClick: () => void }) {
   return (
-    <button
+    <motion.button
       type="button"
       onClick={onClick}
       aria-pressed={selected}
+      whileTap={{ scale: 0.93 }}
       className={[
-        sz,
-        "border font-medium leading-none whitespace-nowrap cursor-pointer select-none",
-        "transition-all duration-150 active:scale-95",
+        "px-2.5 py-1 rounded-full border text-[10px] font-medium leading-none whitespace-nowrap",
+        "cursor-pointer select-none transition-all duration-200",
         "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--gold)]",
         selected
-          ? "border-[var(--gold-deep)] bg-[var(--gold-deep)] text-white shadow-md"
-          : "border-[var(--rose-pastel)] text-[var(--ink)]/65 hover:border-[var(--gold-deep)] hover:text-[var(--gold-deep)] hover:bg-[var(--gold-deep)]/5",
+          ? "border-[var(--gold-deep)] bg-[var(--gold-deep)] text-white shadow-sm"
+          : "border-[var(--rose-pastel)] text-[var(--ink)]/60 hover:border-[var(--gold-deep)]/60 hover:text-[var(--gold-deep)]",
       ].join(" ")}
     >
       {label}
-    </button>
+    </motion.button>
   )
 }
 
-/* ─── Dropdown via portal (nunca se corta) ───────────────── */
-interface DropdownCoords { top: number; left: number; width: number }
-
-function PortalVariantDropdown({ variants, selected, onSelect, open, onClose, triggerRef }: {
+/* ─── Dropdown portal ──────────────────────────────────────── */
+function PortalDropdown({ variants, selected, onSelect, open, onClose, triggerRef }: {
   variants: string[]
   selected: string
   onSelect: (v: string) => void
@@ -53,78 +46,124 @@ function PortalVariantDropdown({ variants, selected, onSelect, open, onClose, tr
   onClose: () => void
   triggerRef: React.RefObject<HTMLButtonElement | null>
 }) {
-  const [coords, setCoords] = useState<DropdownCoords | null>(null)
+  const [pos, setPos] = useState<{ top: number; left: number; width: number } | null>(null)
   const panelRef = useRef<HTMLDivElement>(null)
 
-  /* Calcula posición al abrir */
   useEffect(() => {
     if (!open || !triggerRef.current) return
     const r = triggerRef.current.getBoundingClientRect()
-    const dropW = Math.max(r.width, 280)
-    const left = Math.min(r.left, window.innerWidth - dropW - 8)
-    setCoords({ top: r.bottom + 6, left: Math.max(left, 8), width: dropW })
+    const w = Math.max(r.width, 288)
+    const l = Math.min(r.left, window.innerWidth - w - 8)
+    setPos({ top: r.bottom + 6, left: Math.max(l, 8), width: w })
   }, [open, triggerRef])
 
-  /* Cierra al hacer click afuera o scroll */
   useEffect(() => {
     if (!open) return
     const close = (e: MouseEvent) => {
-      if (
-        panelRef.current?.contains(e.target as Node) ||
-        triggerRef.current?.contains(e.target as Node)
-      ) return
+      if (panelRef.current?.contains(e.target as Node) || triggerRef.current?.contains(e.target as Node)) return
       onClose()
     }
-    const closeOnScroll = () => onClose()
     document.addEventListener("mousedown", close)
-    window.addEventListener("scroll", closeOnScroll, { passive: true, capture: true })
+    window.addEventListener("scroll", onClose, { passive: true, capture: true })
     return () => {
       document.removeEventListener("mousedown", close)
-      window.removeEventListener("scroll", closeOnScroll, true)
+      window.removeEventListener("scroll", onClose, true)
     }
   }, [open, onClose, triggerRef])
 
-  if (!open || !coords) return null
+  if (!open || !pos) return null
 
   return createPortal(
-    <div
+    <motion.div
       ref={panelRef}
-      style={{ position: "fixed", top: coords.top, left: coords.left, width: coords.width, zIndex: 9999 }}
-      className="rounded-2xl border border-[var(--rose-pastel)] bg-white shadow-2xl overflow-hidden"
+      initial={{ opacity: 0, y: -8, scale: 0.97 }}
+      animate={{ opacity: 1, y: 0, scale: 1 }}
+      exit={{ opacity: 0, y: -8, scale: 0.97 }}
+      transition={{ duration: 0.18, ease: [0.16, 1, 0.3, 1] }}
+      style={{ position: "fixed", top: pos.top, left: pos.left, width: pos.width, zIndex: 9999 }}
+      className="rounded-2xl border border-[var(--rose-pastel)] bg-white shadow-[0_16px_48px_-8px_rgba(44,24,16,0.18),0_0_0_1px_rgba(212,175,55,0.1)] overflow-hidden"
     >
-      {/* Header */}
-      <div className="flex items-center gap-2 px-4 py-3 border-b border-[var(--rose-pastel)]/40 bg-[var(--rose-pastel-soft)]">
-        <Palette className="h-3.5 w-3.5 text-[var(--gold-deep)]" />
-        <span className="text-[11px] font-semibold uppercase tracking-[0.18em] text-[var(--gold-deep)]">
-          Elige tu tono
+      <div className="px-4 py-2.5 bg-gradient-to-r from-[var(--rose-pastel-soft)] to-white border-b border-[var(--rose-pastel)]/40 flex items-center justify-between">
+        <span className="flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-[0.2em] text-[var(--gold-deep)]">
+          <Palette className="h-3 w-3" /> Elige tu tono
         </span>
-        <span className="ml-auto text-[10px] text-[var(--muted-foreground)]">
-          {variants.length} opciones
-        </span>
+        <span className="text-[10px] text-[var(--muted-foreground)]">{variants.length} opciones</span>
       </div>
-      {/* Chips */}
-      <div className="p-3 flex flex-wrap gap-1.5 max-h-44 overflow-y-auto">
+      <div className="p-3 flex flex-wrap gap-1.5 max-h-48 overflow-y-auto">
         {variants.map((v) => (
-          <VariantChip
-            key={v}
-            label={v}
-            selected={selected === v}
-            onClick={() => { onSelect(v); onClose() }}
-          />
+          <Chip key={v} label={v} selected={selected === v} onClick={() => { onSelect(v); onClose() }} />
         ))}
       </div>
-      {/* Hint */}
-      {!selected && (
-        <p className="px-4 pb-3 text-[10px] text-[var(--muted-foreground)]">
-          Toca un tono para seleccionarlo
-        </p>
-      )}
-    </div>,
+    </motion.div>,
     document.body,
   )
 }
 
-/* ─── Card ───────────────────────────────────────────────── */
+/* ─── Botón de agregar ─────────────────────────────────────── */
+function AddButton({ canAdd, justAdded, onClick, productName, selectedVariant }: {
+  canAdd: boolean
+  justAdded: boolean
+  onClick: () => void
+  productName: string
+  selectedVariant: string
+}) {
+  return (
+    <motion.button
+      type="button"
+      onClick={onClick}
+      disabled={!canAdd}
+      whileHover={canAdd ? { scale: 1.02 } : {}}
+      whileTap={canAdd ? { scale: 0.97 } : {}}
+      transition={{ type: "spring", stiffness: 500, damping: 28 }}
+      aria-label={`Agregar ${productName}${selectedVariant ? ` - ${selectedVariant}` : ""} al carrito`}
+      data-testid={`add-${productName}`}
+      className={[
+        "relative w-full flex items-center justify-center gap-2 rounded-xl py-2.5 text-xs font-semibold",
+        "overflow-hidden transition-all duration-300 focus-visible:outline-none",
+        "focus-visible:ring-2 focus-visible:ring-[var(--gold)]",
+        justAdded
+          ? "bg-emerald-500 text-white cursor-default"
+          : canAdd
+            ? "bg-[var(--ink)] text-white cursor-pointer hover:bg-[var(--ink)]/85 shadow-sm hover:shadow-md"
+            : "bg-[var(--rose-pastel-soft)] text-[var(--muted-foreground)] cursor-not-allowed border border-[var(--rose-pastel)]",
+      ].join(" ")}
+    >
+      {/* Shimmer en el estado activo */}
+      {canAdd && !justAdded && (
+        <motion.span
+          className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full"
+          animate={{ translateX: ["−100%", "200%"] }}
+          transition={{ duration: 2.4, repeat: Infinity, repeatDelay: 1.5, ease: "easeInOut" }}
+        />
+      )}
+
+      <AnimatePresence mode="wait">
+        {justAdded ? (
+          <motion.span key="ok" className="flex items-center gap-1.5"
+            initial={{ opacity: 0, scale: 0.7 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0 }}
+            transition={{ type: "spring", stiffness: 500, damping: 20 }}>
+            <Check className="h-3.5 w-3.5" strokeWidth={2.5} />
+            ¡Agregado al carrito!
+          </motion.span>
+        ) : canAdd ? (
+          <motion.span key="add" className="flex items-center gap-1.5 relative"
+            initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
+            <ShoppingBag className="h-3.5 w-3.5" />
+            Agregar al carrito
+          </motion.span>
+        ) : (
+          <motion.span key="pick" className="flex items-center gap-1.5"
+            initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
+            <Palette className="h-3.5 w-3.5" />
+            Elige un tono primero
+          </motion.span>
+        )}
+      </AnimatePresence>
+    </motion.button>
+  )
+}
+
+/* ─── Card principal ───────────────────────────────────────── */
 export function ProductCard({ product }: { product: Product }) {
   const { addItem } = useCart()
   const [justAdded, setJustAdded]      = useState(false)
@@ -137,44 +176,38 @@ export function ProductCard({ product }: { product: Product }) {
   const hasVariants  = (product.variants?.length ?? 0) > 0
   const manyVariants = (product.variants?.length ?? 0) > 4
   const fewVariants  = hasVariants && !manyVariants
+  const canAdd       = !hasVariants || selectedVariant !== ""
   const badgeInfo    = product.badge ? BADGE_COPY[product.badge] : null
 
   const handleAdd = useCallback(() => {
-    const canAdd = !hasVariants || selectedVariant !== ""
     if (!canAdd) return
     addItem(product.id, selectedVariant || undefined)
     setJustAdded(true)
-    setTimeout(() => setJustAdded(false), 1600)
-  }, [addItem, product.id, selectedVariant, hasVariants])
+    setTimeout(() => setJustAdded(false), 1800)
+  }, [addItem, product.id, selectedVariant, canAdd])
 
-  const handleCTA = () => {
-    if (manyVariants && !selectedVariant) { setDropOpen(true); return }
-    handleAdd()
+  const handleSelect = (v: string) => {
+    setSelected(v)
+    setDropOpen(false)
   }
-
-  const canAddDirect = !hasVariants || selectedVariant !== ""
 
   return (
     <>
       <motion.article
         className="group relative flex flex-col rounded-2xl bg-white"
-        style={{ boxShadow: "0 1px 6px -1px rgba(44,24,16,0.07), 0 0 0 1px rgba(255,182,193,0.25)" }}
-        whileHover={{
-          y: -5,
-          boxShadow: "0 20px 48px -12px rgba(212,175,55,0.24), 0 4px 16px -4px rgba(44,24,16,0.1), 0 0 0 1.5px rgba(212,175,55,0.2)",
-        }}
-        transition={{ type: "spring", stiffness: 360, damping: 28 }}
+        style={{ boxShadow: "0 1px 4px rgba(44,24,16,0.06), 0 0 0 1px rgba(255,182,193,0.3)" }}
+        whileHover={{ y: -4, boxShadow: "0 16px 40px -8px rgba(44,24,16,0.12), 0 0 0 1.5px rgba(212,175,55,0.25)" }}
+        transition={{ type: "spring", stiffness: 380, damping: 30 }}
         data-testid={`product-${product.id}`}
       >
-        {/* ── Imagen (único elemento con overflow-hidden) ── */}
-        <div className="relative aspect-[3/4] overflow-hidden rounded-t-2xl bg-gradient-to-b from-[var(--rose-pastel-soft)] via-[var(--rose-pastel)]/15 to-[var(--rose-pastel)]/25">
-
+        {/* ── Imagen ── */}
+        <div className="relative aspect-[3/4] overflow-hidden rounded-t-2xl bg-gradient-to-b from-[var(--rose-pastel-soft)] to-[var(--rose-pastel)]/20">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src={product.image}
             alt={product.name}
             loading="lazy"
-            className="absolute inset-0 w-full h-full object-contain p-5 transition-transform duration-700 ease-out will-change-transform group-hover:scale-[1.07]"
+            className="absolute inset-0 w-full h-full object-contain p-5 transition-transform duration-700 ease-out group-hover:scale-[1.06]"
             style={product.imageStyle}
           />
 
@@ -184,124 +217,112 @@ export function ProductCard({ product }: { product: Product }) {
             </div>
           )}
 
-          <div className="absolute inset-0 bg-[var(--ink)]/0 group-hover:bg-[var(--ink)]/5 transition-colors duration-500 pointer-events-none" />
-
-          {/* Precio flotante (hover desktop) */}
-          <div className="absolute right-2.5 top-2.5 z-10 hidden md:block rounded-xl px-2.5 py-1.5 backdrop-blur-md bg-white/80 border border-white/60 shadow-sm opacity-0 translate-y-1 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300">
-            <span className="font-display text-xs font-bold text-[var(--gold-deep)]">
-              {formatCOP(product.price)}
-            </span>
-          </div>
-
-          {/* CTA slide-up */}
-          <div className="absolute inset-x-0 bottom-0 z-20 translate-y-0 md:translate-y-full md:group-hover:translate-y-0 transition-transform duration-300 ease-out">
-            <button
-              type="button"
-              onClick={handleCTA}
-              className={[
-                "w-full flex items-center justify-center gap-2 py-3 text-[11px] font-semibold tracking-wide cursor-pointer",
-                "transition-colors duration-150 focus-visible:outline-none",
-                justAdded
-                  ? "bg-emerald-500 text-white"
-                  : canAddDirect
-                    ? "bg-[#2C1810]/88 text-white hover:bg-[#2C1810]"
-                    : "bg-[#2C1810]/88 text-white hover:bg-[#2C1810]",
-              ].join(" ")}
-              style={{ backdropFilter: "blur(12px)" }}
-              aria-label={`${manyVariants && !selectedVariant ? "Ver tonos de " : "Agregar "}${product.name}`}
-              data-testid={`add-${product.id}`}
-            >
-              <AnimatePresence mode="wait">
-                {justAdded ? (
-                  <motion.span key="ok" className="flex items-center gap-1.5"
-                    initial={{ opacity: 0, scale: 0.8 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0 }}>
-                    <Check className="h-3.5 w-3.5" /> ¡Agregado!
-                  </motion.span>
-                ) : manyVariants && !selectedVariant ? (
-                  <motion.span key="pick" className="flex items-center gap-1.5"
-                    initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
-                    <Palette className="h-3.5 w-3.5" /> Ver tonos ({product.variants!.length})
-                  </motion.span>
-                ) : (
-                  <motion.span key="add" className="flex items-center gap-1.5"
-                    initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
-                    <ShoppingBag className="h-3.5 w-3.5" /> Agregar al carrito
-                  </motion.span>
-                )}
-              </AnimatePresence>
-            </button>
-          </div>
+          {/* Indicador de tono seleccionado en la imagen */}
+          <AnimatePresence>
+            {selectedVariant && (
+              <motion.div
+                initial={{ opacity: 0, y: 6 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: 6 }}
+                className="absolute bottom-2.5 left-2.5 right-2.5 z-10"
+              >
+                <div className="flex items-center gap-1.5 rounded-xl bg-white/90 backdrop-blur-sm px-2.5 py-1.5 shadow-sm border border-white">
+                  <Sparkles className="h-3 w-3 text-[var(--gold-deep)] shrink-0" />
+                  <span className="text-[10px] font-semibold text-[var(--ink)] truncate">
+                    {selectedVariant}
+                  </span>
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
         </div>
 
         {/* ── Info ── */}
-        <div className="flex flex-col gap-1.5 px-3 pt-2.5 pb-3">
-          <h3 className="font-display text-[13px] font-semibold leading-snug line-clamp-2 text-[var(--ink)]">
-            {product.name}
-          </h3>
-          <p className="text-[10.5px] leading-relaxed text-[var(--muted-foreground)] line-clamp-1">
-            {product.description}
-          </p>
+        <div className="flex flex-1 flex-col px-3.5 pt-3 pb-3.5 gap-2.5">
 
-          <div className="flex items-center justify-between mt-0.5 gap-2">
+          {/* Nombre + descripción */}
+          <div>
+            <h3 className="font-display text-[13px] font-semibold leading-snug line-clamp-2 text-[var(--ink)]">
+              {product.name}
+            </h3>
+            <p className="mt-0.5 text-[10.5px] leading-relaxed text-[var(--muted-foreground)] line-clamp-1">
+              {product.description}
+            </p>
+          </div>
+
+          {/* Precio */}
+          <div className="flex items-center gap-2">
             <span className="font-display text-base font-bold text-[var(--gold-deep)]">
               {formatCOP(product.price)}
             </span>
-            {hasVariants && selectedVariant && (
-              <span className="text-[10px] font-medium text-[var(--gold-deep)] truncate max-w-[50%]">
-                {selectedVariant}
+            {hasVariants && !selectedVariant && (
+              <span className="text-[10px] text-[var(--muted-foreground)]/70 italic">
+                + elige tono
               </span>
             )}
           </div>
 
-          {/* Chips inline (≤4 variantes) */}
+          {/* ── Selector de variantes (≤4: chips inline) ── */}
           {fewVariants && (
-            <div className="flex flex-wrap gap-1 mt-0.5">
+            <div className="flex flex-wrap gap-1">
               {product.variants!.map((v) => (
-                <VariantChip key={v} label={v} selected={selectedVariant === v}
-                  onClick={() => setSelected(v)} size="sm" />
+                <Chip key={v} label={v} selected={selectedVariant === v} onClick={() => setSelected(v)} />
               ))}
             </div>
           )}
 
-          {/* Trigger dropdown (>4 variantes) */}
+          {/* ── Selector de variantes (>4: dropdown portal) ── */}
           {manyVariants && (
             <button
               ref={triggerRef}
               type="button"
               onClick={() => setDropOpen((o) => !o)}
               className={[
-                "mt-1 w-full flex items-center justify-between gap-1.5 rounded-xl border px-3 py-2 text-[11px] font-medium",
-                "cursor-pointer transition-all duration-150 focus-visible:outline-none",
-                dropOpen || selectedVariant
-                  ? "border-[var(--gold-deep)] bg-[var(--gold-deep)]/8 text-[var(--gold-deep)]"
-                  : "border-[var(--rose-pastel)] text-[var(--muted-foreground)] hover:border-[var(--gold-deep)] hover:text-[var(--gold-deep)]",
+                "flex items-center justify-between gap-2 rounded-xl border px-3 py-2 text-[11px] font-medium",
+                "cursor-pointer transition-all duration-200 focus-visible:outline-none w-full",
+                selectedVariant
+                  ? "border-[var(--gold-deep)] bg-[var(--gold-deep)]/8 text-[var(--ink)]"
+                  : dropOpen
+                    ? "border-[var(--gold-deep)]/60 text-[var(--ink)]"
+                    : "border-[var(--rose-pastel)] text-[var(--muted-foreground)] hover:border-[var(--gold-deep)]/50",
               ].join(" ")}
             >
-              <span className="flex items-center gap-1.5 truncate">
-                <Palette className="h-3 w-3 shrink-0" />
+              <span className="flex items-center gap-1.5 min-w-0">
+                <Palette className={`h-3 w-3 shrink-0 ${selectedVariant ? "text-[var(--gold-deep)]" : "text-[var(--muted-foreground)]"}`} />
                 <span className="truncate">
-                  {selectedVariant ? selectedVariant : `Ver ${product.variants!.length} tonos`}
+                  {selectedVariant || `Ver ${product.variants!.length} tonos disponibles`}
                 </span>
               </span>
-              <ChevronDown className={`h-3 w-3 shrink-0 transition-transform duration-200 ${dropOpen ? "rotate-180" : ""}`} />
+              <motion.span
+                animate={{ rotate: dropOpen ? 180 : 0 }}
+                transition={{ duration: 0.2 }}
+                className="shrink-0"
+              >
+                <ChevronDown className="h-3.5 w-3.5" />
+              </motion.span>
             </button>
           )}
 
-          {/* Hint sin variante */}
-          {fewVariants && !selectedVariant && (
-            <p className="text-[10px] text-center text-[var(--muted-foreground)]/70">
-              Elige un tono para agregar
-            </p>
-          )}
+          {/* Separador */}
+          <div className="h-px bg-[var(--rose-pastel)]/30 -mx-0.5" />
+
+          {/* ── Botón agregar — siempre visible ── */}
+          <AddButton
+            canAdd={canAdd}
+            justAdded={justAdded}
+            onClick={handleAdd}
+            productName={product.name}
+            selectedVariant={selectedVariant}
+          />
         </div>
       </motion.article>
 
-      {/* Portal dropdown — fuera del DOM del card */}
+      {/* Portal dropdown fuera del card */}
       {manyVariants && (
-        <PortalVariantDropdown
+        <PortalDropdown
           variants={product.variants!}
           selected={selectedVariant}
-          onSelect={setSelected}
+          onSelect={handleSelect}
           open={dropOpen}
           onClose={() => setDropOpen(false)}
           triggerRef={triggerRef}
