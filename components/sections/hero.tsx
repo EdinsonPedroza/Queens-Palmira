@@ -114,15 +114,15 @@ export function Hero() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1, delay: 0.6, ease: [0.16, 1, 0.3, 1] }}
         >
-          <div className="relative w-full max-w-[280px] rounded-3xl overflow-hidden bg-gradient-to-b from-[var(--rose-pastel-soft)] to-[var(--rose-pastel)]/20">
+          <div className="relative w-full max-w-[220px] rounded-3xl overflow-hidden bg-gradient-to-b from-[var(--rose-pastel-soft)] to-[var(--rose-pastel)]/20">
             <Image
               src="/images/PORTADA.png"
               alt="Queens Cosmetics — colección de maquillaje premium"
-              width={560}
-              height={748}
+              width={440}
+              height={586}
               priority
               quality={100}
-              sizes="280px"
+              sizes="220px"
               className="w-full h-auto object-contain"
             />
           </div>
@@ -143,19 +143,19 @@ export function Hero() {
         {/* Right — PORTADA */}
         <div className="relative w-1/2 flex items-center justify-center bg-gradient-to-br from-[var(--rose-pastel-soft)] via-white to-[var(--rose-pastel)]/20 overflow-hidden">
 
-          {/* Imagen contenida — no fill, tamaño fijo para evitar blur */}
+          {/* Imagen contenida */}
           <motion.div
             className="relative z-10"
-            style={{ scale: imgScale, width: "72%", maxWidth: 420 }}
+            style={{ scale: imgScale, width: "58%", maxWidth: 340 }}
           >
             <Image
               src="/images/PORTADA.png"
               alt="Queens Cosmetics — colección de maquillaje premium"
-              width={840}
-              height={1120}
+              width={680}
+              height={906}
               priority
               quality={100}
-              sizes="(max-width: 1280px) 38vw, 420px"
+              sizes="(max-width: 1280px) 30vw, 340px"
               className="w-full h-auto object-contain drop-shadow-2xl"
             />
           </motion.div>

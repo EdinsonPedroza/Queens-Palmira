@@ -28,7 +28,7 @@ DialogOverlay.displayName = DialogPrimitive.Overlay.displayName
 const DialogContent = React.forwardRef<
   React.ElementRef<typeof DialogPrimitive.Content>,
   React.ComponentPropsWithoutRef<typeof DialogPrimitive.Content> & {
-    side?: "right" | "center"
+    side?: "right" | "center" | "bottom"
   }
 >(({ className, children, side = "center", ...props }, ref) => (
   <DialogPortal>
@@ -41,6 +41,12 @@ const DialogContent = React.forwardRef<
           "right-0 top-0 h-full w-full max-w-md data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:slide-out-to-right data-[state=open]:slide-in-from-right",
         side === "center" &&
           "left-1/2 top-1/2 w-full max-w-lg -translate-x-1/2 -translate-y-1/2 rounded-2xl p-6",
+        side === "bottom" &&
+          "bottom-0 left-0 right-0 w-full rounded-t-3xl overflow-hidden " +
+          "data-[state=open]:animate-in data-[state=closed]:animate-out " +
+          "data-[state=closed]:slide-out-to-bottom data-[state=open]:slide-in-from-bottom " +
+          "md:left-1/2 md:top-1/2 md:bottom-auto md:right-auto md:w-full md:max-w-lg " +
+          "md:-translate-x-1/2 md:-translate-y-1/2 md:rounded-2xl",
         className,
       )}
       {...props}
