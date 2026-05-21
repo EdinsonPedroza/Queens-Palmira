@@ -22,14 +22,16 @@ function Chip({ label, selected, onClick }: { label: string; selected: boolean; 
       type="button"
       onClick={onClick}
       aria-pressed={selected}
-      whileTap={{ scale: 0.93 }}
+      whileHover={{ scale: 1.06 }}
+      whileTap={{ scale: 0.92 }}
+      transition={{ type: "spring", stiffness: 500, damping: 24 }}
       className={[
-        "px-2.5 py-1 rounded-full border text-[10px] font-medium leading-none whitespace-nowrap",
-        "cursor-pointer select-none transition-all duration-200",
+        "px-2.5 py-1 rounded-full text-[10px] font-semibold leading-none whitespace-nowrap",
+        "cursor-pointer select-none transition-colors duration-200",
         "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--gold)]",
         selected
-          ? "border-[var(--gold-deep)] bg-[var(--gold-deep)] text-white shadow-sm"
-          : "border-[var(--rose-pastel)] text-[var(--ink)]/60 hover:border-[var(--gold-deep)]/60 hover:text-[var(--gold-deep)]",
+          ? "bg-queens-gradient-intense text-white shadow-md border border-transparent"
+          : "border border-[var(--rose-pastel)] bg-white text-[var(--ink)]/55 hover:border-[var(--gold-deep)]/50 hover:text-[var(--gold-deep)] hover:bg-[var(--gold-deep)]/5",
       ].join(" ")}
     >
       {label}
@@ -111,48 +113,60 @@ function AddButton({ canAdd, justAdded, onClick, productName, selectedVariant }:
     <motion.button
       type="button"
       onClick={onClick}
-      disabled={!canAdd}
-      whileHover={canAdd ? { scale: 1.02 } : {}}
-      whileTap={canAdd ? { scale: 0.97 } : {}}
-      transition={{ type: "spring", stiffness: 500, damping: 28 }}
-      aria-label={`Agregar ${productName}${selectedVariant ? ` - ${selectedVariant}` : ""} al carrito`}
+      disabled={!canAdd && !justAdded}
+      whileHover={canAdd && !justAdded ? { scale: 1.03, y: -1 } : {}}
+      whileTap={canAdd ? { scale: 0.96 } : {}}
+      transition={{ type: "spring", stiffness: 480, damping: 26 }}
+      aria-label={`Agregar ${productName}${selectedVariant ? ` — ${selectedVariant}` : ""} al carrito`}
       data-testid={`add-${productName}`}
       className={[
-        "relative w-full flex items-center justify-center gap-2 rounded-xl py-2.5 text-xs font-semibold",
-        "overflow-hidden transition-all duration-300 focus-visible:outline-none",
-        "focus-visible:ring-2 focus-visible:ring-[var(--gold)]",
+        "relative w-full flex items-center justify-center gap-2 rounded-full py-2.5 text-xs font-bold",
+        "overflow-hidden focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--gold)]",
+        "tracking-wide transition-shadow duration-300",
         justAdded
-          ? "bg-emerald-500 text-white cursor-default"
+          ? "cursor-default text-white"
           : canAdd
-            ? "bg-[var(--ink)] text-white cursor-pointer hover:bg-[var(--ink)]/85 shadow-sm hover:shadow-md"
-            : "bg-[var(--rose-pastel-soft)] text-[var(--muted-foreground)] cursor-not-allowed border border-[var(--rose-pastel)]",
+            ? "bg-queens-gradient-intense text-white cursor-pointer"
+            : "border-2 border-dashed border-[var(--rose-pastel)] bg-transparent text-[var(--muted-foreground)] cursor-not-allowed",
       ].join(" ")}
+      style={
+        justAdded
+          ? { background: "linear-gradient(135deg,#34d399,#059669)", boxShadow: "0 6px 20px -4px rgba(5,150,105,0.45)" }
+          : canAdd
+            ? { boxShadow: "0 8px 24px -6px rgba(255,105,180,0.5), 0 3px 10px -3px rgba(212,175,55,0.35)" }
+            : {}
+      }
     >
-      {/* Shimmer en el estado activo */}
+      {/* Shimmer sweep */}
       {canAdd && !justAdded && (
-        <motion.span
-          className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full"
-          animate={{ translateX: ["−100%", "200%"] }}
-          transition={{ duration: 2.4, repeat: Infinity, repeatDelay: 1.5, ease: "easeInOut" }}
+        <span
+          className="pointer-events-none absolute inset-0"
+          style={{
+            background: "linear-gradient(105deg,transparent 40%,rgba(255,255,255,0.22) 50%,transparent 60%)",
+            backgroundSize: "200% 100%",
+            animation: "shimmer-sweep 2.8s ease-in-out infinite",
+          }}
         />
       )}
 
       <AnimatePresence mode="wait">
         {justAdded ? (
-          <motion.span key="ok" className="flex items-center gap-1.5"
-            initial={{ opacity: 0, scale: 0.7 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0 }}
-            transition={{ type: "spring", stiffness: 500, damping: 20 }}>
-            <Check className="h-3.5 w-3.5" strokeWidth={2.5} />
-            ¡Agregado al carrito!
+          <motion.span key="ok" className="flex items-center gap-1.5 relative z-10"
+            initial={{ opacity: 0, scale: 0.7, y: 4 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={{ opacity: 0, y: -4 }}
+            transition={{ type: "spring", stiffness: 500, damping: 22 }}>
+            <Check className="h-4 w-4" strokeWidth={3} />
+            ¡Agregado!
           </motion.span>
         ) : canAdd ? (
-          <motion.span key="add" className="flex items-center gap-1.5 relative"
-            initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
+          <motion.span key="add" className="flex items-center gap-1.5 relative z-10"
+            initial={{ opacity: 0, y: 4 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -4 }}>
             <ShoppingBag className="h-3.5 w-3.5" />
             Agregar al carrito
           </motion.span>
         ) : (
-          <motion.span key="pick" className="flex items-center gap-1.5"
+          <motion.span key="pick" className="flex items-center gap-1.5 relative z-10"
             initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
             <Palette className="h-3.5 w-3.5" />
             Elige un tono primero

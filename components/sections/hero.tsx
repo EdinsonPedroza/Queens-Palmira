@@ -116,7 +116,7 @@ export function Hero() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1, delay: 0.6, ease: [0.16, 1, 0.3, 1] }}
         >
-          <div className="relative w-full max-w-[200px]">
+          <div className="relative w-full max-w-[200px] bg-white rounded-3xl">
             <Image
               src="/images/PORTADA.png"
               alt="Queens Cosmetics — colección de maquillaje premium"
@@ -143,7 +143,7 @@ export function Hero() {
         </motion.div>
 
         {/* Right — PORTADA */}
-        <div className="relative w-1/2 flex items-center justify-center bg-gradient-to-br from-[var(--rose-pastel-soft)] via-white to-[var(--rose-pastel)]/20 overflow-hidden">
+        <div className="relative w-1/2 flex items-center justify-center bg-white overflow-hidden">
 
           {/* Imagen contenida */}
           <motion.div
