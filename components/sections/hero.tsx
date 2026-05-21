@@ -148,56 +148,66 @@ export function Hero() {
           {textContent}
         </motion.div>
 
-        {/* Right — dos imágenes */}
-        <div className="relative w-[55%] flex items-center justify-center bg-white overflow-hidden gap-0">
+        {/* Right — dos imágenes: PORTADA pequeña izq · kkk grande der */}
+        <div className="relative w-[55%] flex items-end justify-center bg-white overflow-hidden pb-8 pt-20">
 
-          {/* kkk.png — izquierda, ligeramente más pequeña */}
+          {/* PORTADA — izquierda, más pequeña, ligeramente más abajo */}
           <motion.div
-            className="relative z-10 shrink-0"
+            className="relative z-10 shrink-0 self-center"
             style={{
               scale: imgScale,
-              width: "46%",
-              paddingTop: "5rem",
-              paddingBottom: "3rem",
-              maskImage:
-                "radial-gradient(ellipse 82% 80% at 55% 52%, black 35%, transparent 100%)",
-              WebkitMaskImage:
-                "radial-gradient(ellipse 82% 80% at 55% 52%, black 35%, transparent 100%)",
-            }}
-          >
-            <Image
-              src="/images/kkk.png"
-              alt="Queens Cosmetics — productos de belleza"
-              width={600}
-              height={800}
-              priority
-              quality={100}
-              sizes="22vw"
-              className="w-full h-auto object-contain"
-            />
-          </motion.div>
-
-          {/* PORTADA — derecha, protagonista */}
-          <motion.div
-            className="relative z-10 shrink-0"
-            style={{
-              scale: imgScale,
-              width: "54%",
-              padding: "2.5rem 2rem 2.5rem 0",
-              maskImage:
-                "radial-gradient(ellipse 80% 90% at 45% 50%, black 40%, transparent 100%)",
-              WebkitMaskImage:
-                "radial-gradient(ellipse 80% 90% at 45% 50%, black 40%, transparent 100%)",
+              width: "34%",
+              marginRight: "-2%",
+              maskImage: [
+                "linear-gradient(to right,  transparent 0%, black 30%, black 70%, transparent 100%)",
+                "linear-gradient(to bottom, transparent 0%, black 12%, black 88%, transparent 100%)",
+              ].join(", "),
+              WebkitMaskImage: [
+                "linear-gradient(to right,  transparent 0%, black 30%, black 70%, transparent 100%)",
+                "linear-gradient(to bottom, transparent 0%, black 12%, black 88%, transparent 100%)",
+              ].join(", "),
+              maskComposite: "intersect",
+              WebkitMaskComposite: "destination-in",
             }}
           >
             <Image
               src="/images/PORTADA.png"
               alt="Queens Cosmetics — colección de maquillaje premium"
-              width={860}
-              height={1146}
+              width={480}
+              height={640}
               priority
               quality={100}
-              sizes="(max-width: 1280px) 30vw, 380px"
+              sizes="20vw"
+              className="w-full h-auto object-contain"
+            />
+          </motion.div>
+
+          {/* kkk.png — derecha, grande, protagonista */}
+          <motion.div
+            className="relative z-20 shrink-0"
+            style={{
+              scale: imgScale,
+              width: "66%",
+              maskImage: [
+                "linear-gradient(to right,  transparent 0%, black 18%, black 82%, transparent 100%)",
+                "linear-gradient(to bottom, transparent 0%, black 8%,  black 92%, transparent 100%)",
+              ].join(", "),
+              WebkitMaskImage: [
+                "linear-gradient(to right,  transparent 0%, black 18%, black 82%, transparent 100%)",
+                "linear-gradient(to bottom, transparent 0%, black 8%,  black 92%, transparent 100%)",
+              ].join(", "),
+              maskComposite: "intersect",
+              WebkitMaskComposite: "destination-in",
+            }}
+          >
+            <Image
+              src="/images/kkk.png"
+              alt="Queens Cosmetics — productos de belleza"
+              width={900}
+              height={1200}
+              priority
+              quality={100}
+              sizes="(max-width: 1280px) 36vw, 460px"
               className="w-full h-auto object-contain"
             />
           </motion.div>
