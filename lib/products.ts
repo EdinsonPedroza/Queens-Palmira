@@ -108,7 +108,6 @@ export const PRODUCTS: Product[] = [
     description: "Labial cremoso clásico.",
     image: "/images/products/Labial en Barra 3b Jmart.png",
     variants: ["Aventura", "Frutos Rojos", "Nude", "Pimienta", "Rosa", "Vital"],
-    imageStyle: { transform: "translateX(40%)" },
   },
   {
     id: "lip-tinta-tatto-engol",

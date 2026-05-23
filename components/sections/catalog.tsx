@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useMemo, useCallback } from "react"
-import { motion, AnimatePresence } from "framer-motion"
+import { m, AnimatePresence } from "framer-motion"
 import { Search, SlidersHorizontal, ChevronDown, X, ArrowUpDown } from "lucide-react"
 import { ProductCard } from "@/components/product-card"
 import { CATEGORIES, PRODUCTS, getProductsByCategory, type ProductCategory } from "@/lib/products"
@@ -94,24 +94,24 @@ export function Catalog() {
         </div>
 
         {/* ── Sticky wrapper ── */}
-        <div className="sticky top-[72px] z-30 -mx-6 md:-mx-10 px-6 md:px-10 pb-4 pt-3 bg-white/80 backdrop-blur-xl border-b border-[var(--rose-pastel)]/30">
+        <div className="sticky top-[72px] z-30 -mx-6 md:-mx-10 px-6 md:px-10 pb-4 pt-3 bg-white/80 backdrop-blur-xl border-b border-(--rose-pastel)/30">
 
           {/* Category tabs */}
           <div className="flex justify-center mb-3">
-            <div className="flex flex-wrap justify-center gap-1.5 rounded-2xl bg-[var(--rose-pastel)]/25 p-1.5 backdrop-blur-sm border border-white/60 shadow-inner">
+            <div className="flex flex-wrap justify-center gap-1.5 rounded-2xl bg-(--rose-pastel)/25 p-1.5 backdrop-blur-sm border border-white/60 shadow-inner">
               {CATEGORIES.map((cat) => {
                 const isActive = active === cat.id
                 return (
-                  <motion.button
+                  <m.button
                     key={cat.id}
                     onClick={() => handleCategoryChange(cat.id)}
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
                     transition={{ type: "spring", stiffness: 500, damping: 28 }}
-                    className="relative px-3.5 py-2 rounded-xl text-xs font-medium cursor-pointer select-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--gold)]"
+                    className="relative px-3.5 py-2 rounded-xl text-xs font-medium cursor-pointer select-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--gold)"
                   >
                     {isActive && (
-                      <motion.div
+                      <m.div
                         layoutId="cat-pill"
                         className="absolute inset-0 rounded-xl bg-white"
                         style={{ boxShadow: "0 4px 16px -4px rgba(212,175,55,0.4), 0 0 0 1.5px rgba(212,175,55,0.2)" }}
@@ -122,9 +122,7 @@ export function Catalog() {
                       className="relative z-10 flex items-center gap-1.5 transition-colors duration-200"
                       style={{ color: isActive ? "var(--gold-deep)" : "oklch(0.18 0.025 40 / 0.55)" }}
                     >
-                      <span className={isActive ? "font-semibold" : ""}>
-                        {cat.label}
-                      </span>
+                      <span className={isActive ? "font-semibold" : ""}>{cat.label}</span>
                       <span
                         className="text-[10px] font-bold px-1.5 py-0.5 rounded-full hidden sm:inline"
                         style={{
@@ -135,7 +133,7 @@ export function Catalog() {
                         {categoryCounts[cat.id]}
                       </span>
                     </span>
-                  </motion.button>
+                  </m.button>
                 )
               })}
             </div>
@@ -182,7 +180,7 @@ export function Catalog() {
                   "cursor-pointer select-none transition-all duration-150 focus-visible:outline-none",
                   "focus-visible:ring-2 focus-visible:ring-[var(--gold)] whitespace-nowrap",
                   sortOrder !== "default"
-                    ? "border-[var(--gold-deep)] bg-[var(--gold-deep)]/8 text-[var(--gold-deep)]"
+                    ? "border-[var(--gold-deep)] bg-[oklch(0.60_0.130_75/8%)] text-[var(--gold-deep)]"
                     : "border-[var(--rose-pastel)] text-[var(--muted-foreground)] hover:border-[var(--gold-deep)] hover:text-[var(--ink)]",
                 ].join(" ")}
                 aria-expanded={sortOpen}
@@ -197,7 +195,7 @@ export function Catalog() {
 
               <AnimatePresence>
                 {sortOpen && (
-                  <motion.div
+                  <m.div
                     initial={{ opacity: 0, y: -6, scale: 0.97 }}
                     animate={{ opacity: 1, y: 0, scale: 1 }}
                     exit={{ opacity: 0, y: -6, scale: 0.97 }}
@@ -212,14 +210,14 @@ export function Catalog() {
                         className={[
                           "w-full text-left px-4 py-2.5 text-sm transition-colors",
                           sortOrder === key
-                            ? "bg-[var(--gold-deep)]/10 font-semibold text-[var(--gold-deep)]"
+                            ? "bg-[oklch(0.60_0.130_75/10%)] font-semibold text-[var(--gold-deep)]"
                             : "text-[var(--ink)] hover:bg-[var(--rose-pastel)]/30",
                         ].join(" ")}
                       >
                         {label}
                       </button>
                     ))}
-                  </motion.div>
+                  </m.div>
                 )}
               </AnimatePresence>
             </div>
@@ -229,7 +227,7 @@ export function Catalog() {
         {/* ── Metadata row ── */}
         <div className="flex items-center justify-between mt-8 mb-6">
           <AnimatePresence mode="wait">
-            <motion.p
+            <m.p
               key={active + search + sortOrder + "-tag"}
               initial={{ opacity: 0, y: 4 }}
               animate={{ opacity: 1, y: 0 }}
@@ -240,25 +238,25 @@ export function Catalog() {
               {search
                 ? `${filtered.length} resultado${filtered.length !== 1 ? "s" : ""} para "${search}"`
                 : activeCategory.tagline}
-            </motion.p>
+            </m.p>
           </AnimatePresence>
 
           <AnimatePresence mode="wait">
-            <motion.span
+            <m.span
               key={filtered.length}
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               className="text-xs text-[var(--muted-foreground)]"
             >
               {filtered.length} producto{filtered.length !== 1 ? "s" : ""}
-            </motion.span>
+            </m.span>
           </AnimatePresence>
         </div>
 
         {/* ── Grid animado ── */}
         <AnimatePresence mode="wait">
           {visible.length === 0 ? (
-            <motion.div
+            <m.div
               key="empty"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
@@ -279,9 +277,9 @@ export function Catalog() {
                   limpia la búsqueda
                 </button>
               </p>
-            </motion.div>
+            </m.div>
           ) : (
-            <motion.div
+            <m.div
               key={active + "-grid"}
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -290,22 +288,22 @@ export function Catalog() {
               className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-5"
             >
               {visible.map((p, i) => (
-                <motion.div
+                <m.div
                   key={p.id}
                   initial={{ opacity: 0, y: 16 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: Math.min(i, 11) * 0.04, duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
                 >
                   <ProductCard product={p} />
-                </motion.div>
+                </m.div>
               ))}
-            </motion.div>
+            </m.div>
           )}
         </AnimatePresence>
 
         {/* ── Load more ── */}
         {hasMore && (
-          <motion.div
+          <m.div
             className="mt-12 flex flex-col items-center gap-3"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -313,7 +311,7 @@ export function Catalog() {
           >
             {/* Progress bar */}
             <div className="w-full max-w-xs h-1 rounded-full bg-[var(--rose-pastel)]/40 overflow-hidden">
-              <motion.div
+              <m.div
                 className="h-full rounded-full bg-queens-gradient-intense"
                 animate={{ width: `${(visibleCount / filtered.length) * 100}%` }}
                 transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
@@ -322,22 +320,22 @@ export function Catalog() {
             <p className="text-xs text-[var(--muted-foreground)]">
               Mostrando {visible.length} de {filtered.length}
             </p>
-            <motion.button
+            <m.button
               type="button"
               onClick={() => setVisible((n) => n + PAGE_SIZE)}
               whileHover={{ scale: 1.04 }}
               whileTap={{ scale: 0.96 }}
               transition={{ type: "spring", stiffness: 500, damping: 28 }}
               className={[
-                "flex items-center gap-2 rounded-2xl border-2 border-[var(--gold-deep)]/40 px-8 py-3",
-                "text-sm font-semibold text-[var(--gold-deep)] hover:border-[var(--gold-deep)]",
-                "hover:bg-[var(--gold-deep)]/6 transition-all duration-200 cursor-pointer",
+                "flex items-center gap-2 rounded-2xl px-10 py-3.5 shadow-lg",
+                "text-sm font-semibold text-white bg-[var(--gold)] hover:bg-[var(--gold-deep)]",
+                "transition-all duration-200 cursor-pointer",
               ].join(" ")}
             >
-              <ChevronDown className="h-4 w-4" />
+              <ChevronDown className="h-5 w-5" />
               Ver {Math.min(remaining, PAGE_SIZE)} más
-            </motion.button>
-          </motion.div>
+            </m.button>
+          </m.div>
         )}
 
       </div>

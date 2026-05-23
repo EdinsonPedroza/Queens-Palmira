@@ -23,7 +23,7 @@ export function QueensLogo({ className, variant = "default", size = 48 }: Queens
       />
       <span
         className={cn(
-          "font-display tracking-[0.3em] font-bold text-lg",
+          "font-display tracking-[0.18em] font-bold text-2xl",
           isWhite ? "text-white" : "text-ink"
         )}
       >

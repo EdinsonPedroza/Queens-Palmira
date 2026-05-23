@@ -175,7 +175,6 @@ export function CartProvider({ children }: { children: ReactNode }) {
       toggleCart: () => setIsOpen((v) => !v),
       addItem: (productId, variant) => {
         dispatch({ type: "add", productId, variant })
-        setIsOpen(true)
       },
       removeItem: (key) => dispatch({ type: "remove", key }),
       setQty: (key, qty) => dispatch({ type: "set-qty", key, qty }),

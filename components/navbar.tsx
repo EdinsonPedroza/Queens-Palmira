@@ -41,7 +41,7 @@ export function Navbar() {
       >
         <div className="mx-auto flex max-w-7xl items-center justify-between px-5 md:px-8 py-4">
           <Link href="#hero" aria-label="Queens Cosmetics inicio">
-            <QueensLogo variant="default" size={52} />
+            <QueensLogo variant="default" size={80} />
           </Link>
 
           <nav className="hidden lg:flex items-center gap-8">

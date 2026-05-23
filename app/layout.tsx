@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next"
 import { DM_Sans, Inter } from "next/font/google"
 import { CartProvider } from "@/context/cart-context"
+import { MotionProvider } from "@/components/motion-provider"
 import "./globals.css"
 
 const dmSans = DM_Sans({
@@ -61,8 +62,14 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       lang="es-CO"
       className={`${dmSans.variable} ${inter.variable}`}
     >
+      <head>
+        <link rel="preconnect" href="https://images.unsplash.com" />
+        <link rel="dns-prefetch" href="https://images.unsplash.com" />
+      </head>
       <body className="font-body antialiased">
-        <CartProvider>{children}</CartProvider>
+        <CartProvider>
+          <MotionProvider>{children}</MotionProvider>
+        </CartProvider>
       </body>
     </html>
   )

@@ -3,7 +3,8 @@
 import { createPortal } from "react-dom"
 import { ShoppingBag, Check, Palette, ChevronDown, Sparkles } from "lucide-react"
 import { useState, useRef, useEffect, useCallback } from "react"
-import { motion, AnimatePresence } from "framer-motion"
+import Image from "next/image"
+import { m, AnimatePresence } from "framer-motion"
 import type { Product } from "@/lib/products"
 import { Badge } from "./ui/badge"
 import { useCart } from "@/context/cart-context"
@@ -18,7 +19,7 @@ const BADGE_COPY: Record<NonNullable<Product["badge"]>, { text: string; variant:
 /* ─── Chip de tono ─────────────────────────────────────────── */
 function Chip({ label, selected, onClick }: { label: string; selected: boolean; onClick: () => void }) {
   return (
-    <motion.button
+    <m.button
       type="button"
       onClick={onClick}
       aria-pressed={selected}
@@ -31,11 +32,11 @@ function Chip({ label, selected, onClick }: { label: string; selected: boolean; 
         "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--gold)]",
         selected
           ? "bg-queens-gradient-intense text-white shadow-md border border-transparent"
-          : "border border-[var(--rose-pastel)] bg-white text-[var(--ink)]/55 hover:border-[var(--gold-deep)]/50 hover:text-[var(--gold-deep)] hover:bg-[var(--gold-deep)]/5",
+          : "border border-[var(--rose-pastel)] bg-white text-[var(--ink)]/55 hover:border-[oklch(0.60_0.130_75/50%)] hover:text-[var(--gold-deep)] hover:bg-[oklch(0.60_0.130_75/5%)]",
       ].join(" ")}
     >
       {label}
-    </motion.button>
+    </m.button>
   )
 }
 
@@ -76,7 +77,7 @@ function PortalDropdown({ variants, selected, onSelect, open, onClose, triggerRe
   if (!open || !pos) return null
 
   return createPortal(
-    <motion.div
+    <m.div
       ref={panelRef}
       initial={{ opacity: 0, y: -8, scale: 0.97 }}
       animate={{ opacity: 1, y: 0, scale: 1 }}
@@ -96,7 +97,7 @@ function PortalDropdown({ variants, selected, onSelect, open, onClose, triggerRe
           <Chip key={v} label={v} selected={selected === v} onClick={() => { onSelect(v); onClose() }} />
         ))}
       </div>
-    </motion.div>,
+    </m.div>,
     document.body,
   )
 }
@@ -110,7 +111,7 @@ function AddButton({ canAdd, justAdded, onClick, productName, selectedVariant }:
   selectedVariant: string
 }) {
   return (
-    <motion.button
+    <m.button
       type="button"
       onClick={onClick}
       disabled={!canAdd && !justAdded}
@@ -151,29 +152,29 @@ function AddButton({ canAdd, justAdded, onClick, productName, selectedVariant }:
 
       <AnimatePresence mode="wait">
         {justAdded ? (
-          <motion.span key="ok" className="flex items-center gap-1.5 relative z-10"
+          <m.span key="ok" className="flex items-center gap-1.5 relative z-10"
             initial={{ opacity: 0, scale: 0.7, y: 4 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, y: -4 }}
             transition={{ type: "spring", stiffness: 500, damping: 22 }}>
             <Check className="h-4 w-4" strokeWidth={3} />
             ¡Agregado!
-          </motion.span>
+          </m.span>
         ) : canAdd ? (
-          <motion.span key="add" className="flex items-center gap-1.5 relative z-10"
+          <m.span key="add" className="flex items-center gap-1.5 relative z-10"
             initial={{ opacity: 0, y: 4 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -4 }}>
             <ShoppingBag className="h-3.5 w-3.5" />
             Agregar al carrito
-          </motion.span>
+          </m.span>
         ) : (
-          <motion.span key="pick" className="flex items-center gap-1.5 relative z-10"
+          <m.span key="pick" className="flex items-center gap-1.5 relative z-10"
             initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
             <Palette className="h-3.5 w-3.5" />
             Elige un tono primero
-          </motion.span>
+          </m.span>
         )}
       </AnimatePresence>
-    </motion.button>
+    </m.button>
   )
 }
 
@@ -207,7 +208,7 @@ export function ProductCard({ product }: { product: Product }) {
 
   return (
     <>
-      <motion.article
+      <m.article
         className="group relative flex flex-col rounded-2xl bg-white"
         style={{ boxShadow: "0 1px 4px rgba(44,24,16,0.06), 0 0 0 1px rgba(255,182,193,0.3)" }}
         whileHover={{ y: -4, boxShadow: "0 16px 40px -8px rgba(44,24,16,0.12), 0 0 0 1.5px rgba(212,175,55,0.25)" }}
@@ -216,12 +217,12 @@ export function ProductCard({ product }: { product: Product }) {
       >
         {/* ── Imagen ── */}
         <div className="relative aspect-[3/4] overflow-hidden rounded-t-2xl bg-gradient-to-b from-[var(--rose-pastel-soft)] to-[var(--rose-pastel)]/20">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
+          <Image
             src={product.image}
             alt={product.name}
-            loading="lazy"
-            className="absolute inset-0 w-full h-full object-contain p-5 transition-transform duration-700 ease-out group-hover:scale-[1.06]"
+            fill
+            sizes="(max-width: 640px) 45vw, (max-width: 1280px) 30vw, 20vw"
+            className="object-contain p-5 transition-transform duration-700 ease-out group-hover:scale-[1.06]"
             style={product.imageStyle}
           />
 
@@ -234,7 +235,7 @@ export function ProductCard({ product }: { product: Product }) {
           {/* Indicador de tono seleccionado en la imagen */}
           <AnimatePresence>
             {selectedVariant && (
-              <motion.div
+              <m.div
                 initial={{ opacity: 0, y: 6 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: 6 }}
@@ -246,7 +247,7 @@ export function ProductCard({ product }: { product: Product }) {
                     {selectedVariant}
                   </span>
                 </div>
-              </motion.div>
+              </m.div>
             )}
           </AnimatePresence>
         </div>
@@ -295,10 +296,10 @@ export function ProductCard({ product }: { product: Product }) {
                 "flex items-center justify-between gap-2 rounded-xl border px-3 py-2 text-[11px] font-medium",
                 "cursor-pointer transition-all duration-200 focus-visible:outline-none w-full",
                 selectedVariant
-                  ? "border-[var(--gold-deep)] bg-[var(--gold-deep)]/8 text-[var(--ink)]"
+                  ? "border-[var(--gold-deep)] bg-[oklch(0.60_0.130_75/8%)] text-[var(--ink)]"
                   : dropOpen
-                    ? "border-[var(--gold-deep)]/60 text-[var(--ink)]"
-                    : "border-[var(--rose-pastel)] text-[var(--muted-foreground)] hover:border-[var(--gold-deep)]/50",
+                    ? "border-[oklch(0.60_0.130_75/60%)] text-[var(--ink)]"
+                    : "border-[var(--rose-pastel)] text-[var(--muted-foreground)] hover:border-[oklch(0.60_0.130_75/50%)]",
               ].join(" ")}
             >
               <span className="flex items-center gap-1.5 min-w-0">
@@ -307,13 +308,13 @@ export function ProductCard({ product }: { product: Product }) {
                   {selectedVariant || `Ver ${product.variants!.length} tonos disponibles`}
                 </span>
               </span>
-              <motion.span
+              <m.span
                 animate={{ rotate: dropOpen ? 180 : 0 }}
                 transition={{ duration: 0.2 }}
                 className="shrink-0"
               >
                 <ChevronDown className="h-3.5 w-3.5" />
-              </motion.span>
+              </m.span>
             </button>
           )}
 
@@ -329,7 +330,7 @@ export function ProductCard({ product }: { product: Product }) {
             selectedVariant={selectedVariant}
           />
         </div>
-      </motion.article>
+      </m.article>
 
       {/* Portal dropdown fuera del card */}
       {manyVariants && (

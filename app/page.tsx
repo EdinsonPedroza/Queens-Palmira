@@ -6,10 +6,11 @@ import { Hero } from "@/components/sections/hero"
 import { Marquee } from "@/components/sections/marquee"
 import { WhatsAppFloat } from "@/components/whatsapp-float"
 import { CartSidebar } from "@/components/cart-sidebar"
+import { CartFloat } from "@/components/cart-float"
 
+const WhyQueens      = dynamic(() => import("@/components/sections/why-queens").then((m) => m.WhyQueens))
 const Catalog        = dynamic(() => import("@/components/sections/catalog").then((m) => m.Catalog))
 const DigitalCatalog = dynamic(() => import("@/components/sections/digital-catalog").then((m) => m.DigitalCatalog))
-const WhyQueens      = dynamic(() => import("@/components/sections/why-queens").then((m) => m.WhyQueens))
 const Gallery      = dynamic(() => import("@/components/sections/gallery").then((m) => m.Gallery))
 const Testimonials = dynamic(() => import("@/components/sections/testimonials").then((m) => m.Testimonials))
 const FAQ          = dynamic(() => import("@/components/sections/faq").then((m) => m.FAQ))
@@ -26,8 +27,8 @@ export default function Home() {
       <Hero />
       <Marquee />
       <Catalog />
-      <DigitalCatalog />
       <WhyQueens />
+      <DigitalCatalog />
       <Gallery />
       <Testimonials />
       <FAQ />
@@ -35,6 +36,7 @@ export default function Home() {
       <Location />
       <Footer />
       <WhatsAppFloat />
+      <CartFloat />
       <CartSidebar />
     </main>
   )
