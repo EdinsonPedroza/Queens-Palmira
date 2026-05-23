@@ -139,31 +139,6 @@ export function Hero() {
           {textBlock}
         </div>
 
-        {/* Imagen mobile — entra + flota */}
-        <m.div
-          className="flex justify-center px-8 mb-8"
-          initial={{ opacity: 0, scale: 0.85, y: 40 }}
-          animate={{ opacity: 1, scale: 1, y: 0 }}
-          transition={{ duration: 1.1, delay: 0.55, ease: [0.16, 1, 0.3, 1] }}
-        >
-          <m.div
-            className="relative w-full max-w-[320px]"
-            animate={{ y: [0, -12, 0], rotate: [0, 0.5, -0.5, 0] }}
-            transition={{ duration: 5.5, repeat: Infinity, ease: "easeInOut" }}
-          >
-            <Image
-              src="/images/PORTADA.png"
-              alt="Queens Cosmetics — colección de maquillaje premium"
-              width={600} height={800}
-              priority quality={100} sizes="320px"
-              className="w-full h-auto object-contain mix-blend-multiply"
-              style={{
-                maskImage: "radial-gradient(ellipse 82% 88% at 50% 50%, black 50%, transparent 100%)",
-                WebkitMaskImage: "radial-gradient(ellipse 82% 88% at 50% 50%, black 50%, transparent 100%)",
-              }}
-            />
-          </m.div>
-        </m.div>
       </div>
 
       {/* ════ DESKTOP ════ */}
