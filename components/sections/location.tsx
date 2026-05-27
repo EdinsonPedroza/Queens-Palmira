@@ -172,19 +172,6 @@ export function Location() {
             style={{ scale: springMapScale, y: springMapY }}
             className="relative"
           >
-            {/* Marco decorativo animado */}
-            <motion.div
-              className="pointer-events-none absolute -inset-3 z-10 rounded-[28px]"
-              style={{
-                background:
-                  "linear-gradient(135deg, oklch(0.75 0.135 85 / 0.35) 0%, oklch(0.84 0.065 15 / 0.25) 50%, oklch(0.75 0.135 85 / 0.35) 100%)",
-                padding: "2px",
-              }}
-              animate={{
-                backgroundPosition: ["0% 0%", "100% 100%", "0% 0%"],
-              }}
-              transition={{ duration: 4, repeat: Infinity, ease: "linear" }}
-            />
 
             {/* Etiqueta "Queens Store" flotante */}
             <motion.div
