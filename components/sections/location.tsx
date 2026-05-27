@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button"
 import { WA_VISIT } from "@/lib/whatsapp"
 
 const MAP_SRC =
-  "https://maps.google.com/maps?q=Unicentro+Palmira,+Palmira,+Valle+del+Cauca,+Colombia&output=embed&hl=es&z=17"
+  "https://www.openstreetmap.org/export/embed.html?bbox=-76.3099%2C3.5172%2C-76.2899%2C3.5372&layer=mapnik&marker=3.5272%2C-76.2999"
 
 const INFO_CARDS = [
   {
