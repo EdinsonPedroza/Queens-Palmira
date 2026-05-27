@@ -1,13 +1,15 @@
 "use client"
 
-import { useRef, useState } from "react"
+import { useRef, useState, useEffect } from "react"
 import { motion, useScroll, useTransform, useSpring, AnimatePresence } from "framer-motion"
-import { MapPin, Clock, Phone, Instagram, MessageCircle, Navigation } from "lucide-react"
+import { MapPin, Clock, Phone, Instagram, MessageCircle, Navigation, ExternalLink } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { WA_VISIT } from "@/lib/whatsapp"
 
 const MAP_SRC =
   "https://www.openstreetmap.org/export/embed.html?bbox=-76.3099%2C3.5172%2C-76.2899%2C3.5372&layer=mapnik&marker=3.5272%2C-76.2999"
+
+const GMAPS_LINK = "https://maps.google.com/?q=Unicentro+Palmira,+Palmira,+Colombia"
 
 const INFO_CARDS = [
   {
@@ -37,7 +39,15 @@ export function Location() {
   const sectionRef = useRef<HTMLElement>(null)
   const mapRef = useRef<HTMLDivElement>(null)
   const [mapLoaded, setMapLoaded] = useState(false)
+  const [mapError, setMapError] = useState(false)
   const [hoveredCard, setHoveredCard] = useState<number | null>(null)
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      if (!mapLoaded) setMapError(true)
+    }, 6000)
+    return () => clearTimeout(timer)
+  }, [mapLoaded])
 
   const { scrollYProgress } = useScroll({
     target: sectionRef,
@@ -197,7 +207,7 @@ export function Location() {
               <span className="text-xs font-semibold text-[var(--ink)]">Queens Cosmetics · Local 128</span>
             </motion.div>
 
-            {/* Contenedor del iframe */}
+            {/* Contenedor del iframe / fallback */}
             <motion.div
               className="relative overflow-hidden rounded-3xl shadow-2xl"
               style={{ height: "clamp(340px, 45vw, 520px)" }}
@@ -206,23 +216,6 @@ export function Location() {
               viewport={{ once: true, amount: 0.3 }}
               transition={{ duration: 1.1, ease: [0.16, 1, 0.3, 1] }}
             >
-              {/* Shimmer mientras carga */}
-              <AnimatePresence>
-                {!mapLoaded && (
-                  <motion.div
-                    className="absolute inset-0 z-10"
-                    style={{
-                      background:
-                        "linear-gradient(90deg, oklch(0.94 0.035 15) 0%, oklch(0.97 0.008 15) 50%, oklch(0.94 0.035 15) 100%)",
-                      backgroundSize: "200% 100%",
-                    }}
-                    animate={{ backgroundPosition: ["-200% 0%", "200% 0%"] }}
-                    transition={{ duration: 1.5, repeat: Infinity, ease: "linear" }}
-                    exit={{ opacity: 0 }}
-                  />
-                )}
-              </AnimatePresence>
-
               {/* Borde interno brillante */}
               <div
                 className="pointer-events-none absolute inset-0 z-10 rounded-3xl"
@@ -232,20 +225,119 @@ export function Location() {
                 }}
               />
 
-              <iframe
-                title="Mapa Queens Cosmetics Unicentro Palmira"
-                src={MAP_SRC}
-                className="h-full w-full"
-                loading="lazy"
-                referrerPolicy="no-referrer-when-downgrade"
-                allowFullScreen
-                onLoad={() => setMapLoaded(true)}
-              />
+              <AnimatePresence mode="wait">
+                {!mapError ? (
+                  <motion.div key="iframe" className="h-full w-full" exit={{ opacity: 0 }}>
+                    {/* Shimmer mientras carga */}
+                    <AnimatePresence>
+                      {!mapLoaded && (
+                        <motion.div
+                          className="absolute inset-0 z-10 flex flex-col items-center justify-center gap-3"
+                          style={{ background: "oklch(0.97 0.008 15)" }}
+                          exit={{ opacity: 0, transition: { duration: 0.4 } }}
+                        >
+                          <motion.div
+                            className="h-10 w-10 rounded-full border-2 border-[var(--gold)] border-t-transparent"
+                            animate={{ rotate: 360 }}
+                            transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
+                          />
+                          <span className="text-xs text-[var(--muted-foreground)]">Cargando mapa…</span>
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
+                    <iframe
+                      title="Mapa Queens Cosmetics Unicentro Palmira"
+                      src={MAP_SRC}
+                      className="h-full w-full"
+                      loading="lazy"
+                      referrerPolicy="no-referrer-when-downgrade"
+                      allowFullScreen
+                      onLoad={() => setMapLoaded(true)}
+                    />
+                  </motion.div>
+                ) : (
+                  /* ── Fallback elegante cuando el mapa no carga ── */
+                  <motion.a
+                    key="fallback"
+                    href={GMAPS_LINK}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="group flex h-full w-full flex-col items-center justify-center gap-6 px-8 text-center"
+                    style={{
+                      background:
+                        "linear-gradient(145deg, oklch(0.18 0.025 260) 0%, oklch(0.14 0.020 270) 100%)",
+                    }}
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ duration: 0.6 }}
+                  >
+                    {/* Grid de puntos decorativo */}
+                    <div
+                      className="pointer-events-none absolute inset-0 opacity-20"
+                      style={{
+                        backgroundImage:
+                          "radial-gradient(circle, oklch(0.75 0.135 85 / 0.4) 1px, transparent 1px)",
+                        backgroundSize: "28px 28px",
+                      }}
+                    />
+                    {/* Orbe de glow central */}
+                    <motion.div
+                      className="pointer-events-none absolute inset-0"
+                      style={{
+                        background:
+                          "radial-gradient(ellipse 60% 50% at 50% 50%, oklch(0.75 0.135 85 / 0.12) 0%, transparent 70%)",
+                      }}
+                      animate={{ opacity: [0.6, 1, 0.6] }}
+                      transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+                    />
+
+                    {/* Pin animado */}
+                    <motion.div
+                      className="relative z-10 flex h-20 w-20 items-center justify-center rounded-full"
+                      style={{
+                        background:
+                          "linear-gradient(135deg, oklch(0.75 0.135 85 / 0.25) 0%, oklch(0.84 0.065 15 / 0.20) 100%)",
+                        border: "1.5px solid oklch(0.75 0.135 85 / 0.5)",
+                      }}
+                      animate={{ y: [0, -8, 0] }}
+                      transition={{ duration: 2.4, repeat: Infinity, ease: "easeInOut" }}
+                      whileHover={{ scale: 1.12 }}
+                    >
+                      <MapPin className="h-9 w-9 text-[var(--gold)]" />
+                    </motion.div>
+
+                    <div className="relative z-10 space-y-1">
+                      <p className="font-display text-xl font-semibold text-white">
+                        Queens Cosmetics
+                      </p>
+                      <p className="text-sm text-white/60">Local 128 · Unicentro Palmira</p>
+                    </div>
+
+                    <motion.div
+                      className="relative z-10 flex items-center gap-2 rounded-full px-6 py-3 text-sm font-semibold text-[var(--ink)]"
+                      style={{
+                        background:
+                          "linear-gradient(135deg, var(--gold) 0%, oklch(0.84 0.08 75) 100%)",
+                      }}
+                      whileHover={{ scale: 1.05, gap: "12px" }}
+                      transition={{ type: "spring", stiffness: 400, damping: 20 }}
+                    >
+                      <Navigation className="h-4 w-4" />
+                      Ver en Google Maps
+                      <ExternalLink className="h-3.5 w-3.5 opacity-70" />
+                    </motion.div>
+
+                    <p className="relative z-10 text-xs text-white/30">
+                      Toca para abrir en tu aplicación de mapas
+                    </p>
+                  </motion.a>
+                )}
+              </AnimatePresence>
             </motion.div>
 
             {/* Botón "Ver en Maps" */}
             <motion.a
-              href="https://maps.google.com/?q=Unicentro+Palmira,+Palmira,+Colombia"
+              href={GMAPS_LINK}
               target="_blank"
               rel="noopener noreferrer"
               className="absolute -bottom-5 right-6 z-20 flex items-center gap-2 rounded-full bg-[var(--ink)] px-4 py-2 text-xs font-semibold text-white shadow-xl"
