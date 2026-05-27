@@ -8,7 +8,7 @@ const ContentSecurityPolicy = `
   img-src 'self' data: blob: https://images.unsplash.com https://plus.unsplash.com;
   font-src 'self';
   connect-src 'self' https://vitals.vercel-insights.com https://va.vercel-scripts.com;
-  frame-src 'none';
+  frame-src https://www.google.com https://maps.google.com https://maps.googleapis.com;
   object-src 'none';
   base-uri 'self';
   form-action 'self';
