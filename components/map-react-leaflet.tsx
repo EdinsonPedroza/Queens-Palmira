@@ -1,6 +1,7 @@
 "use client"
 
-import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet"
+import { useEffect } from "react"
+import { MapContainer, TileLayer, Marker, Popup, useMap } from "react-leaflet"
 import L from "leaflet"
 
 // Fix default icon paths broken by webpack/turbopack
@@ -14,17 +15,28 @@ L.Icon.Default.mergeOptions({
 const POS: [number, number] = [3.5400896, -76.310776]
 const GMAPS = "https://maps.app.goo.gl/PKAKSgb6rRDPwBvUA"
 
+// Forces Leaflet to recalculate tile grid after container animations/transitions
+function MapResizer() {
+  const map = useMap()
+  useEffect(() => {
+    const t = setTimeout(() => map.invalidateSize(), 300)
+    return () => clearTimeout(t)
+  }, [map])
+  return null
+}
+
 export function MapReactLeaflet() {
   return (
     <MapContainer
       center={POS}
       zoom={17}
-      style={{ width: "100%", height: "100%", filter: "saturate(0.75) contrast(1.05)" }}
+      style={{ width: "100%", height: "100%", filter: "saturate(0.8) contrast(1.05)" }}
       scrollWheelZoom={false}
       zoomControl
       attributionControl={false}
     >
       <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
+      <MapResizer />
       <Marker position={POS}>
         <Popup>
           <div style={{ fontFamily: "sans-serif", minWidth: 160, lineHeight: 1.5 }}>

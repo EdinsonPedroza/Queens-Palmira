@@ -192,10 +192,10 @@ export function Location() {
             <motion.div
               className="relative overflow-hidden rounded-3xl shadow-2xl"
               style={{ height: "clamp(340px, 45vw, 520px)" }}
-              initial={{ clipPath: "inset(100% 0% 0% 0%)" }}
-              whileInView={{ clipPath: "inset(0% 0% 0% 0%)" }}
+              initial={{ opacity: 0, scale: 0.96, y: 24 }}
+              whileInView={{ opacity: 1, scale: 1, y: 0 }}
               viewport={{ once: true, amount: 0.3 }}
-              transition={{ duration: 1.1, ease: [0.16, 1, 0.3, 1] }}
+              transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
             >
               <div
                 className="pointer-events-none absolute inset-0 z-10 rounded-3xl"
