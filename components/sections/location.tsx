@@ -6,7 +6,7 @@ import { MapPin, Clock, Phone, Instagram, MessageCircle, Navigation, ExternalLin
 import { Button } from "@/components/ui/button"
 import { WA_VISIT } from "@/lib/whatsapp"
 
-const GMAPS_LINK = "https://maps.google.com/?q=Unicentro+Palmira,+Palmira,+Colombia"
+const GMAPS_LINK = "https://maps.app.goo.gl/PKAKSgb6rRDPwBvUA"
 
 const INFO_CARDS = [
   {
