@@ -1,10 +1,20 @@
 "use client"
 
+import dynamic from "next/dynamic"
 import { useRef, useState } from "react"
 import { motion, useScroll, useTransform, useSpring, AnimatePresence } from "framer-motion"
 import { MapPin, Clock, Phone, Instagram, MessageCircle, Navigation, ExternalLink } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { WA_VISIT } from "@/lib/whatsapp"
+
+const MapLeaflet = dynamic(() => import("@/components/map-leaflet").then(m => m.MapLeaflet), {
+  ssr: false,
+  loading: () => (
+    <div className="flex h-full w-full items-center justify-center bg-[oklch(0.97_0.008_15)]">
+      <div className="h-8 w-8 animate-spin rounded-full border-2 border-[var(--gold)] border-t-transparent" />
+    </div>
+  ),
+})
 
 const GMAPS_LINK = "https://maps.app.goo.gl/PKAKSgb6rRDPwBvUA"
 
@@ -195,101 +205,24 @@ export function Location() {
               <span className="text-xs font-semibold text-[var(--ink)]">Queens Cosmetics · Local 128</span>
             </motion.div>
 
-            {/* Tarjeta de ubicación — dark premium, siempre visible */}
-            <motion.a
-              href={GMAPS_LINK}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="group relative flex overflow-hidden rounded-3xl shadow-2xl"
+            {/* Mapa Leaflet — interactivo, sin iframe, sin API key */}
+            <motion.div
+              className="relative overflow-hidden rounded-3xl shadow-2xl"
               style={{ height: "clamp(340px, 45vw, 520px)" }}
               initial={{ clipPath: "inset(100% 0% 0% 0%)" }}
               whileInView={{ clipPath: "inset(0% 0% 0% 0%)" }}
               viewport={{ once: true, amount: 0.3 }}
               transition={{ duration: 1.1, ease: [0.16, 1, 0.3, 1] }}
             >
-              {/* Fondo oscuro premium */}
-              <div
-                className="absolute inset-0"
-                style={{
-                  background:
-                    "linear-gradient(145deg, oklch(0.16 0.022 270) 0%, oklch(0.12 0.018 275) 100%)",
-                }}
-              />
-
-              {/* Grid de puntos */}
-              <div
-                className="pointer-events-none absolute inset-0 opacity-25"
-                style={{
-                  backgroundImage:
-                    "radial-gradient(circle, oklch(0.75 0.135 85 / 0.5) 1px, transparent 1px)",
-                  backgroundSize: "28px 28px",
-                }}
-              />
-
-              {/* Glow central animado */}
-              <motion.div
-                className="pointer-events-none absolute inset-0"
-                style={{
-                  background:
-                    "radial-gradient(ellipse 65% 55% at 50% 52%, oklch(0.75 0.135 85 / 0.14) 0%, transparent 70%)",
-                }}
-                animate={{ opacity: [0.6, 1, 0.6] }}
-                transition={{ duration: 3.5, repeat: Infinity, ease: "easeInOut" }}
-              />
-
               {/* Borde interno dorado */}
               <div
                 className="pointer-events-none absolute inset-0 z-10 rounded-3xl"
                 style={{
-                  boxShadow: "inset 0 0 0 1.5px oklch(0.75 0.135 85 / 0.35)",
+                  boxShadow: "inset 0 0 0 2px oklch(0.75 0.135 85 / 0.30)",
                 }}
               />
-
-              {/* Contenido centrado */}
-              <div className="relative z-10 flex h-full w-full flex-col items-center justify-center gap-7 px-8 text-center">
-                {/* Pin flotante */}
-                <motion.div
-                  className="flex h-20 w-20 items-center justify-center rounded-full"
-                  style={{
-                    background:
-                      "linear-gradient(135deg, oklch(0.75 0.135 85 / 0.22) 0%, oklch(0.84 0.065 15 / 0.18) 100%)",
-                    border: "1.5px solid oklch(0.75 0.135 85 / 0.5)",
-                  }}
-                  animate={{ y: [0, -9, 0] }}
-                  transition={{ duration: 2.6, repeat: Infinity, ease: "easeInOut" }}
-                  whileHover={{ scale: 1.12 }}
-                >
-                  <MapPin className="h-9 w-9 text-(--gold)" />
-                </motion.div>
-
-                <div className="space-y-1.5">
-                  <p
-                    className="font-display text-2xl font-semibold text-white"
-                    style={{ letterSpacing: "-0.02em" }}
-                  >
-                    Queens Cosmetics
-                  </p>
-                  <p className="text-sm text-white/55">Local 128 · Unicentro Palmira</p>
-                  <p className="text-xs text-white/35">Valle del Cauca, Colombia</p>
-                </div>
-
-                <motion.div
-                  className="flex items-center gap-2.5 rounded-full px-7 py-3.5 text-sm font-semibold text-(--ink)"
-                  style={{
-                    background: "linear-gradient(135deg, var(--gold) 0%, oklch(0.82 0.09 75) 100%)",
-                  }}
-                  whileHover={{ scale: 1.06 }}
-                  whileTap={{ scale: 0.96 }}
-                  transition={{ type: "spring", stiffness: 400, damping: 20 }}
-                >
-                  <Navigation className="h-4 w-4" />
-                  Ver en Google Maps
-                  <ExternalLink className="h-3.5 w-3.5 opacity-60" />
-                </motion.div>
-
-                <p className="text-xs text-white/25">Toca para abrir en tu app de mapas</p>
-              </div>
-            </motion.a>
+              <MapLeaflet />
+            </motion.div>
 
             {/* Botón "Ver en Maps" */}
             <motion.a
