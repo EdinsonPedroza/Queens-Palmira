@@ -5,7 +5,7 @@ const ContentSecurityPolicy = `
   default-src 'self';
   script-src 'self' 'unsafe-inline' https://va.vercel-scripts.com;
   style-src 'self' 'unsafe-inline';
-  img-src 'self' data: blob: https://images.unsplash.com https://plus.unsplash.com;
+  img-src 'self' data: blob: https://images.unsplash.com https://plus.unsplash.com https://*.tile.openstreetmap.org https://unpkg.com;
   font-src 'self';
   connect-src 'self' https://vitals.vercel-insights.com https://va.vercel-scripts.com;
   frame-src https://www.google.com https://maps.google.com https://maps.googleapis.com;
