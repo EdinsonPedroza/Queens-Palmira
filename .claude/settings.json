@@ -6,7 +6,8 @@
       "Bash(npm run *)",
       "Bash(python -c ' *)",
       "Bash(pip install *)",
-      "Bash(python -c \"import fitz; print\\('fitz ok, version:', fitz.__version__\\)\")"
+      "Bash(python -c \"import fitz; print\\('fitz ok, version:', fitz.__version__\\)\")",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" \"https://www.openstreetmap.org/export/embed.html?bbox=-76.3099,3.5172,-76.2899,3.5372&layer=mapnik&marker=3.5272,-76.2999\")"
     ],
     "additionalDirectories": [
       "C:\\Users\\57318\\Desktop\\LANDING PALMIRA"
