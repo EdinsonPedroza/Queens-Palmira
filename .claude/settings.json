@@ -17,7 +17,14 @@
       "Bash(Get-PSDrive C)",
       "Bash(Select-Object Used,Free)",
       "Bash(wmic logicaldisk *)",
-      "Bash(npm cache *)"
+      "Bash(npm cache *)",
+      "Bash(curl -sI \"https://maps.app.goo.gl/PKAKSgb6rRDPwBvUA\")",
+      "Bash(curl -sI \"https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3983.5!2d-76.310776!3d3.5400896!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8e3a048cb47219db%3A0x648961599ce79421!2sUnicentro+Palmira!5e0!3m2!1ses!2sco!4v1716000000000\")",
+      "Bash(curl -sI \"https://www.google.com/maps/embed?pb=!4v1716000000000!6m8!1m7!1s0x8e3a048cb47219db%3A0x648961599ce79421!2m2!1d-76.310776!2d3.5400896!3f0!4f0!5f0.7820865974627469\")",
+      "Bash(curl -sL \"https://www.google.com/maps/place/Palmira+Unicentro+Shopping+Mall/@3.5400896,-76.3133509,17z\" -H \"User-Agent: Mozilla/5.0\")",
+      "Bash(curl -sI \"https://maps.google.com/maps?q=3.5400896,-76.310776&z=17&output=embed\")",
+      "Bash(curl -sI \"https://maps.google.com/maps?q=Unicentro+Palmira,Colombia&output=embed\")",
+      "Bash(curl -sI \"https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3982.7!2d-76.310776!3d3.5400896!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8e3a048cb47219db%3A0x648961599ce79421!2sPalmira+Unicentro+Shopping+Mall!5e0!3m2!1ses!2sco!4v1748300000000!5m2!1ses!2sco\")"
     ],
     "additionalDirectories": [
       "C:\\Users\\57318\\Desktop\\LANDING PALMIRA"
