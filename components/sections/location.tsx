@@ -1,20 +1,14 @@
 "use client"
 
-import dynamic from "next/dynamic"
 import { useRef, useState } from "react"
 import { motion, useScroll, useTransform, useSpring, AnimatePresence } from "framer-motion"
-import { MapPin, Clock, Phone, Instagram, MessageCircle, Navigation, ExternalLink } from "lucide-react"
+import { MapPin, Clock, Phone, Instagram, MessageCircle, Navigation } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { WA_VISIT } from "@/lib/whatsapp"
 
-const MapLeaflet = dynamic(() => import("@/components/map-leaflet").then(m => m.MapLeaflet), {
-  ssr: false,
-  loading: () => (
-    <div className="flex h-full w-full items-center justify-center bg-[oklch(0.97_0.008_15)]">
-      <div className="h-8 w-8 animate-spin rounded-full border-2 border-[var(--gold)] border-t-transparent" />
-    </div>
-  ),
-})
+// Place ID: 0x8e3a048cb47219db:0x648961599ce79421 — Palmira Unicentro Shopping Mall
+const MAP_EMBED =
+  "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3982.7!2d-76.310776!3d3.5400896!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8e3a048cb47219db%3A0x648961599ce79421!2sPalmira%20Unicentro%20Shopping%20Mall!5e0!3m2!1ses!2sco!4v1748300000000!5m2!1ses!2sco"
 
 const GMAPS_LINK = "https://maps.app.goo.gl/PKAKSgb6rRDPwBvUA"
 
@@ -205,7 +199,7 @@ export function Location() {
               <span className="text-xs font-semibold text-[var(--ink)]">Queens Cosmetics · Local 128</span>
             </motion.div>
 
-            {/* Mapa Leaflet — interactivo, sin iframe, sin API key */}
+            {/* Google Maps embed */}
             <motion.div
               className="relative overflow-hidden rounded-3xl shadow-2xl"
               style={{ height: "clamp(340px, 45vw, 520px)" }}
@@ -217,11 +211,16 @@ export function Location() {
               {/* Borde interno dorado */}
               <div
                 className="pointer-events-none absolute inset-0 z-10 rounded-3xl"
-                style={{
-                  boxShadow: "inset 0 0 0 2px oklch(0.75 0.135 85 / 0.30)",
-                }}
+                style={{ boxShadow: "inset 0 0 0 2px oklch(0.75 0.135 85 / 0.30)" }}
               />
-              <MapLeaflet />
+              <iframe
+                title="Mapa Queens Cosmetics — Unicentro Palmira"
+                src={MAP_EMBED}
+                className="h-full w-full border-0"
+                loading="lazy"
+                allowFullScreen
+                referrerPolicy="no-referrer-when-downgrade"
+              />
             </motion.div>
 
             {/* Botón "Ver en Maps" */}
