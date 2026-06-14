@@ -2,7 +2,7 @@
 
 import { useRef } from "react"
 import Image from "next/image"
-import { m, useScroll, useTransform, useMotionValue, useSpring } from "framer-motion"
+import { m, useTransform, useMotionValue, useSpring } from "framer-motion"
 import { ChevronDown, MessageCircle, ShoppingBag } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { FloatingSparkles } from "@/components/floating-sparkles"
@@ -36,12 +36,6 @@ function Magnetic({ children, className }: { children: React.ReactNode; classNam
 export function Hero() {
   const ref       = useRef<HTMLElement>(null)
   const rightRef  = useRef<HTMLDivElement>(null)
-
-  /* ── Scroll parallax ── */
-  const { scrollYProgress } = useScroll({ target: ref, offset: ["start start", "end start"] })
-  const imgScrollY = useTransform(scrollYProgress, [0, 1], ["0%", "-12%"])
-  const imgScale   = useTransform(scrollYProgress, [0, 1], [1, 1.12])
-  const imgOpacity = useTransform(scrollYProgress, [0, 0.7], [1, 0.5])
 
   /* ── Mouse parallax en imagen ── */
   const mx = useMotionValue(0)
@@ -218,11 +212,7 @@ export function Hero() {
           {/* Stardust rosa-dorado flotando */}
           <FloatingSparkles count={18} />
 
-          {/* Scroll Y + scale + opacity */}
-          <m.div
-            className="relative z-10 -ml-73 mt-11"
-            style={{ y: imgScrollY, scale: imgScale, opacity: imgOpacity, width: "125%", maxWidth: 1250 }}
-          >
+          <div className="relative z-10 -ml-73 mt-11" style={{ width: "125%", maxWidth: 1250 }}>
             {/* Perspectiva de mouse */}
             <m.div style={{ rotateX: rotX, rotateY: rotY, transformPerspective: 1100 }}>
               {/* Float loop */}
@@ -251,7 +241,7 @@ export function Hero() {
                 </m.div>
               </m.div>
             </m.div>
-          </m.div>
+          </div>
 
           {/* Fade izquierda */}
           <div
