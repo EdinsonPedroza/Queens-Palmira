@@ -276,3 +276,155 @@ body {
 .btn-shine:hover::after {
   left: 120%;
 }
+
+/* ════════════════════════════════════════════════════════════
+   QUEENS SIGNATURE — Glam motion system
+   (inspirado en la riqueza de SALCHIMAX, traducido a luxury rosa-dorado)
+   ════════════════════════════════════════════════════════════ */
+
+/* ── Shimmer / sheen sweep sobre titulares ── */
+@keyframes sheen-sweep {
+  0%   { background-position: 200% center; }
+  100% { background-position: -200% center; }
+}
+.text-sheen {
+  position: relative;
+  display: inline-block;
+  background-image: linear-gradient(
+    100deg,
+    transparent 30%,
+    rgba(255, 244, 214, 0.85) 48%,
+    rgba(255, 255, 255, 0.95) 50%,
+    rgba(255, 244, 214, 0.85) 52%,
+    transparent 70%
+  );
+  background-size: 200% 100%;
+  background-repeat: no-repeat;
+  -webkit-background-clip: text;
+  background-clip: text;
+  animation: sheen-sweep 5.5s ease-in-out infinite;
+  animation-delay: 1.2s;
+}
+
+/* ── Partículas de brillo que suben (stardust) ── */
+@keyframes sparkle-rise {
+  0%   { transform: translateY(0) translateX(0) scale(0); opacity: 0; }
+  12%  { opacity: var(--sparkle-opacity, 0.8); transform: translateY(-12vh) scale(1); }
+  85%  { opacity: var(--sparkle-opacity, 0.8); }
+  100% { transform: translateY(-105vh) translateX(var(--sparkle-drift, 30px)) scale(0.2); opacity: 0; }
+}
+.sparkle {
+  position: absolute;
+  border-radius: 50%;
+  background: radial-gradient(circle, #fff6e0 0%, var(--gold) 55%, transparent 100%);
+  box-shadow: 0 0 6px rgba(212, 175, 55, 0.8);
+  animation: sparkle-rise var(--sparkle-dur, 7s) var(--sparkle-delay, 0s) infinite ease-out;
+  pointer-events: none;
+  will-change: transform, opacity;
+}
+.sparkle.rose {
+  background: radial-gradient(circle, #ffe3ef 0%, var(--rose-hot) 55%, transparent 100%);
+  box-shadow: 0 0 6px rgba(255, 105, 180, 0.7);
+}
+
+/* ── Twinkle (parpadeo de estrellitas fijas) ── */
+@keyframes twinkle {
+  0%, 100% { opacity: 0.25; transform: scale(0.7); }
+  50%      { opacity: 1;    transform: scale(1.15); }
+}
+.animate-twinkle { animation: twinkle 2.4s ease-in-out infinite; }
+
+/* ── Clip-path text reveal (sube desde máscara) ── */
+@keyframes text-reveal-up {
+  from { clip-path: inset(100% 0 0 0); transform: translateY(10px); }
+  to   { clip-path: inset(0% 0 0 0);   transform: translateY(0); }
+}
+.text-reveal { animation: text-reveal-up 0.8s cubic-bezier(0.16, 1, 0.3, 1) both; }
+
+/* ── Letter stagger reveal ── */
+.letter-stagger span {
+  display: inline-block;
+  animation: text-reveal-up 0.55s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+/* ── Botón con borde dorado líquido (glam liquid) ── */
+.btn-gold-liquid {
+  position: relative;
+  overflow: hidden;
+  z-index: 0;
+  transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.btn-gold-liquid::before {
+  content: "";
+  position: absolute;
+  inset: -2px;
+  background: linear-gradient(90deg, var(--gold), #fff4d6, var(--rose-hot), var(--gold), var(--gold-soft));
+  background-size: 300% 100%;
+  animation: sheen-sweep 3s linear infinite;
+  z-index: -1;
+  opacity: 0;
+  transition: opacity 0.35s;
+  border-radius: inherit;
+}
+.btn-gold-liquid:hover::before { opacity: 1; }
+.btn-gold-liquid:hover {
+  box-shadow: 0 0 28px rgba(255, 105, 180, 0.45), 0 0 56px rgba(212, 175, 55, 0.25);
+  transform: translateY(-3px);
+}
+
+/* ── Shockwave click ripple ── */
+@keyframes shockwave {
+  0%   { transform: translate(-50%, -50%) scale(0); opacity: 0.7; }
+  100% { transform: translate(-50%, -50%) scale(4); opacity: 0; }
+}
+.shockwave {
+  position: absolute;
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  border: 2px solid var(--rose-hot);
+  pointer-events: none;
+  animation: shockwave 0.65s ease-out forwards;
+}
+
+/* ── Divisor de sección — línea de gradiente animada ── */
+.section-divider {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--rose-pastel), var(--gold), var(--rose-pastel), transparent);
+  background-size: 200% 100%;
+  animation: sheen-sweep 4s linear infinite;
+}
+
+/* ── Overlay de shimmer ultra-sutil (textura luxury) ── */
+.shimmer-overlay::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 9998;
+  background:
+    radial-gradient(circle at 20% 30%, rgba(212, 175, 55, 0.035) 0%, transparent 25%),
+    radial-gradient(circle at 80% 70%, rgba(255, 105, 180, 0.035) 0%, transparent 25%);
+  mix-blend-mode: screen;
+}
+
+/* ── Cursor personalizado: oculta el nativo en dispositivos con mouse ── */
+@media (pointer: fine) {
+  .queens-cursor-active,
+  .queens-cursor-active a,
+  .queens-cursor-active button,
+  .queens-cursor-active [role="button"] {
+    cursor: none;
+  }
+}
+
+/* ── Respeto a prefers-reduced-motion ── */
+@media (prefers-reduced-motion: reduce) {
+  .sparkle,
+  .animate-twinkle,
+  .text-sheen,
+  .section-divider,
+  .btn-gold-liquid::before {
+    animation: none !important;
+  }
+}

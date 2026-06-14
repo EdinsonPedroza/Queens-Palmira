@@ -1,5 +1,6 @@
 import dynamic from "next/dynamic"
 import { IntroScreen } from "@/components/intro-screen"
+import { CursorGlow } from "@/components/cursor-glow"
 import { Navbar } from "@/components/navbar"
 import { ScrollProgress } from "@/components/scroll-progress"
 import { Hero } from "@/components/sections/hero"
@@ -20,8 +21,9 @@ const Footer       = dynamic(() => import("@/components/sections/footer").then((
 
 export default function Home() {
   return (
-    <main className="relative overflow-x-hidden">
+    <main className="relative overflow-x-hidden shimmer-overlay">
       <IntroScreen />
+      <CursorGlow />
       <ScrollProgress />
       <Navbar />
       <Hero />

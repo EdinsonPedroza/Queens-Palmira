@@ -9,23 +9,29 @@ const KEYWORDS = [
   "Pagos Seguros",
 ]
 
-export function Marquee() {
+function Row({ reverse = false }: { reverse?: boolean }) {
   const items = [...KEYWORDS, ...KEYWORDS]
   return (
-    <section
-      className="relative overflow-hidden bg-queens-gradient-intense py-2 border-y border-white/30"
-      aria-hidden="true"
-    >
-      <div className="flex animate-marquee whitespace-nowrap">
-        {items.map((kw, i) => (
-          <div
-            key={i}
-            className="mx-6 flex items-center gap-2 text-white font-display text-sm md:text-base font-bold tracking-wide"
-          >
-            <span>{kw}</span>
-            <Sparkles className="h-3 w-3 text-white/80" />
-          </div>
-        ))}
+    <div className={`flex whitespace-nowrap ${reverse ? "animate-marquee-reverse" : "animate-marquee"}`}>
+      {items.map((kw, i) => (
+        <div
+          key={i}
+          className="mx-6 flex items-center gap-2 text-white font-display text-sm md:text-base font-bold tracking-wide"
+        >
+          <span>{kw}</span>
+          <Sparkles className="h-3 w-3 text-white/80" />
+        </div>
+      ))}
+    </div>
+  )
+}
+
+export function Marquee() {
+  return (
+    <section className="relative overflow-hidden bg-queens-gradient-intense border-y border-white/30" aria-hidden="true">
+      <div className="flex flex-col gap-1 py-2">
+        <Row />
+        <Row reverse />
       </div>
     </section>
   )

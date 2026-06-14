@@ -5,7 +5,33 @@ import Image from "next/image"
 import { m, useScroll, useTransform, useMotionValue, useSpring } from "framer-motion"
 import { ChevronDown, MessageCircle, ShoppingBag } from "lucide-react"
 import { Button } from "@/components/ui/button"
+import { FloatingSparkles } from "@/components/floating-sparkles"
 import { WA_VISIT } from "@/lib/whatsapp"
+
+/* ── Magnetic wrapper — pulls toward the cursor, springs back on leave ── */
+function Magnetic({ children, className }: { children: React.ReactNode; className?: string }) {
+  const ref = useRef<HTMLDivElement>(null)
+  const mx = useMotionValue(0)
+  const my = useMotionValue(0)
+  const sx = useSpring(mx, { stiffness: 260, damping: 18 })
+  const sy = useSpring(my, { stiffness: 260, damping: 18 })
+
+  const onMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    const r = ref.current!.getBoundingClientRect()
+    mx.set((e.clientX - (r.left + r.width / 2)) * 0.3)
+    my.set((e.clientY - (r.top + r.height / 2)) * 0.3)
+  }
+  const reset = () => {
+    mx.set(0)
+    my.set(0)
+  }
+
+  return (
+    <m.div ref={ref} style={{ x: sx, y: sy }} onMouseMove={onMove} onMouseLeave={reset} className={className}>
+      {children}
+    </m.div>
+  )
+}
 
 export function Hero() {
   const ref       = useRef<HTMLElement>(null)
@@ -102,30 +128,22 @@ export function Hero() {
         animate={{ opacity: 1, y: 0, scale: 1 }}
         transition={{ duration: 0.7, delay: 1.1, ease: [0.16, 1, 0.3, 1] }}
       >
-        <m.div
-          whileHover={{ scale: 1.06, y: -3 }}
-          whileTap={{ scale: 0.95 }}
-          transition={{ type: "spring", stiffness: 550, damping: 22 }}
-        >
-          <Button asChild size="lg" className="bg-[var(--gold)] text-white hover:bg-[var(--gold-deep)] border-none shadow-lg">
+        <Magnetic>
+          <Button asChild size="lg" className="btn-gold-liquid bg-[var(--gold)] text-white hover:bg-[var(--gold-deep)] hover:text-white border-none shadow-lg">
             <a href="#catalogo">
               <ShoppingBag className="h-5 w-5" />
               Ver catálogo
             </a>
           </Button>
-        </m.div>
-        <m.div
-          whileHover={{ scale: 1.06, y: -3 }}
-          whileTap={{ scale: 0.95 }}
-          transition={{ type: "spring", stiffness: 550, damping: 22 }}
-        >
+        </Magnetic>
+        <Magnetic>
           <Button asChild variant="outline" size="lg" className="bg-transparent text-[#2C1810] border-[#2C1810]/30 hover:bg-[#2C1810]/10 hover:text-[#2C1810]">
             <a href={WA_VISIT} target="_blank" rel="noopener noreferrer">
               <MessageCircle className="h-5 w-5" />
               Escríbenos
             </a>
           </Button>
-        </m.div>
+        </Magnetic>
       </m.div>
     </div>
   )
@@ -134,11 +152,19 @@ export function Hero() {
     <section ref={ref} id="hero" className="bg-white">
 
       {/* ════ MOBILE ════ */}
-      <div className="md:hidden flex flex-col min-h-[100svh]">
-        <div className="pt-24 pb-8 px-6 flex items-center flex-1">
+      <div className="md:hidden relative flex flex-col min-h-[100svh] overflow-hidden">
+        {/* Glow + stardust de fondo */}
+        <m.div
+          className="pointer-events-none absolute top-[30%] right-[-10%] h-72 w-72 rounded-full blur-3xl"
+          style={{ background: "oklch(0.84 0.065 15 / 22%)" }}
+          animate={{ scale: [1, 1.25, 1], y: [0, -16, 0] }}
+          transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
+          aria-hidden
+        />
+        <FloatingSparkles count={12} />
+        <div className="relative z-10 pt-24 pb-8 px-6 flex items-center flex-1">
           {textBlock}
         </div>
-
       </div>
 
       {/* ════ DESKTOP ════ */}
@@ -183,6 +209,18 @@ export function Hero() {
             transition={{ duration: 6, repeat: Infinity, ease: "easeInOut", delay: 1 }}
             aria-hidden
           />
+
+          {/* Glow central que respira */}
+          <m.div
+            className="pointer-events-none absolute top-1/2 right-[24%] h-[520px] w-[520px] -translate-y-1/2 rounded-full"
+            style={{ background: "radial-gradient(circle, rgba(255,105,180,0.16) 0%, rgba(212,175,55,0.08) 45%, transparent 70%)" }}
+            animate={{ opacity: [0.5, 0.9, 0.5], scale: [1, 1.08, 1] }}
+            transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
+            aria-hidden
+          />
+
+          {/* Stardust rosa-dorado flotando */}
+          <FloatingSparkles count={18} />
 
           {/* Scroll Y + scale + opacity */}
           <m.div
