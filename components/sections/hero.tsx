@@ -149,7 +149,7 @@ export function Hero() {
         {/* Glow + stardust de fondo */}
         <m.div
           className="pointer-events-none absolute top-[30%] right-[-10%] h-72 w-72 rounded-full blur-3xl"
-          style={{ background: "oklch(0.84 0.065 15 / 22%)" }}
+          style={{ background: "oklch(0.92 0.025 15 / 10%)" }}
           animate={{ scale: [1, 1.25, 1], y: [0, -16, 0] }}
           transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
           aria-hidden
@@ -178,7 +178,7 @@ export function Hero() {
           {/* Orb rosa — flota lento */}
           <m.div
             className="pointer-events-none absolute top-[18%] right-[12%] h-80 w-80 rounded-full blur-3xl"
-            style={{ background: "oklch(0.84 0.065 15 / 24%)" }}
+            style={{ background: "oklch(0.92 0.025 15 / 12%)" }}
             animate={{ scale: [1, 1.28, 1], x: [0, 26, 0], y: [0, -18, 0] }}
             transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
             aria-hidden
@@ -186,7 +186,7 @@ export function Hero() {
           {/* Orb dorado — flota opuesto */}
           <m.div
             className="pointer-events-none absolute bottom-[18%] right-[28%] h-60 w-60 rounded-full blur-3xl"
-            style={{ background: "oklch(0.75 0.135 85 / 18%)" }}
+            style={{ background: "oklch(0.90 0.050 85 / 10%)" }}
             animate={{ scale: [1, 1.2, 1], x: [0, -20, 0], y: [0, 16, 0] }}
             transition={{ duration: 10, repeat: Infinity, ease: "easeInOut", delay: 2.5 }}
             aria-hidden
@@ -194,7 +194,7 @@ export function Hero() {
           {/* Orb pequeño accent */}
           <m.div
             className="pointer-events-none absolute top-[55%] right-[8%] h-36 w-36 rounded-full blur-2xl"
-            style={{ background: "oklch(0.70 0.195 355 / 12%)" }}
+            style={{ background: "oklch(0.88 0.060 355 / 8%)" }}
             animate={{ scale: [1, 1.4, 1], y: [0, -22, 0] }}
             transition={{ duration: 6, repeat: Infinity, ease: "easeInOut", delay: 1 }}
             aria-hidden
@@ -203,7 +203,7 @@ export function Hero() {
           {/* Glow central que respira */}
           <m.div
             className="pointer-events-none absolute top-1/2 right-[24%] h-[520px] w-[520px] -translate-y-1/2 rounded-full"
-            style={{ background: "radial-gradient(circle, rgba(255,105,180,0.16) 0%, rgba(212,175,55,0.08) 45%, transparent 70%)" }}
+            style={{ background: "radial-gradient(circle, rgba(255,255,255,0.55) 0%, rgba(255,235,245,0.18) 45%, transparent 70%)" }}
             animate={{ opacity: [0.5, 0.9, 0.5], scale: [1, 1.08, 1] }}
             transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
             aria-hidden
