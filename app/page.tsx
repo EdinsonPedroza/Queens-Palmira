@@ -1,6 +1,5 @@
 import dynamic from "next/dynamic"
 import { IntroScreen } from "@/components/intro-screen"
-import { CursorGlow } from "@/components/cursor-glow"
 import { Navbar } from "@/components/navbar"
 import { ScrollProgress } from "@/components/scroll-progress"
 import { Hero } from "@/components/sections/hero"
@@ -23,7 +22,6 @@ export default function Home() {
   return (
     <main className="relative overflow-x-hidden shimmer-overlay">
       <IntroScreen />
-      <CursorGlow />
       <ScrollProgress />
       <Navbar />
       <Hero />

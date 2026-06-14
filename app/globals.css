@@ -408,16 +408,6 @@ body {
   mix-blend-mode: screen;
 }
 
-/* ── Cursor personalizado: oculta el nativo en dispositivos con mouse ── */
-@media (pointer: fine) {
-  .queens-cursor-active,
-  .queens-cursor-active a,
-  .queens-cursor-active button,
-  .queens-cursor-active [role="button"] {
-    cursor: none;
-  }
-}
-
 /* ── Respeto a prefers-reduced-motion ── */
 @media (prefers-reduced-motion: reduce) {
   .sparkle,

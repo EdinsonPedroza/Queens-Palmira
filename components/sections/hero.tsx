@@ -39,7 +39,6 @@ export function Hero() {
 
   /* ── Scroll parallax ── */
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start start", "end start"] })
-  const textY      = useTransform(scrollYProgress, [0, 1], ["0%", "20%"])
   const imgScrollY = useTransform(scrollYProgress, [0, 1], ["0%", "-12%"])
   const imgScale   = useTransform(scrollYProgress, [0, 1], [1, 1.12])
   const imgOpacity = useTransform(scrollYProgress, [0, 0.7], [1, 0.5])
@@ -170,13 +169,10 @@ export function Hero() {
       {/* ════ DESKTOP ════ */}
       <div className="hidden md:flex min-h-[100svh] overflow-hidden">
 
-        {/* Left — texto con parallax Y */}
-        <m.div
-          className="relative z-30 flex w-[48%] shrink-0 items-center pl-16 pr-4 lg:pl-24 lg:pr-6 xl:pl-32 pt-25 pb-10"
-          style={{ y: textY }}
-        >
+        {/* Left — texto */}
+        <div className="relative z-30 flex w-[48%] shrink-0 items-center pl-16 pr-4 lg:pl-24 lg:pr-6 xl:pl-32 pt-25 pb-10">
           {textBlock}
-        </m.div>
+        </div>
 
         {/* Right — imagen con orbs + mouse parallax + float + scroll */}
         <div
