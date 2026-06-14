@@ -33,7 +33,7 @@ export function WhatsAppFloat() {
           role="tooltip"
         >
           <span className="font-medium">¡Hola Reina!</span>{" "}
-          <span className="text-[var(--muted-foreground)]">¿En qué te ayudamos? 💖</span>
+          <span className="text-[var(--muted-foreground)]">¿En qué te ayudamos?</span>
         </div>
       )}
       <a

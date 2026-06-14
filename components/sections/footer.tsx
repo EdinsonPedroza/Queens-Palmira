@@ -169,7 +169,7 @@ export function Footer() {
           transition={{ delay: 0.3, duration: 0.8 }}
         >
           <p>© {year} Queens Cosmetics. Todos los derechos reservados.</p>
-          <p>Palmira, Valle del Cauca · Colombia 🇨🇴</p>
+          <p>Palmira, Valle del Cauca · Colombia</p>
         </m.div>
       </div>
     </footer>

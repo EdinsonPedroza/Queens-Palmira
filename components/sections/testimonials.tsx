@@ -8,7 +8,7 @@ interface Review {
 }
 
 const REVIEWS: Review[] = [
-  { name: "Valentina R.",  initials: "VR", rating: 5, text: "Mi base favorita la conseguí aquí. Me asesoraron perfecto con el tono y ahora es mi base holy grail. 💕" },
+  { name: "Valentina R.",  initials: "VR", rating: 5, text: "Mi base favorita la conseguí aquí. Me asesoraron perfecto con el tono y ahora es mi base holy grail." },
   { name: "Camila M.",     initials: "CM", rating: 5, text: "El labial matte dura TODO el día. Compré 3 tonos más. La atención es divina, se sienten como amigas." },
   { name: "Sofía P.",      initials: "SP", rating: 5, text: "La paleta Smoky Night es INSANA. Pigmentada, sin fall out. Definitivamente volveré por más." },
   { name: "Daniela L.",    initials: "DL", rating: 5, text: "El serum de vitamina C me cambió la piel en dos semanas. Ahora todo mi skincare lo compro aquí." },

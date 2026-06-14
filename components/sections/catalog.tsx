@@ -263,7 +263,7 @@ export function Catalog() {
               exit={{ opacity: 0 }}
               className="py-24 text-center"
             >
-              <p className="text-4xl mb-4">🔍</p>
+              <Search className="mx-auto mb-4 h-10 w-10 text-[var(--muted-foreground)]" />
               <p className="font-display text-xl font-semibold text-[var(--ink)] mb-2">
                 Sin resultados
               </p>

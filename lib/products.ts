@@ -21,12 +21,12 @@ export interface Product {
 }
 
 export const CATEGORIES: { id: ProductCategory; label: string; icon: string; tagline: string }[] = [
-  { id: "labiales",  label: "Labiales",       icon: "💋", tagline: "Besos de seda y color" },
-  { id: "rostro",    label: "Rostro",          icon: "✨", tagline: "La base de tu belleza" },
-  { id: "ojos",      label: "Ojos",            icon: "👁️", tagline: "Miradas que hipnotizan" },
-  { id: "skincare",  label: "Skin Care",       icon: "🌸", tagline: "Tu ritual de reina" },
-  { id: "unas",      label: "Uñas",            icon: "💅", tagline: "Detalles que enamoran" },
-  { id: "capilar",   label: "Línea Capilar",   icon: "👑", tagline: "Cabello de reina" },
+  { id: "labiales",  label: "Labiales",       icon: "", tagline: "Besos de seda y color" },
+  { id: "rostro",    label: "Rostro",          icon: "", tagline: "La base de tu belleza" },
+  { id: "ojos",      label: "Ojos",            icon: "", tagline: "Miradas que hipnotizan" },
+  { id: "skincare",  label: "Skin Care",       icon: "", tagline: "Tu ritual de reina" },
+  { id: "unas",      label: "Uñas",            icon: "", tagline: "Detalles que enamoran" },
+  { id: "capilar",   label: "Línea Capilar",   icon: "", tagline: "Cabello de reina" },
 ]
 
 export const PRODUCTS: Product[] = [
@@ -458,7 +458,7 @@ export const PRODUCTS: Product[] = [
   },
   {
     id: "mascara-essence-extreme",
-    name: "Pestañinas Essence I♥EXTREME",
+    name: "Pestañinas Essence I LOVE EXTREME",
     price: 18000,
     category: "ojos",
     description: "Máscara de volumen y curvatura extrema.",

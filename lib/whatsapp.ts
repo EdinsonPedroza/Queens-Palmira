@@ -14,15 +14,15 @@ export function waLink(message: string): string {
 }
 
 export const WA_DEFAULT = waLink(
-  "Hola Queens! 👑 Me gustaría recibir información sobre sus productos.",
+  "Hola Queens! Me gustaría recibir información sobre sus productos.",
 )
 
 export const WA_VISIT = waLink(
-  "Hola Queens! 👑 Quiero visitar la tienda en Unicentro Palmira, tienen disponibilidad?",
+  "Hola Queens! Quiero visitar la tienda en Unicentro Palmira, tienen disponibilidad?",
 )
 
 export const WA_ADVICE = waLink(
-  "Hola Queens! 👑 Me gustaría una asesoría personalizada de productos.",
+  "Hola Queens! Me gustaría una asesoría personalizada de productos.",
 )
 
 export function buildOrderMessage(items: CartLineItem[]): string {
@@ -38,12 +38,12 @@ export function buildOrderMessage(items: CartLineItem[]): string {
   const total = items.reduce((sum, i) => sum + i.product.price * i.qty, 0)
 
   return [
-    "Hola Queens! 👑 Quiero pedir:",
+    "Hola Queens! Quiero pedir:",
     "",
     ...lines,
     "",
     `*Total: ${formatCOP(total)}*`,
     "",
-    "Gracias! 💖",
+    "Gracias!",
   ].join("\n")
 }
