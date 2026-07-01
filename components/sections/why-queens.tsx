@@ -17,14 +17,14 @@ const FEATURES = [
     title: "Asesoría Personalizada",
     desc: "Te guiamos hacia el tono y producto ideal para tu tipo de piel.",
     accent: "Para cada piel",
-    img: "https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?w=600&q=80&auto=format&fit=crop",
+    img: "https://images.unsplash.com/photo-1596704017254-9b121068fb31?w=600&q=80&auto=format&fit=crop",
   },
   {
     number: "03",
     title: "Envíos el Mismo Día",
     desc: "En Palmira y todo el Valle del Cauca. Rápido, seguro y sin complicaciones.",
     accent: "Palmira y Valle",
-    img: "https://images.unsplash.com/photo-1513475382585-d06e58bcb0e0?w=600&q=80&auto=format&fit=crop",
+    img: "https://images.unsplash.com/photo-1595246140625-573b715d11dc?w=600&q=80&auto=format&fit=crop",
   },
   {
     number: "04",

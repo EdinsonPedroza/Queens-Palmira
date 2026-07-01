@@ -1,7 +1,7 @@
 "use client"
 
 import { createPortal } from "react-dom"
-import { ShoppingBag, Check, Palette, ChevronDown, Sparkles } from "lucide-react"
+import { ShoppingBag, Check, ChevronDown } from "lucide-react"
 import { useState, useRef, useEffect, useCallback } from "react"
 import Image from "next/image"
 import { m, AnimatePresence } from "framer-motion"
@@ -87,8 +87,8 @@ function PortalDropdown({ variants, selected, onSelect, open, onClose, triggerRe
       className="rounded-2xl border border-[var(--rose-pastel)] bg-white shadow-[0_16px_48px_-8px_rgba(44,24,16,0.18),0_0_0_1px_rgba(212,175,55,0.1)] overflow-hidden"
     >
       <div className="px-4 py-2.5 bg-gradient-to-r from-[var(--rose-pastel-soft)] to-white border-b border-[var(--rose-pastel)]/40 flex items-center justify-between">
-        <span className="flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-[0.2em] text-[var(--gold-deep)]">
-          <Palette className="h-3 w-3" /> Elige tu tono
+        <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-[var(--gold-deep)]">
+          Elige tu tono
         </span>
         <span className="text-[10px] text-[var(--muted-foreground)]">{variants.length} opciones</span>
       </div>
@@ -128,7 +128,7 @@ function AddButton({ canAdd, justAdded, onClick, productName, selectedVariant }:
           ? "cursor-default text-white"
           : canAdd
             ? "bg-queens-gradient-intense text-white cursor-pointer"
-            : "border-2 border-dashed border-[var(--rose-pastel)] bg-transparent text-[var(--muted-foreground)] cursor-not-allowed",
+            : "border-2 border-dashed border-[var(--rose-pastel)] bg-transparent text-[var(--muted-foreground)] cursor-default",
       ].join(" ")}
       style={
         justAdded
@@ -167,9 +167,8 @@ function AddButton({ canAdd, justAdded, onClick, productName, selectedVariant }:
             Agregar al carrito
           </m.span>
         ) : (
-          <m.span key="pick" className="flex items-center gap-1.5 relative z-10"
+          <m.span key="pick" className="relative z-10"
             initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
-            <Palette className="h-3.5 w-3.5" />
             Elige un tono primero
           </m.span>
         )}
@@ -241,8 +240,7 @@ export function ProductCard({ product }: { product: Product }) {
                 exit={{ opacity: 0, y: 6 }}
                 className="absolute bottom-2.5 left-2.5 right-2.5 z-10"
               >
-                <div className="flex items-center gap-1.5 rounded-xl bg-white/90 backdrop-blur-sm px-2.5 py-1.5 shadow-sm border border-white">
-                  <Sparkles className="h-3 w-3 text-[var(--gold-deep)] shrink-0" />
+                <div className="flex items-center justify-center rounded-xl bg-white/90 backdrop-blur-sm px-2.5 py-1.5 shadow-sm border border-white">
                   <span className="text-[10px] font-semibold text-[var(--ink)] truncate">
                     {selectedVariant}
                   </span>
@@ -303,7 +301,6 @@ export function ProductCard({ product }: { product: Product }) {
               ].join(" ")}
             >
               <span className="flex items-center gap-1.5 min-w-0">
-                <Palette className={`h-3 w-3 shrink-0 ${selectedVariant ? "text-[var(--gold-deep)]" : "text-[var(--muted-foreground)]"}`} />
                 <span className="truncate">
                   {selectedVariant || `Ver ${product.variants!.length} tonos disponibles`}
                 </span>
