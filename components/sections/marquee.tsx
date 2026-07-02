@@ -29,8 +29,7 @@ function Row({ reverse = false }: { reverse?: boolean }) {
 export function Marquee() {
   return (
     <section className="relative overflow-hidden bg-queens-gradient-intense border-y border-white/30" aria-hidden="true">
-      <div className="flex flex-col gap-1 py-2">
-        <Row />
+      <div className="flex flex-col py-2.5">
         <Row reverse />
       </div>
     </section>

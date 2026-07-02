@@ -89,7 +89,6 @@ export function Catalog() {
           </h2>
           <p className="text-[var(--muted-foreground)] text-base md:text-lg">
             Explora por categoría y agrega tus favoritos al carrito.
-            Confirmamos tu pedido por WhatsApp.
           </p>
         </div>
 
