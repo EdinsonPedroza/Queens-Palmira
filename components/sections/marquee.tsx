@@ -9,17 +9,23 @@ const KEYWORDS = [
   "Pagos Seguros",
 ]
 
-function Row({ reverse = false }: { reverse?: boolean }) {
+function Row() {
   const items = [...KEYWORDS, ...KEYWORDS]
   return (
-    <div className={`flex whitespace-nowrap ${reverse ? "animate-marquee-reverse" : "animate-marquee"}`}>
+    <div className="flex whitespace-nowrap animate-marquee-reverse">
       {items.map((kw, i) => (
-        <div
-          key={i}
-          className="mx-6 flex items-center gap-2 text-white font-display text-sm md:text-base font-bold tracking-wide"
-        >
-          <span>{kw}</span>
-          <Sparkles className="h-3 w-3 text-white/80" />
+        <div key={i} className="flex items-center">
+          <span
+            className="mx-6 font-display text-sm md:text-base font-semibold uppercase tracking-[0.18em] text-white"
+            style={{ textShadow: "0 1px 3px rgba(44,24,16,0.18)" }}
+          >
+            {kw}
+          </span>
+          <Sparkles
+            className="h-3.5 w-3.5 shrink-0 text-[var(--gold-soft)]"
+            fill="currentColor"
+            strokeWidth={1}
+          />
         </div>
       ))}
     </div>
@@ -28,9 +34,22 @@ function Row({ reverse = false }: { reverse?: boolean }) {
 
 export function Marquee() {
   return (
-    <section className="relative overflow-hidden bg-queens-gradient-intense border-y border-white/30" aria-hidden="true">
-      <div className="flex flex-col py-2.5">
-        <Row reverse />
+    <section
+      className="relative overflow-hidden bg-queens-gradient-intense border-y border-white/25"
+      aria-hidden="true"
+    >
+      {/* Brillo sutil en la parte superior (sheen luxury) */}
+      <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-white/18 via-transparent to-black/5" />
+
+      {/* Fila con fundido en los bordes */}
+      <div
+        className="relative py-3"
+        style={{
+          maskImage: "linear-gradient(90deg, transparent 0%, #000 7%, #000 93%, transparent 100%)",
+          WebkitMaskImage: "linear-gradient(90deg, transparent 0%, #000 7%, #000 93%, transparent 100%)",
+        }}
+      >
+        <Row />
       </div>
     </section>
   )
