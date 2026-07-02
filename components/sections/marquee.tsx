@@ -1,5 +1,3 @@
-import { Sparkles } from "lucide-react"
-
 const KEYWORDS = [
   "Cosmética Premium",
   "Envíos a todo Palmira",
@@ -9,23 +7,30 @@ const KEYWORDS = [
   "Pagos Seguros",
 ]
 
+/** Separador geométrico: pequeño diamante dorado (CSS, sin iconos) */
+function Diamond() {
+  return (
+    <span
+      aria-hidden
+      className="mx-6 h-1.5 w-1.5 shrink-0 rotate-45 rounded-[1px] bg-[var(--gold-soft)]"
+      style={{ boxShadow: "0 0 6px rgba(255,244,214,0.6)" }}
+    />
+  )
+}
+
 function Row() {
   const items = [...KEYWORDS, ...KEYWORDS]
   return (
-    <div className="flex whitespace-nowrap animate-marquee-reverse">
+    <div className="flex items-center whitespace-nowrap animate-marquee-reverse">
       {items.map((kw, i) => (
         <div key={i} className="flex items-center">
           <span
-            className="mx-6 font-display text-sm md:text-base font-semibold uppercase tracking-[0.18em] text-white"
+            className="font-display text-sm md:text-base font-medium uppercase tracking-[0.22em] text-white"
             style={{ textShadow: "0 1px 3px rgba(44,24,16,0.18)" }}
           >
             {kw}
           </span>
-          <Sparkles
-            className="h-3.5 w-3.5 shrink-0 text-[var(--gold-soft)]"
-            fill="currentColor"
-            strokeWidth={1}
-          />
+          <Diamond />
         </div>
       ))}
     </div>
