@@ -1,7 +1,7 @@
 "use client"
 
 import { createPortal } from "react-dom"
-import { ShoppingBag, Check, ChevronDown } from "lucide-react"
+import { ShoppingBag, Check, ChevronDown, Star } from "lucide-react"
 import { useState, useRef, useEffect, useCallback } from "react"
 import Image from "next/image"
 import { m, AnimatePresence } from "framer-motion"
@@ -177,6 +177,33 @@ function AddButton({ canAdd, justAdded, onClick, productName, selectedVariant }:
   )
 }
 
+/* ─── Fila de rating (estrellas) ───────────────────────────── */
+function RatingRow({ rating, reviews }: { rating: number; reviews?: number }) {
+  const rounded = Math.round(rating)
+  return (
+    <div className="flex items-center gap-1" aria-label={`Calificación ${rating} de 5`}>
+      <div className="flex">
+        {Array.from({ length: 5 }).map((_, i) => (
+          <Star
+            key={i}
+            className="h-3 w-3"
+            strokeWidth={0}
+            fill={i < rounded ? "var(--gold)" : "var(--rose-pastel)"}
+          />
+        ))}
+      </div>
+      <span className="text-[10px] font-bold text-[var(--gold-deep)] leading-none tabular-nums">
+        {rating.toFixed(1)}
+      </span>
+      {reviews != null && (
+        <span className="text-[10px] text-[var(--muted-foreground)]/70 leading-none">
+          ({reviews})
+        </span>
+      )}
+    </div>
+  )
+}
+
 /* ─── Card principal ───────────────────────────────────────── */
 export function ProductCard({ product }: { product: Product }) {
   const { addItem } = useCart()
@@ -209,13 +236,14 @@ export function ProductCard({ product }: { product: Product }) {
     <>
       <m.article
         className="group relative flex flex-col rounded-2xl bg-white"
-        style={{ boxShadow: "0 1px 4px rgba(44,24,16,0.06), 0 0 0 1px rgba(255,182,193,0.3)" }}
-        whileHover={{ y: -4, boxShadow: "0 16px 40px -8px rgba(44,24,16,0.12), 0 0 0 1.5px rgba(212,175,55,0.25)" }}
+        style={{ boxShadow: "0 6px 20px -8px rgba(44,24,16,0.16), 0 2px 6px -3px rgba(255,105,180,0.14), 0 0 0 1px rgba(255,182,193,0.45)" }}
+        whileHover={{ y: -6, boxShadow: "0 26px 50px -12px rgba(255,105,180,0.30), 0 10px 22px -10px rgba(212,175,55,0.28), 0 0 0 1.5px rgba(212,175,55,0.35)" }}
         transition={{ type: "spring", stiffness: 380, damping: 30 }}
         data-testid={`product-${product.id}`}
       >
         {/* ── Imagen ── */}
-        <div className="relative aspect-[3/4] overflow-hidden rounded-t-2xl bg-gradient-to-b from-[var(--rose-pastel-soft)] to-[var(--rose-pastel)]/20">
+        <div className="product-image-bg relative aspect-[3/4] overflow-hidden rounded-t-2xl">
+          <span className="product-glow" aria-hidden />
           <Image
             src={product.image}
             alt={product.name}
@@ -263,17 +291,33 @@ export function ProductCard({ product }: { product: Product }) {
             </p>
           </div>
 
-          {/* Precio */}
-          <div className="flex items-center gap-2">
-            <span className="font-display text-base font-bold text-[var(--gold-deep)]">
-              {formatCOP(product.price)}
-            </span>
-            {hasVariants && !selectedVariant && (
-              <span className="text-[10px] text-[var(--muted-foreground)]/70 italic">
-                + elige tono
+          {/* Precio + rating */}
+          <div className="flex items-end justify-between gap-2">
+            <div className="flex flex-col gap-0.5">
+              {product.originalPrice && product.originalPrice > product.price && (
+                <div className="flex items-center gap-1.5">
+                  <span className="text-[11px] font-medium text-[var(--muted-foreground)]/70 line-through">
+                    {formatCOP(product.originalPrice)}
+                  </span>
+                  <span className="rounded-full bg-[var(--rose-hot)]/12 px-1.5 py-0.5 text-[9px] font-bold text-[var(--rose-hot)] leading-none">
+                    -{Math.round((1 - product.price / product.originalPrice) * 100)}%
+                  </span>
+                </div>
+              )}
+              <span className="font-display text-lg font-bold text-[var(--gold-deep)] leading-none">
+                {formatCOP(product.price)}
               </span>
+            </div>
+            {product.rating != null && (
+              <RatingRow rating={product.rating} reviews={product.reviews} />
             )}
           </div>
+
+          {hasVariants && !selectedVariant && (
+            <span className="-mt-1 text-[10px] text-[var(--muted-foreground)]/70 italic">
+              + elige tu tono
+            </span>
+          )}
 
           {/* ── Selector de variantes (≤4: chips inline) ── */}
           {fewVariants && (

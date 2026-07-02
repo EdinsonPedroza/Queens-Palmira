@@ -240,6 +240,35 @@ body {
   animation: shimmer 4s linear infinite;
 }
 
+/* ── Fondo de imagen de producto — con profundidad (spotlight + vignette rosé) ── */
+.product-image-bg {
+  background:
+    radial-gradient(115% 75% at 50% 12%, oklch(0.99 0.006 20) 0%, transparent 52%),
+    radial-gradient(95% 65% at 50% 100%, oklch(0.86 0.075 12 / 0.55) 0%, transparent 72%),
+    linear-gradient(158deg, oklch(0.965 0.028 25) 0%, oklch(0.905 0.055 14) 100%);
+}
+/* Anillo interior sutil que "hunde" el producto en la tarjeta */
+.product-image-bg::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  box-shadow: inset 0 1px 2px rgba(255, 255, 255, 0.7),
+              inset 0 -18px 32px -18px rgba(255, 105, 180, 0.28);
+}
+/* Halo dorado que aparece detrás del producto al hover */
+.product-image-bg .product-glow {
+  position: absolute;
+  inset: 12% 18%;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(212, 175, 55, 0.32) 0%, transparent 70%);
+  opacity: 0;
+  transition: opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  pointer-events: none;
+  filter: blur(8px);
+}
+.group:hover .product-glow { opacity: 1; }
+
 /* Product card hover */
 .product-card-lift {
   transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1),

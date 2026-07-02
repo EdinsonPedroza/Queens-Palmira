@@ -18,6 +18,12 @@ export interface Product {
   variants?: string[]
   badge?: "nuevo" | "bestseller" | "oferta"
   imageStyle?: React.CSSProperties
+  /** Precio anterior — si existe, se muestra tachado y se calcula el % de ahorro */
+  originalPrice?: number
+  /** Calificación 0–5. Solo se renderiza la fila de estrellas si está presente */
+  rating?: number
+  /** Número de reseñas asociadas al rating */
+  reviews?: number
 }
 
 export const CATEGORIES: { id: ProductCategory; label: string; icon: string; tagline: string }[] = [
@@ -40,6 +46,8 @@ export const PRODUCTS: Product[] = [
     description: "Labial líquido mate de hasta 16 horas.",
     image: "/images/products/Maybelline Superstay Matte Ink.png",
     badge: "bestseller",
+    rating: 4.9,
+    reviews: 128,
     variants: ["Dreamer", "Lover", "Pioneer", "Seductress", "Inspirer", "Mover", "Revolutionary", "Artist"],
   },
   {
@@ -78,6 +86,8 @@ export const PRODUCTS: Product[] = [
     description: "Gloss brillante con efecto plumping.",
     image: "/images/products/Lip Gloss Atenea 1stScene.png",
     badge: "nuevo",
+    rating: 4.6,
+    reviews: 61,
     variants: ["Coco", "Shell Coral", "Cool Ice", "Coral Haze", "Bright Pink"],
   },
   {
@@ -165,6 +175,8 @@ export const PRODUCTS: Product[] = [
     description: "Cobertura total hasta 24 horas.",
     image: "/images/products/Base Superstay 24H Maybelline.png",
     badge: "bestseller",
+    rating: 4.8,
+    reviews: 96,
     variants: ["Buff Beige", "Cassic Ivory", "Golden", "Honey", "Natural Beige", "IvoryPorcelain", "Sun Beige", "Toffe", "Warm Nude"],
   },
   {
@@ -175,6 +187,8 @@ export const PRODUCTS: Product[] = [
     description: "Base mate y sin poros, 16H.",
     image: "/images/products/Base Fit Me 16H Maybelline.png",
     badge: "bestseller",
+    rating: 5,
+    reviews: 214,
     variants: ["Natural Ivory", "Buff Beige", "Soft Tan", "Natural Beige", "Porcelain", "Nude Beige", "Pure Beige", "Warm Honey"],
   },
   {
@@ -220,6 +234,8 @@ export const PRODUCTS: Product[] = [
     description: "Corrector antiojeras de alta cobertura.",
     image: "/images/products/Corrector Maybelline EASER.png",
     badge: "nuevo",
+    rating: 4.8,
+    reviews: 182,
     variants: ["Ivory", "Medium", "Light", "Golden", "Honey"],
   },
   {
@@ -308,6 +324,8 @@ export const PRODUCTS: Product[] = [
     description: "Polvo compacto mate y sin poros.",
     image: "/images/products/Polvo Compacto FIT me Maybelline.png",
     badge: "bestseller",
+    rating: 4.7,
+    reviews: 73,
   },
   {
     id: "rubor-1stscene",
@@ -317,6 +335,8 @@ export const PRODUCTS: Product[] = [
     description: "Rubor satinado de larga duración.",
     image: "/images/products/Rubor Compacto 1ST SCENE Atenea.png",
     badge: "nuevo",
+    rating: 5,
+    reviews: 240,
     variants: ["Pink Pearl", "Peach Melba", "Dusty Rose", "Salmon"],
     imageStyle: { transform: "translateY(28%)" },
   },
@@ -435,6 +455,8 @@ export const PRODUCTS: Product[] = [
     description: "Kit de brochas profesionales para maquillaje completo.",
     image: "/images/products/Kit Brochas Singolare V2 Montoc.png",
     badge: "nuevo",
+    rating: 4.7,
+    reviews: 88,
   },
 
   // ═══════════════ OJOS ═══════════════
@@ -446,6 +468,8 @@ export const PRODUCTS: Product[] = [
     description: "Máscara de volumen extremo para pestañas infinitas.",
     image: "/images/products/Pestanina Sky High Maybelline.png",
     badge: "bestseller",
+    rating: 4.9,
+    reviews: 156,
   },
   {
     id: "mascara-colossal-maybelline",
@@ -482,6 +506,8 @@ export const PRODUCTS: Product[] = [
     description: "42 sombras matte, shimmer y glitter.",
     image: "/images/products/Paleta Sombras Engol Colombia Pro Magica.png",
     badge: "bestseller",
+    rating: 4.6,
+    reviews: 61,
   },
   {
     id: "paleta-ruby-rose-22-tonos",
@@ -534,6 +560,8 @@ export const PRODUCTS: Product[] = [
     description: "Lápiz de cejas doble extremo con cepillo.",
     image: "/images/products/Lapiz de Cejas Doble Montoc HUMIDE.png",
     badge: "nuevo",
+    rating: 4.9,
+    reviews: 128,
     variants: ["Medium", "Dark"],
   },
   {
@@ -656,6 +684,8 @@ export const PRODUCTS: Product[] = [
     description: "Gel facial hidratante de textura ligera para todo tipo de piel.",
     image: "/images/products/Gel Facial Hidratante Montoc Hydromo.png",
     badge: "bestseller",
+    rating: 4.8,
+    reviews: 182,
   },
   {
     id: "protector-solar-loreal-fps50",
@@ -665,6 +695,8 @@ export const PRODUCTS: Product[] = [
     description: "Protector solar diario de amplio espectro.",
     image: "/images/products/Protector Solar UV Defender FPS50 Loreal.png",
     badge: "nuevo",
+    rating: 4.8,
+    reviews: 96,
   },
   {
     id: "contorno-ojos-loreal",
@@ -824,6 +856,8 @@ export const PRODUCTS: Product[] = [
     description: "Esmalte semipermanente de gel de larga duración.",
     image: "/images/products/Esmalte Gel Polish Semi Masglo.png",
     badge: "bestseller",
+    rating: 5,
+    reviews: 240,
     variants: ["+20 tonos disponibles — consultar en tienda"],
   },
   {
@@ -896,6 +930,8 @@ export const PRODUCTS: Product[] = [
     description: "Shampoo y acondicionador alisador profesional antifrizz. Valor unitario.",
     image: "/images/products/Shampoo y Acondicionador Salon In Liss Control.png",
     badge: "bestseller",
+    rating: 4.7,
+    reviews: 88,
     variants: ["Shampoo", "Acondicionador"],
   },
   {
@@ -959,6 +995,8 @@ export const PRODUCTS: Product[] = [
     description: "Shampoo profesional de reparación intensa.",
     image: "/images/products/Shampoo Absolut Repair Loreal Profesional.png",
     badge: "nuevo",
+    rating: 5,
+    reviews: 214,
   },
   {
     id: "shampoo-densificador-loreal",
@@ -1073,6 +1111,8 @@ export const PRODUCTS: Product[] = [
     description: "Pre-tratamiento profesional que neutraliza metales y protege el cabello.",
     image: "/images/products/Tratamiento Metal Detox Loreal.png",
     badge: "nuevo",
+    rating: 4.7,
+    reviews: 73,
   },
   {
     id: "cristal-liquido-alfaparf",
