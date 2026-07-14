@@ -1,6 +1,7 @@
 "use client"
 
 import { m } from "framer-motion"
+import Link from "next/link"
 import { Instagram, MessageCircle, MapPin } from "lucide-react"
 import { QueensLogo } from "@/components/queens-logo"
 import { WA_DEFAULT } from "@/lib/whatsapp"
@@ -169,6 +170,14 @@ export function Footer() {
           transition={{ delay: 0.3, duration: 0.8 }}
         >
           <p>© {year} Queens Cosmetics. Todos los derechos reservados.</p>
+          <nav className="flex items-center gap-4">
+            <Link href="/terminos" className="hover:text-[var(--gold)] transition-colors">
+              Términos y Condiciones
+            </Link>
+            <Link href="/privacidad" className="hover:text-[var(--gold)] transition-colors">
+              Privacidad
+            </Link>
+          </nav>
           <p>Palmira, Valle del Cauca · Colombia</p>
         </m.div>
       </div>
