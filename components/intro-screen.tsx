@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react"
 import { m, AnimatePresence } from "framer-motion"
 import Image from "next/image"
+import { seededRandom } from "@/lib/utils"
 
 const LETTERS = "QUEENS".split("")
 
@@ -51,6 +52,9 @@ export function IntroScreen() {
 
   useEffect(() => {
     if (sessionStorage.getItem("queens-intro-seen")) return
+    // The intro is gated on sessionStorage, which only exists after mount, so it
+    // deliberately never renders on the server.
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setVisible(true)
     document.body.style.overflow = "hidden"
     const t = setTimeout(() => setExiting(true), 2400)
@@ -70,15 +74,15 @@ export function IntroScreen() {
     ...Array.from({ length: 18 }, (_, i) => ({
       angle: i * 20,
       delay: 0.16 + i * 0.008,
-      size: Math.random() * 2.5 + 1.5,
-      dist: 120 + Math.random() * 80,
+      size: seededRandom(i * 3) * 2.5 + 1.5,
+      dist: 120 + seededRandom(i * 3 + 1) * 80,
       color: i % 3 === 0 ? "#FF69B4" : "#D4AF37",
     })),
     ...Array.from({ length: 9 }, (_, i) => ({
       angle: i * 40 + 12,
       delay: 0.26 + i * 0.01,
       size: 1.5,
-      dist: 80 + Math.random() * 40,
+      dist: 80 + seededRandom(i * 3 + 2) * 40,
       color: "#fff4d6",
     })),
   ]
@@ -161,12 +165,12 @@ export function IntroScreen() {
                   }}
                 />
                 <Image
-                  src="/images/logoFondo.png"
+                  src="/images/logoFondo.webp"
                   alt="Queens Cosmetics"
                   width={120}
                   height={120}
                   priority
-                  quality={100}
+                  quality={85}
                   className="relative w-24 h-24 md:w-32 md:h-32 object-contain drop-shadow-[0_8px_30px_rgba(212,175,55,0.5)]"
                 />
               </m.div>

@@ -126,6 +126,9 @@ export function CartProvider({ children }: { children: ReactNode }) {
     } catch {
       /* ignore */
     }
+    // Reading localStorage is only possible after mount, so this one cascading
+    // render is unavoidable — it is what gates the persist effect below.
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setHydrated(true)
   }, [])
 

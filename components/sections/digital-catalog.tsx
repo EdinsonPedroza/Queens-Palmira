@@ -7,7 +7,7 @@ import { ChevronLeft, ChevronRight, BookOpen, X, ZoomIn } from "lucide-react"
 const TOTAL_PAGES = 83
 
 function pageUrl(n: number) {
-  return `/images/catalog_pages/page_${String(n).padStart(3, "0")}.png`
+  return `/images/catalog_pages/page_${String(n).padStart(3, "0")}.webp`
 }
 
 export function DigitalCatalog() {

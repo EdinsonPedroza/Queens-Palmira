@@ -11,4 +11,12 @@ build
 tsconfig.tsbuildinfo
 next-env.d.ts
 
-.vercel
+# Source assets — masters kept locally, never deployed.
+# The optimized WebP derivatives live in public/images/ and those ARE versioned.
+/*.png
+/catalog_pages/
+/productos/
+/catalogo.pdf
+
+# Debug artifacts
+.playwright-mcp/

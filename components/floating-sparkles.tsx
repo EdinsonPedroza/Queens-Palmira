@@ -1,6 +1,7 @@
 "use client"
 
 import { useMemo } from "react"
+import { seededRandom } from "@/lib/utils"
 
 interface FloatingSparklesProps {
   /** Number of particles. */
@@ -14,18 +15,23 @@ interface FloatingSparklesProps {
  * nothing on the JS thread. Drop inside any `position: relative` section.
  */
 export function FloatingSparkles({ count = 22, className = "" }: FloatingSparklesProps) {
+  // Seeded, not Math.random(): the Hero renders on the server, so random values
+  // generated during render would differ on the client and break hydration.
   const particles = useMemo(
     () =>
-      Array.from({ length: count }, (_, i) => ({
-        id: i,
-        left: `${3 + Math.random() * 94}%`,
-        size: Math.random() * 4 + 2,
-        dur: `${Math.random() * 5 + 6}s`,
-        delay: `${Math.random() * 8}s`,
-        drift: `${(Math.random() - 0.5) * 90}px`,
-        opacity: Math.random() * 0.5 + 0.3,
-        rose: i % 3 === 0,
-      })),
+      Array.from({ length: count }, (_, i) => {
+        const s = i * 7
+        return {
+          id: i,
+          left: `${3 + seededRandom(s) * 94}%`,
+          size: seededRandom(s + 1) * 4 + 2,
+          dur: `${seededRandom(s + 2) * 5 + 6}s`,
+          delay: `${seededRandom(s + 3) * 8}s`,
+          drift: `${(seededRandom(s + 4) - 0.5) * 90}px`,
+          opacity: seededRandom(s + 5) * 0.5 + 0.3,
+          rose: i % 3 === 0,
+        }
+      }),
     [count]
   )
 

@@ -3,13 +3,16 @@
 import { useEffect } from "react"
 import { MapContainer, TileLayer, Marker, Popup, useMap } from "react-leaflet"
 import L from "leaflet"
+// Bundled with this chunk — the map is dynamically imported, so the CSS is not
+// render-blocking and no third-party CDN is needed.
+import "leaflet/dist/leaflet.css"
 
-// Fix default icon paths broken by webpack/turbopack
+// Fix default icon paths broken by webpack/turbopack — assets served from public/leaflet
 delete (L.Icon.Default.prototype as unknown as Record<string, unknown>)._getIconUrl
 L.Icon.Default.mergeOptions({
-  iconRetinaUrl: "https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon-2x.png",
-  iconUrl:       "https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png",
-  shadowUrl:     "https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png",
+  iconRetinaUrl: "/leaflet/marker-icon-2x.png",
+  iconUrl:       "/leaflet/marker-icon.png",
+  shadowUrl:     "/leaflet/marker-shadow.png",
 })
 
 const POS: [number, number] = [3.5400896, -76.310776]
