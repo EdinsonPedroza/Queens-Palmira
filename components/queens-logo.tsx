@@ -12,11 +12,11 @@ export function QueensLogo({ className, variant = "default", size = 48 }: Queens
   return (
     <div className={cn("inline-flex items-center gap-2", className)}>
       <Image
-        src="/images/logoFondo.png"
+        src="/images/logoFondo.webp"
         alt="Queens Cosmetics"
         width={size}
         height={size}
-        quality={100}
+        quality={85}
         className="shrink-0"
         style={isWhite ? { filter: "brightness(0) invert(1)" } : undefined}
         priority

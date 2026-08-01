@@ -227,10 +227,10 @@ export function Hero() {
                   transition={{ duration: 1.15, delay: 0.3, ease: [0.16, 1, 0.3, 1] }}
                 >
                   <Image
-                    src="/images/PORTADA.png"
+                    src="/images/PORTADA.webp"
                     alt="Queens Cosmetics — colección de maquillaje premium"
                     width={1200} height={1500}
-                    priority quality={100}
+                    priority quality={85}
                     sizes="(max-width: 1280px) 65vw, 980px"
                     className="w-full h-auto object-contain mix-blend-multiply"
                     style={{

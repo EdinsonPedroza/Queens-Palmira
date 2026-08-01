@@ -3,12 +3,12 @@ import path from "path"
 
 const ContentSecurityPolicy = `
   default-src 'self';
-  script-src 'self' 'unsafe-inline' https://va.vercel-scripts.com;
-  style-src 'self' 'unsafe-inline' https://unpkg.com;
-  img-src 'self' data: blob: https://images.unsplash.com https://plus.unsplash.com https://*.tile.openstreetmap.org https://unpkg.com;
+  script-src 'self' 'unsafe-inline' https://va.vercel-scripts.com https://www.googletagmanager.com;
+  style-src 'self' 'unsafe-inline';
+  img-src 'self' data: blob: https://images.unsplash.com https://plus.unsplash.com https://*.tile.openstreetmap.org https://www.googletagmanager.com https://www.google-analytics.com;
   font-src 'self';
-  connect-src 'self' https://vitals.vercel-insights.com https://va.vercel-scripts.com;
-  frame-src https://www.google.com https://maps.google.com https://maps.googleapis.com;
+  connect-src 'self' https://vitals.vercel-insights.com https://va.vercel-scripts.com https://www.googletagmanager.com https://www.google-analytics.com https://*.google-analytics.com https://*.analytics.google.com;
+  frame-src 'none';
   object-src 'none';
   base-uri 'self';
   form-action 'self';
@@ -41,7 +41,7 @@ const nextConfig = {
       { protocol: "https", hostname: "plus.unsplash.com" },
     ],
     formats: ["image/avif", "image/webp"],
-    qualities: [100, 75],
+    qualities: [75, 85],
     deviceSizes: [375, 640, 750, 828, 1080, 1200, 1920],
     imageSizes: [16, 32, 64, 128, 256],
   },

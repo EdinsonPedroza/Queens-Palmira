@@ -26,13 +26,13 @@ export interface Product {
   reviews?: number
 }
 
-export const CATEGORIES: { id: ProductCategory; label: string; icon: string; tagline: string }[] = [
-  { id: "labiales",  label: "Labiales",       icon: "", tagline: "Besos de seda y color" },
-  { id: "rostro",    label: "Rostro",          icon: "", tagline: "La base de tu belleza" },
-  { id: "ojos",      label: "Ojos",            icon: "", tagline: "Miradas que hipnotizan" },
-  { id: "skincare",  label: "Skin Care",       icon: "", tagline: "Tu ritual de reina" },
-  { id: "unas",      label: "Uñas",            icon: "", tagline: "Detalles que enamoran" },
-  { id: "capilar",   label: "Línea Capilar",   icon: "", tagline: "Cabello de reina" },
+export const CATEGORIES: { id: ProductCategory; label: string; tagline: string }[] = [
+  { id: "labiales",  label: "Labiales",       tagline: "Besos de seda y color" },
+  { id: "rostro",    label: "Rostro",         tagline: "La base de tu belleza" },
+  { id: "ojos",      label: "Ojos",           tagline: "Miradas que hipnotizan" },
+  { id: "skincare",  label: "Skin Care",      tagline: "Tu ritual de reina" },
+  { id: "unas",      label: "Uñas",           tagline: "Detalles que enamoran" },
+  { id: "capilar",   label: "Línea Capilar",  tagline: "Cabello de reina" },
 ]
 
 export const PRODUCTS: Product[] = [
@@ -44,7 +44,7 @@ export const PRODUCTS: Product[] = [
     price: 46000,
     category: "labiales",
     description: "Labial líquido mate de hasta 16 horas.",
-    image: "/images/products/Maybelline Superstay Matte Ink.png",
+    image: "/images/products/Maybelline Superstay Matte Ink.webp",
     badge: "bestseller",
     rating: 4.9,
     reviews: 128,
@@ -56,7 +56,7 @@ export const PRODUCTS: Product[] = [
     price: 24000,
     category: "labiales",
     description: "Gloss cremoso con acabado brillante.",
-    image: "/images/products/Spiral Gloss Montoc.png",
+    image: "/images/products/Spiral Gloss Montoc.webp",
     variants: ["Susu", "Yasu", "Tacey", "Kafu"],
   },
   {
@@ -65,7 +65,7 @@ export const PRODUCTS: Product[] = [
     price: 25000,
     category: "labiales",
     description: "Gloss hidratante de larga duración.",
-    image: "/images/products/GlowFusion Montoc.png",
+    image: "/images/products/GlowFusion Montoc.webp",
     variants: ["Alba", "Lyra", "Ariel", "Aurora"],
     imageStyle: { transform: "translate(-28%, 8%)" },
   },
@@ -75,7 +75,7 @@ export const PRODUCTS: Product[] = [
     price: 23000,
     category: "labiales",
     description: "Labial líquido mate de larga duración.",
-    image: "/images/products/Labial Vogue Resist 14H.png",
+    image: "/images/products/Labial Vogue Resist 14H.webp",
     variants: ["Elegante", "Fabulosa", "Encantadora", "Valiente", "Apasionada", "Atrevida"],
   },
   {
@@ -84,7 +84,7 @@ export const PRODUCTS: Product[] = [
     price: 30000,
     category: "labiales",
     description: "Gloss brillante con efecto plumping.",
-    image: "/images/products/Lip Gloss Atenea 1stScene.png",
+    image: "/images/products/Lip Gloss Atenea 1stScene.webp",
     badge: "nuevo",
     rating: 4.6,
     reviews: 61,
@@ -96,7 +96,7 @@ export const PRODUCTS: Product[] = [
     price: 11000,
     category: "labiales",
     description: "Acabado mate aterciopelado de larga duración.",
-    image: "/images/products/Labial Liquido Mate Feels Ruby Rose.png",
+    image: "/images/products/Labial Liquido Mate Feels Ruby Rose.webp",
     variants: ["129", "356", "362", "366", "376", "066"],
     imageStyle: { transform: "translateX(-15%)" },
   },
@@ -106,7 +106,7 @@ export const PRODUCTS: Product[] = [
     price: 12500,
     category: "labiales",
     description: "Labial en barra con acabado satinado.",
-    image: "/images/products/Labial Duo Fells Ruby Rose.png",
+    image: "/images/products/Labial Duo Fells Ruby Rose.webp",
     variants: ["312", "302", "316", "360", "311", "362", "361", "211"],
     imageStyle: { transform: "translateX(35%)" },
   },
@@ -116,7 +116,7 @@ export const PRODUCTS: Product[] = [
     price: 13000,
     category: "labiales",
     description: "Labial cremoso clásico.",
-    image: "/images/products/Labial en Barra 3b Jmart.png",
+    image: "/images/products/Labial en Barra 3b Jmart.webp",
     variants: ["Aventura", "Frutos Rojos", "Nude", "Pimienta", "Rosa", "Vital"],
   },
   {
@@ -125,7 +125,7 @@ export const PRODUCTS: Product[] = [
     price: 5000,
     category: "labiales",
     description: "Tinte buildable para un look natural y duradero.",
-    image: "/images/products/Tinta Lip Tattoo Engol.png",
+    image: "/images/products/Tinta Lip Tattoo Engol.webp",
     variants: ["01", "02", "03", "04"],
   },
   {
@@ -134,7 +134,7 @@ export const PRODUCTS: Product[] = [
     price: 9000,
     category: "labiales",
     description: "Brillo jugoso con aroma afrutado.",
-    image: "/images/products/Brillo Labial Essence Juicy Bomb.png",
+    image: "/images/products/Brillo Labial Essence Juicy Bomb.webp",
     variants: ["Lovely", "Witty", "Proud", "Poppin"],
   },
   {
@@ -143,7 +143,7 @@ export const PRODUCTS: Product[] = [
     price: 10700,
     category: "labiales",
     description: "Labial en barra acabado mate.",
-    image: "/images/products/Labial Mate Nailen en Barra.png",
+    image: "/images/products/Labial Mate Nailen en Barra.webp",
     variants: ["Aventura", "Frutos Rojos", "Nude", "Pimienta", "Rosa", "Vital"],
   },
   {
@@ -152,7 +152,7 @@ export const PRODUCTS: Product[] = [
     price: 10800,
     category: "labiales",
     description: "Labial líquido mate de larga duración.",
-    image: "/images/products/Samy Labial Liquido Matte.png",
+    image: "/images/products/Samy Labial Liquido Matte.webp",
     variants: ["01", "02", "03", "06", "08", "12", "15"],
   },
   // Brillo Holográfico Engol: imagen con texto incrustado — reemplazar PNG cuando haya foto limpia
@@ -163,7 +163,7 @@ export const PRODUCTS: Product[] = [
     price: 5000,
     category: "labiales",
     description: "Gloss transparente de larga duración.",
-    image: "/images/products/Lipgloss Engol.png",
+    image: "/images/products/Lipgloss Engol.webp",
   },
 
   // ═══════════════ ROSTRO ═══════════════
@@ -173,7 +173,7 @@ export const PRODUCTS: Product[] = [
     price: 60200,
     category: "rostro",
     description: "Cobertura total hasta 24 horas.",
-    image: "/images/products/Base Superstay 24H Maybelline.png",
+    image: "/images/products/Base Superstay 24H Maybelline.webp",
     badge: "bestseller",
     rating: 4.8,
     reviews: 96,
@@ -185,7 +185,7 @@ export const PRODUCTS: Product[] = [
     price: 48000,
     category: "rostro",
     description: "Base mate y sin poros, 16H.",
-    image: "/images/products/Base Fit Me 16H Maybelline.png",
+    image: "/images/products/Base Fit Me 16H Maybelline.webp",
     badge: "bestseller",
     rating: 5,
     reviews: 214,
@@ -197,7 +197,7 @@ export const PRODUCTS: Product[] = [
     price: 35000,
     category: "rostro",
     description: "Base hidratante de larga duración.",
-    image: "/images/products/Base HUMIDE Montoc.png",
+    image: "/images/products/Base HUMIDE Montoc.webp",
     variants: ["100", "200", "300", "400", "500", "600", "700"],
   },
   {
@@ -206,7 +206,7 @@ export const PRODUCTS: Product[] = [
     price: 29500,
     category: "rostro",
     description: "Cobertura media-alta 24H.",
-    image: "/images/products/Base Vogue Resist 24H.png",
+    image: "/images/products/Base Vogue Resist 24H.webp",
     variants: ["Capuccino", "Glamour", "Miel", "Natural", "Petalo"],
   },
   {
@@ -215,7 +215,7 @@ export const PRODUCTS: Product[] = [
     price: 45000,
     category: "rostro",
     description: "Base fluida acabado natural.",
-    image: "/images/products/Base Atenea 1stScene.png",
+    image: "/images/products/Base Atenea 1stScene.webp",
     variants: ["Light", "Cream", "Vainilla", "Almond", "Sand"],
   },
   {
@@ -224,7 +224,7 @@ export const PRODUCTS: Product[] = [
     price: 25500,
     category: "rostro",
     description: "Base con detox de toxinas para piel más limpia.",
-    image: "/images/products/Base Ultimate Detox Raquel.png",
+    image: "/images/products/Base Ultimate Detox Raquel.webp",
   },
   {
     id: "corrector-maybelline-eraser",
@@ -232,7 +232,7 @@ export const PRODUCTS: Product[] = [
     price: 55000,
     category: "rostro",
     description: "Corrector antiojeras de alta cobertura.",
-    image: "/images/products/Corrector Maybelline EASER.png",
+    image: "/images/products/Corrector Maybelline EASER.webp",
     badge: "nuevo",
     rating: 4.8,
     reviews: 182,
@@ -244,7 +244,7 @@ export const PRODUCTS: Product[] = [
     price: 30000,
     category: "rostro",
     description: "Corrector cremoso con vitamina C.",
-    image: "/images/products/Corrector Atenea 1stScene.png",
+    image: "/images/products/Corrector Atenea 1stScene.webp",
   },
   {
     id: "corrector-bloomshell",
@@ -252,7 +252,7 @@ export const PRODUCTS: Product[] = [
     price: 17500,
     category: "rostro",
     description: "Corrector con vitamina C y ácido hialurónico.",
-    image: "/images/products/Corrector Blloomshell.png",
+    image: "/images/products/Corrector Blloomshell.webp",
     variants: ["00", "01", "02", "03", "04", "05", "06", "07"],
   },
   {
@@ -261,7 +261,7 @@ export const PRODUCTS: Product[] = [
     price: 57000,
     category: "rostro",
     description: "Polvo suelto traslúcido fijador, efecto airbrush.",
-    image: "/images/products/Polvo Suelto Montoc Soft Powder.png",
+    image: "/images/products/Polvo Suelto Montoc Soft Powder.webp",
     variants: ["Polvo traslucido"],
   },
   {
@@ -270,7 +270,7 @@ export const PRODUCTS: Product[] = [
     price: 19000,
     category: "rostro",
     description: "Polvo suelto con minerales naturales.",
-    image: "/images/products/Polvo Suelto Raquel Minerals.png",
+    image: "/images/products/Polvo Suelto Raquel Minerals.webp",
     variants: ["Traslucido", "Banana", "Beige", "Miel", "Almendra"],
   },
   {
@@ -279,7 +279,7 @@ export const PRODUCTS: Product[] = [
     price: 36000,
     category: "rostro",
     description: "Polvo fijador ultraligero.",
-    image: "/images/products/Polvo Suelto Bloomshell.png",
+    image: "/images/products/Polvo Suelto Bloomshell.webp",
     variants: ["White", "Natural", "Pink"],
   },
   {
@@ -288,7 +288,7 @@ export const PRODUCTS: Product[] = [
     price: 33600,
     category: "rostro",
     description: "Polvo compacto acabado sedoso.",
-    image: "/images/products/Polvo Compacto SP PRO.png",
+    image: "/images/products/Polvo Compacto SP PRO.webp",
     variants: ["T00", "T01", "T02", "T03", "T04", "T05", "T06", "T09"],
   },
   {
@@ -297,7 +297,7 @@ export const PRODUCTS: Product[] = [
     price: 9800,
     category: "rostro",
     description: "Polvo compacto de larga duración.",
-    image: "/images/products/Polvo Compacto Nailen.png",
+    image: "/images/products/Polvo Compacto Nailen.webp",
     variants: ["1", "2", "3", "4", "5", "6", "7"],
   },
   {
@@ -306,7 +306,7 @@ export const PRODUCTS: Product[] = [
     price: 19000,
     category: "rostro",
     description: "Polvo compacto con minerales naturales.",
-    image: "/images/products/Polvo Compacto Raquel Piel de Oro.png",
+    image: "/images/products/Polvo Compacto Raquel Piel de Oro.webp",
   },
   {
     id: "polvo-compacto-smart-3b",
@@ -314,7 +314,7 @@ export const PRODUCTS: Product[] = [
     price: 18000,
     category: "rostro",
     description: "Polvo compacto multifuncional.",
-    image: "/images/products/Polvo Compacto Smart 3b.png",
+    image: "/images/products/Polvo Compacto Smart 3b.webp",
   },
   {
     id: "polvo-compacto-fitme-maybelline",
@@ -322,7 +322,7 @@ export const PRODUCTS: Product[] = [
     price: 43000,
     category: "rostro",
     description: "Polvo compacto mate y sin poros.",
-    image: "/images/products/Polvo Compacto FIT me Maybelline.png",
+    image: "/images/products/Polvo Compacto FIT me Maybelline.webp",
     badge: "bestseller",
     rating: 4.7,
     reviews: 73,
@@ -333,7 +333,7 @@ export const PRODUCTS: Product[] = [
     price: 37500,
     category: "rostro",
     description: "Rubor satinado de larga duración.",
-    image: "/images/products/Rubor Compacto 1ST SCENE Atenea.png",
+    image: "/images/products/Rubor Compacto 1ST SCENE Atenea.webp",
     badge: "nuevo",
     rating: 5,
     reviews: 240,
@@ -346,7 +346,7 @@ export const PRODUCTS: Product[] = [
     price: 30000,
     category: "rostro",
     description: "Rubor en crema fácil de difuminar.",
-    image: "/images/products/Rubor en crema Nostalgic MONTOC.png",
+    image: "/images/products/Rubor en crema Nostalgic MONTOC.webp",
     variants: ["So pretty", "Darling", "Exquisite", "Honey"],
     imageStyle: { transform: "translateY(35%)" },
   },
@@ -356,7 +356,7 @@ export const PRODUCTS: Product[] = [
     price: 30000,
     category: "rostro",
     description: "Rubor en stick para mejillas naturales.",
-    image: "/images/products/Rubor Mont HUMIDE Montoc.png",
+    image: "/images/products/Rubor Mont HUMIDE Montoc.webp",
     variants: ["Solé", "Rouse", "Dolce", "Sogno", "Luce"],
   },
   {
@@ -365,7 +365,7 @@ export const PRODUCTS: Product[] = [
     price: 6900,
     category: "rostro",
     description: "Rubor compacto de alta pigmentación.",
-    image: "/images/products/Rubor Compacto Samy Blush.png",
+    image: "/images/products/Rubor Compacto Samy Blush.webp",
     variants: ["Vanity", "Salmón", "Golden Rose", "Lady", "Satin Pink", "Tierra"],
     imageStyle: { transform: "translateX(-30%)" },
   },
@@ -375,7 +375,7 @@ export const PRODUCTS: Product[] = [
     price: 9800,
     category: "rostro",
     description: "Rubor compacto con acabado natural.",
-    image: "/images/products/Rubor Nailen.png",
+    image: "/images/products/Rubor Nailen.webp",
     imageStyle: { transform: "translateY(-15%)" },
   },
   {
@@ -384,7 +384,7 @@ export const PRODUCTS: Product[] = [
     price: 28000,
     category: "rostro",
     description: "Rubor compacto mini para llevar siempre.",
-    image: "/images/products/Rubor Pocket Blush Montoc.png",
+    image: "/images/products/Rubor Pocket Blush Montoc.webp",
     imageStyle: { transform: "translate(28%, 25%)" },
   },
   {
@@ -393,7 +393,7 @@ export const PRODUCTS: Product[] = [
     price: 8500,
     category: "rostro",
     description: "Blush en gel de larga duración.",
-    image: "/images/products/Jelly Blush Engol.png",
+    image: "/images/products/Jelly Blush Engol.webp",
     variants: ["01", "02", "03", "04"],
   },
   {
@@ -402,7 +402,7 @@ export const PRODUCTS: Product[] = [
     price: 27000,
     category: "rostro",
     description: "Contorno líquido fácil de difuminar.",
-    image: "/images/products/Contorno liquido HUMIDE Montoc.png",
+    image: "/images/products/Contorno liquido HUMIDE Montoc.webp",
     variants: ["Amber", "Toffe"],
   },
   {
@@ -411,7 +411,7 @@ export const PRODUCTS: Product[] = [
     price: 23000,
     category: "rostro",
     description: "Iluminador compacto de alta pigmentación.",
-    image: "/images/products/Polvo Iluminador SP PRO Pro Pearl.png",
+    image: "/images/products/Polvo Iluminador SP PRO Pro Pearl.webp",
     variants: ["Bronce", "Perla"],
   },
   {
@@ -420,7 +420,7 @@ export const PRODUCTS: Product[] = [
     price: 8000,
     category: "rostro",
     description: "Highlighter en polvo con destellos suaves.",
-    image: "/images/products/Polvo de Hadas Engol Highlighter.png",
+    image: "/images/products/Polvo de Hadas Engol Highlighter.webp",
   },
   {
     id: "fijador-montoc-dixy",
@@ -428,7 +428,7 @@ export const PRODUCTS: Product[] = [
     price: 28000,
     category: "rostro",
     description: "Spray fijador de maquillaje de larga duración.",
-    image: "/images/products/Fijador Maquillaje Montoc Dixy Fix.png",
+    image: "/images/products/Fijador Maquillaje Montoc Dixy Fix.webp",
   },
   {
     id: "blender-sponge-montoc",
@@ -436,7 +436,7 @@ export const PRODUCTS: Product[] = [
     price: 20000,
     category: "rostro",
     description: "Esponja de maquillaje de alta densidad.",
-    image: "/images/products/Blender Sponge LP018 Montoc.png",
+    image: "/images/products/Blender Sponge LP018 Montoc.webp",
     variants: ["LP018", "Beteada Morada"],
   },
   {
@@ -445,7 +445,7 @@ export const PRODUCTS: Product[] = [
     price: 25000,
     category: "rostro",
     description: "Bronzer en polvo para un tono sol natural.",
-    image: "/images/products/Bronzer Hello Beach Montoc.png",
+    image: "/images/products/Bronzer Hello Beach Montoc.webp",
   },
   {
     id: "kit-brochas-montoc",
@@ -453,7 +453,7 @@ export const PRODUCTS: Product[] = [
     price: 60000,
     category: "rostro",
     description: "Kit de brochas profesionales para maquillaje completo.",
-    image: "/images/products/Kit Brochas Singolare V2 Montoc.png",
+    image: "/images/products/Kit Brochas Singolare V2 Montoc.webp",
     badge: "nuevo",
     rating: 4.7,
     reviews: 88,
@@ -466,7 +466,7 @@ export const PRODUCTS: Product[] = [
     price: 61000,
     category: "ojos",
     description: "Máscara de volumen extremo para pestañas infinitas.",
-    image: "/images/products/Pestanina Sky High Maybelline.png",
+    image: "/images/products/Pestanina Sky High Maybelline.webp",
     badge: "bestseller",
     rating: 4.9,
     reviews: 156,
@@ -477,7 +477,7 @@ export const PRODUCTS: Product[] = [
     price: 37000,
     category: "ojos",
     description: "Volumen x10 en una sola pasada.",
-    image: "/images/products/Pestanina Maybelline COLOSSAL.png",
+    image: "/images/products/Pestanina Maybelline COLOSSAL.webp",
     variants: ["Volum Express Lavable", "Waterproof"],
   },
   {
@@ -486,7 +486,7 @@ export const PRODUCTS: Product[] = [
     price: 18000,
     category: "ojos",
     description: "Máscara de volumen y curvatura extrema.",
-    image: "/images/products/Pestaninas Essence I Love Extreme.png",
+    image: "/images/products/Pestaninas Essence I Love Extreme.webp",
     variants: ["Waterproof", "Volume", "Crazy Volume"],
   },
   {
@@ -495,7 +495,7 @@ export const PRODUCTS: Product[] = [
     price: 23000,
     category: "ojos",
     description: "5 referencias para todo tipo de look.",
-    image: "/images/products/Pestaninas Vogue Larga Duracion.png",
+    image: "/images/products/Pestaninas Vogue Larga Duracion.webp",
     variants: ["Efecto total 6", "Ultra Volumen", "Pestañas de muñeca", "Curvas perfectas", "Amor a primera vista"],
   },
   {
@@ -504,7 +504,7 @@ export const PRODUCTS: Product[] = [
     price: 45000,
     category: "ojos",
     description: "42 sombras matte, shimmer y glitter.",
-    image: "/images/products/Paleta Sombras Engol Colombia Pro Magica.png",
+    image: "/images/products/Paleta Sombras Engol Colombia Pro Magica.webp",
     badge: "bestseller",
     rating: 4.6,
     reviews: 61,
@@ -515,7 +515,7 @@ export const PRODUCTS: Product[] = [
     price: 32000,
     category: "ojos",
     description: "22 sombras con primer incluido.",
-    image: "/images/products/Paleta de Sombras Ruby Rose Amazing.png",
+    image: "/images/products/Paleta de Sombras Ruby Rose Amazing.webp",
   },
   {
     id: "delineador-gel-montoc",
@@ -523,7 +523,7 @@ export const PRODUCTS: Product[] = [
     price: 30000,
     category: "ojos",
     description: "Gel delineador negro intenso de larga duración.",
-    image: "/images/products/Delineador en Gel Montoc.png",
+    image: "/images/products/Delineador en Gel Montoc.webp",
     variants: ["Negro"],
   },
   {
@@ -532,7 +532,7 @@ export const PRODUCTS: Product[] = [
     price: 10200,
     category: "ojos",
     description: "Lápiz delineador retráctil suave.",
-    image: "/images/products/Delineador de ojos Bardot.png",
+    image: "/images/products/Delineador de ojos Bardot.webp",
     variants: ["Beige", "Black"],
   },
   {
@@ -541,7 +541,7 @@ export const PRODUCTS: Product[] = [
     price: 9400,
     category: "ojos",
     description: "Delineador retráctil de larga duración.",
-    image: "/images/products/Lapiz retractil de ojos Nailen.png",
+    image: "/images/products/Lapiz retractil de ojos Nailen.webp",
     variants: ["Arabe", "Fiesta", "Latino", "Pasión", "Sangria", "Tahití"],
   },
   {
@@ -550,7 +550,7 @@ export const PRODUCTS: Product[] = [
     price: 8000,
     category: "ojos",
     description: "Lápiz multifunción para cejas y ojos.",
-    image: "/images/products/Lapiz Delineador Cejas y Ojos.png",
+    image: "/images/products/Lapiz Delineador Cejas y Ojos.webp",
   },
   {
     id: "lapiz-cejas-doble-montoc",
@@ -558,7 +558,7 @@ export const PRODUCTS: Product[] = [
     price: 15000,
     category: "ojos",
     description: "Lápiz de cejas doble extremo con cepillo.",
-    image: "/images/products/Lapiz de Cejas Doble Montoc HUMIDE.png",
+    image: "/images/products/Lapiz de Cejas Doble Montoc HUMIDE.webp",
     badge: "nuevo",
     rating: 4.9,
     reviews: 128,
@@ -570,7 +570,7 @@ export const PRODUCTS: Product[] = [
     price: 19000,
     category: "ojos",
     description: "Tinta para cejas de hasta 24 horas.",
-    image: "/images/products/Tinta Liquida De Cejas Vogue Resist.png",
+    image: "/images/products/Tinta Liquida De Cejas Vogue Resist.webp",
     variants: ["Ivory", "Medium", "Light", "Golden", "Honey"],
   },
   {
@@ -579,7 +579,7 @@ export const PRODUCTS: Product[] = [
     price: 4500,
     category: "ojos",
     description: "Pomada para cejas de larga duración.",
-    image: "/images/products/Pomada de Cejas Engol Fashion.png",
+    image: "/images/products/Pomada de Cejas Engol Fashion.webp",
     variants: ["Brown", "Brunette", "Chocolate"],
   },
   {
@@ -588,7 +588,7 @@ export const PRODUCTS: Product[] = [
     price: 23000,
     category: "ojos",
     description: "Henna semipermanente para cejas naturales.",
-    image: "/images/products/Henna para Cejas Moonlight.png",
+    image: "/images/products/Henna para Cejas Moonlight.webp",
     variants: ["Café Oscuro", "Café Medio"],
   },
   {
@@ -597,7 +597,7 @@ export const PRODUCTS: Product[] = [
     price: 22000,
     category: "ojos",
     description: "Kit henna para cejas de larga duración.",
-    image: "/images/products/Henna para Cejas Cejas Perfectas.png",
+    image: "/images/products/Henna para Cejas Cejas Perfectas.webp",
   },
   {
     id: "jabon-cejas-jbl",
@@ -605,7 +605,7 @@ export const PRODUCTS: Product[] = [
     price: 12000,
     category: "ojos",
     description: "Jabón fijador para cejas definidas y peinadas.",
-    image: "/images/products/Jabon de Cejas JBL Brow Soap.png",
+    image: "/images/products/Jabon de Cejas JBL Brow Soap.webp",
   },
   {
     id: "perfilador-cejas-tinkle",
@@ -613,7 +613,7 @@ export const PRODUCTS: Product[] = [
     price: 9000,
     category: "ojos",
     description: "Cuchilla para dar forma precisa a las cejas.",
-    image: "/images/products/Perfilador de Cejas Tinkle.png",
+    image: "/images/products/Perfilador de Cejas Tinkle.webp",
   },
   {
     id: "brochas-sombras-ojos",
@@ -621,7 +621,7 @@ export const PRODUCTS: Product[] = [
     price: 15000,
     category: "ojos",
     description: "Set de brochas profesionales para ojos.",
-    image: "/images/products/Brochas para Sombras de Ojos.png",
+    image: "/images/products/Brochas para Sombras de Ojos.webp",
   },
   {
     id: "pestanas-most-beauty-3d",
@@ -629,7 +629,7 @@ export const PRODUCTS: Product[] = [
     price: 6000,
     category: "ojos",
     description: "Pestañas postizas reutilizables.",
-    image: "/images/products/Pestanas Enteras Most Beauty 3D.png",
+    image: "/images/products/Pestanas Enteras Most Beauty 3D.webp",
     variants: ["3D", "Daily 3D"],
   },
   {
@@ -638,7 +638,7 @@ export const PRODUCTS: Product[] = [
     price: 7000,
     category: "ojos",
     description: "Pestañas naturales de alta densidad.",
-    image: "/images/products/Pestanas Most Beauty Wonder Lashes.png",
+    image: "/images/products/Pestanas Most Beauty Wonder Lashes.webp",
   },
   {
     id: "pestanas-belia-5d",
@@ -646,7 +646,7 @@ export const PRODUCTS: Product[] = [
     price: 7000,
     category: "ojos",
     description: "Pestañas de visón sintético 5D ultra naturales.",
-    image: "/images/products/Pestanas Enteras Belia 5D Mei yan Er.png",
+    image: "/images/products/Pestanas Enteras Belia 5D Mei yan Er.webp",
     variants: ["005", "047", "07", "2", "056", "055", "083"],
   },
   {
@@ -655,7 +655,7 @@ export const PRODUCTS: Product[] = [
     price: 8000,
     category: "ojos",
     description: "Pestañas individuales para look natural.",
-    image: "/images/products/Pestana Pelo a Pelo Kickass.png",
+    image: "/images/products/Pestana Pelo a Pelo Kickass.webp",
   },
   {
     id: "pegante-salon-pro",
@@ -663,7 +663,7 @@ export const PRODUCTS: Product[] = [
     price: 18000,
     category: "ojos",
     description: "Adhesivo profesional para pestañas.",
-    image: "/images/products/Pegante De Pestanas Salon Pro.png",
+    image: "/images/products/Pegante De Pestanas Salon Pro.webp",
   },
   {
     id: "pegante-duo-pestanas",
@@ -671,7 +671,7 @@ export const PRODUCTS: Product[] = [
     price: 26000,
     category: "ojos",
     description: "Adhesivo profesional de larga duración.",
-    image: "/images/products/Pegante para Pestanas Duo.png",
+    image: "/images/products/Pegante para Pestanas Duo.webp",
     variants: ["Dark", "White"],
   },
 
@@ -682,7 +682,7 @@ export const PRODUCTS: Product[] = [
     price: 52000,
     category: "skincare",
     description: "Gel facial hidratante de textura ligera para todo tipo de piel.",
-    image: "/images/products/Gel Facial Hidratante Montoc Hydromo.png",
+    image: "/images/products/Gel Facial Hidratante Montoc Hydromo.webp",
     badge: "bestseller",
     rating: 4.8,
     reviews: 182,
@@ -693,7 +693,7 @@ export const PRODUCTS: Product[] = [
     price: 60900,
     category: "skincare",
     description: "Protector solar diario de amplio espectro.",
-    image: "/images/products/Protector Solar UV Defender FPS50 Loreal.png",
+    image: "/images/products/Protector Solar UV Defender FPS50 Loreal.webp",
     badge: "nuevo",
     rating: 4.8,
     reviews: 96,
@@ -704,7 +704,7 @@ export const PRODUCTS: Product[] = [
     price: 60000,
     category: "skincare",
     description: "Hidrata, rellena y reduce líneas finas.",
-    image: "/images/products/Acido Hialuronico Cuidado Ojos Loreal.png",
+    image: "/images/products/Acido Hialuronico Cuidado Ojos Loreal.webp",
   },
   {
     id: "agua-micelar-garnier",
@@ -712,7 +712,7 @@ export const PRODUCTS: Product[] = [
     price: 37000,
     category: "skincare",
     description: "Desmaquillante micelar todo en 1.",
-    image: "/images/products/Agua Micelar Garnier.png",
+    image: "/images/products/Agua Micelar Garnier.webp",
     variants: ["Todo en 1", "Vitamina C", "Ácido Salicílico"],
   },
   {
@@ -721,7 +721,7 @@ export const PRODUCTS: Product[] = [
     price: 26000,
     category: "skincare",
     description: "Desmaquillante natural para pieles sensibles.",
-    image: "/images/products/Vitu Agua Micelar Sabila y Pepino.png",
+    image: "/images/products/Vitu Agua Micelar Sabila y Pepino.webp",
   },
   {
     id: "mascarilla-garnier",
@@ -729,7 +729,7 @@ export const PRODUCTS: Product[] = [
     price: 11300,
     category: "skincare",
     description: "Mascarilla de tela en solo 15 minutos.",
-    image: "/images/products/Mascarillas en Tela Garnier.png",
+    image: "/images/products/Mascarillas en Tela Garnier.webp",
     variants: ["Vitamina C", "Hidra Bomb", "Pure Carbon"],
   },
   {
@@ -738,7 +738,7 @@ export const PRODUCTS: Product[] = [
     price: 24000,
     category: "skincare",
     description: "Jabón exfoliante con frutas rojas.",
-    image: "/images/products/Jabon Exfoliante Facial Vitu.png",
+    image: "/images/products/Jabon Exfoliante Facial Vitu.webp",
   },
   {
     id: "tonico-biofloral-raquel",
@@ -746,7 +746,7 @@ export const PRODUCTS: Product[] = [
     price: 19000,
     category: "skincare",
     description: "Tónico floral que equilibra y tonifica la piel.",
-    image: "/images/products/Tonico Biofloral Raquel.png",
+    image: "/images/products/Tonico Biofloral Raquel.webp",
   },
   {
     id: "protector-nude-spf50",
@@ -754,7 +754,7 @@ export const PRODUCTS: Product[] = [
     price: 57500,
     category: "skincare",
     description: "Protector solar ligero de alta protección.",
-    image: "/images/products/Protector Solar Nude SPF50.png",
+    image: "/images/products/Protector Solar Nude SPF50.webp",
     variants: ["Sin color", "Con color"],
   },
   {
@@ -763,7 +763,7 @@ export const PRODUCTS: Product[] = [
     price: 4000,
     category: "skincare",
     description: "Sachet de protector solar de máxima protección.",
-    image: "/images/products/Protector Solar Nude SPF100 Sachet.png",
+    image: "/images/products/Protector Solar Nude SPF100 Sachet.webp",
   },
   {
     id: "bronceador-solar-nude",
@@ -771,7 +771,7 @@ export const PRODUCTS: Product[] = [
     price: 4000,
     category: "skincare",
     description: "Bronceador solar en sachet para llevar.",
-    image: "/images/products/Bronceador Solar Nude Sachet.png",
+    image: "/images/products/Bronceador Solar Nude Sachet.webp",
   },
   {
     id: "autobronceador-piel-oro",
@@ -779,7 +779,7 @@ export const PRODUCTS: Product[] = [
     price: 50000,
     category: "skincare",
     description: "Bronceado natural y duradero en spray.",
-    image: "/images/products/Autobronceador Piel de Oro.png",
+    image: "/images/products/Autobronceador Piel de Oro.webp",
   },
   {
     id: "aceite-bronceador-piel-oro",
@@ -787,7 +787,7 @@ export const PRODUCTS: Product[] = [
     price: 48000,
     category: "skincare",
     description: "Aceite bronceador que hidrata y potencia el bronceado.",
-    image: "/images/products/Aceite Bronceador Piel de Oro.png",
+    image: "/images/products/Aceite Bronceador Piel de Oro.webp",
   },
   {
     id: "aceite-antiestrias-piel-oro",
@@ -795,7 +795,7 @@ export const PRODUCTS: Product[] = [
     price: 48000,
     category: "skincare",
     description: "Aceite nutritivo que previene y reduce estrías.",
-    image: "/images/products/Aceite Antiestrias Piel de Oro.png",
+    image: "/images/products/Aceite Antiestrias Piel de Oro.webp",
   },
   {
     id: "crema-depilatoria-sedosa",
@@ -803,7 +803,7 @@ export const PRODUCTS: Product[] = [
     price: 14000,
     category: "skincare",
     description: "Crema depilatoria hidratante para piernas y cuerpo.",
-    image: "/images/products/Crema Depilatoria Sedosa.png",
+    image: "/images/products/Crema Depilatoria Sedosa.webp",
   },
   {
     id: "sachet-crema-depilatoria",
@@ -811,7 +811,7 @@ export const PRODUCTS: Product[] = [
     price: 3000,
     category: "skincare",
     description: "Crema depilatoria en sachet para zonas pequeñas.",
-    image: "/images/products/Sachet Crema Depilatoria Lampina.png",
+    image: "/images/products/Sachet Crema Depilatoria Lampina.webp",
   },
   {
     id: "gel-afeitar-barber",
@@ -819,7 +819,7 @@ export const PRODUCTS: Product[] = [
     price: 15000,
     category: "skincare",
     description: "Gel de afeitar profesional para piel suave.",
-    image: "/images/products/Gel de Afeitar Barber Duvy Class.png",
+    image: "/images/products/Gel de Afeitar Barber Duvy Class.webp",
     imageStyle: { transform: "translateY(8%)" },
   },
   {
@@ -828,7 +828,7 @@ export const PRODUCTS: Product[] = [
     price: 18000,
     category: "skincare",
     description: "Bálsamo calmante post-afeitado.",
-    image: "/images/products/Balsamo After Shave Barber Duvy Class.png",
+    image: "/images/products/Balsamo After Shave Barber Duvy Class.webp",
   },
   {
     id: "talco-barberia",
@@ -836,7 +836,7 @@ export const PRODUCTS: Product[] = [
     price: 12000,
     category: "skincare",
     description: "Talco para barbería de uso profesional.",
-    image: "/images/products/Talco Barberia Barber Duvy Class.png",
+    image: "/images/products/Talco Barberia Barber Duvy Class.webp",
   },
   {
     id: "gel-vibrante-fawy-skin",
@@ -844,7 +844,7 @@ export const PRODUCTS: Product[] = [
     price: 10800,
     category: "skincare",
     description: "Gel multifuncional con Vitamina E.",
-    image: "/images/products/Gel Vibrante Fawy.png",
+    image: "/images/products/Gel Vibrante Fawy.webp",
   },
 
   // ═══════════════ UÑAS ═══════════════
@@ -854,7 +854,7 @@ export const PRODUCTS: Product[] = [
     price: 22300,
     category: "unas",
     description: "Esmalte semipermanente de gel de larga duración.",
-    image: "/images/products/Esmalte Gel Polish Semi Masglo.png",
+    image: "/images/products/Esmalte Gel Polish Semi Masglo.webp",
     badge: "bestseller",
     rating: 5,
     reviews: 240,
@@ -866,7 +866,7 @@ export const PRODUCTS: Product[] = [
     price: 8200,
     category: "unas",
     description: "Esmalte con efecto gel de alta pigmentación.",
-    image: "/images/products/Esmalte Vogue Efecto Gel.png",
+    image: "/images/products/Esmalte Vogue Efecto Gel.webp",
     variants: ["+20 tonos disponibles — consultar en tienda"],
   },
   {
@@ -875,7 +875,7 @@ export const PRODUCTS: Product[] = [
     price: 9800,
     category: "unas",
     description: "Esmalte de alta cobertura y acabado brillante.",
-    image: "/images/products/Esmalte Masglo.png",
+    image: "/images/products/Esmalte Masglo.webp",
     variants: ["+20 tonos disponibles — consultar en tienda"],
   },
   {
@@ -884,7 +884,7 @@ export const PRODUCTS: Product[] = [
     price: 4000,
     category: "unas",
     description: "Esmalte clásico de larga duración.",
-    image: "/images/products/Esmalte Tradicional Admiss.png",
+    image: "/images/products/Esmalte Tradicional Admiss.webp",
     variants: ["+20 tonos disponibles — consultar en tienda"],
   },
   {
@@ -893,7 +893,7 @@ export const PRODUCTS: Product[] = [
     price: 6600,
     category: "unas",
     description: "Removedor que cuida y fortalece la uña.",
-    image: "/images/products/Removedor De Esmalte Lander.png",
+    image: "/images/products/Removedor De Esmalte Lander.webp",
     variants: ["Endurecedor", "Tradicional"],
   },
   {
@@ -902,7 +902,7 @@ export const PRODUCTS: Product[] = [
     price: 15000,
     category: "unas",
     description: "Removedor con keratina para uñas sanas y fuertes.",
-    image: "/images/products/Removedor de Esmalte Samy Keratin.png",
+    image: "/images/products/Removedor de Esmalte Samy Keratin.webp",
   },
   {
     id: "aceite-cuticula-brescia",
@@ -910,7 +910,7 @@ export const PRODUCTS: Product[] = [
     price: 7000,
     category: "unas",
     description: "Aceite nutritivo que suaviza y cuida la cutícula.",
-    image: "/images/products/Aceite de Cuticula Brescia.png",
+    image: "/images/products/Aceite de Cuticula Brescia.webp",
   },
   {
     id: "removedor-cuticula-brescia",
@@ -918,7 +918,7 @@ export const PRODUCTS: Product[] = [
     price: 8800,
     category: "unas",
     description: "Crema removedora de cutícula con Vitamina E.",
-    image: "/images/products/Removedor de cuticula Brescia.png",
+    image: "/images/products/Removedor de cuticula Brescia.webp",
   },
 
   // ═══════════════ LÍNEA CAPILAR ═══════════════
@@ -928,7 +928,7 @@ export const PRODUCTS: Product[] = [
     price: 65400,
     category: "capilar",
     description: "Shampoo y acondicionador alisador profesional antifrizz. Valor unitario.",
-    image: "/images/products/Shampoo y Acondicionador Salon In Liss Control.png",
+    image: "/images/products/Shampoo y Acondicionador Salon In Liss Control.webp",
     badge: "bestseller",
     rating: 4.7,
     reviews: 88,
@@ -940,7 +940,7 @@ export const PRODUCTS: Product[] = [
     price: 65400,
     category: "capilar",
     description: "Shampoo y acondicionador reparador para cabello dañado. Valor unitario.",
-    image: "/images/products/Shampoo y Acondicionador Salon In Hydra Repair.png",
+    image: "/images/products/Shampoo y Acondicionador Salon In Hydra Repair.webp",
     variants: ["Shampoo", "Acondicionador"],
   },
   {
@@ -949,7 +949,7 @@ export const PRODUCTS: Product[] = [
     price: 38000,
     category: "capilar",
     description: "Shampoo y acondicionador con ácido glicólico. Valor unitario.",
-    image: "/images/products/Shampoo y Acondicionador Acido Glycolico Elvive.png",
+    image: "/images/products/Shampoo y Acondicionador Acido Glycolico Elvive.webp",
     variants: ["Shampoo", "Acondicionador"],
   },
   {
@@ -958,7 +958,7 @@ export const PRODUCTS: Product[] = [
     price: 28000,
     category: "capilar",
     description: "Shampoo y acondicionador anticaída con cebolla. Valor unitario.",
-    image: "/images/products/Shampoo y Acondicionador Cebolla Versatil.png",
+    image: "/images/products/Shampoo y Acondicionador Cebolla Versatil.webp",
     variants: ["Shampoo", "Acondicionador"],
   },
   {
@@ -967,7 +967,7 @@ export const PRODUCTS: Product[] = [
     price: 28000,
     category: "capilar",
     description: "Shampoo y acondicionador fortalecedor con proteínas equinas. Valor unitario.",
-    image: "/images/products/Shampoo y Acondicionador Equino Versatil.png",
+    image: "/images/products/Shampoo y Acondicionador Equino Versatil.webp",
     variants: ["Shampoo", "Acondicionador"],
   },
   {
@@ -976,7 +976,7 @@ export const PRODUCTS: Product[] = [
     price: 28000,
     category: "capilar",
     description: "Shampoo y acondicionador protector de color. Valor unitario.",
-    image: "/images/products/Shampoo y Acondicionador Proteccion Color Versatil.png",
+    image: "/images/products/Shampoo y Acondicionador Proteccion Color Versatil.webp",
     variants: ["Shampoo", "Acondicionador"],
   },
   {
@@ -985,7 +985,7 @@ export const PRODUCTS: Product[] = [
     price: 45000,
     category: "capilar",
     description: "Shampoo con ácido hialurónico para hidratación profunda.",
-    image: "/images/products/Shampoo Hialuronico Elvive Loreal.png",
+    image: "/images/products/Shampoo Hialuronico Elvive Loreal.webp",
   },
   {
     id: "shampoo-absolut-repair-loreal",
@@ -993,7 +993,7 @@ export const PRODUCTS: Product[] = [
     price: 95000,
     category: "capilar",
     description: "Shampoo profesional de reparación intensa.",
-    image: "/images/products/Shampoo Absolut Repair Loreal Profesional.png",
+    image: "/images/products/Shampoo Absolut Repair Loreal Profesional.webp",
     badge: "nuevo",
     rating: 5,
     reviews: 214,
@@ -1004,7 +1004,7 @@ export const PRODUCTS: Product[] = [
     price: 85000,
     category: "capilar",
     description: "Shampoo anticaída con tecnología densificadora.",
-    image: "/images/products/Shampoo Densificador Serioxyl Advanced Loreal.png",
+    image: "/images/products/Shampoo Densificador Serioxyl Advanced Loreal.webp",
   },
   {
     id: "shampoo-control-caspa-versatil",
@@ -1012,7 +1012,7 @@ export const PRODUCTS: Product[] = [
     price: 22000,
     category: "capilar",
     description: "Shampoo anticaspa 2 en 1 para uso diario.",
-    image: "/images/products/Shampoo 2 en 1 Control Caspa Versatil.png",
+    image: "/images/products/Shampoo 2 en 1 Control Caspa Versatil.webp",
   },
   {
     id: "shampoo-control-caspa-deep-roots",
@@ -1020,7 +1020,7 @@ export const PRODUCTS: Product[] = [
     price: 24000,
     category: "capilar",
     description: "Shampoo anticaspa de acción profunda.",
-    image: "/images/products/Shampoo Control Caspa Deep Roots.png",
+    image: "/images/products/Shampoo Control Caspa Deep Roots.webp",
   },
   {
     id: "shampoo-control-caida-barber",
@@ -1028,7 +1028,7 @@ export const PRODUCTS: Product[] = [
     price: 20000,
     category: "capilar",
     description: "Shampoo anticaída para cabello masculino.",
-    image: "/images/products/Shampoo Control Caida Barber Duvy Class.png",
+    image: "/images/products/Shampoo Control Caida Barber Duvy Class.webp",
   },
   {
     id: "shampoo-grasa-cebolla",
@@ -1036,7 +1036,7 @@ export const PRODUCTS: Product[] = [
     price: 22000,
     category: "capilar",
     description: "Shampoo para cabello graso con extracto de cebolla.",
-    image: "/images/products/Shampoo Control Grasa Cebolla Fresh Co.png",
+    image: "/images/products/Shampoo Control Grasa Cebolla Fresh Co.webp",
   },
   {
     id: "shampoo-color-freshco",
@@ -1044,7 +1044,7 @@ export const PRODUCTS: Product[] = [
     price: 22000,
     category: "capilar",
     description: "Shampoo para preservar el color del cabello teñido.",
-    image: "/images/products/Shampoo Proteccion Color Fresh Co.png",
+    image: "/images/products/Shampoo Proteccion Color Fresh Co.webp",
   },
   {
     id: "shampoo-nutritive-alfaparf",
@@ -1052,7 +1052,7 @@ export const PRODUCTS: Product[] = [
     price: 55000,
     category: "capilar",
     description: "Shampoo nutritivo profesional Alfaparf.",
-    image: "/images/products/Shampoo Nutritive Yellow Alfaparf.png",
+    image: "/images/products/Shampoo Nutritive Yellow Alfaparf.webp",
   },
   {
     id: "shampoo-ponto-sachet",
@@ -1060,7 +1060,7 @@ export const PRODUCTS: Product[] = [
     price: 4000,
     category: "capilar",
     description: "Shampoo reparador en sachet.",
-    image: "/images/products/Shampoo Ponto Sachet.png",
+    image: "/images/products/Shampoo Ponto Sachet.webp",
   },
   {
     id: "shampoo-cebolla-sachet",
@@ -1068,7 +1068,7 @@ export const PRODUCTS: Product[] = [
     price: 3500,
     category: "capilar",
     description: "Shampoo anticaída con cebolla en sachet.",
-    image: "/images/products/Shampoo Cebolla Versatil Sachet.png",
+    image: "/images/products/Shampoo Cebolla Versatil Sachet.webp",
   },
   {
     id: "shampoo-vitamino-loreal",
@@ -1076,7 +1076,7 @@ export const PRODUCTS: Product[] = [
     price: 80000,
     category: "capilar",
     description: "Shampoo protector de color con Omega 6.",
-    image: "/images/products/Shampoo y Termo Protector Vitamino Color Loreal.png",
+    image: "/images/products/Shampoo y Termo Protector Vitamino Color Loreal.webp",
     variants: ["Shampoo", "Termo protector"],
   },
   {
@@ -1085,7 +1085,7 @@ export const PRODUCTS: Product[] = [
     price: 52000,
     category: "capilar",
     description: "Acondicionador con keratina para cabello muy dañado.",
-    image: "/images/products/Acondicionador Keratin Ultra Force Salon In.png",
+    image: "/images/products/Acondicionador Keratin Ultra Force Salon In.webp",
   },
   {
     id: "acondicionador-liss-alfaparf",
@@ -1093,7 +1093,7 @@ export const PRODUCTS: Product[] = [
     price: 55000,
     category: "capilar",
     description: "Acondicionador alisador profesional Alfaparf.",
-    image: "/images/products/Acondicionador Liss Yellow Alfaparf.png",
+    image: "/images/products/Acondicionador Liss Yellow Alfaparf.webp",
   },
   {
     id: "acondicionador-repair-alfaparf",
@@ -1101,7 +1101,7 @@ export const PRODUCTS: Product[] = [
     price: 55000,
     category: "capilar",
     description: "Acondicionador reparador profesional Alfaparf.",
-    image: "/images/products/Acondicionador Repair Yellow Alfaparf.png",
+    image: "/images/products/Acondicionador Repair Yellow Alfaparf.webp",
   },
   {
     id: "tratamiento-metal-detox-loreal",
@@ -1109,7 +1109,7 @@ export const PRODUCTS: Product[] = [
     price: 135000,
     category: "capilar",
     description: "Pre-tratamiento profesional que neutraliza metales y protege el cabello.",
-    image: "/images/products/Tratamiento Metal Detox Loreal.png",
+    image: "/images/products/Tratamiento Metal Detox Loreal.webp",
     badge: "nuevo",
     rating: 4.7,
     reviews: 73,
@@ -1120,7 +1120,7 @@ export const PRODUCTS: Product[] = [
     price: 110000,
     category: "capilar",
     description: "Sérum de acabado cristalizado para brillo y suavidad extrema.",
-    image: "/images/products/Cristal Liquido Sublime Semi Di Lino Alfaparf.png",
+    image: "/images/products/Cristal Liquido Sublime Semi Di Lino Alfaparf.webp",
   },
   {
     id: "nikols-fitokeratina",
@@ -1128,7 +1128,7 @@ export const PRODUCTS: Product[] = [
     price: 20000,
     category: "capilar",
     description: "Tratamiento de keratina vegetal que sella la cutícula y da brillo.",
-    image: "/images/products/Nikols Tratamiento Fitokeratina.png",
+    image: "/images/products/Nikols Tratamiento Fitokeratina.webp",
   },
   {
     id: "ampolletas-hair-saloon",
@@ -1136,7 +1136,7 @@ export const PRODUCTS: Product[] = [
     price: 8000,
     category: "capilar",
     description: "Ampolletas nutritivas de acción intensiva.",
-    image: "/images/products/Ampolletas Capilares Hair Saloon Pluss.png",
+    image: "/images/products/Ampolletas Capilares Hair Saloon Pluss.webp",
   },
   {
     id: "ampolletas-alfaparf",
@@ -1144,7 +1144,7 @@ export const PRODUCTS: Product[] = [
     price: 15000,
     category: "capilar",
     description: "Ampolletas de tratamiento profesional Alfaparf.",
-    image: "/images/products/Ampolletas capilares Alfaparf.png",
+    image: "/images/products/Ampolletas capilares Alfaparf.webp",
   },
   {
     id: "deco-white-9-recamier",
@@ -1152,7 +1152,7 @@ export const PRODUCTS: Product[] = [
     price: 11300,
     category: "capilar",
     description: "Decolorante en sachet hasta 9 niveles de aclaramiento.",
-    image: "/images/products/Recamier Deco White 9 Sachet.png",
+    image: "/images/products/Recamier Deco White 9 Sachet.webp",
   },
   {
     id: "deco-black-9-recamier",
@@ -1160,7 +1160,7 @@ export const PRODUCTS: Product[] = [
     price: 18000,
     category: "capilar",
     description: "Decolorante premium hasta 9 niveles.",
-    image: "/images/products/Recamier Deco Black 9.png",
+    image: "/images/products/Recamier Deco Black 9.webp",
   },
   {
     id: "deco-alfapar-bb-bleach",
@@ -1168,7 +1168,7 @@ export const PRODUCTS: Product[] = [
     price: 11000,
     category: "capilar",
     description: "Decolorante de alta performace, hasta 9 niveles High Lift.",
-    image: "/images/products/Decolorante Alfaparf BB Bleach Sachet.png",
+    image: "/images/products/Decolorante Alfaparf BB Bleach Sachet.webp",
   },
   {
     id: "polvo-deco-plex-duvy",
@@ -1176,7 +1176,7 @@ export const PRODUCTS: Product[] = [
     price: 18000,
     category: "capilar",
     description: "Decolorante en polvo con tecnología Plex.",
-    image: "/images/products/Polvo Decolorante Plex Duvy Class.png",
+    image: "/images/products/Polvo Decolorante Plex Duvy Class.webp",
   },
   {
     id: "agua-oxigenada-alfaparf",
@@ -1184,7 +1184,7 @@ export const PRODUCTS: Product[] = [
     price: 14000,
     category: "capilar",
     description: "Agua oxigenada de 10 volúmenes para tintes.",
-    image: "/images/products/Agua Oxigenada Oxido 10 Alfaparf.png",
+    image: "/images/products/Agua Oxigenada Oxido 10 Alfaparf.webp",
   },
   {
     id: "agua-oxigenada-loreal",
@@ -1192,7 +1192,7 @@ export const PRODUCTS: Product[] = [
     price: 16000,
     category: "capilar",
     description: "Oxidante cremoso 20 volúmenes L'Oréal.",
-    image: "/images/products/Loreal Agua Oxigenada Majicreme 20.png",
+    image: "/images/products/Loreal Agua Oxigenada Majicreme 20.webp",
   },
   {
     id: "oxy-cream-duvy",
@@ -1200,7 +1200,7 @@ export const PRODUCTS: Product[] = [
     price: 14000,
     category: "capilar",
     description: "Crema oxidante 20 volúmenes.",
-    image: "/images/products/Oxy Cream 20 Duvy Class.png",
+    image: "/images/products/Oxy Cream 20 Duvy Class.webp",
   },
   {
     id: "tinte-casting-loreal",
@@ -1208,7 +1208,7 @@ export const PRODUCTS: Product[] = [
     price: 42000,
     category: "capilar",
     description: "Tinte semipermanente sin amoniaco, brillo duradero.",
-    image: "/images/products/Tinte Casting Sin Amoniaco Loreal.png",
+    image: "/images/products/Tinte Casting Sin Amoniaco Loreal.webp",
   },
   {
     id: "tinte-colorwear-alfaparf",
@@ -1216,7 +1216,7 @@ export const PRODUCTS: Product[] = [
     price: 45000,
     category: "capilar",
     description: "Tinte sin amoniaco profesional Alfaparf.",
-    image: "/images/products/Tinte Colorwear Sin Amoniaco Alfaparf.png",
+    image: "/images/products/Tinte Colorwear Sin Amoniaco Alfaparf.webp",
   },
   {
     id: "tinte-garnier",
@@ -1224,7 +1224,7 @@ export const PRODUCTS: Product[] = [
     price: 29000,
     category: "capilar",
     description: "Tinte de alta cobertura con aceites naturales.",
-    image: "/images/products/Tinte Garnier Cor Intensa.png",
+    image: "/images/products/Tinte Garnier Cor Intensa.webp",
   },
   {
     id: "tinte-recamier-green-forest",
@@ -1232,7 +1232,7 @@ export const PRODUCTS: Product[] = [
     price: 32000,
     category: "capilar",
     description: "Tinte vegano con extractos naturales.",
-    image: "/images/products/Tinte Recamier Green Forest Salon In.png",
+    image: "/images/products/Tinte Recamier Green Forest Salon In.webp",
   },
   {
     id: "tinte-recamier-techni-tone",
@@ -1240,7 +1240,7 @@ export const PRODUCTS: Product[] = [
     price: 32000,
     category: "capilar",
     description: "Tinte profesional de larga duración.",
-    image: "/images/products/Tinte Recamier Techni Tone.png",
+    image: "/images/products/Tinte Recamier Techni Tone.webp",
   },
   {
     id: "tinte-deep-roots",
@@ -1248,7 +1248,7 @@ export const PRODUCTS: Product[] = [
     price: 28000,
     category: "capilar",
     description: "Tinte con tratamiento nutritivo integrado.",
-    image: "/images/products/Tinte Tratamiento Deep Roots.png",
+    image: "/images/products/Tinte Tratamiento Deep Roots.webp",
   },
   {
     id: "tinte-vision-color-duvy",
@@ -1256,7 +1256,7 @@ export const PRODUCTS: Product[] = [
     price: 22000,
     category: "capilar",
     description: "Tinte profesional de alta cobertura.",
-    image: "/images/products/Tinte Vision Color Duvy Class.png",
+    image: "/images/products/Tinte Vision Color Duvy Class.webp",
   },
   {
     id: "tinte-vision-touch",
@@ -1264,7 +1264,7 @@ export const PRODUCTS: Product[] = [
     price: 22000,
     category: "capilar",
     description: "Tinte de larga duración con brillo intenso.",
-    image: "/images/products/Tinte Vision Touch Color.png",
+    image: "/images/products/Tinte Vision Touch Color.webp",
   },
   {
     id: "lissia-tinte-biotina",
@@ -1272,7 +1272,7 @@ export const PRODUCTS: Product[] = [
     price: 28000,
     category: "capilar",
     description: "Tinte sin amoniaco con biotina y keratina.",
-    image: "/images/products/Lissia Tinte en Crema Biotina Keratina.png",
+    image: "/images/products/Lissia Tinte en Crema Biotina Keratina.webp",
     imageStyle: { transform: "translateX(-12%)" },
   },
   {
@@ -1281,7 +1281,7 @@ export const PRODUCTS: Product[] = [
     price: 26500,
     category: "capilar",
     description: "Cobertura de canas sin amoníaco ni peróxido.",
-    image: "/images/products/Tratamiento Cubre Canas Fresh Co.png",
+    image: "/images/products/Tratamiento Cubre Canas Fresh Co.webp",
     variants: ["Castaño Oscuro"],
   },
   {
@@ -1290,7 +1290,7 @@ export const PRODUCTS: Product[] = [
     price: 38000,
     category: "capilar",
     description: "Tratamiento vegano intensivo con keratina y colágeno.",
-    image: "/images/products/Recamier Tratamiento Vegano Keratina y Colageno.png",
+    image: "/images/products/Recamier Tratamiento Vegano Keratina y Colageno.webp",
   },
   {
     id: "tratamiento-amino-deep-roots",
@@ -1298,7 +1298,7 @@ export const PRODUCTS: Product[] = [
     price: 28000,
     category: "capilar",
     description: "Tratamiento con aminoácidos y keratina.",
-    image: "/images/products/Tratamiento Amino Keratina Deep Roots.png",
+    image: "/images/products/Tratamiento Amino Keratina Deep Roots.webp",
   },
   {
     id: "tratamiento-bio-repair-deep-roots",
@@ -1306,7 +1306,7 @@ export const PRODUCTS: Product[] = [
     price: 28000,
     category: "capilar",
     description: "Tratamiento reparador biológico.",
-    image: "/images/products/Tratamiento Bio Repair Deep Roots.png",
+    image: "/images/products/Tratamiento Bio Repair Deep Roots.webp",
   },
   {
     id: "tratamiento-bio-reparador-meicys",
@@ -1314,7 +1314,7 @@ export const PRODUCTS: Product[] = [
     price: 30000,
     category: "capilar",
     description: "Tratamiento reparador con aceite de argán.",
-    image: "/images/products/Tratamiento Bio Reparador Argan Meicys.png",
+    image: "/images/products/Tratamiento Bio Reparador Argan Meicys.webp",
   },
   {
     id: "tratamiento-tinturado-deep-roots",
@@ -1322,7 +1322,7 @@ export const PRODUCTS: Product[] = [
     price: 28000,
     category: "capilar",
     description: "Tratamiento especial para cabello teñido.",
-    image: "/images/products/Tratamiento Cabello Tinturado Deep Roots.png",
+    image: "/images/products/Tratamiento Cabello Tinturado Deep Roots.webp",
   },
   {
     id: "tratamiento-base-frutas",
@@ -1330,7 +1330,7 @@ export const PRODUCTS: Product[] = [
     price: 28000,
     category: "capilar",
     description: "Tratamiento nutritivo con base de frutas.",
-    image: "/images/products/Tratamiento Capilar Base de Frutas Deep Roots.png",
+    image: "/images/products/Tratamiento Capilar Base de Frutas Deep Roots.webp",
   },
   {
     id: "tratamiento-color-salon-in",
@@ -1338,7 +1338,7 @@ export const PRODUCTS: Product[] = [
     price: 32000,
     category: "capilar",
     description: "Tratamiento que intensifica y protege el color.",
-    image: "/images/products/Tratamiento Color Intensifier Salon In.png",
+    image: "/images/products/Tratamiento Color Intensifier Salon In.webp",
   },
   {
     id: "tratamiento-color-sachet",
@@ -1346,7 +1346,7 @@ export const PRODUCTS: Product[] = [
     price: 5000,
     category: "capilar",
     description: "Tratamiento sachet para cabello teñido.",
-    image: "/images/products/Tratamiento Color Sachet Deep Roots.png",
+    image: "/images/products/Tratamiento Color Sachet Deep Roots.webp",
   },
   {
     id: "tratamiento-complex-freshco",
@@ -1354,7 +1354,7 @@ export const PRODUCTS: Product[] = [
     price: 22000,
     category: "capilar",
     description: "Tratamiento capilar complejo revitalizante.",
-    image: "/images/products/Tratamiento Complex Fresh Co.png",
+    image: "/images/products/Tratamiento Complex Fresh Co.webp",
   },
   {
     id: "tratamiento-embrion-pato",
@@ -1362,7 +1362,7 @@ export const PRODUCTS: Product[] = [
     price: 28000,
     category: "capilar",
     description: "Tratamiento regenerador con embrión de pato.",
-    image: "/images/products/Tratamiento Embrion de Pato Fresh Co.png",
+    image: "/images/products/Tratamiento Embrion de Pato Fresh Co.webp",
   },
   {
     id: "tratamiento-maracuya-skala",
@@ -1370,7 +1370,7 @@ export const PRODUCTS: Product[] = [
     price: 18000,
     category: "capilar",
     description: "Tratamiento nutritivo con maracuyá.",
-    image: "/images/products/Tratamiento Maracuya Skala.png",
+    image: "/images/products/Tratamiento Maracuya Skala.webp",
   },
   {
     id: "tratamiento-maxybelt-hialuronico",
@@ -1378,7 +1378,7 @@ export const PRODUCTS: Product[] = [
     price: 35000,
     category: "capilar",
     description: "Tratamiento con ácido hialurónico para hidratación extrema.",
-    image: "/images/products/Tratamiento Maxybelt Acido Hialuronico.png",
+    image: "/images/products/Tratamiento Maxybelt Acido Hialuronico.webp",
   },
   {
     id: "tratamiento-maxybelt-aminoacidos",
@@ -1386,7 +1386,7 @@ export const PRODUCTS: Product[] = [
     price: 35000,
     category: "capilar",
     description: "Tratamiento con aminoácidos para reparación estructural.",
-    image: "/images/products/Tratamiento Maxybelt Aminoacidos.png",
+    image: "/images/products/Tratamiento Maxybelt Aminoacidos.webp",
   },
   {
     id: "tratamiento-romero-quina",
@@ -1394,7 +1394,7 @@ export const PRODUCTS: Product[] = [
     price: 22000,
     category: "capilar",
     description: "Tratamiento anticaída con romero y quina.",
-    image: "/images/products/Tratamiento Romero y Quina Fresh Co.png",
+    image: "/images/products/Tratamiento Romero y Quina Fresh Co.webp",
   },
   {
     id: "tratamiento-termoprotector-meicys",
@@ -1402,7 +1402,7 @@ export const PRODUCTS: Product[] = [
     price: 28000,
     category: "capilar",
     description: "Termoprotector que protege hasta 230°C.",
-    image: "/images/products/Meicys Tratamiento Termoprotector.png",
+    image: "/images/products/Meicys Tratamiento Termoprotector.webp",
   },
   {
     id: "mascarilla-caviar-meicys",
@@ -1410,7 +1410,7 @@ export const PRODUCTS: Product[] = [
     price: 35000,
     category: "capilar",
     description: "Mascarilla nutritiva con extracto de caviar.",
-    image: "/images/products/Mascarilla Capilar Caviar Meicys.png",
+    image: "/images/products/Mascarilla Capilar Caviar Meicys.webp",
   },
   {
     id: "laca-fijacion-alfaparf",
@@ -1418,7 +1418,7 @@ export const PRODUCTS: Product[] = [
     price: 48000,
     category: "capilar",
     description: "Laca de fijación fuerte profesional Alfaparf.",
-    image: "/images/products/Laca Fijacion Fuerte Yellow Alfaparf.png",
+    image: "/images/products/Laca Fijacion Fuerte Yellow Alfaparf.webp",
   },
   {
     id: "crema-peinar-mais-lisos",
@@ -1426,7 +1426,7 @@ export const PRODUCTS: Product[] = [
     price: 16000,
     category: "capilar",
     description: "Crema alisadora para cabello con frizz.",
-    image: "/images/products/Crema para Peinar Mais Lisos Skala.png",
+    image: "/images/products/Crema para Peinar Mais Lisos Skala.webp",
   },
   {
     id: "crema-peinar-potato-amor",
@@ -1434,7 +1434,7 @@ export const PRODUCTS: Product[] = [
     price: 16000,
     category: "capilar",
     description: "Crema para peinar con aceite de patata.",
-    image: "/images/products/Crema para Peinar Potao do Amor Skala.png",
+    image: "/images/products/Crema para Peinar Potao do Amor Skala.webp",
   },
   {
     id: "espuma-adapta-foam",
@@ -1442,7 +1442,7 @@ export const PRODUCTS: Product[] = [
     price: 38000,
     category: "capilar",
     description: "Mousse de fijación adaptable para todo tipo de cabello.",
-    image: "/images/products/Espuma Adapta Foam Mousse Salon In.png",
+    image: "/images/products/Espuma Adapta Foam Mousse Salon In.webp",
   },
   {
     id: "encrespador-montoc-amore",
@@ -1450,7 +1450,7 @@ export const PRODUCTS: Product[] = [
     price: 32000,
     category: "capilar",
     description: "Definidor de rizos para cabello ondulado y rizado.",
-    image: "/images/products/Encrespador Montoc Amore Curl.png",
+    image: "/images/products/Encrespador Montoc Amore Curl.webp",
   },
   {
     id: "cpc-12-meicys",
@@ -1458,7 +1458,7 @@ export const PRODUCTS: Product[] = [
     price: 38000,
     category: "capilar",
     description: "Tratamiento anticaída con 12 complejos activos.",
-    image: "/images/products/CPC 12 Reparacion Anticaida Meicys.png",
+    image: "/images/products/CPC 12 Reparacion Anticaida Meicys.webp",
   },
   {
     id: "tonico-anticaida-barber",
@@ -1466,7 +1466,7 @@ export const PRODUCTS: Product[] = [
     price: 20000,
     category: "capilar",
     description: "Tónico anticaída para uso masculino.",
-    image: "/images/products/Tonico Control Caida Barber Duvy Class.png",
+    image: "/images/products/Tonico Control Caida Barber Duvy Class.webp",
   },
   {
     id: "kit-ponto-salvavidas",
@@ -1474,7 +1474,7 @@ export const PRODUCTS: Product[] = [
     price: 22000,
     category: "capilar",
     description: "Kit de recuperación intensiva para cabello muy dañado.",
-    image: "/images/products/Kit Ponto Salvavidas.png",
+    image: "/images/products/Kit Ponto Salvavidas.webp",
   },
   {
     id: "cepillo-montoc-luna-pink",
@@ -1482,7 +1482,7 @@ export const PRODUCTS: Product[] = [
     price: 19000,
     category: "capilar",
     description: "Cepillo desenredante de alta calidad.",
-    image: "/images/products/Cepillo Cabello Montoc Luna Pink.png",
+    image: "/images/products/Cepillo Cabello Montoc Luna Pink.webp",
     variants: ["Coral", "Rosa pastel"],
   },
   {
@@ -1491,7 +1491,7 @@ export const PRODUCTS: Product[] = [
     price: 25000,
     category: "capilar",
     description: "Extensiones de cabello sintético premium.",
-    image: "/images/products/Kanekalon Queen.png",
+    image: "/images/products/Kanekalon Queen.webp",
   },
   {
     id: "kanekalon-soft-jumbo",
@@ -1499,7 +1499,7 @@ export const PRODUCTS: Product[] = [
     price: 28000,
     category: "capilar",
     description: "Extensiones jumbo de fibra suave.",
-    image: "/images/products/Kanekalon Soft Jumbo Bijoux.png",
+    image: "/images/products/Kanekalon Soft Jumbo Bijoux.webp",
   },
   {
     id: "ganchos-cabello-enkor",
@@ -1507,7 +1507,7 @@ export const PRODUCTS: Product[] = [
     price: 5000,
     category: "capilar",
     description: "Ganchos para cabello de alta durabilidad.",
-    image: "/images/products/Ganchos para Cabello Enkor.png",
+    image: "/images/products/Ganchos para Cabello Enkor.webp",
   },
   {
     id: "ligas-cabello-enkor",
@@ -1515,7 +1515,7 @@ export const PRODUCTS: Product[] = [
     price: 4000,
     category: "capilar",
     description: "Ligas elásticas para cabello sin daño.",
-    image: "/images/products/Ligas para Cabello Enkor.png",
+    image: "/images/products/Ligas para Cabello Enkor.webp",
   },
   {
     id: "rulos-esponja-enkor",
@@ -1523,7 +1523,7 @@ export const PRODUCTS: Product[] = [
     price: 12000,
     category: "capilar",
     description: "Rulos de esponja para rizos suaves sin calor.",
-    image: "/images/products/Rulos Esponja Enkor.png",
+    image: "/images/products/Rulos Esponja Enkor.webp",
   },
   {
     id: "rulos-tapa-enkor",
@@ -1531,7 +1531,7 @@ export const PRODUCTS: Product[] = [
     price: 15000,
     category: "capilar",
     description: "Rulos con tapa para mayor fijación del rizo.",
-    image: "/images/products/Rulos con Tapa Enkor.png",
+    image: "/images/products/Rulos con Tapa Enkor.webp",
   },
   {
     id: "color-1-sachet",
@@ -1539,7 +1539,7 @@ export const PRODUCTS: Product[] = [
     price: 3500,
     category: "capilar",
     description: "Tinte en sachet para aplicación rápida.",
-    image: "/images/products/Color 1 Sachet.png",
+    image: "/images/products/Color 1 Sachet.webp",
   },
 ]
 
