@@ -5,6 +5,7 @@ import { useRef, useState } from "react"
 import { motion, useScroll, useTransform, useSpring, AnimatePresence } from "framer-motion"
 import { MapPin, Clock, Phone, Instagram, MessageCircle, Navigation } from "lucide-react"
 import { Button } from "@/components/ui/button"
+import { useIsMobile } from "@/hooks/use-is-mobile"
 import { WA_VISIT } from "@/lib/whatsapp"
 
 const Map = dynamic(
@@ -42,6 +43,7 @@ export function Location() {
   const sectionRef = useRef<HTMLElement>(null)
   const mapRef = useRef<HTMLDivElement>(null)
   const [hoveredCard, setHoveredCard] = useState<number | null>(null)
+  const isMobile = useIsMobile()
 
   const { scrollYProgress } = useScroll({
     target: sectionRef,
@@ -95,7 +97,7 @@ export function Location() {
           style={{
             background: "radial-gradient(circle, oklch(0.84 0.065 15 / 0.18) 0%, transparent 70%)",
           }}
-          animate={{ scale: [1, 1.12, 1], opacity: [0.6, 1, 0.6] }}
+          animate={isMobile ? undefined : { scale: [1, 1.12, 1], opacity: [0.6, 1, 0.6] }}
           transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
         />
         {/* Orbe de glow dorado */}
@@ -104,7 +106,7 @@ export function Location() {
           style={{
             background: "radial-gradient(circle, oklch(0.75 0.135 85 / 0.12) 0%, transparent 70%)",
           }}
-          animate={{ scale: [1, 1.18, 1], opacity: [0.5, 0.9, 0.5] }}
+          animate={isMobile ? undefined : { scale: [1, 1.18, 1], opacity: [0.5, 0.9, 0.5] }}
           transition={{ duration: 8, repeat: Infinity, ease: "easeInOut", delay: 2 }}
         />
       </motion.div>

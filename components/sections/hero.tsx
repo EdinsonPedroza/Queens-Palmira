@@ -6,6 +6,7 @@ import { m, useTransform, useMotionValue, useSpring } from "framer-motion"
 import { ChevronDown, MessageCircle, ShoppingBag } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { FloatingSparkles } from "@/components/floating-sparkles"
+import { useIsMobile } from "@/hooks/use-is-mobile"
 import { WA_VISIT } from "@/lib/whatsapp"
 
 /* ── Magnetic wrapper — pulls toward the cursor, springs back on leave ── */
@@ -36,6 +37,7 @@ function Magnetic({ children, className }: { children: React.ReactNode; classNam
 export function Hero() {
   const ref       = useRef<HTMLElement>(null)
   const rightRef  = useRef<HTMLDivElement>(null)
+  const isMobile  = useIsMobile()
 
   /* ── Mouse parallax en imagen ── */
   const mx = useMotionValue(0)
@@ -146,21 +148,21 @@ export function Hero() {
 
       {/* ════ MOBILE ════ */}
       <div className="md:hidden relative flex flex-col min-h-[100svh] overflow-hidden">
-        {/* Glow + stardust de fondo */}
-        <m.div
+        {/* Glow de fondo — estático, sin animación ni partículas (costaba frames en mobile) */}
+        <div
           className="pointer-events-none absolute top-[30%] right-[-10%] h-72 w-72 rounded-full blur-3xl"
           style={{ background: "oklch(0.92 0.025 15 / 10%)" }}
-          animate={{ scale: [1, 1.25, 1], y: [0, -16, 0] }}
-          transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
           aria-hidden
         />
-        <FloatingSparkles count={12} />
         <div className="relative z-10 pt-24 pb-8 px-6 flex items-center flex-1">
           {textBlock}
         </div>
       </div>
 
       {/* ════ DESKTOP ════ */}
+      {/* Unmounted on mobile instead of just `hidden`: it was staying mounted and
+          animating (orbs, sparkles, springs) off-screen, burning frames on phones. */}
+      {!isMobile && (
       <div className="hidden md:flex min-h-[100svh] overflow-hidden">
 
         {/* Left — texto */}
@@ -282,6 +284,7 @@ export function Hero() {
           </m.div>
         </m.a>
       </div>
+      )}
     </section>
   )
 }
