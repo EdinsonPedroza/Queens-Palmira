@@ -4,6 +4,7 @@ import { useRef } from "react"
 import { m, useInView, useMotionValue, useSpring, useTransform } from "framer-motion"
 import { MessageCircle, Sparkles } from "lucide-react"
 import { Button } from "@/components/ui/button"
+import { useIsMobile } from "@/hooks/use-is-mobile"
 import { WA_ADVICE } from "@/lib/whatsapp"
 
 const WORDS = ["¿Lista", "para", "encontrar", "tu", "próximo", "favorito?"]
@@ -33,6 +34,7 @@ function MagneticButton({ children, className, href }: { children: React.ReactNo
 export function CTA() {
   const ref = useRef<HTMLElement>(null)
   const inView = useInView(ref, { once: true, margin: "-80px" })
+  const isMobile = useIsMobile()
 
   return (
     <section ref={ref} className="relative py-20 md:py-28 overflow-hidden">
@@ -49,7 +51,7 @@ export function CTA() {
           key={i}
           className="pointer-events-none absolute rounded-full blur-3xl"
           style={{ width: orb.size, height: orb.size, left: orb.x, top: orb.y, background: orb.color }}
-          animate={{ x: [0, 30, -20, 0], y: [0, -20, 30, 0], scale: [1, 1.1, 0.95, 1] }}
+          animate={isMobile ? undefined : { x: [0, 30, -20, 0], y: [0, -20, 30, 0], scale: [1, 1.1, 0.95, 1] }}
           transition={{ duration: orb.dur, repeat: Infinity, ease: "easeInOut", delay: i * 1.5 }}
         />
       ))}

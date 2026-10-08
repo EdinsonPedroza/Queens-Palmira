@@ -49,7 +49,7 @@ export function Testimonials() {
   const secondHalf = REVIEWS.slice(4)
 
   return (
-    <section className="relative py-20 md:py-28 bg-white overflow-hidden">
+    <section id="testimonios" className="relative scroll-mt-20 py-20 md:py-28 bg-white overflow-hidden">
       <div className="mx-auto max-w-7xl px-6 md:px-10 mb-12">
         <div className="text-center">
           <span className="inline-block text-xs font-semibold tracking-[0.3em] uppercase text-[var(--gold-deep)] mb-3">

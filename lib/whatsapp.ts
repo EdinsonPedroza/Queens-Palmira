@@ -25,6 +25,18 @@ export const WA_ADVICE = waLink(
   "Hola Queens! Me gustaría una asesoría personalizada de productos.",
 )
 
+export const WA_SPA = waLink(
+  "Hola Queens Spa! Quiero reservar una cita, ¿qué horarios tienen disponibles?",
+)
+
+export const WA_SPA_INFO = waLink(
+  "Hola Queens Spa! Me gustaría información sobre sus rituales y precios.",
+)
+
+export function spaBookingLink(service: string): string {
+  return waLink(`Hola Queens Spa! Quiero reservar: ${service}. ¿Qué horarios tienen disponibles?`)
+}
+
 export function buildOrderMessage(items: CartLineItem[]): string {
   if (items.length === 0) {
     return "Hola Queens! Quiero información sobre sus productos."

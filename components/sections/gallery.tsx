@@ -3,6 +3,7 @@
 import { useRef } from "react"
 import Image from "next/image"
 import { m, useInView } from "framer-motion"
+import { useIsMobile } from "@/hooks/use-is-mobile"
 
 const IMAGES = [
   { src: "https://images.unsplash.com/photo-1596462502278-27bfdc403348?w=900&q=85&auto=format&fit=crop", alt: "Colección de cosméticos premium", span: "md:col-span-2 md:row-span-2", caption: "Nuestra colección signature" },
@@ -23,6 +24,7 @@ const DIRS = [
 export function Gallery() {
   const ref = useRef<HTMLElement>(null)
   const inView = useInView(ref, { once: true, margin: "-80px" })
+  const isMobile = useIsMobile()
 
   return (
     <section
@@ -34,7 +36,7 @@ export function Gallery() {
       <m.div
         className="pointer-events-none absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 h-[600px] w-[600px] rounded-full blur-[120px]"
         style={{ background: "oklch(0.84 0.065 15 / 15%)" }}
-        animate={{ scale: [1, 1.2, 1] }}
+        animate={isMobile ? undefined : { scale: [1, 1.2, 1] }}
         transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
       />
 

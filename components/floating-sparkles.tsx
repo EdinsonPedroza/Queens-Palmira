@@ -8,13 +8,15 @@ interface FloatingSparklesProps {
   count?: number
   /** Extra classes for the absolute-positioned container. */
   className?: string
+  /** "mixed" alternates rose and gold dust; "gold" is gold only (noir/spa surfaces). */
+  tone?: "mixed" | "gold"
 }
 
 /**
  * Rose/gold stardust drifting upward — CSS-animated (`.sparkle`) so it costs
  * nothing on the JS thread. Drop inside any `position: relative` section.
  */
-export function FloatingSparkles({ count = 22, className = "" }: FloatingSparklesProps) {
+export function FloatingSparkles({ count = 22, className = "", tone = "mixed" }: FloatingSparklesProps) {
   // Seeded, not Math.random(): the Hero renders on the server, so random values
   // generated during render would differ on the client and break hydration.
   const particles = useMemo(
@@ -29,10 +31,10 @@ export function FloatingSparkles({ count = 22, className = "" }: FloatingSparkle
           delay: `${seededRandom(s + 3) * 8}s`,
           drift: `${(seededRandom(s + 4) - 0.5) * 90}px`,
           opacity: seededRandom(s + 5) * 0.5 + 0.3,
-          rose: i % 3 === 0,
+          rose: tone === "mixed" && i % 3 === 0,
         }
       }),
-    [count]
+    [count, tone]
   )
 
   return (

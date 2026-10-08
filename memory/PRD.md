@@ -1,16 +1,27 @@
-# QUEENS COSMETICS — Landing Page PRD
+# QUEENS — Landing Page PRD
 
 ## Problema Original
-Crear una landing page premium y femenina para **Queens Cosmetics**, tienda de cosméticos ubicada en Unicentro Palmira. Objetivo: convertir visitantes en pedidos por WhatsApp mediante un catálogo atractivo con carrito funcional (estilo Salchimax).
+Crear un sitio premium y femenino para **Queens**, marca con dos personalidades en Palmira: la tienda de cosméticos y el spa. Objetivo: convertir visitantes en pedidos (carrito → WhatsApp) para la tienda y en reservas (WhatsApp directo) para el spa.
+
+> **Actualización tras reunión con la marca:** el sitio dejó de ser una sola landing. Ahora `/` es un portal de dos puertas y cada personalidad tiene su propia página (`/cosmetics`, `/spa`). **No comparten local**, son dos sedes.
 
 ## Información del Negocio
-- **Nombre:** Queens Cosmetics
-- **Instagram:** [@queenscosmeticss](https://www.instagram.com/queenscosmeticss/)
-- **WhatsApp:** +57 314 867 7230
+- **Nombre:** Queens — Queens Cosmetics (tienda) + Queens Spa
+- **Instagram:** [@queenscosmeticss](https://www.instagram.com/queenscosmeticss/) (compartido)
+- **WhatsApp:** +57 314 867 7230 (compartido)
 - **URL WhatsApp:** `https://wa.me/573148677230?text=Hola%20Queens,%20quiero%20hacer%20un%20pedido`
-- **Ubicación:** Local 128, Unicentro Palmira, Valle del Cauca, Colombia
-- **Horario:** Lunes a Domingo, 10:00 AM – 8:00 PM
 - **Público objetivo:** Mujeres 18–45 años, interesadas en belleza y autocuidado premium
+
+### Sedes
+| | Queens Cosmetics | Queens Spa |
+|---|---|---|
+| **Dirección** | Local 128, Unicentro Palmira | Cra 25 #11-23 |
+| **Ciudad** | Palmira, Valle del Cauca | Palmira, Valle del Cauca |
+| **Horario** | Lun a Dom, 10:00 AM – 8:00 PM | Lun a Dom, con cita previa |
+| **Atención** | Sin cita | Solo con cita |
+| **Coordenadas** | `3.5400896, -76.310776` | `3.509948, -76.2984773` ⚠️ sin confirmar |
+
+⚠️ El pin del spa lo geocodifiqué del cruce Cra 25 × Calle 11 (OpenStreetMap), no es la puerta exacta. Pedir a la clienta el link de Google Maps de la sede y reemplazar `VENUES.spa` en `lib/site.ts`.
 
 ## Brand Identity
 

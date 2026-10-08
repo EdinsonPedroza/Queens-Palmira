@@ -1,11 +1,14 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import { m, AnimatePresence } from "framer-motion"
 import Image from "next/image"
 import { seededRandom } from "@/lib/utils"
 
 const LETTERS = "QUEENS".split("")
+
+/** Fired when the intro starts opening, so the hero can time its entrance to the reveal. */
+export const INTRO_EXIT_EVENT = "queens:intro-exit"
 
 /* ── Expanding ring ── */
 function Ring({ delay, scaleTo, color, opacity }: { delay: number; scaleTo: number; color: string; opacity: number }) {
@@ -49,6 +52,17 @@ function Spark({ angle, delay, dist, size, color }: { angle: number; delay: numb
 export function IntroScreen() {
   const [visible, setVisible] = useState(false)
   const [exiting, setExiting] = useState(false)
+  const unlockedRef = useRef(false)
+
+  // Unlocks scroll exactly once, from whichever path gets there first —
+  // the normal exit-animation callback, or the safety-net fallback below.
+  const unlock = () => {
+    if (unlockedRef.current) return
+    unlockedRef.current = true
+    document.body.style.overflow = ""
+    sessionStorage.setItem("queens-intro-seen", "1")
+    setVisible(false)
+  }
 
   useEffect(() => {
     if (sessionStorage.getItem("queens-intro-seen")) return
@@ -57,15 +71,25 @@ export function IntroScreen() {
     // eslint-disable-next-line react-hooks/set-state-in-effect
     setVisible(true)
     document.body.style.overflow = "hidden"
-    const t = setTimeout(() => setExiting(true), 2400)
-    return () => clearTimeout(t)
+    const t = setTimeout(() => {
+      setExiting(true)
+      window.dispatchEvent(new Event(INTRO_EXIT_EVENT))
+    }, 2400)
+    // Safety net: if AnimatePresence's onExitComplete never fires (observed
+    // under React Strict Mode's double-effect dev remount), the page would
+    // stay scroll-locked forever. Force the unlock a beat after the exit
+    // animation should have finished either way.
+    const safety = setTimeout(unlock, 3600)
+    return () => {
+      clearTimeout(t)
+      clearTimeout(safety)
+      // Covers the Strict Mode dev remount: undo this pass's lock so the
+      // next mount starts clean instead of stacking on top of it.
+      document.body.style.overflow = ""
+    }
   }, [])
 
-  const handleExitComplete = () => {
-    document.body.style.overflow = ""
-    sessionStorage.setItem("queens-intro-seen", "1")
-    setVisible(false)
-  }
+  const handleExitComplete = unlock
 
   if (!visible) return null
 
@@ -87,13 +111,15 @@ export function IntroScreen() {
     })),
   ]
 
-  const curtainTop = {
-    initial: { y: 0 },
-    exit: { y: "-100%", transition: { duration: 0.65, ease: [0.76, 0, 0.24, 1] as const } },
+  // Split down the middle like the hero underneath: Lado A (cosmetics, rose) on
+  // the left, Lado B (spa, noir) on the right — the curtains part sideways.
+  const curtainLeft = {
+    initial: { x: 0 },
+    exit: { x: "-100%", transition: { duration: 0.75, ease: [0.76, 0, 0.24, 1] as const } },
   }
-  const curtainBottom = {
-    initial: { y: 0 },
-    exit: { y: "100%", transition: { duration: 0.65, ease: [0.76, 0, 0.24, 1] as const } },
+  const curtainRight = {
+    initial: { x: 0 },
+    exit: { x: "100%", transition: { duration: 0.75, ease: [0.76, 0, 0.24, 1] as const } },
   }
 
   return (
@@ -102,19 +128,19 @@ export function IntroScreen() {
         <>
           {/* Curtains split open on exit */}
           <m.div
-            key="curtain-top"
-            variants={curtainTop}
+            key="curtain-left"
+            variants={curtainLeft}
             initial="initial"
             exit="exit"
-            className="fixed inset-x-0 top-0 h-1/2 z-[98] pointer-events-none bg-queens-gradient"
+            className="fixed inset-y-0 left-0 w-1/2 z-[98] pointer-events-none bg-queens-gradient"
             style={{ willChange: "transform" }}
           />
           <m.div
-            key="curtain-bottom"
-            variants={curtainBottom}
+            key="curtain-right"
+            variants={curtainRight}
             initial="initial"
             exit="exit"
-            className="fixed inset-x-0 bottom-0 h-1/2 z-[98] pointer-events-none bg-queens-gradient"
+            className="fixed inset-y-0 right-0 w-1/2 z-[98] pointer-events-none bg-noir"
             style={{ willChange: "transform" }}
           />
 
@@ -122,7 +148,7 @@ export function IntroScreen() {
             key="intro-content"
             initial={{ opacity: 1 }}
             exit={{ opacity: 0, transition: { duration: 0.18 } }}
-            className="fixed inset-0 z-[99] flex flex-col items-center justify-center overflow-hidden bg-queens-gradient"
+            className="fixed inset-0 z-[99] flex flex-col items-center justify-center overflow-hidden"
           >
             {/* Ambient radial glow */}
             <m.div
@@ -134,6 +160,15 @@ export function IntroScreen() {
                 background:
                   "radial-gradient(ellipse 55% 50% at 50% 48%, rgba(255,255,255,0.7) 0%, rgba(255,244,214,0.3) 38%, transparent 70%)",
               }}
+            />
+
+            {/* Center seam between the two personalities */}
+            <m.div
+              className="absolute inset-y-0 left-1/2 w-px -translate-x-1/2 origin-center pointer-events-none"
+              style={{ background: "linear-gradient(to bottom, transparent, #D4AF37 30%, #D4AF37 70%, transparent)" }}
+              initial={{ scaleY: 0, opacity: 0 }}
+              animate={{ scaleY: 1, opacity: 0.7 }}
+              transition={{ duration: 0.9, delay: 0.05, ease: [0.16, 1, 0.3, 1] }}
             />
 
             {/* Logo + bursts */}
@@ -201,14 +236,15 @@ export function IntroScreen() {
               style={{ width: "min(440px, 84vw)", willChange: "transform" }}
             />
 
-            {/* Tagline */}
+            {/* Tagline — each word sits on its own side of the seam */}
             <m.p
-              className="font-display uppercase tracking-[0.45em] text-ink/55 text-[10px] md:text-xs mt-4 pl-[0.45em]"
+              className="grid w-full grid-cols-2 font-display uppercase tracking-[0.45em] text-[10px] md:text-xs mt-4"
               initial={{ opacity: 0, y: 6 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 1.15 }}
             >
-              La belleza que mereces
+              <span className="pr-5 text-right text-ink/60">Cosmetics</span>
+              <span className="pl-5 text-left text-[var(--gold-soft)]">Spa</span>
             </m.p>
 
             {/* Loading bar */}

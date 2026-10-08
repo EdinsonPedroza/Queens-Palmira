@@ -5,6 +5,7 @@ import Link from "next/link"
 import { Instagram, MessageCircle, MapPin } from "lucide-react"
 import { QueensLogo } from "@/components/queens-logo"
 import { WA_DEFAULT } from "@/lib/whatsapp"
+import { BUSINESS, VENUES, faceLinkProps, type Face } from "@/lib/site"
 
 const colVariants = {
   hidden: { opacity: 0, y: 32 },
@@ -22,8 +23,80 @@ const letterVariants = {
   }),
 }
 
-export function Footer() {
+interface FooterLink {
+  label: string
+  href: string
+}
+
+/* Two link columns per face. In-page hashes stay on the current page; anything
+ * starting with "/" crosses over to the other personality. */
+const COLUMNS: Record<Exclude<Face, "about">, [{ title: string; links: FooterLink[] }, { title: string; links: FooterLink[] }]> = {
+  portal: [
+    {
+      title: "Cosmetics",
+      links: [
+        { label: "Catálogo",       href: "/cosmetics#catalogo" },
+        { label: "Cat. Virtual",   href: "/cosmetics#catalogo-digital" },
+        { label: "Por qué Queens", href: "/cosmetics#por-que" },
+        { label: "Galería",        href: "/cosmetics#galeria" },
+      ],
+    },
+    {
+      title: "Spa",
+      links: [
+        { label: "Rituales",     href: "/spa#rituales" },
+        { label: "Galería",      href: "/spa#galeria-spa" },
+        { label: "Experiencias", href: "/spa#testimonios-spa" },
+        { label: "Preguntas",    href: "/spa#faq-spa" },
+      ],
+    },
+  ],
+  cosmetics: [
+    {
+      title: "Tienda",
+      links: [
+        { label: "Catálogo",     href: "#catalogo" },
+        { label: "Cat. Virtual", href: "#catalogo-digital" },
+        { label: "Galería",      href: "#galeria" },
+        { label: "Preguntas",    href: "#faq" },
+      ],
+    },
+    {
+      title: "Queens",
+      links: [
+        { label: "Queens Spa",     href: "/spa" },
+        { label: "Por qué Queens", href: "#por-que" },
+        { label: "Ubicación",      href: "#ubicacion" },
+        { label: "Inicio",         href: "/" },
+      ],
+    },
+  ],
+  spa: [
+    {
+      title: "Spa",
+      links: [
+        { label: "Rituales",     href: "#rituales" },
+        { label: "Galería",      href: "#galeria-spa" },
+        { label: "Experiencias", href: "#testimonios-spa" },
+        { label: "Preguntas",    href: "#faq-spa" },
+      ],
+    },
+    {
+      title: "Queens",
+      links: [
+        { label: "Queens Cosmetics", href: "/cosmetics" },
+        { label: "Catálogo",         href: "/cosmetics#catalogo" },
+        { label: "Ubicación",        href: "#ubicacion" },
+        { label: "Inicio",           href: "/" },
+      ],
+    },
+  ],
+}
+
+export function Footer({ face = "portal" }: { face?: Face }) {
   const year = new Date().getFullYear()
+  // "Quiénes somos" is a portal-level page, so it shares the portal's columns
+  const [colA, colB] = COLUMNS[face === "about" ? "portal" : face]
 
   return (
     <footer className="relative bg-[var(--ink)] text-white overflow-hidden">
@@ -47,50 +120,43 @@ export function Footer() {
                 <>
                   <QueensLogo variant="white" />
                   <p className="mt-5 text-sm text-white/70 leading-relaxed max-w-xs">
-                    Cosmética premium en Palmira. La belleza que mereces, con la
-                    calidad que te cuidas.
+                    Cosmética premium y spa en Palmira. Dos personalidades, una
+                    sola reina: tú.
                   </p>
                   <div className="mt-6 flex gap-3">
-                    <SocialLink href="https://www.instagram.com/queenscosmeticss/" icon={<Instagram className="h-5 w-5" />} label="Instagram" />
+                    <SocialLink href={BUSINESS.instagramUrl} icon={<Instagram className="h-5 w-5" />} label="Instagram" />
                     <SocialLink href={WA_DEFAULT} icon={<MessageCircle className="h-5 w-5" />} label="WhatsApp" />
                   </div>
                 </>
               )}
-              {i === 1 && (
-                <FooterCol title="Tienda" links={[
-                  { label: "Catálogo",    href: "#catalogo" },
-                  { label: "Labiales",    href: "#catalogo" },
-                  { label: "Skincare",    href: "#catalogo" },
-                  { label: "Fragancias",  href: "#catalogo" },
-                  { label: "Accesorios",  href: "#catalogo" },
-                ]} />
-              )}
-              {i === 2 && (
-                <FooterCol title="Queens" links={[
-                  { label: "Por qué Queens", href: "#por-que" },
-                  { label: "Galería",        href: "#galeria" },
-                  { label: "Testimonios",    href: "#por-que" },
-                  { label: "Ubicación",      href: "#ubicacion" },
-                ]} />
-              )}
+              {i === 1 && <FooterCol title={colA.title} links={colA.links} />}
+              {i === 2 && <FooterCol title={colB.title} links={colB.links} />}
               {i === 3 && (
                 <div>
                   <h4 className="font-display font-semibold text-[var(--gold)] mb-4 tracking-wide">Contacto</h4>
                   <ul className="space-y-3 text-sm text-white/80">
-                    <li className="flex items-start gap-2">
-                      <MapPin className="h-4 w-4 shrink-0 mt-0.5 text-[var(--gold)]" />
-                      <span>Local 128, Unicentro Palmira</span>
-                    </li>
+                    {/* Two venues — spell both out so nobody shows up at the wrong one */}
+                    {[VENUES.cosmetics, VENUES.spa].map((v) => (
+                      <li key={v.href} className="flex items-start gap-2">
+                        <MapPin className="h-4 w-4 shrink-0 mt-0.5 text-[var(--gold)]" />
+                        <span>
+                          <span className="block text-xs font-semibold uppercase tracking-wider text-white/50">
+                            {v.name.replace("Queens ", "")}
+                          </span>
+                          {v.address}
+                        </span>
+                      </li>
+                    ))}
                     <li className="flex items-start gap-2">
                       <MessageCircle className="h-4 w-4 shrink-0 mt-0.5 text-[var(--gold)]" />
                       <a href={WA_DEFAULT} target="_blank" rel="noopener noreferrer" className="hover:text-[var(--gold)] transition">
-                        +57 314 867 7230
+                        {BUSINESS.phoneDisplay}
                       </a>
                     </li>
                     <li className="flex items-start gap-2">
                       <Instagram className="h-4 w-4 shrink-0 mt-0.5 text-[var(--gold)]" />
-                      <a href="https://www.instagram.com/queenscosmeticss/" target="_blank" rel="noopener noreferrer" className="hover:text-[var(--gold)] transition">
-                        @queenscosmeticss
+                      <a href={BUSINESS.instagramUrl} target="_blank" rel="noopener noreferrer" className="hover:text-[var(--gold)] transition">
+                        {BUSINESS.instagram}
                       </a>
                     </li>
                   </ul>
@@ -171,6 +237,9 @@ export function Footer() {
         >
           <p>© {year} Queens Cosmetics. Todos los derechos reservados.</p>
           <nav className="flex items-center gap-4">
+            <Link href="/quienes-somos" className="hover:text-[var(--gold)] transition-colors">
+              Quiénes somos
+            </Link>
             <Link href="/terminos" className="hover:text-[var(--gold)] transition-colors">
               Términos y Condiciones
             </Link>
@@ -202,7 +271,7 @@ function SocialLink({ href, icon, label }: { href: string; icon: React.ReactNode
   )
 }
 
-function FooterCol({ title, links }: { title: string; links: { label: string; href: string }[] }) {
+function FooterCol({ title, links }: { title: string; links: FooterLink[] }) {
   return (
     <div>
       <h4 className="font-display font-semibold text-[var(--gold)] mb-4 tracking-wide">{title}</h4>
@@ -215,9 +284,15 @@ function FooterCol({ title, links }: { title: string; links: { label: string; hr
             viewport={{ once: true }}
             transition={{ delay: i * 0.06, duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
           >
-            <a href={l.href} className="text-white/70 hover:text-[var(--gold)] transition">
-              {l.label}
-            </a>
+            {l.href.startsWith("/") ? (
+              <Link href={l.href} {...faceLinkProps(l.href)} className="text-white/70 hover:text-[var(--gold)] transition">
+                {l.label}
+              </Link>
+            ) : (
+              <a href={l.href} className="text-white/70 hover:text-[var(--gold)] transition">
+                {l.label}
+              </a>
+            )}
           </m.li>
         ))}
       </ul>
