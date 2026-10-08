@@ -45,6 +45,10 @@
   --gold-soft: oklch(0.85 0.090 85);
   --gold-deep: oklch(0.60 0.130 75);
   --ink: oklch(0.18 0.025 40);                    /* #2C1810 */
+
+  /* Queens Spa — the "dark side" personality */
+  --noir: oklch(0.13 0.008 40);                   /* warm black */
+  --noir-soft: oklch(0.19 0.010 40);
 }
 
 .dark {
@@ -100,6 +104,8 @@
   --color-gold-soft: oklch(0.85 0.090 85);
   --color-gold-deep: oklch(0.60 0.130 75);
   --color-ink: oklch(0.18 0.025 40);
+  --color-noir: oklch(0.13 0.008 40);
+  --color-noir-soft: oklch(0.19 0.010 40);
 
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
@@ -437,10 +443,36 @@ body {
   mix-blend-mode: screen;
 }
 
+/* ════════════════════════════════════════════════════════════
+   DUAL PERSONALITY — Cosmetics (Lado A) · Spa (Lado B)
+   ════════════════════════════════════════════════════════════ */
+
+/* Slow rotation for the text ring around the hero emblem */
+@keyframes spin-slow {
+  to { transform: rotate(360deg); }
+}
+.animate-spin-slow { animation: spin-slow 38s linear infinite; }
+
+/* Hollow gold display type for the spa side */
+.text-outline-gold {
+  color: transparent;
+  -webkit-text-stroke: 1.5px oklch(0.75 0.135 85 / 0.32);
+}
+
+/* Film grain — gives the noir side a tactile, editorial texture */
+.bg-grain {
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%' height='100%' filter='url(%23n)' opacity='0.55'/></svg>");
+  background-size: 160px 160px;
+}
+
 /* ── Respeto a prefers-reduced-motion ── */
 @media (prefers-reduced-motion: reduce) {
   .sparkle,
   .animate-twinkle,
+  .animate-spin-slow,
+  .animate-float,
+  .animate-marquee,
+  .animate-marquee-reverse,
   .text-sheen,
   .section-divider,
   .btn-gold-liquid::before {

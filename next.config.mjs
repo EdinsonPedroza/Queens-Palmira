@@ -1,9 +1,11 @@
 /** @type {import('next').NextConfig} */
 import path from "path"
 
+const isDevelopment = process.env.NODE_ENV !== "production"
+
 const ContentSecurityPolicy = `
   default-src 'self';
-  script-src 'self' 'unsafe-inline' https://va.vercel-scripts.com https://www.googletagmanager.com;
+  script-src 'self' 'unsafe-inline' ${isDevelopment ? "'unsafe-eval'" : ""} https://va.vercel-scripts.com https://www.googletagmanager.com;
   style-src 'self' 'unsafe-inline';
   img-src 'self' data: blob: https://images.unsplash.com https://plus.unsplash.com https://*.tile.openstreetmap.org https://www.googletagmanager.com https://www.google-analytics.com;
   font-src 'self';
@@ -12,7 +14,7 @@ const ContentSecurityPolicy = `
   object-src 'none';
   base-uri 'self';
   form-action 'self';
-  upgrade-insecure-requests;
+  ${isDevelopment ? "" : "upgrade-insecure-requests;"}
 `.replace(/\n/g, " ").trim();
 
 const securityHeaders = [

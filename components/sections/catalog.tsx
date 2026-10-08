@@ -93,11 +93,11 @@ export function Catalog() {
         </div>
 
         {/* ── Sticky wrapper ── */}
-        <div className="sticky top-[72px] z-30 -mx-6 md:-mx-10 px-6 md:px-10 pb-4 pt-3 bg-white/80 backdrop-blur-xl border-b border-(--rose-pastel)/30">
+        <div className="sticky top-[72px] z-30 -mx-6 md:-mx-10 px-6 md:px-10 pb-4 pt-3 bg-white/95 md:bg-white/80 md:backdrop-blur-xl border-b border-(--rose-pastel)/30">
 
           {/* Category tabs */}
           <div className="flex justify-center mb-3">
-            <div className="flex flex-wrap justify-center gap-1.5 rounded-2xl bg-(--rose-pastel)/25 p-1.5 backdrop-blur-sm border border-white/60 shadow-inner">
+            <div className="flex flex-wrap justify-center gap-1.5 rounded-2xl bg-(--rose-pastel)/25 p-1.5 md:backdrop-blur-sm border border-white/60 shadow-inner">
               {CATEGORIES.map((cat) => {
                 const isActive = active === cat.id
                 return (
@@ -284,7 +284,7 @@ export function Catalog() {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -10 }}
               transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
-              className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-5"
+              className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-2.5 md:gap-3"
             >
               {visible.map((p, i) => (
                 <m.div

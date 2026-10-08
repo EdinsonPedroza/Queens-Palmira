@@ -34,7 +34,7 @@ const FAQS = [
 
 export function FAQ() {
   return (
-    <section className="relative py-20 md:py-28 bg-gradient-to-b from-white to-[var(--rose-pastel)]/15">
+    <section id="faq" className="relative scroll-mt-20 py-20 md:py-28 bg-gradient-to-b from-white to-[var(--rose-pastel)]/15">
       <div className="mx-auto max-w-3xl px-6 md:px-10">
         <div className="text-center mb-12">
           <span className="inline-block text-xs font-semibold tracking-[0.3em] uppercase text-[var(--gold-deep)] mb-3">

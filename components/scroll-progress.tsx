@@ -1,18 +1,29 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { useEffect, useRef } from "react"
 
 export function ScrollProgress() {
-  const [progress, setProgress] = useState(0)
+  // Writes the bar directly via ref instead of React state: a scroll handler
+  // can fire dozens of times per second, and routing that through setState +
+  // re-render on every tick is what was causing the scroll jank on mobile.
+  const barRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
-    const onScroll = () => {
+    let ticking = false
+    const update = () => {
+      ticking = false
       const h = document.documentElement
       const scrolled = h.scrollTop
       const max = h.scrollHeight - h.clientHeight
-      setProgress(max > 0 ? (scrolled / max) * 100 : 0)
+      const progress = max > 0 ? scrolled / max : 0
+      if (barRef.current) barRef.current.style.transform = `scaleX(${progress})`
     }
-    onScroll()
+    const onScroll = () => {
+      if (ticking) return
+      ticking = true
+      requestAnimationFrame(update)
+    }
+    update()
     window.addEventListener("scroll", onScroll, { passive: true })
     return () => window.removeEventListener("scroll", onScroll)
   }, [])
@@ -23,8 +34,9 @@ export function ScrollProgress() {
       aria-hidden="true"
     >
       <div
-        className="h-full bg-queens-gradient-intense transition-[width] duration-150"
-        style={{ width: `${progress}%` }}
+        ref={barRef}
+        className="h-full w-full origin-left bg-queens-gradient-intense"
+        style={{ transform: "scaleX(0)" }}
       />
     </div>
   )

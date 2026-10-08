@@ -2,48 +2,120 @@
 
 import dynamic from "next/dynamic"
 import { useRef, useState } from "react"
-import { motion, useScroll, useTransform, useSpring, AnimatePresence } from "framer-motion"
+import { m, useScroll, useTransform, useSpring, AnimatePresence } from "framer-motion"
 import { MapPin, Clock, Phone, Instagram, MessageCircle, Navigation } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { useIsMobile } from "@/hooks/use-is-mobile"
-import { WA_VISIT } from "@/lib/whatsapp"
+import { WA_SPA, WA_VISIT } from "@/lib/whatsapp"
+import { BUSINESS, VENUES } from "@/lib/site"
 
 const Map = dynamic(
   () => import("@/components/map-react-leaflet").then(m => m.MapReactLeaflet),
-  { ssr: false, loading: () => <div className="h-full w-full bg-[oklch(0.95_0.01_15)]" /> }
+  { ssr: false, loading: () => <div className="h-full w-full bg-[var(--loc-card)]" /> }
 )
 
-const GMAPS_LINK = "https://maps.app.goo.gl/PKAKSgb6rRDPwBvUA"
+/*
+ * Each personality has its own venue, so this section takes one and dresses it:
+ * light for the store at Unicentro, noir for the spa on Carrera 25. The theme is
+ * injected as CSS custom properties so the markup below stays single-path.
+ */
+const THEMES = {
+  light: {
+    "--loc-bg": "oklch(0.97 0.008 15)",
+    "--loc-card": "oklch(1 0 0)",
+    "--loc-border": "oklch(0.84 0.065 15 / 0.4)",
+    "--loc-text": "var(--ink)",
+    "--loc-muted": "var(--muted-foreground)",
+    "--loc-accent": "var(--gold-deep)",
+    "--loc-icon-bg": "linear-gradient(135deg, var(--rose-pastel-soft) 0%, oklch(0.88 0.07 85) 100%)",
+    "--loc-shadow": "0 2px 12px -4px oklch(0.18 0.025 40 / 0.06)",
+  },
+  noir: {
+    "--loc-bg": "var(--noir)",
+    "--loc-card": "var(--noir-soft)",
+    "--loc-border": "oklch(1 0 0 / 0.12)",
+    "--loc-text": "oklch(1 0 0)",
+    "--loc-muted": "oklch(1 0 0 / 0.6)",
+    "--loc-accent": "var(--gold)",
+    "--loc-icon-bg": "linear-gradient(135deg, oklch(0.75 0.135 85 / 0.22) 0%, oklch(0.75 0.135 85 / 0.08) 100%)",
+    "--loc-shadow": "0 2px 12px -4px oklch(0 0 0 / 0.5)",
+  },
+} as const
 
-const INFO_CARDS = [
-  {
-    icon: <MapPin className="h-5 w-5" />,
-    title: "Dirección",
-    lines: ["Local 128, Unicentro Palmira", "Valle del Cauca, Colombia"],
-  },
-  {
-    icon: <Clock className="h-5 w-5" />,
-    title: "Horario",
-    lines: ["Lunes a Domingo", "10:00 AM – 8:00 PM"],
-  },
-  {
-    icon: <Phone className="h-5 w-5" />,
-    title: "Contacto",
-    lines: ["WhatsApp: +57 314 867 7230"],
-  },
-  {
-    icon: <Instagram className="h-5 w-5" />,
-    title: "Síguenos",
-    lines: ["@queenscosmeticss"],
-    href: "https://www.instagram.com/queenscosmeticss/",
-  },
-]
+type VenueKey = "cosmetics" | "spa"
 
-export function Location() {
+const COPY: Record<VenueKey, {
+  theme: keyof typeof THEMES
+  title: string
+  place: string
+  lead: string
+  cta: { href: string; label: string }
+}> = {
+  cosmetics: {
+    theme: "light",
+    title: "Nuestra tienda en",
+    place: "Unicentro Palmira",
+    lead: "Ven y vive la experiencia Queens en persona. Te esperamos con un espacio pensado para consentirte.",
+    cta: { href: WA_VISIT, label: "Confirmar disponibilidad" },
+  },
+  spa: {
+    theme: "noir",
+    title: "Nuestro spa en",
+    place: "la Carrera 25",
+    lead: "Una casa aparte de la tienda, pensada solo para bajar el ritmo. Reserva tu ritual y te esperamos con todo listo.",
+    cta: { href: WA_SPA, label: "Reservar mi cita" },
+  },
+}
+
+interface InfoCard {
+  icon: React.ReactNode
+  title: string
+  lines: string[]
+  href?: string
+}
+
+const EASE = [0.16, 1, 0.3, 1] as const
+
+/*
+ * The header animates from its wrapper, not element by element. The h2 starts
+ * translated a full line below its own box, and that box clips — so if the h2
+ * carried its own `whileInView`, it would sit entirely outside the clip rect,
+ * report zero intersection, and never be told to animate in. It would stay
+ * invisible forever. Driving it from the unclipped wrapper avoids that.
+ */
+const headerVariants = {
+  hidden: {},
+  show: { transition: { staggerChildren: 0.12 } },
+}
+
+const labelRise = {
+  hidden: { opacity: 0, y: 20 },
+  show: { opacity: 1, y: 0, transition: { duration: 0.6, ease: EASE } },
+}
+
+const titleRise = {
+  hidden: { y: "110%" },
+  show: { y: "0%", transition: { duration: 0.9, ease: EASE } },
+}
+
+const leadRise = {
+  hidden: { opacity: 0, y: 24 },
+  show: { opacity: 1, y: 0, transition: { duration: 0.7, ease: EASE } },
+}
+
+export function Location({ face = "cosmetics" }: { face?: VenueKey }) {
   const sectionRef = useRef<HTMLElement>(null)
-  const mapRef = useRef<HTMLDivElement>(null)
   const [hoveredCard, setHoveredCard] = useState<number | null>(null)
   const isMobile = useIsMobile()
+
+  const copy = COPY[face]
+  const venue = VENUES[face]
+  const cards: InfoCard[] = [
+    { icon: <MapPin className="h-5 w-5" />, title: "Dirección", lines: [venue.address, venue.region] },
+    { icon: <Clock className="h-5 w-5" />, title: "Horario", lines: venue.hours },
+    { icon: <Phone className="h-5 w-5" />, title: "Contacto", lines: [`WhatsApp: ${BUSINESS.phoneDisplay}`] },
+    { icon: <Instagram className="h-5 w-5" />, title: "Síguenos", lines: [BUSINESS.instagram], href: BUSINESS.instagramUrl },
+  ]
 
   const { scrollYProgress } = useScroll({
     target: sectionRef,
@@ -64,16 +136,16 @@ export function Location() {
       ref={sectionRef}
       id="ubicacion"
       className="relative overflow-hidden py-24 md:py-36"
-      style={{ background: "oklch(0.97 0.008 15)" }}
+      style={{ ...THEMES[copy.theme], background: "var(--loc-bg)" } as React.CSSProperties}
     >
       {/* Fondo animado — líneas diagonales */}
-      <motion.div
+      <m.div
         style={{ y: bgY }}
         className="pointer-events-none absolute inset-0 z-0"
         aria-hidden
       >
         {Array.from({ length: 8 }).map((_, i) => (
-          <motion.div
+          <m.div
             key={i}
             className="absolute h-px w-full origin-left"
             style={{
@@ -92,7 +164,7 @@ export function Location() {
         ))}
 
         {/* Orbe de glow rosa */}
-        <motion.div
+        <m.div
           className="absolute -left-32 top-1/2 h-[600px] w-[600px] -translate-y-1/2 rounded-full"
           style={{
             background: "radial-gradient(circle, oklch(0.84 0.065 15 / 0.18) 0%, transparent 70%)",
@@ -101,7 +173,7 @@ export function Location() {
           transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
         />
         {/* Orbe de glow dorado */}
-        <motion.div
+        <m.div
           className="absolute -right-32 bottom-0 h-[500px] w-[500px] rounded-full"
           style={{
             background: "radial-gradient(circle, oklch(0.75 0.135 85 / 0.12) 0%, transparent 70%)",
@@ -109,35 +181,33 @@ export function Location() {
           animate={isMobile ? undefined : { scale: [1, 1.18, 1], opacity: [0.5, 0.9, 0.5] }}
           transition={{ duration: 8, repeat: Infinity, ease: "easeInOut", delay: 2 }}
         />
-      </motion.div>
+      </m.div>
 
       <div className="relative z-10 mx-auto max-w-7xl px-6 md:px-10">
 
         {/* Header con slide brutal */}
-        <motion.div
+        <m.div
           style={{ x: titleX, opacity: titleOpacity }}
           className="mb-14 md:mb-20"
+          variants={headerVariants}
+          initial="hidden"
+          whileInView="show"
+          viewport={{ once: true, margin: "-60px" }}
         >
-          <motion.span
-            className="mb-3 inline-block text-xs font-semibold uppercase tracking-[0.35em] text-[var(--gold-deep)]"
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+          <m.span
+            className="mb-3 inline-block text-xs font-semibold uppercase tracking-[0.35em] text-[var(--loc-accent)]"
+            variants={labelRise}
           >
             Visítanos
-          </motion.span>
+          </m.span>
 
           <div className="overflow-hidden">
-            <motion.h2
-              className="font-display font-bold text-[var(--ink)]"
+            <m.h2
+              className="font-display font-bold text-[var(--loc-text)]"
               style={{ fontSize: "clamp(2.2rem, 5vw, 4rem)", letterSpacing: "-0.025em", lineHeight: 1.1 }}
-              initial={{ y: "110%" }}
-              whileInView={{ y: "0%" }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
+              variants={titleRise}
             >
-              Nuestra tienda en{" "}
+              {copy.title}{" "}
               <br className="hidden md:block" />
               <em
                 className="font-serif italic font-light"
@@ -148,36 +218,28 @@ export function Location() {
                   backgroundClip: "text",
                 }}
               >
-                Unicentro Palmira
+                {copy.place}
               </em>
-            </motion.h2>
+            </m.h2>
           </div>
 
-          <motion.p
-            className="mt-4 max-w-lg text-[var(--muted-foreground)] text-base md:text-lg"
-            initial={{ opacity: 0, y: 24 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.7, delay: 0.25, ease: [0.16, 1, 0.3, 1] }}
-          >
-            Ven y vive la experiencia Queens en persona. Te esperamos con un
-            espacio pensado para consentirte.
-          </motion.p>
-        </motion.div>
+          <m.p className="mt-4 max-w-lg text-[var(--loc-muted)] text-base md:text-lg" variants={leadRise}>
+            {copy.lead}
+          </m.p>
+        </m.div>
 
         {/* Grid principal */}
         <div className="grid lg:grid-cols-[1.25fr_1fr] gap-8 lg:gap-14 items-start">
 
           {/* ── MAPA ── */}
-          <motion.div
-            ref={mapRef}
+          <m.div
             style={{ scale: springMapScale, y: springMapY }}
             className="relative"
           >
 
-            {/* Etiqueta "Queens Store" flotante */}
-            <motion.div
-              className="absolute -top-5 left-6 z-20 flex items-center gap-2 rounded-full border border-[var(--gold)]/40 bg-white px-4 py-2 shadow-lg"
+            {/* Etiqueta flotante */}
+            <m.div
+              className="absolute -top-5 left-6 z-20 flex items-center gap-2 rounded-full border border-[var(--gold)]/40 bg-[var(--loc-card)] px-4 py-2 shadow-lg"
               initial={{ opacity: 0, y: 16, scale: 0.85 }}
               whileInView={{ opacity: 1, y: 0, scale: 1 }}
               viewport={{ once: true }}
@@ -187,11 +249,13 @@ export function Location() {
                 <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[var(--rose-hot)] opacity-75" />
                 <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-[var(--rose-hot)]" />
               </span>
-              <span className="text-xs font-semibold text-[var(--ink)]">Queens Cosmetics · Local 128</span>
-            </motion.div>
+              <span className="text-xs font-semibold text-[var(--loc-text)]">
+                {venue.name} · {venue.address}
+              </span>
+            </m.div>
 
             {/* react-leaflet map */}
-            <motion.div
+            <m.div
               className="relative overflow-hidden rounded-3xl shadow-2xl"
               style={{ height: "clamp(340px, 45vw, 520px)" }}
               initial={{ opacity: 0, scale: 0.96, y: 24 }}
@@ -203,12 +267,12 @@ export function Location() {
                 className="pointer-events-none absolute inset-0 z-10 rounded-3xl"
                 style={{ boxShadow: "inset 0 0 0 2px oklch(0.75 0.135 85 / 0.30)" }}
               />
-              <Map />
-            </motion.div>
+              <Map venue={venue} />
+            </m.div>
 
             {/* Botón "Ver en Maps" */}
-            <motion.a
-              href={GMAPS_LINK}
+            <m.a
+              href={venue.gmaps}
               target="_blank"
               rel="noopener noreferrer"
               className="absolute -bottom-5 right-6 z-20 flex items-center gap-2 rounded-full bg-[var(--ink)] px-4 py-2 text-xs font-semibold text-white shadow-xl"
@@ -221,12 +285,12 @@ export function Location() {
             >
               <Navigation className="h-3.5 w-3.5" />
               Abrir en Google Maps
-            </motion.a>
-          </motion.div>
+            </m.a>
+          </m.div>
 
           {/* ── INFO CARDS ── */}
           <div className="flex flex-col gap-4 pt-6 lg:pt-0">
-            {INFO_CARDS.map((card, i) => (
+            {cards.map((card, i) => (
               <MagneticCard
                 key={card.title}
                 card={card}
@@ -238,22 +302,22 @@ export function Location() {
             ))}
 
             {/* CTA WhatsApp */}
-            <motion.div
+            <m.div
               className="pt-2"
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.6, delay: 0.55, ease: [0.16, 1, 0.3, 1] }}
             >
-              <motion.div
+              <m.div
                 whileHover={{ scale: 1.03 }}
                 whileTap={{ scale: 0.97 }}
                 transition={{ type: "spring", stiffness: 400, damping: 20 }}
               >
                 <Button asChild variant="whatsapp" size="lg" className="w-full relative overflow-hidden">
-                  <a href={WA_VISIT} target="_blank" rel="noopener noreferrer">
+                  <a href={copy.cta.href} target="_blank" rel="noopener noreferrer">
                     {/* Shimmer on hover */}
-                    <motion.span
+                    <m.span
                       className="pointer-events-none absolute inset-0"
                       style={{
                         background:
@@ -264,11 +328,11 @@ export function Location() {
                       transition={{ duration: 2.5, repeat: Infinity, ease: "linear", repeatDelay: 1 }}
                     />
                     <MessageCircle className="h-5 w-5" />
-                    Confirmar disponibilidad
+                    {copy.cta.label}
                   </a>
                 </Button>
-              </motion.div>
-            </motion.div>
+              </m.div>
+            </m.div>
           </div>
         </div>
       </div>
@@ -284,7 +348,7 @@ function MagneticCard({
   onHover,
   onLeave,
 }: {
-  card: (typeof INFO_CARDS)[number]
+  card: InfoCard
   index: number
   isHovered: boolean
   onHover: () => void
@@ -305,11 +369,10 @@ function MagneticCard({
   }
 
   const inner = (
-    <motion.div
+    <m.div
       ref={ref}
-      className="group relative flex gap-4 overflow-hidden rounded-2xl border bg-white p-5 cursor-pointer"
+      className="group relative flex gap-4 overflow-hidden rounded-2xl border bg-[var(--loc-card)] p-5 cursor-pointer"
       style={{
-        borderColor: isHovered ? "var(--gold)" : "oklch(0.84 0.065 15 / 0.4)",
         rotateX: tilt.x,
         rotateY: tilt.y,
         transformStyle: "preserve-3d",
@@ -326,15 +389,15 @@ function MagneticCard({
       animate={{
         boxShadow: isHovered
           ? "0 16px 40px -8px oklch(0.75 0.135 85 / 0.25), 0 4px 16px -4px oklch(0.84 0.065 15 / 0.20)"
-          : "0 2px 12px -4px oklch(0.18 0.025 40 / 0.06)",
-        borderColor: isHovered ? "var(--gold)" : "oklch(0.84 0.065 15 / 0.4)",
+          : "var(--loc-shadow)",
+        borderColor: isHovered ? "var(--gold)" : "var(--loc-border)",
       }}
       onMouseMove={handleMouseMove}
       onMouseEnter={onHover}
       onMouseLeave={() => { onLeave(); setTilt({ x: 0, y: 0 }) }}
     >
       {/* Shimmer de fondo al hover */}
-      <motion.div
+      <m.div
         className="pointer-events-none absolute inset-0"
         style={{
           background:
@@ -347,7 +410,7 @@ function MagneticCard({
       {/* Borde brillante animado */}
       <AnimatePresence>
         {isHovered && (
-          <motion.div
+          <m.div
             className="pointer-events-none absolute inset-0 rounded-2xl"
             style={{
               background:
@@ -362,11 +425,9 @@ function MagneticCard({
       </AnimatePresence>
 
       {/* Icono con spring */}
-      <motion.div
-        className="relative flex h-12 w-12 shrink-0 items-center justify-center rounded-xl text-[var(--gold-deep)]"
-        style={{
-          background: "linear-gradient(135deg, var(--rose-pastel-soft) 0%, oklch(0.88 0.07 85) 100%)",
-        }}
+      <m.div
+        className="relative flex h-12 w-12 shrink-0 items-center justify-center rounded-xl text-[var(--loc-accent)]"
+        style={{ background: "var(--loc-icon-bg)" }}
         animate={{
           scale: isHovered ? 1.15 : 1,
           rotate: isHovered ? [0, -6, 6, 0] : 0,
@@ -374,28 +435,28 @@ function MagneticCard({
         transition={{ type: "spring", stiffness: 400, damping: 15 }}
       >
         {card.icon}
-      </motion.div>
+      </m.div>
 
       <div className="relative min-w-0">
-        <motion.h3
-          className="mb-1 text-xs font-semibold uppercase tracking-wider text-[var(--gold-deep)]"
+        <m.h3
+          className="mb-1 text-xs font-semibold uppercase tracking-wider text-[var(--loc-accent)]"
           animate={{ x: isHovered ? 3 : 0 }}
           transition={{ type: "spring", stiffness: 400, damping: 20 }}
         >
           {card.title}
-        </motion.h3>
+        </m.h3>
         {card.lines.map((l, j) => (
-          <motion.p
+          <m.p
             key={j}
-            className="text-sm text-[var(--ink)]"
+            className="text-sm text-[var(--loc-text)]"
             animate={{ x: isHovered ? 3 : 0 }}
             transition={{ type: "spring", stiffness: 400, damping: 20, delay: j * 0.03 }}
           >
             {l}
-          </motion.p>
+          </m.p>
         ))}
       </div>
-    </motion.div>
+    </m.div>
   )
 
   if (card.href) {

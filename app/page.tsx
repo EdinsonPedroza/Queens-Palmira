@@ -1,43 +1,36 @@
+import type { Metadata } from "next"
 import dynamic from "next/dynamic"
 import { IntroScreen } from "@/components/intro-screen"
 import { Navbar } from "@/components/navbar"
 import { ScrollProgress } from "@/components/scroll-progress"
 import { Hero } from "@/components/sections/hero"
-import { Marquee } from "@/components/sections/marquee"
 import { WhatsAppFloat } from "@/components/whatsapp-float"
-import { CartSidebar } from "@/components/cart-sidebar"
-import { CartFloat } from "@/components/cart-float"
 
-const WhyQueens      = dynamic(() => import("@/components/sections/why-queens").then((m) => m.WhyQueens))
-const Catalog        = dynamic(() => import("@/components/sections/catalog").then((m) => m.Catalog))
-const DigitalCatalog = dynamic(() => import("@/components/sections/digital-catalog").then((m) => m.DigitalCatalog))
-const Gallery      = dynamic(() => import("@/components/sections/gallery").then((m) => m.Gallery))
-const Testimonials = dynamic(() => import("@/components/sections/testimonials").then((m) => m.Testimonials))
-const FAQ          = dynamic(() => import("@/components/sections/faq").then((m) => m.FAQ))
-const CTA          = dynamic(() => import("@/components/sections/cta").then((m) => m.CTA))
-const Location     = dynamic(() => import("@/components/sections/location").then((m) => m.Location))
-const Footer       = dynamic(() => import("@/components/sections/footer").then((m) => m.Footer))
+const Locations = dynamic(() => import("@/components/sections/locations").then((m) => m.Locations))
+const Footer    = dynamic(() => import("@/components/sections/footer").then((m) => m.Footer))
 
+export const metadata: Metadata = {
+  title: "Queens — Cosmetics & Spa en Palmira",
+  description:
+    "Dos casas en Palmira: Queens Cosmetics, cosmética premium en el Local 128 de Unicentro, y Queens Spa, faciales y masajes con cita previa en la Cra 25 #11-23.",
+  openGraph: {
+    title: "Queens — Cosmetics & Spa en Palmira",
+    description:
+      "Dos casas, una reina: cosmética premium en Unicentro y un spa para bajar el ritmo en la Cra 25.",
+  },
+}
+
+/* The portal: two doors, then where each one is. */
 export default function Home() {
   return (
     <main className="relative overflow-x-hidden shimmer-overlay">
       <IntroScreen />
       <ScrollProgress />
-      <Navbar />
+      <Navbar face="portal" />
       <Hero />
-      <Marquee />
-      <Catalog />
-      <WhyQueens />
-      <DigitalCatalog />
-      <Gallery />
-      <Testimonials />
-      <FAQ />
-      <CTA />
-      <Location />
-      <Footer />
+      <Locations />
+      <Footer face="portal" />
       <WhatsAppFloat />
-      <CartFloat />
-      <CartSidebar />
     </main>
   )
 }
