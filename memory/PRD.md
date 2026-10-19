@@ -15,7 +15,7 @@ Crear un sitio premium y femenino para **Queens**, marca con dos personalidades 
 ### Sedes
 | | Queens Cosmetics | Queens Spa |
 |---|---|---|
-| **Dirección** | Local 128, Unicentro Palmira | Cra 25 #11-23 |
+| **Dirección** | Local 1-28, Unicentro Palmira | Cra 25 #11-23 |
 | **Ciudad** | Palmira, Valle del Cauca | Palmira, Valle del Cauca |
 | **Horario** | Lun a Dom, 10:00 AM – 8:00 PM | Lun a Dom, con cita previa |
 | **Atención** | Sin cita | Solo con cita |
@@ -25,27 +25,41 @@ Crear un sitio premium y femenino para **Queens**, marca con dos personalidades 
 
 ## Brand Identity
 
-### Paleta (HEX originales + tokens)
-| Rol | HEX | Uso |
-|---|---|---|
-| Rosa pastel (primario) | `#FFB6C1` | 90% de la superficie, backgrounds suaves, cards |
-| Dorado luxury | `#D4AF37` | Acentos, botones, íconos, bordes premium |
-| Blanco puro | `#FFFFFF` | Fondos principales, texto sobre oscuro |
-| Rosa intenso | `#FF69B4` | CTAs urgentes, badges de descuento, hover states |
-| Negro suave | `#2C1810` | Textos principales, contraste |
-| Gradientes | Rosa → Dorado | Headers hero, hover de botones premium |
+### Paleta (manual de marca: `ACTUALIZACION/NEWW/paleta de color y contrastes queens.pdf`)
+| Rol | Nombre | HEX | OKLCH | Token |
+|---|---|---|---|---|
+| **Fondo de todo**, "blanco" de la marca | Crema | `#FFFFEE` | `oklch(0.995 0.022 106.8)` | `--crema` (`bg-white` también sale crema) |
+| Apoyo (casi sin uso) | Ciruela | `#462649` | `oklch(0.325 0.073 323.9)` | `--ciruela` |
+| Texto | Ciruela casi negro (derivado) | — | `oklch(0.2 0.035 324)` | `--ink` |
+| **Cosméticos**: botones, líneas, íconos | Lila | `#A48BA6` | `oklch(0.668 0.049 323.8)` | `--lila` |
+| **Spa**: botones, líneas, íconos | Dorado | `#BCA157` | `oklch(0.717 0.099 89.8)` | `--dorado` (alias `--gold`) |
+
+**Regla del cliente: dorado = spa, lila = cosméticos, crema = fondo.** En código el acento se llama `--face` y cambia por página (ver CLAUDE.md, "Acento por cara").
+
+Derivados (tintes/sombras, no colores nuevos): `--lila-light`, `--lila-soft`, `--lila-deep`, `--dorado-soft`, `--dorado-deep`, `--ciruela-soft`, `--ciruela-deep`.
+
+**Combinaciones aprobadas del logo:** dorado, ciruela o lila sobre crema · crema sobre dorado, lila o ciruela. El dorado **no** va sobre lila.
+
+**Contraste WCAG medido:** ciruela/crema 12.7 · ciruela/dorado 5.1 · ciruela/lila 4.2 · crema/lila 3.1 · crema/dorado 2.5. Regla: el dorado sobre crema solo sirve para elementos grandes o decorativos; para texto usa `--dorado-deep` (5.0). Texto crema sobre dorado o lila no pasa AA en tamaños chicos: usa ciruela encima.
+
+### Logo
+- **Isotipo** (corona + Q con corazón) e **imagotipo** (isotipo + "Queens cosmetics"): archivos de `ACTUALIZACION/NEWW/`, dorado plano con fondo transparente. Hay versiones 3D (metálicas) sin usar.
+- El nombre "Queens" va siempre como imagen (`wordmark-*.webp`, recortado del imagotipo): su lettering está en curvas y es más grueso que The Seasons Bold, no se puede reescribir con la fuente.
+- En el sitio: `public/images/brand/isotipo-{dorado,ciruela,crema}.webp`, recoloreadas desde el canal alfa del PNG original. Íconos (`app/icon.png`, `apple-icon.png`, `favicon.ico`, `public/icon-*.png`) = isotipo crema sobre ciruela. `public/og-image.jpg` = imagotipo dorado sobre crema.
 
 ### Typography
-- **Headings display:** Playfair Display (serif elegante, cursivas para acentos)
-- **Headings sans:** Outfit o Plus Jakarta Sans (800 weight)
-- **Body:** Inter (400/500)
-- **Acentos cursivos:** Cormorant Garamond italic
+- **Familia única:** The Seasons. **Bold** para títulos (`h1`–`h6`), **Regular** para todo lo demás. Archivos en `app/fonts/` (Regular, Italic, Bold, Bold Italic).
+- ⚠️ **Los archivos recibidos son la versión DEMO.** Solo tienen letras A–Z/a–z, `, . : ; ?` y los dígitos 0–3 y 5–9; el resto (á é í ó ú ñ ¿ ¡ ! $ + - ( ) & @ # % / * y el dígito 4) es un adorno con la palabra "DEMO". Se restringió con `unicode-range` en `app/layout.tsx` y esos caracteres salen de **Cormorant Garamond** (respaldo). **Pendiente: conseguir la fuente completa y con licencia** (la demo no es para uso comercial) y borrar `declarations` y `glyphFallback` del layout.
+- Los números se dibujan con el respaldo; se fuerza `font-variant-numeric: lining-nums` porque Cormorant trae números de estilo antiguo.
+- `html { font-size: 106.25% }`: The Seasons tiene x-height pequeño y compensa la legibilidad frente a la sans anterior.
 
 ### Estilo
+- **El spa es un spa de uñas.** Servicios placeholder: manicure tradicional y semipermanente, pedicure spa, uñas en gel o acrílico, nail art, retiro y mantenimiento. Sin fotos propias todavía: hay 2 fotos de relleno de Pexels (IDs 4677849 y 15491629).
+- Portal: dos mitades crema (lila a la izquierda con la foto de la tienda; dorado a la derecha con la foto del spa en un arco que sube desde abajo). Antes la mitad del spa era oscura; el cliente eligió la versión crema.
 - **Femenino luxury.** Inspirado en Chanel Beauty, Fenty, Sephora premium.
-- Estética suave, pétalos de rosa, dorado sutil, glass morphism rosé.
+- Estética editorial con arcos (los de la tienda), lila y dorado sutil.
 - Animaciones delicadas (float, shimmer, fade elegante).
-- Fotografía estilo editorial beauty (macro de texturas, manos con productos).
+- Fotografía: la tienda real de Unicentro (arcos lila, neón del isotipo, estantes). El spa sigue con fotos de relleno.
 
 ## Stack Técnico
 - **Frontend:** Next.js 16 (App Router) + React 19 + TypeScript strict
@@ -53,13 +67,13 @@ Crear un sitio premium y femenino para **Queens**, marca con dos personalidades 
 - **UI primitivos:** Radix UI (dialog para carrito, accordion para FAQ, tabs para categorías)
 - **Animaciones:** Framer Motion
 - **Íconos:** Lucide React
-- **Fuentes:** next/font (Playfair Display + Outfit + Inter + Cormorant)
+- **Fuentes:** next/font/local (The Seasons, demo) + Cormorant Garamond como respaldo de glifos
 - **State del carrito:** React Context + localStorage (persistencia)
 - **Deploy:** Vercel (estático)
 
 ## Secciones de la Landing (en orden)
 
-1. **IntroScreen** — Loader con logo Queens (corona dorada + texto rosa) + fade out elegante
+1. **IntroScreen** — Loader dorado | ciruela con el isotipo y el nombre en crema + fade out elegante
 2. **Navbar** — Fixed, transparente → rosa opaco en scroll. Logo + nav links + ícono carrito con badge + CTA "Visítanos"
 3. **Hero** — Full screen (`100svh`). Imagen editorial de mujer/productos, headline serif ("La belleza que mereces"), subtitle, 2 CTAs (WhatsApp + Ver catálogo)
 4. **Marquee Strip** — Dorado sobre rosa, palabras: "Cosmética Premium · Envíos a todo Palmira · +500 Reinas felices · Productos originales · Asesoría personalizada"
@@ -76,7 +90,7 @@ Crear un sitio premium y femenino para **Queens**, marca con dos personalidades 
 9. **Testimonials** — Doble marquee (sentidos opuestos) con 8 reseñas
 10. **FAQ** — Accordion con 6 preguntas frecuentes
 11. **CTA Glow** — Sección full-width con gradiente rosa→dorado, glow shimmer, botón WhatsApp grande
-12. **Ubicación** — Mapa de Unicentro Palmira + tarjetas (Local 128, horario, teléfono, redes)
+12. **Ubicación** — Mapa de Unicentro Palmira + tarjetas (Local 1-28, horario, teléfono, redes)
 13. **Footer** — Links, redes (Instagram + WhatsApp), info, "QUEENS" en texto gigante dorado
 14. **Cart Sidebar** — Dialog Radix que slide desde la derecha, lista de items con controles +/-, total, botón "Enviar pedido por WhatsApp"
 15. **Floating WhatsApp** — Botón rosa pulsante con tooltip
@@ -178,7 +192,7 @@ Crear un sitio premium y femenino para **Queens**, marca con dos personalidades 
 
 ### P1 — Siguientes mejoras
 - [ ] Fotos reales de los productos (reemplazar placeholders de Unsplash)
-- [ ] Logo real de Queens (actualmente SVG monograma)
+- [x] Logo real de Queens (isotipo + imagotipo del manual de marca, ya aplicados)
 - [ ] Sección de promociones / combos
 - [ ] Filtros por tono, tipo de piel, marca
 - [ ] Newsletter con descuento de bienvenida

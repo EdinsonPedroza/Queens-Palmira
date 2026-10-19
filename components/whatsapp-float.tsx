@@ -29,7 +29,7 @@ export function WhatsAppFloat() {
     >
       {showTip && (
         <div
-          className="mb-2 hidden sm:block rounded-2xl bg-white px-4 py-2.5 text-sm shadow-lg border border-[var(--rose-pastel)] animate-fade-up"
+          className="mb-2 hidden sm:block rounded-2xl bg-white px-4 py-2.5 text-sm shadow-lg border border-[var(--face-light)] animate-fade-up"
           role="tooltip"
         >
           <span className="font-medium">¡Hola Reina!</span>{" "}
@@ -40,10 +40,17 @@ export function WhatsAppFloat() {
         href={WA_DEFAULT}
         target="_blank"
         rel="noopener noreferrer"
-        className="group relative flex h-14 w-14 items-center justify-center rounded-full bg-[#25D366] text-white shadow-[0_8px_24px_-4px_rgba(37,211,102,0.6)] transition-all hover:scale-110 hover:shadow-[0_12px_32px_-4px_rgba(37,211,102,0.85)]"
+        className="group relative flex h-14 w-14 items-center justify-center rounded-full text-white transition-all hover:scale-110"
         aria-label="Chatear por WhatsApp"
       >
-        <span className="absolute inset-0 rounded-full animate-pulse-rose" />
+        {/* Three layers, bottom to top: the green glow, the pulsing ring, the button face.
+            The ring is a disc that grows and fades behind the face, so only its rim shows: the
+            same look as animating `box-shadow`, but `transform` and `opacity` run on the
+            compositor. The box-shadow version repainted on every frame, on every page, and
+            kept the main thread busy for as long as the tab was open. */}
+        <span aria-hidden className="absolute inset-0 rounded-full shadow-[0_8px_24px_-4px_rgba(37,211,102,0.6)] transition-shadow group-hover:shadow-[0_12px_32px_-4px_rgba(37,211,102,0.85)]" />
+        <span aria-hidden className="animate-pulse-ring absolute inset-0 rounded-full" />
+        <span aria-hidden className="absolute inset-0 rounded-full bg-[#25D366]" />
         <svg
           viewBox="0 0 32 32"
           className="h-7 w-7 relative z-10"

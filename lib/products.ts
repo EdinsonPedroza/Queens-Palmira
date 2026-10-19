@@ -1,12 +1,8 @@
 import type React from "react"
 
-export type ProductCategory =
-  | "labiales"
-  | "rostro"
-  | "ojos"
-  | "skincare"
-  | "unas"
-  | "capilar"
+import type { ProductCategory } from "./categories"
+export { CATEGORIES } from "./categories"
+export type { ProductCategory }
 
 export interface Product {
   id: string
@@ -26,14 +22,6 @@ export interface Product {
   reviews?: number
 }
 
-export const CATEGORIES: { id: ProductCategory; label: string; tagline: string }[] = [
-  { id: "labiales",  label: "Labiales",       tagline: "Besos de seda y color" },
-  { id: "rostro",    label: "Rostro",         tagline: "La base de tu belleza" },
-  { id: "ojos",      label: "Ojos",           tagline: "Miradas que hipnotizan" },
-  { id: "skincare",  label: "Skin Care",      tagline: "Tu ritual de reina" },
-  { id: "unas",      label: "Uñas",           tagline: "Detalles que enamoran" },
-  { id: "capilar",   label: "Línea Capilar",  tagline: "Cabello de reina" },
-]
 
 export const PRODUCTS: Product[] = [
 
@@ -67,7 +55,6 @@ export const PRODUCTS: Product[] = [
     description: "Gloss hidratante de larga duración.",
     image: "/images/products/GlowFusion Montoc.webp",
     variants: ["Alba", "Lyra", "Ariel", "Aurora"],
-    imageStyle: { transform: "translate(-28%, 8%)" },
   },
   {
     id: "lip-vogue-resist-14h",
@@ -98,7 +85,6 @@ export const PRODUCTS: Product[] = [
     description: "Acabado mate aterciopelado de larga duración.",
     image: "/images/products/Labial Liquido Mate Feels Ruby Rose.webp",
     variants: ["129", "356", "362", "366", "376", "066"],
-    imageStyle: { transform: "translateX(-15%)" },
   },
   {
     id: "lip-duo-fells-ruby-rose",
@@ -108,7 +94,6 @@ export const PRODUCTS: Product[] = [
     description: "Labial en barra con acabado satinado.",
     image: "/images/products/Labial Duo Fells Ruby Rose.webp",
     variants: ["312", "302", "316", "360", "311", "362", "361", "211"],
-    imageStyle: { transform: "translateX(35%)" },
   },
   {
     id: "lip-3b-barra",
@@ -338,7 +323,6 @@ export const PRODUCTS: Product[] = [
     rating: 5,
     reviews: 240,
     variants: ["Pink Pearl", "Peach Melba", "Dusty Rose", "Salmon"],
-    imageStyle: { transform: "translateY(28%)" },
   },
   {
     id: "rubor-nostalgic-montoc",
@@ -348,7 +332,6 @@ export const PRODUCTS: Product[] = [
     description: "Rubor en crema fácil de difuminar.",
     image: "/images/products/Rubor en crema Nostalgic MONTOC.webp",
     variants: ["So pretty", "Darling", "Exquisite", "Honey"],
-    imageStyle: { transform: "translateY(35%)" },
   },
   {
     id: "rubor-humide-montoc",
@@ -367,7 +350,6 @@ export const PRODUCTS: Product[] = [
     description: "Rubor compacto de alta pigmentación.",
     image: "/images/products/Rubor Compacto Samy Blush.webp",
     variants: ["Vanity", "Salmón", "Golden Rose", "Lady", "Satin Pink", "Tierra"],
-    imageStyle: { transform: "translateX(-30%)" },
   },
   {
     id: "rubor-nailen",
@@ -376,7 +358,6 @@ export const PRODUCTS: Product[] = [
     category: "rostro",
     description: "Rubor compacto con acabado natural.",
     image: "/images/products/Rubor Nailen.webp",
-    imageStyle: { transform: "translateY(-15%)" },
   },
   {
     id: "rubor-pocket-blush-montoc",
@@ -385,7 +366,6 @@ export const PRODUCTS: Product[] = [
     category: "rostro",
     description: "Rubor compacto mini para llevar siempre.",
     image: "/images/products/Rubor Pocket Blush Montoc.webp",
-    imageStyle: { transform: "translate(28%, 25%)" },
   },
   {
     id: "rubor-jelly-blush-engol",
@@ -820,7 +800,6 @@ export const PRODUCTS: Product[] = [
     category: "skincare",
     description: "Gel de afeitar profesional para piel suave.",
     image: "/images/products/Gel de Afeitar Barber Duvy Class.webp",
-    imageStyle: { transform: "translateY(8%)" },
   },
   {
     id: "balsamo-after-shave",
@@ -1273,7 +1252,6 @@ export const PRODUCTS: Product[] = [
     category: "capilar",
     description: "Tinte sin amoniaco con biotina y keratina.",
     image: "/images/products/Lissia Tinte en Crema Biotina Keratina.webp",
-    imageStyle: { transform: "translateX(-12%)" },
   },
   {
     id: "cubre-canas-fresh-co",

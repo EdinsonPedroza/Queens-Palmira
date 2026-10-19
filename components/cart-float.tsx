@@ -1,33 +1,72 @@
 "use client"
 
-import { m, AnimatePresence, useAnimationControls } from "framer-motion"
+import { m, AnimatePresence, useAnimationControls, useReducedMotion } from "framer-motion"
 import { ShoppingBag } from "lucide-react"
-import { useEffect, useRef } from "react"
+import { useCallback, useEffect, useRef, useState, type ReactNode } from "react"
 import { useCart } from "@/context/cart-context"
+import { formatCOP } from "@/lib/utils"
+
+const OUT = [0.23, 1, 0.32, 1] as const
+
+/* A number that "rolls" like an odometer: the old value leaves upward while the new one rises into its place. Without motion, a fade. */
+function Roll({ value, children }: { value: string | number; children?: ReactNode }) {
+  const reduce = useReducedMotion()
+  return (
+    <span className="relative inline-flex overflow-hidden" style={{ height: "1.25em" }}>
+      <AnimatePresence mode="popLayout" initial={false}>
+        <m.span
+          key={value}
+          initial={reduce ? { opacity: 0 } : { opacity: 0, transform: "translateY(100%)" }}
+          animate={{ opacity: 1, transform: "translateY(0%)" }}
+          exit={reduce ? { opacity: 0 } : { opacity: 0, transform: "translateY(-100%)" }}
+          transition={{ duration: 0.3, ease: OUT }}
+          className="inline-block"
+          style={{ lineHeight: 1.25 }}
+        >
+          {children ?? value}
+        </m.span>
+      </AnimatePresence>
+    </span>
+  )
+}
 
 export function CartFloat() {
-  const { count, total, openCart } = useCart()
+  const { count, total, isOpen, openCart } = useCart()
+  const reduce = useReducedMotion()
   const controls = useAnimationControls()
-  const prevCount = useRef(count)
+
+  /* While the cart is open it covers this chip (and, after an add, it is the cart that celebrates). So the chip keeps showing the old
+   * numbers and takes the new ones the moment the cart closes: that is when the roll, the gold flash and the bounce are seen. */
+  const [shown, setShown] = useState({ count, total })
+  const [flash, setFlash] = useState(0)
+  const prev = useRef(shown)
+  // Derived while rendering (React's "adjust state when a prop changes" pattern) instead of in an effect: the chip takes the cart's numbers in
+  // the same pass in which the cart closes, with no extra commit.
+  if (!isOpen && (shown.count !== count || shown.total !== total)) setShown({ count, total })
+
+  const bounce = useCallback(() => {
+    controls.start({
+      scale:  [1, 1.32, 0.86, 1.12, 0.97, 1],
+      rotate: [0, -6,   4,   -2,   1,   0],
+      transition: {
+        duration: 0.55,
+        times:    [0, 0.16, 0.38, 0.6, 0.78, 1],
+        ease: "easeOut",
+      },
+    })
+  }, [controls])
 
   useEffect(() => {
-    if (count > prevCount.current) {
-      controls.start({
-        scale:  [1, 1.32, 0.86, 1.12, 0.97, 1],
-        rotate: [0, -6,   4,   -2,   1,   0],
-        transition: {
-          duration: 0.55,
-          times:    [0, 0.16, 0.38, 0.6, 0.78, 1],
-          ease: "easeOut",
-        },
-      })
+    if (shown.count > prev.current.count) {
+      setFlash((n) => n + 1)
+      if (prev.current.count > 0) bounce()
     }
-    prevCount.current = count
-  }, [count, controls])
+    prev.current = shown
+  }, [shown, bounce])
 
   return (
     <AnimatePresence>
-      {count > 0 && (
+      {shown.count > 0 && (
         <m.div
           className="fixed bottom-24 right-5 z-50"
           initial={{ scale: 0, opacity: 0, y: 24 }}
@@ -35,66 +74,55 @@ export function CartFloat() {
           exit={{ scale: 0, opacity: 0, y: 24 }}
           transition={{ type: "spring", stiffness: 440, damping: 26 }}
         >
+          {/* The chip and its little "Ver carrito" tab move together (bounce, hover, press), so the tab always stays glued on top */}
+          <m.div animate={controls} whileHover={{ y: -2 }} whileTap={{ scale: 0.97 }} className="flex flex-col items-start">
+          {/* The tab: a pointer for the click only (the button below carries the accessible name) */}
+          <span
+            aria-hidden
+            onClick={openCart}
+            className="-mb-px ml-3 cursor-pointer bg-[color-mix(in_oklab,var(--ink)_72%,transparent)] px-2.5 pb-1 pt-1.5 text-[9.5px] font-bold uppercase leading-none tracking-[0.2em] text-[var(--face)] backdrop-blur-xl"
+            style={{ boxShadow: "0 0 0 1px color-mix(in oklab, var(--crema) 16%, transparent)", clipPath: "inset(-1px -1px 1px -1px)" }}
+          >
+            Ver carrito
+          </span>
           <m.button
             type="button"
             onClick={openCart}
-            animate={controls}
-            whileHover={{ scale: 1.07, y: -3 }}
-            whileTap={{ scale: 0.93 }}
-            aria-label={`Ver carrito — ${count} productos`}
+            aria-label={`Ver carrito — ${shown.count} productos`}
             data-testid="cart-float"
-            className="relative flex items-center gap-3 rounded-2xl px-4 py-3 cursor-pointer overflow-hidden"
-            style={{
-              background: "linear-gradient(135deg, var(--rose-hot) 0%, var(--gold-deep) 100%)",
-              boxShadow: "0 8px 32px -8px rgba(255,105,180,0.65), 0 4px 16px -4px rgba(212,175,55,0.45), 0 0 0 1.5px rgba(255,255,255,0.2)",
-            }}
+            // "Vidrio" in the ink colours (client's pick): square, the near-black of the announcement strip but translucent over a blur
+            className="relative flex cursor-pointer items-center gap-3 bg-[color-mix(in_oklab,var(--ink)_72%,transparent)] px-4 py-3 text-[var(--crema)] backdrop-blur-xl [font-variant-numeric:lining-nums]"
+            style={{ boxShadow: "0 0 0 1px color-mix(in oklab, var(--crema) 16%, transparent), 0 18px 34px -14px rgba(30,15,34,0.55)" }}
           >
-            {/* Shimmer continuo */}
-            <span
-              className="pointer-events-none absolute inset-0"
-              aria-hidden
-              style={{
-                background: "linear-gradient(105deg,transparent 40%,rgba(255,255,255,0.18) 50%,transparent 60%)",
-                backgroundSize: "200% 100%",
-                animation: "shimmer-sweep 3s ease-in-out infinite",
-              }}
-            />
+            {/* A flash of light that blooms behind the bag when something was added (pale gold, brief, once) */}
+            {flash > 0 && !reduce && (
+              <span aria-hidden className="pointer-events-none absolute inset-0 overflow-hidden">
+                <m.span
+                  key={flash}
+                  className="absolute inset-0"
+                  style={{ background: "radial-gradient(circle at 24% 50%, color-mix(in oklab, var(--dorado-soft) 88%, white) 0%, transparent 60%)" }}
+                  initial={{ opacity: 0.95, transform: "scale(0.4)" }}
+                  animate={{ opacity: 0, transform: "scale(1.8)" }}
+                  transition={{ duration: 0.7, ease: OUT }}
+                />
+              </span>
+            )}
 
-            {/* Icono + badge */}
-            <span className="relative shrink-0">
-              <ShoppingBag className="h-5 w-5 text-white" />
-              <m.span
-                key={count}
-                initial={{ scale: 0, opacity: 0 }}
-                animate={{ scale: 1, opacity: 1 }}
-                transition={{ type: "spring", stiffness: 700, damping: 18 }}
-                className="absolute -right-2.5 -top-2.5 flex h-5 w-5 items-center justify-center rounded-full bg-white text-[10px] font-black"
-                style={{ color: "var(--rose-hot)" }}
-              >
-                {count}
-              </m.span>
+            {/* The bag and its count in parentheses, like the header's */}
+            <span className="relative flex items-center gap-1.5">
+              <ShoppingBag className="h-5 w-5 text-[var(--crema)]" />
+              <span className="flex items-center text-[15px] font-semibold leading-none">
+                (<Roll value={shown.count} />)
+              </span>
             </span>
 
-            {/* Textos */}
-            <span className="relative flex flex-col items-start leading-none gap-0.5">
-              <span className="text-[9px] font-bold uppercase tracking-widest text-white/75">
-                Mi carrito
-              </span>
-              <m.span
-                key={total}
-                initial={{ opacity: 0, y: 5 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.25 }}
-                className="text-sm font-black text-white"
-              >
-                {new Intl.NumberFormat("es-CO", {
-                  style: "currency",
-                  currency: "COP",
-                  maximumFractionDigits: 0,
-                }).format(total)}
-              </m.span>
+            <span aria-hidden className="relative h-6 w-px bg-[var(--crema)]/25" />
+
+            <span className="relative text-[15px] font-semibold leading-none">
+              <Roll value={shown.total}>{formatCOP(shown.total)}</Roll>
             </span>
           </m.button>
+          </m.div>
         </m.div>
       )}
     </AnimatePresence>

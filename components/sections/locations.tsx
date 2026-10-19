@@ -5,12 +5,15 @@ import Link from "next/link"
 import { m, type Variants } from "framer-motion"
 import { ArrowUpRight, Clock, MapPin, Navigation } from "lucide-react"
 import { buttonVariants } from "@/components/ui/button"
+import { WhenNear } from "@/components/when-near"
 import { cn } from "@/lib/utils"
 import { VENUES, faceLinkProps, type Venue } from "@/lib/site"
 
+const MapPlaceholder = () => <div className="h-full w-full animate-pulse bg-black/5" />
+
 const Map = dynamic(
   () => import("@/components/map-react-leaflet").then((m) => m.MapReactLeaflet),
-  { ssr: false, loading: () => <div className="h-full w-full animate-pulse bg-black/5" /> },
+  { ssr: false, loading: MapPlaceholder },
 )
 
 /*
@@ -35,8 +38,8 @@ const fadeUp: Variants = {
 const VENUE_LIST: Venue[] = [VENUES.cosmetics, VENUES.spa]
 
 const CARDS = [
-  { venue: VENUES.cosmetics, theme: "light" as const, testId: "location-cosmetics", learnMore: "Conocer la tienda" },
-  { venue: VENUES.spa, theme: "noir" as const, testId: "location-spa", learnMore: "Conocer el spa" },
+  { venue: VENUES.cosmetics, face: "face-cosmetics", testId: "location-cosmetics", learnMore: "Conocer la tienda" },
+  { venue: VENUES.spa, face: "face-spa", testId: "location-spa", learnMore: "Conocer el spa" },
 ]
 
 export function Locations() {
@@ -51,19 +54,19 @@ export function Locations() {
       >
         <m.p
           variants={fadeUp}
-          className="mb-5 flex items-center justify-center gap-3 text-[11px] font-bold uppercase tracking-[0.32em] text-[var(--gold-deep)]"
+          className="mb-5 flex items-center justify-center gap-3 text-[11px] font-bold uppercase tracking-[0.32em] text-[var(--face-deep)]"
         >
-          <span className="h-px w-10 bg-[var(--gold-deep)]/50" />
+          <span className="h-px w-10 bg-[var(--face-deep)]/50" />
           Dónde encontrarnos
-          <span className="h-px w-10 bg-[var(--gold-deep)]/50" />
+          <span className="h-px w-10 bg-[var(--face-deep)]/50" />
         </m.p>
         <h2
           id="ubicaciones-title"
-          className="font-display uppercase leading-[0.9] tracking-[-0.04em] text-ink"
+          className="font-display uppercase leading-[0.9] tracking-[-0.02em] text-ink"
           style={{ fontSize: "clamp(2.4rem, 6vw, 5rem)" }}
         >
           <span className="block overflow-hidden pb-[0.06em]">
-            <m.span variants={rise} custom={0} className="block font-light">
+            <m.span variants={rise} custom={0} className="block font-bold">
               Dos casas,
             </m.span>
           </span>
@@ -87,20 +90,21 @@ export function Locations() {
             transition={{ duration: 0.9, ease: EASE }}
             className="relative isolate h-[clamp(300px,70vw,380px)] w-full overflow-hidden rounded-3xl shadow-xl lg:h-auto lg:min-h-[460px]"
           >
-            <div className="absolute inset-0">
+            {/* Leaflet and its tiles wait until the hero above has finished loading */}
+            <WhenNear className="absolute inset-0" fallback={<MapPlaceholder />}>
               <Map venues={VENUE_LIST} />
-            </div>
+            </WhenNear>
             <div
               aria-hidden
               className="pointer-events-none absolute inset-0 z-[500] rounded-3xl"
-              style={{ boxShadow: "inset 0 0 0 2px oklch(0.75 0.135 85 / 0.30)" }}
+              style={{ boxShadow: "inset 0 0 0 2px color-mix(in oklab, var(--face) 30%, transparent)" }}
             />
             {/* Legend: one chip per venue, in its pin color */}
             <div className="absolute bottom-4 left-4 z-[600] flex flex-wrap gap-2">
               {VENUE_LIST.map((v) => (
                 <span
                   key={v.href}
-                  className="flex items-center gap-2 rounded-full border border-[var(--gold)]/40 bg-white px-3.5 py-2 shadow-lg"
+                  className="flex items-center gap-2 rounded-full border border-[var(--face)]/40 bg-white px-3.5 py-2 shadow-lg"
                 >
                   <span className="h-2.5 w-2.5 rounded-full" style={{ background: v.accent }} />
                   <span className="text-xs font-semibold text-[var(--ink)]">{v.name}</span>
@@ -124,30 +128,24 @@ export function Locations() {
 function InfoRow({
   icon,
   label,
-  isNoir,
-  accent,
   children,
 }: {
   icon: React.ReactNode
   label: string
-  isNoir: boolean
-  accent: string
   children: React.ReactNode
 }) {
   return (
     <div className="flex items-start gap-4">
       <span
         aria-hidden
-        className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full"
-        style={{ background: `${accent}1f`, color: accent }}
+        className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full text-[var(--face-deep)]"
+        style={{ background: "color-mix(in oklab, var(--face) 14%, transparent)" }}
       >
         {icon}
       </span>
       <div className="min-w-0">
-        <dt className={cn("text-[10px] font-semibold uppercase tracking-[0.22em]", isNoir ? "text-white/45" : "text-ink/45")}>
-          {label}
-        </dt>
-        <dd className={cn("mt-1", isNoir ? "text-white" : "text-ink")}>{children}</dd>
+        <dt className="text-[10px] font-semibold uppercase tracking-[0.22em] text-ink/60">{label}</dt>
+        <dd className="mt-1 text-ink">{children}</dd>
       </div>
     </div>
   )
@@ -155,21 +153,17 @@ function InfoRow({
 
 function VenueCard({
   venue,
-  theme,
+  face,
   testId,
   learnMore,
   index,
 }: {
   venue: Venue
-  theme: "light" | "noir"
+  face: string
   testId: string
   learnMore: string
   index: number
 }) {
-  const isNoir = theme === "noir"
-  // The gold in `accent` is too pale to read as text on the light card
-  const iconAccent = isNoir ? venue.accent : "#c48a1a"
-
   return (
     <m.article
       initial={{ opacity: 0, y: 32 }}
@@ -179,36 +173,32 @@ function VenueCard({
       data-testid={testId}
       className={cn(
         "relative flex-1 overflow-hidden rounded-3xl border p-6 md:p-8",
-        isNoir
-          ? "border-white/10 bg-noir text-white"
-          : "border-[oklch(0.84_0.065_15/0.4)] bg-[linear-gradient(180deg,oklch(0.97_0.015_15)_0%,white_100%)] text-ink",
+        face,
+        "border-[color-mix(in_oklab,var(--face-light)_60%,transparent)] bg-[linear-gradient(180deg,oklch(0.97_0.02_103)_0%,var(--crema)_100%)] text-ink",
       )}
     >
-      {isNoir && <div aria-hidden className="pointer-events-none absolute inset-0 bg-grain opacity-[0.07] mix-blend-overlay" />}
-
       <div className="relative">
         {/* Who, and the one thing to know before coming */}
         <div className="flex flex-wrap items-center justify-between gap-x-4 gap-y-2">
           <h3 className="flex items-center gap-3 font-display text-2xl font-semibold tracking-tight md:text-[1.7rem]">
-            <span aria-hidden className="h-3 w-3 rounded-full" style={{ background: venue.accent }} />
+            <span aria-hidden className="h-3 w-3 rounded-full bg-[var(--face)]" />
             {venue.name}
           </h3>
           <span
-            className="rounded-full border px-3 py-1 text-[10px] font-bold uppercase tracking-[0.16em]"
-            style={{ color: iconAccent, borderColor: `${iconAccent}66` }}
+            className="rounded-full border border-[color-mix(in_oklab,var(--face)_55%,transparent)] px-3 py-1 text-[10px] font-bold uppercase tracking-[0.16em] text-[var(--face-deep)]"
           >
             {venue.note}
           </span>
         </div>
 
         {/* Where and when */}
-        <dl className={cn("mt-6 grid gap-5 border-t pt-6", isNoir ? "border-white/10" : "border-ink/10")}>
-          <InfoRow icon={<MapPin className="h-5 w-5" />} label="Dirección" isNoir={isNoir} accent={iconAccent}>
+        <dl className="mt-6 grid gap-5 border-t border-ink/10 pt-6">
+          <InfoRow icon={<MapPin className="h-5 w-5" />} label="Dirección">
             <span className="block font-display text-lg font-semibold leading-snug md:text-xl">{venue.address}</span>
-            <span className={cn("block text-sm", isNoir ? "text-white/55" : "text-ink/55")}>{venue.region}</span>
+            <span className="block text-sm text-ink/60">{venue.region}</span>
           </InfoRow>
 
-          <InfoRow icon={<Clock className="h-5 w-5" />} label="Horario" isNoir={isNoir} accent={iconAccent}>
+          <InfoRow icon={<Clock className="h-5 w-5" />} label="Horario">
             {venue.hours.map((line) => (
               <span key={line} className="block text-base leading-snug">
                 {line}
@@ -223,7 +213,7 @@ function VenueCard({
             href={venue.gmaps}
             target="_blank"
             rel="noopener noreferrer"
-            className={buttonVariants({ variant: isNoir ? "gold" : "default", size: "default" })}
+            className={buttonVariants({ variant: "default", size: "default" })}
           >
             <Navigation className="h-4 w-4" />
             Cómo llegar
@@ -232,12 +222,7 @@ function VenueCard({
             href={venue.href}
             {...faceLinkProps(venue.href)}
             data-testid={`${testId}-enter`}
-            className={cn(
-              "group inline-flex items-center gap-1.5 text-sm font-semibold underline-offset-[6px] outline-none hover:underline focus-visible:ring-2",
-              isNoir
-                ? "text-white/80 decoration-[var(--gold)] hover:text-white focus-visible:ring-[var(--gold)]"
-                : "text-ink/75 decoration-[var(--rose-hot)] hover:text-ink focus-visible:ring-[var(--rose-hot)]",
-            )}
+            className="group inline-flex items-center gap-1.5 text-sm font-semibold text-ink/80 underline decoration-[var(--face)] underline-offset-[6px] outline-none hover:text-ink focus-visible:ring-2 focus-visible:ring-[var(--face-deep)]"
           >
             {learnMore}
             <ArrowUpRight className="h-4 w-4 transition-transform duration-300 group-hover:rotate-45" />

@@ -2,15 +2,30 @@
 
 import { useRef } from "react"
 import Image from "next/image"
+import Link from "next/link"
+import { ArrowUpRight } from "lucide-react"
+import { cn } from "@/lib/utils"
 import { m, useInView } from "framer-motion"
-import { useIsMobile } from "@/hooks/use-is-mobile"
 
-const IMAGES = [
-  { src: "https://images.unsplash.com/photo-1596462502278-27bfdc403348?w=900&q=85&auto=format&fit=crop", alt: "Colección de cosméticos premium", span: "md:col-span-2 md:row-span-2", caption: "Nuestra colección signature" },
-  { src: "https://images.unsplash.com/photo-1503236823255-94609f598e71?w=600&q=85&auto=format&fit=crop", alt: "Maquillaje profesional" },
-  { src: "https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?w=600&q=85&auto=format&fit=crop", alt: "Brochas y herramientas de belleza" },
-  { src: "https://images.unsplash.com/photo-1571781926291-c477ebfd024b?w=600&q=85&auto=format&fit=crop", alt: "Rutina de skincare" },
-  { src: "https://images.unsplash.com/photo-1583241475880-083f84372725?w=600&q=85&auto=format&fit=crop", alt: "Labiales en exhibición" },
+// Photos of the store at Unicentro. `pos` is the object-position focal point:
+// the shots are tall phone photos cropped into square-ish tiles.
+interface GalleryImage {
+  src: string
+  pos: string
+  alt: string
+  span?: string
+  caption?: string
+  /** The tile is a link: where it goes and the pill label that shows it */
+  href?: string
+  cta?: string
+}
+
+const IMAGES: GalleryImage[] = [
+  { src: "/images/cosmetics/store-andres.webp", pos: "50% 0%", alt: "Andrés, de Queens Cosmetics, aplicándose rubor con una brocha rosada", href: "/quienes-somos", cta: "Conoce más de Queens" },
+  { src: "/images/cosmetics/store-neon-logo.webp", pos: "50% 34%", alt: "Isotipo de Queens en neón dentro de la tienda" },
+  { src: "/images/cosmetics/store-shelves.webp", pos: "62% 42%", alt: "Estantes con maquillaje y skincare de marcas originales" },
+  { src: "/images/cosmetics/store-counter.webp", pos: "50% 62%", alt: "Mostrador de la tienda con labiales y accesorios" },
+  { src: "/images/cosmetics/store-makeup.webp", pos: "38% 46%", alt: "Estantes de maquillaje junto a la pared lila" },
 ]
 
 const DIRS = [
@@ -21,34 +36,73 @@ const DIRS = [
   { x: -30, y:  40 },
 ]
 
+/** The portrait that links to /quienes-somos: the photo IS the card (edge to edge), in a column as wide as the photo is, so nothing is cropped or blown up. A pill on it says it is a link. */
+function AboutCard({ img, i, inView, mobile = false }: { img: GalleryImage; i: number; inView: boolean; mobile?: boolean }) {
+  return (
+    <m.div
+      className={cn(
+        "group relative overflow-hidden rounded-2xl",
+        mobile ? "mb-3 aspect-[893/1263] md:hidden" : "hidden md:col-span-1 md:row-span-2 md:block",
+      )}
+      initial={{ opacity: 0, x: DIRS[i].x, y: DIRS[i].y, scale: 0.88 }}
+      animate={inView ? { opacity: 1, x: 0, y: 0, scale: 1 } : {}}
+      transition={{ duration: 0.9, delay: i * 0.12, ease: [0.16, 1, 0.3, 1] }}
+      whileHover={{ scale: 1.02, zIndex: 10 }}
+    >
+      <Image
+        src={img.src}
+        alt={img.alt}
+        fill
+        sizes="(max-width: 768px) 100vw, 400px"
+        style={{ objectPosition: img.pos }}
+        className="object-cover transition-transform duration-700 ease-[cubic-bezier(0.23,1,0.32,1)] group-hover:scale-[1.02]"
+      />
+      <div className="pointer-events-none absolute inset-x-0 bottom-0 h-1/4 bg-linear-to-t from-(--ink)/40 to-transparent" />
+      <span className="pointer-events-none absolute bottom-2 left-2 z-20 inline-flex items-center gap-2 rounded-full bg-(--ink) px-4 py-2.5 text-[0.7rem] font-semibold uppercase tracking-[0.22em] text-(--crema) shadow-lg transition-transform duration-300 ease-[cubic-bezier(0.23,1,0.32,1)] group-hover:-translate-y-0.5">
+        {img.cta}
+        <ArrowUpRight className="h-4 w-4 transition-transform duration-300 ease-[cubic-bezier(0.23,1,0.32,1)] group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+      </span>
+      <Link
+        href={img.href ?? "/quienes-somos"}
+        aria-label={`${img.cta}: ir a Quiénes somos`}
+        data-testid={mobile ? "gallery-about-link-mobile" : "gallery-about-link"}
+        className="absolute inset-0 z-10 rounded-2xl focus-visible:outline-2 focus-visible:outline-offset-[-4px] focus-visible:outline-(--ink)"
+      />
+    </m.div>
+  )
+}
+
 export function Gallery() {
   const ref = useRef<HTMLElement>(null)
   const inView = useInView(ref, { once: true, margin: "-80px" })
-  const isMobile = useIsMobile()
 
   return (
     <section
       ref={ref}
       id="galeria"
-      className="relative py-20 md:py-28 bg-linear-to-b from-(--rose-pastel)/15 to-white overflow-hidden"
+      className="relative scroll-mt-[var(--nav-h)] pt-3 md:pt-4 pb-4 md:pb-5 bg-linear-to-b from-(--dorado-soft)/20 to-white overflow-hidden"
     >
-      {/* Decorative orb */}
-      <m.div
-        className="pointer-events-none absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 h-[600px] w-[600px] rounded-full blur-[120px]"
-        style={{ background: "oklch(0.84 0.065 15 / 15%)" }}
-        animate={isMobile ? undefined : { scale: [1, 1.2, 1] }}
-        transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
+      {/* Decorative orb. It breathes forever: a CSS loop (see "AMBIENT LOOPS" in globals.css), still on phones */}
+      <div
+        className="ambient-breathe ambient-desktop pointer-events-none absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 h-[600px] w-[600px] rounded-full blur-[120px]"
+        style={
+          {
+            background: "color-mix(in oklab, var(--face-light) 18%, transparent)",
+            "--breathe-x": 1.2,
+            "--amb-dur": "8s",
+          } as React.CSSProperties
+        }
       />
 
       <div className="relative mx-auto max-w-7xl px-6 md:px-10">
-        <div className="text-center mb-12 overflow-hidden">
+        <div className="text-center mb-3 md:mb-4 overflow-hidden">
           <m.span
-            className="inline-block text-xs font-semibold tracking-[0.3em] uppercase text-(--gold-deep) mb-3"
+            className="inline-block text-xs font-semibold tracking-[0.3em] uppercase text-(--face-deep) mb-3"
             initial={{ opacity: 0, y: 20 }}
             animate={inView ? { opacity: 1, y: 0 } : {}}
             transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
           >
-            Galería
+            Conócenos
           </m.span>
 
           <div className="overflow-hidden">
@@ -59,14 +113,18 @@ export function Gallery() {
               animate={inView ? { y: 0, opacity: 1 } : {}}
               transition={{ duration: 0.8, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
             >
-              Momentos{" "}
-              <em className="font-serif italic font-light text-queens-gradient">Queens</em>
+              Momentos Queens
             </m.h2>
           </div>
         </div>
 
-        <div className="grid grid-cols-2 md:grid-cols-4 auto-rows-[200px] md:auto-rows-[260px] gap-3 md:gap-4">
-          {IMAGES.map((img, i) => (
+        {/* Phones: the portrait card sits above the grid in normal flow, so its height follows the photo (the grid rows are fixed) */}
+        {IMAGES.map((img, i) => img.href && <AboutCard key={i} img={img} i={i} inView={inView} mobile />)}
+
+        <div className="grid grid-cols-2 md:grid-cols-[1.25fr_1fr_1fr] auto-rows-[200px] md:auto-rows-[260px] gap-3 md:gap-4">
+          {IMAGES.map((img, i) => img.href ? (
+            <AboutCard key={i} img={img} i={i} inView={inView} />
+          ) : (
             <m.div
               key={i}
               className={`group relative overflow-hidden rounded-2xl ${img.span ?? ""}`}
@@ -79,32 +137,28 @@ export function Gallery() {
                 src={img.src}
                 alt={img.alt}
                 fill
-                sizes="(max-width: 768px) 50vw, 25vw"
-                className="object-cover transition-transform duration-700 group-hover:scale-115"
+                // capped: the grid lives in max-w-7xl, so past ~1440px the tiles stop growing
+                // (~418px each of the three columns; the caps leave room for the hover zoom)
+                sizes="(max-width: 768px) 50vw, min(33vw, 430px)"
+                style={{ objectPosition: img.pos }}
+                className={cn("transition-transform duration-700", "object-cover group-hover:scale-115")}
               />
 
-              {/* overlay */}
-              <m.div
-                className="absolute inset-0 bg-linear-to-t from-(--ink)/60 via-transparent to-transparent"
-                initial={{ opacity: 0 }}
-                whileHover={{ opacity: 1 }}
-                transition={{ duration: 0.4 }}
-              />
+              {/* Everything below reacts to the TILE being hovered (group-hover). They used to carry
+                  their own `whileHover`, but they are stacked on top of each other: the topmost layer
+                  took the pointer, so the shade never showed and the caption only appeared if the
+                  cursor landed on the caption itself. */}
+
+              {/* shade, so the caption reads over the photo */}
+              <div className="absolute inset-0 bg-linear-to-t from-(--ink)/60 via-transparent to-transparent opacity-0 transition-opacity duration-400 ease-in-out group-hover:opacity-100" />
 
               {/* shimmer on hover */}
-              <m.div
-                className="absolute inset-0 bg-linear-to-br from-white/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"
-              />
+              <div className="absolute inset-0 bg-linear-to-br from-white/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
 
               {img.caption && (
-                <m.div
-                  className="absolute inset-x-0 bottom-0 p-5 text-white"
-                  initial={{ opacity: 0, y: 16 }}
-                  whileHover={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
-                >
+                <div className="pointer-events-none absolute inset-x-0 bottom-0 translate-y-4 p-5 text-white opacity-0 transition-[opacity,translate] duration-400 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:translate-y-0 group-hover:opacity-100">
                   <p className="font-serif italic text-lg">{img.caption}</p>
-                </m.div>
+                </div>
               )}
             </m.div>
           ))}

@@ -12,7 +12,7 @@ export const metadata: Metadata = {
 const sections = [
   {
     title: "1. Responsable del tratamiento",
-    body: "Queens Cosmetics, con local en Unicentro Palmira (Local 128), Valle del Cauca, es responsable del tratamiento de los datos personales que nos compartes al hacer pedidos por WhatsApp, usar el carrito de este sitio o contactarnos por redes sociales.",
+    body: "Queens Cosmetics, con local en Unicentro Palmira (Local 1-28), Valle del Cauca, es responsable del tratamiento de los datos personales que nos compartes al hacer pedidos por WhatsApp, usar el carrito de este sitio o contactarnos por redes sociales.",
   },
   {
     title: "2. Datos que recolectamos",
@@ -42,7 +42,7 @@ export default function PrivacidadPage() {
       <div className="mx-auto max-w-3xl px-6 py-16 md:py-24">
         <Link
           href="/"
-          className="inline-flex items-center gap-2 text-xs tracking-widest uppercase font-medium text-[var(--ink)]/50 hover:text-[var(--gold-deep)] transition-colors duration-300 mb-12"
+          className="inline-flex items-center gap-2 text-xs tracking-widest uppercase font-medium text-[var(--ink)]/65 hover:text-[var(--face-deep)] transition-colors duration-300 mb-12"
         >
           <ArrowLeft className="w-4 h-4" /> Volver al inicio
         </Link>
@@ -64,9 +64,9 @@ export default function PrivacidadPage() {
           ))}
         </div>
 
-        <p className="mt-14 pt-6 border-t border-[var(--ink)]/10 text-xs text-[var(--ink)]/50">
+        <p className="mt-14 pt-6 border-t border-[var(--ink)]/10 text-xs text-[var(--ink)]/65">
           Última actualización: julio de 2026 · Consulta también nuestros{" "}
-          <Link href="/terminos" className="text-[var(--gold-deep)] hover:underline">
+          <Link href="/terminos" className="text-[var(--face-deep)] hover:underline">
             Términos y Condiciones
           </Link>
         </p>

@@ -1,12 +1,16 @@
 "use client"
 
-import { useState, useMemo, useCallback } from "react"
-import { m, AnimatePresence } from "framer-motion"
-import { Search, SlidersHorizontal, ChevronDown, X, ArrowUpDown } from "lucide-react"
-import { ProductCard } from "@/components/product-card"
+import { useState, useMemo, useCallback, useEffect, useLayoutEffect, useRef } from "react"
+import { m, AnimatePresence, useReducedMotion } from "framer-motion"
+import { Search, ChevronDown, ArrowUpDown, X } from "lucide-react"
+import { ProductCard, CARD_GRID, type CardStyle } from "@/components/product-card"
+import { SubcategoryNav } from "@/components/subcategory-nav"
+import { SUBCATEGORIES, subcategoryOf } from "@/lib/subcategories"
 import { CATEGORIES, PRODUCTS, getProductsByCategory, type ProductCategory } from "@/lib/products"
+import { CATEGORY_ACTIVE_EVENT, CATEGORY_EVENT, CATALOG_FILTERS_ID, SEARCH_ACTIVE_EVENT, SEARCH_EVENT } from "@/lib/site"
+import { cn } from "@/lib/utils"
 
-const PAGE_SIZE = 12
+const PAGE_SIZE = 15
 
 type SortOrder = "default" | "price-asc" | "price-desc"
 
@@ -16,32 +20,148 @@ const SORT_LABELS: Record<SortOrder, string> = {
   "price-desc": "Mayor precio",
 }
 
-export function Catalog() {
+/* Controles del catálogo (barra de categorías, buscador, orden): rectángulos rectos, sin líneas, con un
+ * fondo lila suave. El estado activo se rellena en tinta con texto crema. */
+export const CONTROL_TEXT  = "text-[11.5px] uppercase tracking-[0.16em]"
+export const CONTROL_BG    = "bg-[var(--lila)]"
+export const CONTROL_HOVER = "hover:bg-[color-mix(in_oklab,var(--lila)_88%,var(--ink))]"
+/** Estado activo / elegido: el lila del logo, más oscuro (--lila-deep) con texto crema (≥5:1). Los controles en reposo son el lila del logo (#A48BA6) con texto casi negro. */
+/** El buscador y el orden se quedan en el lila suave (pedido del cliente); solo la barra de categorías va en el lila del logo. */
+export const CONTROL_SOFT_BG    = "bg-[var(--lila-soft)]"
+export const CONTROL_SOFT_HOVER = "hover:bg-[var(--lila-light)]/45"
+export const CONTROL_ON    = "bg-[var(--lila-deep)] text-[var(--crema)]"
+
+/* Barra de categorías "subrayado editorial" (elegida por el cliente entre seis versiones): solo texto sobre el crema, con una línea fina
+ * lila abajo y, bajo la categoría abierta, una línea gruesa del lila del logo que SE DESLIZA de una a otra (220 ms, ease-in-out fuerte;
+ * solo transform) y la categoría en lila oscuro y negrita. Sin números de cantidad (el cliente los quitó). En celular se desplaza de lado.
+ * Con una búsqueda en toda la tienda no hay categoría activa y la línea gruesa se desvanece. Con "reducir movimiento" no se desliza. */
+const TAB_SLIDE = "220ms cubic-bezier(0.77, 0, 0.175, 1)"
+
+export function CategoryBar({ active, onSelect, className }: {
+  active: ProductCategory | null
+  /** Ya no se muestra (el cliente quitó los números); se acepta para no romper a quien lo pasa. */
+  counts?: Record<string, number>
+  onSelect: (id: ProductCategory) => void
+  className?: string
+}) {
+  const reduce = useReducedMotion()
+  const refs = useRef<Record<string, HTMLButtonElement | null>>({})
+  const inner = useRef<HTMLDivElement>(null)
+  const last = useRef<ProductCategory>(active ?? CATEGORIES[0].id)  // the line stays where it was while it fades out
+  const [bar, setBar] = useState({ x: 0, w: 0 })
+  const [ready, setReady] = useState(false)    // no slide on first paint
+
+  const measure = useCallback(() => {
+    if (active) last.current = active
+    const el = refs.current[last.current]
+    if (el) setBar({ x: el.offsetLeft, w: el.offsetWidth })
+  }, [active])
+  useLayoutEffect(measure, [measure])
+  useEffect(() => {
+    const box = inner.current
+    const ro = box ? new ResizeObserver(measure) : null   // the fonts loading or the window resizing move the tabs
+    if (box) ro?.observe(box)
+    const id = requestAnimationFrame(() => requestAnimationFrame(() => setReady(true)))
+    return () => { ro?.disconnect(); cancelAnimationFrame(id) }
+  }, [measure])
+
+  return (
+    <div
+      role="tablist"
+      aria-label="Categorías"
+      className={cn("mx-auto mb-2 max-w-[940px] overflow-x-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden", className)}
+    >
+      <div ref={inner} className="relative flex w-max min-w-full gap-7 sm:gap-8">
+        <span aria-hidden className="pointer-events-none absolute inset-x-0 bottom-0 h-px bg-[var(--lila-light)]" />
+        {CATEGORIES.map((cat) => {
+          const on = active === cat.id
+          return (
+            <button
+              key={cat.id}
+              ref={(el) => { refs.current[cat.id] = el }}
+              type="button"
+              role="tab"
+              aria-selected={on}
+              onClick={(e) => {
+                onSelect(cat.id)
+                // Centra la elegida moviendo solo esta fila: scrollIntoView también desplazaría
+                // la sección y <main> (ambos recortan con overflow).
+                const row = e.currentTarget.closest<HTMLElement>('[role="tablist"]')
+                if (row) {
+                  const c = row.getBoundingClientRect()
+                  const r = e.currentTarget.getBoundingClientRect()
+                  row.scrollTo({ left: row.scrollLeft + (r.left - c.left) - (c.width - r.width) / 2, behavior: "smooth" })
+                }
+              }}
+              data-testid={`category-${cat.id}`}
+              className={cn(
+                "flex-none cursor-pointer select-none whitespace-nowrap pb-3 pt-2.5 text-[1rem] leading-none transition-colors duration-200",
+                "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--face)",
+                on ? "font-bold text-[var(--ciruela)]" : "font-semibold text-[var(--lila-deep)] hover:text-[var(--ciruela)]",
+              )}
+            >
+              {cat.label}
+            </button>
+          )
+        })}
+        <span
+          aria-hidden
+          className="pointer-events-none absolute bottom-0 left-0 h-[3px] w-px origin-left bg-[var(--ciruela)]"
+          style={{
+            transform: `translateX(${bar.x}px) scaleX(${bar.w})`,
+            opacity: active ? 1 : 0,
+            transition: ready && !reduce ? `transform ${TAB_SLIDE}, opacity 150ms ease-out` : "none",
+          }}
+        />
+      </div>
+    </div>
+  )
+}
+
+export function Catalog({ cardStyle = "editorial" }: { cardStyle?: CardStyle }) {
   const [active, setActive]         = useState<ProductCategory>("labiales")
-  const [search, setSearch]         = useState("")
+  const [search, setSearch]         = useState("")      // the header's magnifier: the whole store
+  const [localQuery, setLocalQuery] = useState("")      // the little box in this row: the open category only
   const [sortOrder, setSortOrder]   = useState<SortOrder>("default")
   const [sortOpen, setSortOpen]     = useState(false)
   const [visibleCount, setVisible]  = useState(PAGE_SIZE)
+  const [group, setGroup]           = useState<string>("todo")   // subcategory of the open category ("Índice")
 
   const activeCategory = CATEGORIES.find((c) => c.id === active)!
 
-  /* counts por categoría — se usa en los tabs */
+  /* cantidad por categoría: va en la barra de categorías */
   const categoryCounts = useMemo(
     () => Object.fromEntries(CATEGORIES.map((c) => [c.id, getProductsByCategory(c.id).length])),
     [],
   )
 
+  /* Línea Capilar's subcategories (the index to the left of the grid): how many products each one has */
+  const defs = SUBCATEGORIES[active]
+  const groupItems = useMemo(() => {
+    const list = getProductsByCategory(active)
+    return [
+      { id: "todo", label: "Todo", count: list.length },
+      ...(defs ?? []).map((g) => ({ id: g.id, label: g.label, count: list.filter((p) => subcategoryOf(p) === g.id).length })),
+    ]
+  }, [active, defs])
+
   /* productos filtrados + ordenados */
   const filtered = useMemo(() => {
-    const raw = getProductsByCategory(active)
-    const q   = search.trim().toLowerCase()
-    const hit = q
-      ? raw.filter((p) => p.name.toLowerCase().includes(q) || p.description.toLowerCase().includes(q))
-      : raw
+    const q    = search.trim().toLowerCase()
+    const text = q || localQuery.trim().toLowerCase()   // the store-wide search wins over the category one
+    const raw  = q ? PRODUCTS : getProductsByCategory(active)
+    const hit  = text
+      ? raw.filter((p) => p.name.toLowerCase().includes(text) || p.description.toLowerCase().includes(text))
+      : defs && group !== "todo"
+        ? raw.filter((p) => subcategoryOf(p) === group)   // a subcategory; any text search looks across the whole category instead
+        : raw
     if (sortOrder === "price-asc")  return [...hit].sort((a, b) => a.price - b.price)
     if (sortOrder === "price-desc") return [...hit].sort((a, b) => b.price - a.price)
     return hit
-  }, [active, search, sortOrder])
+  }, [active, search, localQuery, sortOrder, group, defs])
+
+  const hasGroups = !!defs && !search
+  const groupTagline = hasGroups && !localQuery.trim() && group !== "todo" ? defs?.find((g) => g.id === group)?.tagline : undefined
 
   const visible    = filtered.slice(0, visibleCount)
   const hasMore    = visibleCount < filtered.length
@@ -51,10 +171,54 @@ export function Catalog() {
     setActive(id)
     setVisible(PAGE_SIZE)
     setSearch("")
+    setLocalQuery("")
+    setGroup("todo")
   }, [])
+
+  const handleGroup = useCallback((id: string) => {
+    setGroup(id)
+    setLocalQuery("")
+    setVisible(PAGE_SIZE)
+  }, [])
+
+  /* Tell the header which category is open (it marks that link) */
+  useEffect(() => {
+    window.dispatchEvent(new CustomEvent(CATEGORY_ACTIVE_EVENT, { detail: active }))
+  }, [active])
+
+  /* The header's category links ask for a tab */
+  useEffect(() => {
+    const onCategory = (e: Event) => {
+      const id = (e as CustomEvent<ProductCategory>).detail
+      if (CATEGORIES.some((c) => c.id === id)) handleCategoryChange(id)
+    }
+    window.addEventListener(CATEGORY_EVENT, onCategory)
+    return () => window.removeEventListener(CATEGORY_EVENT, onCategory)
+  }, [handleCategoryChange])
 
   const handleSearch = useCallback((val: string) => {
     setSearch(val)
+    setVisible(PAGE_SIZE)
+  }, [])
+
+  /* The header's search box (the magnifier) types here; and the header mirrors whatever the search text is */
+  useEffect(() => {
+    const onSearch = (e: Event) => handleSearch((e as CustomEvent<string>).detail ?? "")
+    window.addEventListener(SEARCH_EVENT, onSearch)
+    return () => window.removeEventListener(SEARCH_EVENT, onSearch)
+  }, [handleSearch])
+  useEffect(() => {
+    window.dispatchEvent(new CustomEvent(SEARCH_ACTIVE_EVENT, { detail: search }))
+  }, [search])
+
+  const handleLocalSearch = useCallback((val: string) => {
+    setLocalQuery(val)
+    setVisible(PAGE_SIZE)
+  }, [])
+
+  const clearSearch = useCallback(() => {
+    setSearch("")
+    setLocalQuery("")
     setVisible(PAGE_SIZE)
   }, [])
 
@@ -67,199 +231,192 @@ export function Catalog() {
   return (
     <section
       id="catalogo"
-      className="relative py-20 md:py-28 bg-gradient-to-b from-white to-[var(--rose-pastel)]/15 overflow-hidden"
+      className="relative scroll-mt-[var(--nav-h)] pt-4 md:pt-5 pb-3 md:pb-4 bg-gradient-to-b from-white to-[var(--dorado-soft)]/20 overflow-clip"
     >
       {/* Decorative blobs */}
-      <div className="absolute top-10 -left-20 h-64 w-64 rounded-full bg-[var(--rose-pastel)]/30 blur-3xl pointer-events-none" aria-hidden />
-      <div className="absolute bottom-20 -right-20 h-80 w-80 rounded-full bg-[var(--gold)]/20 blur-3xl pointer-events-none" aria-hidden />
+      <div className="absolute top-10 -left-20 h-64 w-64 rounded-full bg-[var(--face-light)]/30 blur-3xl pointer-events-none" aria-hidden />
+      <div className="absolute bottom-20 -right-20 h-80 w-80 rounded-full bg-[var(--face)]/20 blur-3xl pointer-events-none" aria-hidden />
 
       <div className="relative mx-auto max-w-7xl px-6 md:px-10">
 
         {/* ── Header ── */}
-        <div className="mx-auto max-w-2xl text-center mb-12">
-          <span className="inline-block text-xs font-semibold tracking-[0.3em] uppercase text-[var(--gold-deep)] mb-3">
+        <div className="max-w-3xl text-left mb-2 md:mb-3">
+          <span className="inline-block text-xs font-semibold tracking-[0.3em] uppercase text-[var(--face-deep)] mb-2.5">
             Nuestro catálogo
           </span>
           <h2
-            className="font-display font-semibold text-ink mb-4"
-            style={{ fontSize: "clamp(2rem, 4.5vw, 3.2rem)", letterSpacing: "-0.03em" }}
+            className="font-display font-semibold text-ink whitespace-nowrap"
+            style={{ fontSize: "clamp(1.45rem, 3vw, 2.2rem)", lineHeight: 1.05, letterSpacing: "-0.03em" }}
           >
-            Productos que te harán{" "}
-            <span className="text-queens-gradient">sentir única</span>
+            Productos para reinas
           </h2>
-          <p className="text-[var(--muted-foreground)] text-base md:text-lg">
-            Explora por categoría y agrega tus favoritos al carrito.
-          </p>
         </div>
 
-        {/* ── Sticky wrapper ── */}
-        <div className="sticky top-[72px] z-30 -mx-6 md:-mx-10 px-6 md:px-10 pb-4 pt-3 bg-white/95 md:bg-white/80 md:backdrop-blur-xl border-b border-(--rose-pastel)/30">
-
-          {/* Category tabs */}
-          <div className="flex justify-center mb-3">
-            <div className="flex flex-wrap justify-center gap-1.5 rounded-2xl bg-(--rose-pastel)/25 p-1.5 md:backdrop-blur-sm border border-white/60 shadow-inner">
-              {CATEGORIES.map((cat) => {
-                const isActive = active === cat.id
-                return (
-                  <m.button
-                    key={cat.id}
-                    onClick={() => handleCategoryChange(cat.id)}
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.95 }}
-                    transition={{ type: "spring", stiffness: 500, damping: 28 }}
-                    className="relative px-3.5 py-2 rounded-xl text-xs font-medium cursor-pointer select-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--gold)"
-                  >
-                    {isActive && (
-                      <m.div
-                        layoutId="cat-pill"
-                        className="absolute inset-0 rounded-xl bg-white"
-                        style={{ boxShadow: "0 4px 16px -4px rgba(212,175,55,0.4), 0 0 0 1.5px rgba(212,175,55,0.2)" }}
-                        transition={{ type: "spring", stiffness: 420, damping: 32 }}
-                      />
+        {/* The categories, right above what they show: this is where the header's links land (the bar and the row under it together) */}
+        <div id={CATALOG_FILTERS_ID} className="scroll-mt-[calc(var(--nav-h)+var(--search-h,0px)+1rem)]">
+          {/* ── The categories (left) and, on the right of the same row, the little search and the sort order. Under 1360px the bar takes the whole row and they drop below it. ── */}
+          <div className="flex flex-col gap-3 min-[1360px]:flex-row min-[1360px]:items-end min-[1360px]:justify-between">
+            <CategoryBar
+              active={search ? null : active}
+              counts={categoryCounts}
+              onSelect={handleCategoryChange}
+              className="mx-0 mb-0 max-w-none min-[1360px]:min-w-0 min-[1360px]:flex-none"
+            />
+            <div className="flex w-full items-end gap-3 sm:justify-end min-[1360px]:w-auto min-[1360px]:shrink-0">
+              {/* The little search: this category only. It steps aside while the header's store-wide search is on. */}
+              {!search && (
+                <div
+                  className={cn(
+                    "relative h-10 min-w-0 flex-1 transition-colors duration-200 sm:w-64 sm:flex-none",
+                    "focus-within:outline-2 focus-within:outline-offset-2 focus-within:outline-(--face)",
+                  )}
+                  style={{ boxShadow: "inset 0 0 0 1px color-mix(in oklab, var(--ciruela) 38%, transparent)" }}
+                >
+                  <Search className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-[var(--ciruela)]" />
+                  <input
+                    type="search"
+                    value={localQuery}
+                    onChange={(e) => handleLocalSearch(e.target.value)}
+                    onKeyDown={(e) => { if (e.key === "Escape") handleLocalSearch("") }}
+                    placeholder="Buscar…"
+                    aria-label={`Buscar en ${activeCategory.label.toLowerCase()}`}
+                    data-testid="category-search"
+                    className={cn(
+                      "h-full w-full bg-transparent pl-10 pr-9 text-sm text-[var(--ink)] focus:outline-none",
+                      "placeholder:text-[11.5px] placeholder:uppercase placeholder:tracking-[0.16em] placeholder:text-[var(--ciruela)]/70",
+                      "[&::-webkit-search-cancel-button]:hidden",
                     )}
-                    <span
-                      className="relative z-10 flex items-center gap-1.5 transition-colors duration-200"
-                      style={{ color: isActive ? "var(--gold-deep)" : "oklch(0.18 0.025 40 / 0.55)" }}
+                  />
+                  {localQuery && (
+                    <button
+                      type="button"
+                      onClick={() => handleLocalSearch("")}
+                      className="absolute right-2.5 top-1/2 -translate-y-1/2 cursor-pointer text-[var(--ink)]/60 transition-colors hover:text-[var(--ink)]"
+                      aria-label="Limpiar búsqueda"
                     >
-                      <span className={isActive ? "font-semibold" : ""}>{cat.label}</span>
-                      <span
-                        className="text-[10px] font-bold px-1.5 py-0.5 rounded-full hidden sm:inline"
-                        style={{
-                          background: isActive ? "rgba(212,175,55,0.12)" : "rgba(0,0,0,0.06)",
-                          color: isActive ? "var(--gold-deep)" : "oklch(0.18 0.025 40 / 0.4)",
-                        }}
-                      >
-                        {categoryCounts[cat.id]}
-                      </span>
-                    </span>
-                  </m.button>
-                )
-              })}
+                      <X className="h-4 w-4" />
+                    </button>
+                  )}
+                </div>
+              )}
+
+
+              {/* Sort dropdown */}
+              <div className="relative flex">
+                <button
+                  type="button"
+                  onClick={() => setSortOpen((o) => !o)}
+                  className={cn(
+                    CONTROL_TEXT,
+                    "flex h-10 cursor-pointer select-none items-center gap-2.5 whitespace-nowrap px-3.5 transition-colors duration-200 sm:px-4",
+                    "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--face)",
+                    sortOrder !== "default" ? "bg-[var(--ciruela)] font-bold text-[var(--crema)]" : "font-semibold text-[var(--ciruela)] hover:bg-[var(--ciruela)]/8",
+                  )}
+                  style={{ boxShadow: sortOrder !== "default" ? "none" : "inset 0 0 0 1px color-mix(in oklab, var(--ciruela) 38%, transparent)" }}
+                  aria-expanded={sortOpen}
+                  aria-haspopup="listbox"
+                  aria-label={`Ordenar: ${SORT_LABELS[sortOrder]}`}
+                >
+                  <ArrowUpDown className="h-4 w-4 shrink-0" />
+                  <span className="hidden sm:inline">{SORT_LABELS[sortOrder]}</span>
+                  <ChevronDown
+                    className={`h-3.5 w-3.5 shrink-0 transition-transform duration-200 ${sortOpen ? "rotate-180" : ""}`}
+                  />
+                </button>
+
+                <AnimatePresence>
+                  {sortOpen && (
+                    <m.div
+                      role="listbox"
+                      aria-label="Ordenar"
+                      initial={{ opacity: 0, y: -6 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -6 }}
+                      transition={{ duration: 0.15 }}
+                      className="absolute right-0 top-[calc(100%+6px)] z-50 min-w-[190px] bg-[var(--crema)] shadow-[0_18px_40px_-14px_rgba(30,15,34,0.45)]"
+                    >
+                      {(Object.entries(SORT_LABELS) as [SortOrder, string][]).map(([key, label]) => (
+                        <button
+                          key={key}
+                          type="button"
+                          role="option"
+                          aria-selected={sortOrder === key}
+                          onClick={() => handleSort(key)}
+                          className={cn(
+                            CONTROL_TEXT,
+                            "w-full cursor-pointer px-5 py-3.5 text-left transition-colors",
+                            sortOrder === key ? CONTROL_ON : ["text-[var(--ink)]", CONTROL_HOVER],
+                          )}
+                        >
+                          {label}
+                        </button>
+                      ))}
+                    </m.div>
+                  )}
+                </AnimatePresence>
+              </div>
+
             </div>
           </div>
 
-          {/* Search + Sort row */}
-          <div className="flex items-center gap-3 max-w-2xl mx-auto">
-            {/* Search */}
-            <div className="relative flex-1">
-              <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-[var(--muted-foreground)]" />
-              <input
-                type="search"
-                value={search}
-                onChange={(e) => handleSearch(e.target.value)}
-                placeholder={`Buscar en ${activeCategory.label.toLowerCase()}…`}
-                className={[
-                  "w-full rounded-xl border-2 bg-white py-2.5 pl-10 pr-10 text-sm text-[var(--ink)]",
-                  "placeholder:text-[var(--muted-foreground)] transition-all duration-200",
-                  "focus:outline-none focus:ring-0",
-                  search
-                    ? "border-[var(--gold-deep)]"
-                    : "border-[var(--rose-pastel)] focus:border-[var(--gold-deep)]",
-                ].join(" ")}
-              />
+          {/* ── Metadata row: the category's phrase, and how many products ── */}
+          <div className="mb-6 mt-5 flex flex-wrap items-center justify-between gap-x-4 gap-y-2">
+            {/* The category's phrase, in semi-bold. Its name is the highlighted tab right above, so no title is repeated here (client request, final). */}
+            <div className="flex min-w-0 flex-wrap items-center gap-x-5 gap-y-1">
+              <AnimatePresence mode="wait">
+                <m.p
+                  key={active + search + localQuery + group + "-tag"}
+                  initial={{ opacity: 0, y: 4 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -4 }}
+                  transition={{ duration: 0.2 }}
+                  className="text-sm font-semibold uppercase tracking-[0.08em] text-[var(--face-deep)]"
+                  data-testid="category-subtitle"
+                >
+                  {search || localQuery.trim()
+                    ? `${filtered.length} resultado${filtered.length !== 1 ? "s" : ""} para "${search || localQuery.trim()}"`
+                    : groupTagline ?? activeCategory.tagline}
+                </m.p>
+              </AnimatePresence>
               {search && (
                 <button
                   type="button"
                   onClick={() => handleSearch("")}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-[var(--muted-foreground)] hover:text-[var(--ink)] transition-colors"
-                  aria-label="Limpiar búsqueda"
+                  className="cursor-pointer text-xs uppercase tracking-[0.16em] text-[var(--ink)] underline underline-offset-4 decoration-[var(--face-deep)]/50 hover:decoration-[var(--face-deep)]"
                 >
-                  <X className="h-4 w-4" />
+                  Limpiar
                 </button>
               )}
             </div>
 
-            {/* Sort dropdown */}
-            <div className="relative">
-              <button
-                type="button"
-                onClick={() => setSortOpen((o) => !o)}
-                className={[
-                  "flex items-center gap-2 rounded-xl border-2 px-3.5 py-2.5 text-sm font-medium",
-                  "cursor-pointer select-none transition-all duration-150 focus-visible:outline-none",
-                  "focus-visible:ring-2 focus-visible:ring-[var(--gold)] whitespace-nowrap",
-                  sortOrder !== "default"
-                    ? "border-[var(--gold-deep)] bg-[oklch(0.60_0.130_75/8%)] text-[var(--gold-deep)]"
-                    : "border-[var(--rose-pastel)] text-[var(--muted-foreground)] hover:border-[var(--gold-deep)] hover:text-[var(--ink)]",
-                ].join(" ")}
-                aria-expanded={sortOpen}
+            <AnimatePresence mode="wait">
+              <m.span
+                key={filtered.length}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                className="text-xs text-[var(--muted-foreground)]"
               >
-                <ArrowUpDown className="h-4 w-4 shrink-0" />
-                <span className="hidden sm:inline">{SORT_LABELS[sortOrder]}</span>
-                <SlidersHorizontal className="h-3.5 w-3.5 sm:hidden shrink-0" />
-                <ChevronDown
-                  className={`h-3.5 w-3.5 shrink-0 transition-transform duration-200 ${sortOpen ? "rotate-180" : ""}`}
-                />
-              </button>
+                {filtered.length} producto{filtered.length !== 1 ? "s" : ""}
+              </m.span>
+            </AnimatePresence>
 
-              <AnimatePresence>
-                {sortOpen && (
-                  <m.div
-                    initial={{ opacity: 0, y: -6, scale: 0.97 }}
-                    animate={{ opacity: 1, y: 0, scale: 1 }}
-                    exit={{ opacity: 0, y: -6, scale: 0.97 }}
-                    transition={{ duration: 0.15 }}
-                    className="absolute right-0 top-[calc(100%+6px)] z-50 min-w-[160px] rounded-xl border border-[var(--rose-pastel)] bg-white shadow-xl overflow-hidden"
-                  >
-                    {(Object.entries(SORT_LABELS) as [SortOrder, string][]).map(([key, label]) => (
-                      <button
-                        key={key}
-                        type="button"
-                        onClick={() => handleSort(key)}
-                        className={[
-                          "w-full text-left px-4 py-2.5 text-sm transition-colors",
-                          sortOrder === key
-                            ? "bg-[oklch(0.60_0.130_75/10%)] font-semibold text-[var(--gold-deep)]"
-                            : "text-[var(--ink)] hover:bg-[var(--rose-pastel)]/30",
-                        ].join(" ")}
-                      >
-                        {label}
-                      </button>
-                    ))}
-                  </m.div>
-                )}
-              </AnimatePresence>
-            </div>
+
           </div>
         </div>
 
-        {/* ── Metadata row ── */}
-        <div className="flex items-center justify-between mt-8 mb-6">
-          <AnimatePresence mode="wait">
-            <m.p
-              key={active + search + sortOrder + "-tag"}
-              initial={{ opacity: 0, y: 4 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -4 }}
-              transition={{ duration: 0.2 }}
-              className="text-sm font-medium tracking-[0.08em] text-[var(--gold-deep)] uppercase"
-            >
-              {search
-                ? `${filtered.length} resultado${filtered.length !== 1 ? "s" : ""} para "${search}"`
-                : activeCategory.tagline}
-            </m.p>
-          </AnimatePresence>
-
-          <AnimatePresence mode="wait">
-            <m.span
-              key={filtered.length}
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              className="text-xs text-[var(--muted-foreground)]"
-            >
-              {filtered.length} producto{filtered.length !== 1 ? "s" : ""}
-            </m.span>
-          </AnimatePresence>
-        </div>
-
         {/* ── Grid animado ── */}
-        <AnimatePresence mode="wait">
+        {/* Cambiar de categoría es de las acciones más repetidas: la rejilla se reemplaza al instante (sin esperar a que salga la
+            anterior) y solo las tarjetas entran, escalonadas y rápidas. */}
+        {/* Línea Capilar: the subcategory index sits to the left of the grid (chips under the header on phones) and the grid shows one subcategory at a time */}
+        <div className={cn(hasGroups && "lg:grid lg:grid-cols-[14.5rem_minmax(0,1fr)] lg:gap-8")}>
+          {hasGroups && <SubcategoryNav items={groupItems} value={localQuery.trim() ? null : group} onChange={handleGroup} />}
+          <div className="min-w-0">
           {visible.length === 0 ? (
             <m.div
               key="empty"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
+              transition={{ duration: 0.2, ease: [0.23, 1, 0.32, 1] }}
               className="py-24 text-center"
             >
               <Search className="mx-auto mb-4 h-10 w-10 text-[var(--muted-foreground)]" />
@@ -270,72 +427,45 @@ export function Catalog() {
                 Intenta con otro término o{" "}
                 <button
                   type="button"
-                  className="text-[var(--gold-deep)] underline underline-offset-2 cursor-pointer"
-                  onClick={() => handleSearch("")}
+                  className="text-[var(--face-deep)] underline underline-offset-2 cursor-pointer"
+                  onClick={clearSearch}
                 >
                   limpia la búsqueda
                 </button>
               </p>
             </m.div>
           ) : (
-            <m.div
-              key={active + "-grid"}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -10 }}
-              transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
-              className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-2.5 md:gap-3"
-            >
+            <div key={active + group + "-grid"} className={cn("grid", CARD_GRID[cardStyle], hasGroups && "lg:grid-cols-4 xl:grid-cols-4")}>
               {visible.map((p, i) => (
                 <m.div
                   key={p.id}
-                  initial={{ opacity: 0, y: 16 }}
+                  initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: Math.min(i, 11) * 0.04, duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
+                  transition={{ delay: Math.min(i, 7) * 0.03, duration: 0.25, ease: [0.23, 1, 0.32, 1] }}
                 >
-                  <ProductCard product={p} />
+                  <ProductCard product={p} cardStyle={cardStyle} />
                 </m.div>
               ))}
-            </m.div>
-          )}
-        </AnimatePresence>
-
-        {/* ── Load more ── */}
-        {hasMore && (
-          <m.div
-            className="mt-12 flex flex-col items-center gap-3"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.3 }}
-          >
-            {/* Progress bar */}
-            <div className="w-full max-w-xs h-1 rounded-full bg-[var(--rose-pastel)]/40 overflow-hidden">
-              <m.div
-                className="h-full rounded-full bg-queens-gradient-intense"
-                animate={{ width: `${(visibleCount / filtered.length) * 100}%` }}
-                transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
-              />
+              {/* "Ver más" is one more square of the grid: translucent lila (see-through, ink text), the number of products left, nothing else (client's pick, "ficha tinta") */}
+              {hasMore && (
+                <button
+                  type="button"
+                  onClick={() => setVisible((n) => n + PAGE_SIZE)}
+                  aria-label={`Ver ${Math.min(remaining, PAGE_SIZE)} productos más`}
+                  data-testid="load-more"
+                  style={{ boxShadow: "inset 0 0 0 1px color-mix(in oklab, var(--lila) 45%, transparent)" }}
+                  className="group relative aspect-square w-full cursor-pointer self-start bg-[color-mix(in_oklab,var(--lila)_26%,transparent)] text-[var(--ink)] backdrop-blur-sm transition-colors duration-300 hover:bg-[color-mix(in_oklab,var(--lila)_42%,transparent)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--face)"
+                >
+                  <span className="absolute inset-0 flex flex-col items-center justify-center gap-1">
+                    <span className="font-display text-[clamp(1.75rem,3vw,2.5rem)] font-bold leading-none transition-transform duration-300 ease-[cubic-bezier(0.23,1,0.32,1)] group-hover:scale-110">+{remaining}</span>
+                    <span className="text-[10.5px] uppercase tracking-[0.22em]">productos</span>
+                  </span>
+                </button>
+              )}
             </div>
-            <p className="text-xs text-[var(--muted-foreground)]">
-              Mostrando {visible.length} de {filtered.length}
-            </p>
-            <m.button
-              type="button"
-              onClick={() => setVisible((n) => n + PAGE_SIZE)}
-              whileHover={{ scale: 1.04 }}
-              whileTap={{ scale: 0.96 }}
-              transition={{ type: "spring", stiffness: 500, damping: 28 }}
-              className={[
-                "flex items-center gap-2 rounded-2xl px-10 py-3.5 shadow-lg",
-                "text-sm font-semibold text-white bg-[var(--gold)] hover:bg-[var(--gold-deep)]",
-                "transition-all duration-200 cursor-pointer",
-              ].join(" ")}
-            >
-              <ChevronDown className="h-5 w-5" />
-              Ver {Math.min(remaining, PAGE_SIZE)} más
-            </m.button>
-          </m.div>
-        )}
+          )}
+          </div>
+        </div>
 
       </div>
     </section>

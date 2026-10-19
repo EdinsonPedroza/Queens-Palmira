@@ -24,7 +24,7 @@ const FAQS = [
   },
   {
     q: "¿Ofrecen asesoría personalizada?",
-    a: "¡Claro! Puedes visitarnos en Local 128 de Unicentro Palmira o escribirnos por WhatsApp. Te ayudamos con tono de base, rutina de skincare, esmaltes, línea capilar y maquillaje para cualquier ocasión.",
+    a: "¡Claro! Puedes visitarnos en Local 1-28 de Unicentro Palmira o escribirnos por WhatsApp. Te ayudamos con tono de base, rutina de skincare, esmaltes, línea capilar y maquillaje para cualquier ocasión.",
   },
   {
     q: "¿Tienen descuentos o promociones?",
@@ -34,18 +34,17 @@ const FAQS = [
 
 export function FAQ() {
   return (
-    <section id="faq" className="relative scroll-mt-20 py-20 md:py-28 bg-gradient-to-b from-white to-[var(--rose-pastel)]/15">
+    <section id="faq" className="relative scroll-mt-20 py-4 md:py-5 bg-gradient-to-b from-white to-[var(--dorado-soft)]/20">
       <div className="mx-auto max-w-3xl px-6 md:px-10">
-        <div className="text-center mb-12">
-          <span className="inline-block text-xs font-semibold tracking-[0.3em] uppercase text-[var(--gold-deep)] mb-3">
+        <div className="text-center mb-3 md:mb-4">
+          <span className="inline-block text-xs font-semibold tracking-[0.3em] uppercase text-[var(--face-deep)] mb-3">
             Preguntas frecuentes
           </span>
           <h2
             className="font-display font-semibold text-ink"
             style={{ fontSize: "clamp(2rem, 4.5vw, 3.2rem)", letterSpacing: "-0.03em" }}
           >
-            Preguntas{" "}
-            <span className="text-queens-gradient">frecuentes</span>
+            Preguntas frecuentes
           </h2>
         </div>
 

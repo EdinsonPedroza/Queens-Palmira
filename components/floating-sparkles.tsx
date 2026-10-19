@@ -8,12 +8,12 @@ interface FloatingSparklesProps {
   count?: number
   /** Extra classes for the absolute-positioned container. */
   className?: string
-  /** "mixed" alternates rose and gold dust; "gold" is gold only (noir/spa surfaces). */
+  /** "mixed" alternates the accent with its lighter tint; "gold" is the accent only. */
   tone?: "mixed" | "gold"
 }
 
 /**
- * Rose/gold stardust drifting upward — CSS-animated (`.sparkle`) so it costs
+ * Accent-colored stardust drifting upward — CSS-animated (`.sparkle`) so it costs
  * nothing on the JS thread. Drop inside any `position: relative` section.
  */
 export function FloatingSparkles({ count = 22, className = "", tone = "mixed" }: FloatingSparklesProps) {
@@ -31,7 +31,7 @@ export function FloatingSparkles({ count = 22, className = "", tone = "mixed" }:
           delay: `${seededRandom(s + 3) * 8}s`,
           drift: `${(seededRandom(s + 4) - 0.5) * 90}px`,
           opacity: seededRandom(s + 5) * 0.5 + 0.3,
-          rose: tone === "mixed" && i % 3 === 0,
+          alt: tone === "mixed" && i % 3 === 0,
         }
       }),
     [count, tone]
@@ -42,7 +42,7 @@ export function FloatingSparkles({ count = 22, className = "", tone = "mixed" }:
       {particles.map((p) => (
         <span
           key={p.id}
-          className={`sparkle${p.rose ? " rose" : ""}`}
+          className={`sparkle${p.alt ? " alt" : ""}`}
           style={
             {
               left: p.left,

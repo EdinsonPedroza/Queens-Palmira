@@ -52,7 +52,7 @@ export function WhyQueens() {
       {/* Fondo sutil */}
       <div
         className="pointer-events-none absolute inset-0"
-        style={{ background: "radial-gradient(ellipse 65% 50% at 75% 30%, oklch(0.84 0.065 15 / 10%), transparent)" }}
+        style={{ background: "radial-gradient(ellipse 65% 50% at 75% 30%, color-mix(in oklab, var(--face-light) 12%, transparent), transparent)" }}
         aria-hidden
       />
 
@@ -63,7 +63,7 @@ export function WhyQueens() {
           <div>
             <m.span
               className="block text-[11px] font-bold tracking-[0.3em] uppercase mb-2"
-              style={{ color: "var(--gold-deep)" }}
+              style={{ color: "var(--face-deep)" }}
               initial={{ opacity: 0 }}
               animate={inView ? { opacity: 1 } : {}}
               transition={{ duration: 0.5 }}
@@ -84,7 +84,7 @@ export function WhyQueens() {
 
           <m.p
             className="text-sm max-w-xs"
-            style={{ color: "oklch(0.45 0.025 30)" }}
+            style={{ color: "oklch(0.46 0.055 324)" }}
             initial={{ opacity: 0 }}
             animate={inView ? { opacity: 1 } : {}}
             transition={{ duration: 0.6, delay: 0.25 }}
@@ -121,25 +121,26 @@ function FeatureCard({
       whileHover={{ y: -5 }}
       className="group relative flex flex-col overflow-hidden rounded-2xl bg-white cursor-default"
       style={{
-        boxShadow: "0 1px 4px oklch(0.18 0.025 40 / 6%), 0 0 0 1px oklch(0.84 0.065 15 / 30%)",
+        boxShadow: "0 1px 4px oklch(0.325 0.073 323.9 / 6%), 0 0 0 1px color-mix(in oklab, var(--face-light) 30%, transparent)",
         transition: "box-shadow 0.3s ease",
       }}
       onMouseEnter={(e) => {
         e.currentTarget.style.boxShadow =
-          "0 16px 40px -8px oklch(0.75 0.135 85 / 20%), 0 0 0 1.5px oklch(0.75 0.135 85 / 30%)"
+          "0 16px 40px -8px color-mix(in oklab, var(--face) 20%, transparent), 0 0 0 1.5px color-mix(in oklab, var(--face) 30%, transparent)"
       }}
       onMouseLeave={(e) => {
         e.currentTarget.style.boxShadow =
-          "0 1px 4px oklch(0.18 0.025 40 / 6%), 0 0 0 1px oklch(0.84 0.065 15 / 30%)"
+          "0 1px 4px oklch(0.325 0.073 323.9 / 6%), 0 0 0 1px color-mix(in oklab, var(--face-light) 30%, transparent)"
       }}
     >
       {/* Imagen */}
-      <div className="relative h-40 overflow-hidden bg-gradient-to-b from-[var(--rose-pastel-soft)] to-[var(--rose-pastel)]/20">
+      <div className="relative h-40 overflow-hidden bg-gradient-to-b from-[var(--face-soft)] to-[var(--face-light)]/20">
         <Image
           src={feature.img}
           alt={feature.title}
           fill
-          sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 20vw"
+          // capped: five cards inside max-w-7xl stop growing past ~1440px (255px drawn, 275 with the hover zoom)
+          sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, min(20vw, 275px)"
           className="object-cover transition-transform duration-700 ease-out group-hover:scale-[1.07]"
         />
         {/* Overlay degradado */}
@@ -153,7 +154,7 @@ function FeatureCard({
           style={{
             fontSize: "2rem",
             color: "rgba(255,255,255,0.85)",
-            textShadow: "0 2px 12px rgba(44,24,16,0.25)",
+            textShadow: "0 2px 12px rgba(70,38,73,0.25)",
             letterSpacing: "-0.04em",
           }}
           aria-hidden
@@ -172,17 +173,17 @@ function FeatureCard({
         </h3>
         <p
           className="leading-relaxed flex-1"
-          style={{ fontSize: "0.78rem", color: "oklch(0.45 0.025 30)" }}
+          style={{ fontSize: "0.78rem", color: "oklch(0.46 0.055 324)" }}
         >
           {feature.desc}
         </p>
 
         {/* Accent */}
         <div className="flex items-center gap-2 pt-1">
-          <div className="h-px flex-1" style={{ background: "oklch(0.84 0.065 15 / 50%)" }} />
+          <div className="h-px flex-1" style={{ background: "color-mix(in oklab, var(--face-light) 50%, transparent)" }} />
           <span
             className="text-[9px] font-black uppercase tracking-[0.2em] whitespace-nowrap"
-            style={{ color: "var(--gold-deep)" }}
+            style={{ color: "var(--face-deep)" }}
           >
             {feature.accent}
           </span>
