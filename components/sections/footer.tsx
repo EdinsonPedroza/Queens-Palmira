@@ -105,7 +105,8 @@ const COLUMNS: Record<Exclude<Face, "about">, [{ title: string; links: FooterLin
   ],
 }
 
-export function Footer({ face = "portal" }: { face?: Face }) {
+/** `tone="crema"`: a light footer (the spa's, client request): the logo is the coloured one (gold, or lila in the store) instead of the crema one. Default "ink" is the dark block. */
+export function Footer({ face = "portal", tone = "ink" }: { face?: Face; tone?: "ink" | "crema" }) {
   const year = new Date().getFullYear()
   // The big lettering starts when it scrolls into view: this flag only switches the CSS animation on (Framer's own entrance blinked for a frame when it ended)
   const wordRef = useRef<HTMLDivElement>(null)
@@ -133,7 +134,7 @@ export function Footer({ face = "portal" }: { face?: Face }) {
             >
               {i === 0 && (
                 <>
-                  <QueensLogo variant="white" cosmetics={face === "cosmetics"} />
+                  <QueensLogo variant={tone === "crema" ? (face === "cosmetics" ? "lila" : "default") : "white"} cosmetics={face === "cosmetics"} />
                   <p className="mt-5 text-sm text-white/70 leading-relaxed max-w-xs">
                     Cosmética premium y spa en Palmira. Dos personalidades, una
                     sola reina: tú.

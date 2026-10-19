@@ -258,8 +258,8 @@ export function Hero() {
           {/* Four rows shared by both columns (crown, title, line, button): the two titles and the two buttons
               line up across the seam whatever the length of the text in between. */}
           <m.div style={{ x: shift }} className="grid w-full grid-cols-2 grid-rows-[auto_auto_auto_auto]">
-            <PortalColumn side="glam" subtitle="COSMETICS" opacity={glamOpacity} open={glamOpen} noteOpacity={glamServiceOpacity} noteX={glamServiceX} />
-            <PortalColumn side="spa" subtitle="SPA" opacity={spaOpacity} open={spaOpen} noteOpacity={spaServiceOpacity} noteX={spaServiceX} />
+            <PortalColumn side="glam" subtitle="cosmetics" opacity={glamOpacity} open={glamOpen} noteOpacity={glamServiceOpacity} noteX={glamServiceX} />
+            <PortalColumn side="spa" subtitle="spa" opacity={spaOpacity} open={spaOpen} noteOpacity={spaServiceOpacity} noteX={spaServiceX} />
           </m.div>
         </div>
       </div>
@@ -388,14 +388,14 @@ function PortalColumn({
       {/* `relative`: the service note hangs off the title block, level with its top, at a fixed distance */}
       <div className="relative row-start-2">
         <ServiceNote side={side} open={open} opacity={noteOpacity} x={noteX} />
-        <h2 className="font-display uppercase leading-[0.86] tracking-[-0.025em]" style={{ fontSize: "var(--lockup)" }}>
+        <h2 className="font-display leading-[0.86] tracking-[-0.025em]" style={{ fontSize: "var(--lockup)" }}>
           <span className="block overflow-hidden pb-[0.1em]">
             <m.span variants={rise} custom={0} className="block font-bold text-[var(--face)]">
-              QUEENS
+              Queens
             </m.span>
           </span>
           <span className="block overflow-hidden pb-[0.06em]">
-            <m.span variants={rise} custom={1} className="block text-[0.5em] font-light tracking-[0.14em] text-ink">
+            <m.span variants={rise} custom={1} className="block text-[0.55em] font-light tracking-[0.04em] text-ink">
               {subtitle}
             </m.span>
           </span>
@@ -529,7 +529,7 @@ function Wordmark({ className }: { className?: string }) {
   return (
     <div
       className={cn(
-        "pointer-events-none absolute inset-x-0 bottom-0 flex select-none justify-center font-display font-bold uppercase leading-[0.75] tracking-[-0.03em]",
+        "pointer-events-none absolute inset-x-0 bottom-0 flex select-none justify-center font-display font-bold leading-[0.75] tracking-[-0.03em]",
         className,
       )}
       style={{ fontSize: "18vw", transform: "translateY(17%)" }}
@@ -539,38 +539,21 @@ function Wordmark({ className }: { className?: string }) {
   )
 }
 
-/* ── The logo, wearing both personalities: each half is clipped at its own center ── */
+/* ── The emblem: the 3D isotype (gold, with its own relief), from ACTUALIZACION/NEWW/Isotipo Queens 3D .png cropped to the artwork (public/images/brand/isotipo-3d.webp,
+   542×775, transparent). The client asked for it in the middle (19 Oct 2026); before it was the flat isotype, lila on the left half and gold on the right. Names are written
+   like the logo: a capital Q and the rest in lowercase ("Queens cosmetics", "Queens spa"). ── */
 function Emblem() {
   return (
     <m.div variants={emblemIn} aria-hidden className="relative aspect-square" style={{ width: "var(--emblem)" }}>
-      <EmblemHalf side="glam" />
-      <EmblemHalf side="spa" />
-    </m.div>
-  )
-}
-
-function EmblemHalf({ side }: { side: Side }) {
-  const isSpa = side === "spa"
-
-  // Just the logo, still. The spinning ring of text, its inner circle and the
-  // glow behind it were removed: the client found the hero too busy.
-  return (
-    <div className="absolute inset-0" style={{ clipPath: isSpa ? "inset(0 0 0 50%)" : "inset(0 50% 0 0)" }}>
-      {/* Each half wears its own colour on crema: lila (cosmetics) and gold (spa).
-          `unoptimized`: the artwork is already a small WebP (14 KB) with hairline strokes, and
-          re-encoding it through the image optimizer (AVIF, smaller sizes) is what softened it. Served
-          as is, at its full 556×803, it stays crisp on any screen; the browser only scales it down. */}
+      {/* `unoptimized`: the artwork is already a small WebP with hairline strokes, and re-encoding it through the image optimizer is what softened it. */}
       <Image
-        src={isSpa ? "/images/brand/isotipo-dorado.webp" : "/images/brand/isotipo-lila.webp"}
+        src="/images/brand/isotipo-3d.webp"
         alt=""
         fill
         priority
         unoptimized
-        className={cn(
-          "object-contain p-[6%]",
-          isSpa ? "drop-shadow-[0_0_14px_rgba(188,161,87,0.3)]" : "drop-shadow-[0_6px_12px_rgba(35,16,37,0.15)]",
-        )}
+        className="object-contain p-[6%] drop-shadow-[0_6px_10px_rgba(90,70,30,0.22)]"
       />
-    </div>
+    </m.div>
   )
 }

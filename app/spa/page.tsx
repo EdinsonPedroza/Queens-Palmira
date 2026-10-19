@@ -32,7 +32,7 @@ export default function SpaPage() {
   return (
     <MotionProvider>
       {/* flow-root: the hero's margin-top (the strip + header) must stay inside <main>, or the announcement strip, which hangs from the top of <main>, would slide down with it */}
-      <main className="relative flow-root overflow-x-clip">
+      <main data-palette="spa" data-page="spa" className="relative flow-root overflow-x-clip">
         <ScrollProgress />
         <Navbar face="spa" separate announce />
         <SpaHero />
@@ -43,7 +43,7 @@ export default function SpaPage() {
         <SpaFAQ />
         <SpaCTA />
         <Location face="spa" />
-        <Footer face="spa" />
+        <Footer face="spa" tone="crema" />
         <WhatsAppFloat />
       </main>
     </MotionProvider>
