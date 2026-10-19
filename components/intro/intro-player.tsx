@@ -2,45 +2,44 @@
 
 import { useEffect, useRef, useState, type CSSProperties } from "react"
 import { preload } from "react-dom"
-import { INTRO_VERSIONS, type IntroVersionId } from "./intro-versions"
+import { cn } from "@/lib/utils"
 import styles from "./intro.module.css"
 
 /** The official logo as a mask (see scripts/brand-imagotipo.mjs): the intro paints it in lila or crema. */
 export const INTRO_LOGO_SRC = "/images/brand/imagotipo-cosmetics.webp"
 
-interface IntroPlayerProps {
-  id: IntroVersionId
-  /** Fills its parent (a preview frame) instead of the whole screen. */
-  contained?: boolean
-  /** The exit starts: the portal's own entrance is timed to this moment. */
-  onExitStart?: () => void
-  /** The exit is over; the player can be removed. */
-  onDone?: () => void
-  /** Makes the whole intro a button (used by the full-screen preview to close it). */
-  onClick?: () => void
-}
+/** ms until the exit starts (which is also when the portal's own entrance starts) and how long the exit lasts. */
+const EXIT_AT = 2000
+const EXIT_MS = 800
+
+const word = (side: "L" | "R", tone: "cream" | "lila") =>
+  cn("font-display", styles.tag, side === "L" ? styles.tagL : styles.tagR, tone === "cream" ? styles.onCream : styles.onLila, styles.tagIn)
+
+const logo = (tone: "lila" | "crema") => cn(styles.mask, styles.logo, tone === "lila" ? styles.lila : styles.crema, styles.logoIn)
 
 /*
- * Plays one version of the intro: it only owns the clock. `data-phase` goes from "in" to "out" when the exit starts and the
- * CSS does the rest (a timer, not an animation callback: nothing here can get stuck waiting for an event that never comes).
- * With "reduce motion" the version stays still and the exit is a short fade.
+ * "Dos caras": two layers with the same logo in the same place. The left one is crema with a lila logo; the right one (clipped to the right half)
+ * is lila with a crema logo. It wipes in from the right edge to the axis, so the logo's right half flips colour right there, and on the way out
+ * each half carries its half of the logo to its own side.
  */
-export function IntroPlayer({ id, contained = false, onExitStart, onDone, onClick }: IntroPlayerProps) {
-  const version = INTRO_VERSIONS[id]
+export function IntroPlayer({ onExitStart, onDone }: { onExitStart?: () => void; onDone?: () => void }) {
   const [phase, setPhase] = useState<"in" | "out">("in")
   const callbacks = useRef({ onExitStart, onDone })
 
-  // Starts downloading the logo before the first animation frame needs it.
+  // Starts downloading the logo before the first animation frame needs it. It is a CSS mask, which the browser fetches in CORS mode,
+  // so the preload has to be `anonymous` too or the browser would not reuse it.
   preload(INTRO_LOGO_SRC, { as: "image", crossOrigin: "anonymous" })
 
   useEffect(() => {
     callbacks.current = { onExitStart, onDone }
   })
 
+  // A timer, not an animation callback: nothing here can get stuck waiting for an event that never comes.
+  // With "reduce motion" the composition stays still and the exit is a short fade.
   useEffect(() => {
     const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches
-    const exitAt = reduced ? 900 : version.exitAt
-    const exitMs = reduced ? 320 : version.exitMs
+    const exitAt = reduced ? 900 : EXIT_AT
+    const exitMs = reduced ? 320 : EXIT_MS
     const out = setTimeout(() => {
       setPhase("out")
       callbacks.current.onExitStart?.()
@@ -50,21 +49,18 @@ export function IntroPlayer({ id, contained = false, onExitStart, onDone, onClic
       clearTimeout(out)
       clearTimeout(done)
     }
-  }, [version])
+  }, [])
 
-  const Scene = version.Scene
   return (
-    <div
-      className={styles.root}
-      data-v={id}
-      data-phase={phase}
-      data-contained={contained || undefined}
-      data-clickable={onClick ? "" : undefined}
-      aria-hidden
-      onClick={onClick}
-      style={{ "--mask": `url(${INTRO_LOGO_SRC})` } as CSSProperties}
-    >
-      <Scene />
+    <div className={styles.root} data-phase={phase} aria-hidden style={{ "--mask": `url(${INTRO_LOGO_SRC})` } as CSSProperties}>
+      <div className={cn(styles.layer, styles.cream, styles.left)}>
+        <div className={logo("lila")} />
+        <span className={word("L", "cream")}>La tienda</span>
+      </div>
+      <div className={cn(styles.layer, styles.lilaBg, styles.right)}>
+        <div className={logo("crema")} />
+        <span className={word("R", "lila")}>El spa</span>
+      </div>
     </div>
   )
 }

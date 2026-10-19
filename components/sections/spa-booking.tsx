@@ -31,7 +31,7 @@ interface Values {
 type Errors = Partial<Record<"name" | "phone" | "service" | "date" | "consent", string>>
 
 const EMPTY: Values = { name: "", phone: "", service: "", date: "", time: "", notes: "" }
-const ERR = "oklch(0.78 0.13 25)"   // a light coral that reads on the dark band (≈8:1); the brand has no error colour
+const ERR = "oklch(0.52 0.17 25)"   // a deep coral that reads on the light band; the brand has no error colour
 
 /** "2026-10-20" as a LOCAL date (new Date("2026-10-20") would be UTC midnight and show the day before in Colombia). */
 function parseDay(iso: string): Date {
@@ -58,7 +58,7 @@ const FIELD =
   "w-full bg-[color-mix(in_oklab,var(--crema)_7%,transparent)] px-3.5 text-[14px] text-[var(--crema)] outline-none transition-shadow duration-150 placeholder:text-[var(--crema)]/40 " +
   "hover:shadow-[inset_0_0_0_1px_color-mix(in_oklab,var(--crema)_50%,transparent)] focus:shadow-[inset_0_0_0_2px_var(--face)]"
 const FIELD_LINE = "shadow-[inset_0_0_0_1px_color-mix(in_oklab,var(--crema)_24%,transparent)]"
-const FIELD_ERR = "shadow-[inset_0_0_0_1.5px_oklch(0.78_0.13_25)]"
+const FIELD_ERR = "shadow-[inset_0_0_0_1.5px_oklch(0.52_0.17_25)]"
 const LINE = "color-mix(in oklab, var(--crema) 16%, transparent)"
 
 function Field({ id, label, optional, error, children }: { id: string; label: string; optional?: boolean; error?: string; children: ReactNode }) {

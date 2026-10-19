@@ -545,3 +545,93 @@ em, i, .italic {
     display: none;
   }
 }
+
+/* ════════════════════════════════════════════════════════════
+   /cosmetics — paleta de la imagen del cliente: LILA y CREMA, sin morado oscuro
+   Se activa con <main data-palette="queens"> (solo /cosmetics). El cliente (19 oct 2026): "ese morado oscuro no me gusta; quiero mantener la paleta de la
+   imagen" (lila sobre crema y crema sobre lila), y eligió la versión "Bandas" para la portada, el catálogo y la parte de abajo (la franja de arriba y el pie).
+   - El morado oscuro (ciruela, lila oscuro) se queda SOLO como color de TEXTO para resaltar (rótulos, subtítulos, categoría abierta, enlaces del encabezado):
+     el cliente lo prefiere sobre el negro. Nunca como relleno.
+   - Los RELLENOS oscuros (ciruela o tinta) pasan a lila con texto en tinta. La portada va en lila (título y textos); crema sobre lila (3,1:1) solo en grande.
+   - La franja de anuncio y el pie van en lila con letras crema (el pie es el único sitio donde crema sobre lila va en texto chico: lo pidió el cliente).
+   ════════════════════════════════════════════════════════════ */
+:root:has(main[data-palette="queens"]) {
+  --pv-crema: var(--crema);
+}
+:root:has(main[data-palette="queens"]) :is([class~="bg-ink"], [class~="bg-[var(--ink)]"], [class~="bg-(--ink)"]):not(.rounded-full, [data-testid="announcement"]) { background: var(--lila); color: var(--ink); }
+:root:has(main[data-palette="queens"]) [data-testid="cart-float"],
+:root:has(main[data-palette="queens"]) span:has(+ [data-testid="cart-float"]) { background: color-mix(in oklab, var(--lila) 90%, transparent); color: var(--ink); }
+:root:has(main[data-palette="queens"]) [data-testid="cart-float"] svg { color: var(--ink); }
+:root:has(main[data-palette="queens"]) [role="img"][aria-label$="en tu carrito"] { background: color-mix(in oklab, var(--lila) 90%, transparent); color: var(--ink); }
+
+main[data-palette="queens"] :is([class~="bg-[var(--ciruela)]"], [class~="bg-(--ciruela)"], [class~="bg-[var(--face-deep)]"]) { background: var(--lila); color: var(--ink); }
+main[data-palette="queens"] [role="option"][aria-selected="true"] { background: var(--lila); color: var(--ink); }
+main[data-palette="queens"] [data-testid^="subcategory-"]::before { background: var(--pv-crema); }
+/* Índice de subcategorías: el texto en morado oscuro (no negro) */
+main[data-palette="queens"] button[data-testid^="subcategory-"] { color: var(--ciruela); }
+main[data-palette="queens"] button[data-testid^="subcategory-"] > span:last-child { color: color-mix(in oklab, var(--ciruela) 62%, transparent); }
+/* la fila elegida: `--ciruela` vale lila ahí (para el borde en línea), así que el texto lleva el morado oscuro escrito */
+main[data-palette="queens"] button[data-testid^="subcategory-"][aria-pressed="true"],
+main[data-palette="queens"] button[data-testid^="subcategory-"][aria-pressed="true"] > span:last-child { color: oklch(0.325 0.073 323.9); }
+main[data-palette="queens"] [data-testid^="subcategory-"][aria-pressed="true"] { --ciruela: var(--lila); }
+main[data-palette="queens"] .bg-queens-gradient-intense { background: var(--lila); }
+
+/* Franja de anuncio de arriba (letras en crema) */
+main[data-palette="queens"] [data-testid="announcement"] { background: var(--lila); color: var(--pv-crema); }
+
+/* Portada: todo el texto en lila (el título es grande; el botón, lila con texto crema) */
+main[data-palette="queens"] #hero :is(h1, p, a, span):not([data-testid="cosmetics-hero-cta-catalog"]) { color: var(--lila); }
+main[data-palette="queens"] #hero [data-testid="cosmetics-hero-cta-catalog"] { background: var(--lila); color: var(--pv-crema); }
+main[data-palette="queens"] #hero [data-testid="cosmetics-hero-cta-catalog"]:hover { background: color-mix(in oklab, var(--lila) 72%, var(--pv-crema)); }
+
+/* Pie lila con todo su texto en crema (el de siempre: text-white es crema en esta marca) */
+main[data-palette="queens"] footer { --face: var(--pv-crema); background: var(--lila); color: var(--pv-crema); }
+main[data-palette="queens"] footer > div:first-child { background: var(--pv-crema); }
+main[data-palette="queens"] footer h4 { color: var(--ciruela); font-size: 12px; }
+main[data-palette="queens"] footer [data-testid="footer-news"] { color: var(--pv-crema); }
+main[data-palette="queens"] footer a.underline { color: var(--pv-crema); }
+main[data-palette="queens"] footer [class*="text-white/"] { color: color-mix(in oklab, var(--pv-crema) 92%, transparent); }
+main[data-palette="queens"] footer .ambient-breathe { display: none; }
+/* Barra de abajo (derechos, enlaces legales, ciudad): morado oscuro */
+main[data-palette="queens"] footer div[class*="text-white/50"], main[data-palette="queens"] footer div[class*="text-white/50"] a, main[data-palette="queens"] footer [data-testid="footer-top"] { color: var(--ciruela); }
+
+/* Títulos de sección: morado oscuro en la tienda, no negro (pedido del cliente, 19 oct 2026). Los títulos de las tarjetas siguen en tinta. */
+main[data-palette="queens"] :is(#catalogo, #galeria, #testimonios, #ubicacion, #faq) h2 { color: var(--ciruela); }
+
+/* /spa: el pie en fondo claro (pie claro) con las letras Queens doradas (pedido del cliente, 19 oct 2026), con la paleta del spa: dorado y crema. Dentro del pie `--crema` vale
+   dorado oscuro (así su text-white, border-white/10… pasan a dorado oscuro) y `--pv-crema` guarda el crema real. Solo el pie: lo demás del spa no se tocó. */
+:root:has(main[data-palette="spa"]) { --pv-crema: var(--crema); }
+main[data-palette="spa"] footer { --crema: var(--dorado-deep); background: var(--pv-crema); color: var(--dorado-deep); }
+main[data-palette="spa"] footer > div:first-child { background: var(--dorado); }
+main[data-palette="spa"] footer h4 { color: var(--dorado-deep); font-size: 12px; }
+main[data-palette="spa"] footer [data-testid="footer-news"], main[data-palette="spa"] footer a.underline { color: var(--dorado-deep); }
+main[data-palette="spa"] footer .ambient-breathe { display: none; }
+main[data-palette="spa"] footer [class*="text-white/"] { color: color-mix(in oklab, var(--dorado-deep) 88%, transparent); }
+/* Pie claro (spa y portal) más bajo: menos aire arriba y abajo, columnas más pegadas al «Queens» y las letras más pequeñas (pedido del cliente, 19 oct 2026). */
+main[data-palette="spa"] footer > div:nth-child(2) { padding-block: 2rem 1.25rem; }
+main[data-palette="spa"] footer .grid { margin-bottom: 1.5rem; gap: 1.75rem; }
+main[data-palette="spa"] footer [data-testid="footer-wordmark"] { width: min(58%, 700px); }
+main[data-palette="spa"] footer div.border-t.pt-12 { padding-top: 1.25rem; }
+main[data-palette="spa"] footer div.mt-8.border-t { margin-top: 1rem; padding-top: 1rem; }
+/* La parte de las columnas, más compacta: la columna de la marca (logo, texto, redes, novedades) es la más alta y manda el alto de todas. */
+main[data-palette="spa"] footer .grid > div:first-child > p { margin-top: 0.75rem; }
+main[data-palette="spa"] footer .grid > div:first-child > div.mt-6 { margin-top: 0.9rem; }
+main[data-palette="spa"] footer .grid > div:first-child > div.mt-7 { margin-top: 1rem; padding-top: 0.85rem; }
+main[data-palette="spa"] footer .grid ul[class*="space-y-4"] > * + * { margin-top: 0.7rem; }
+main[data-palette="spa"] footer .grid ul[class*="space-y-2.5"] > * + * { margin-top: 0.4rem; }
+main[data-palette="spa"] footer h4 { margin-bottom: 0.7rem; }
+
+
+/* /spa sin fondos oscuros: el diseño de la tienda con el dorado en lugar del lila (pedido del cliente, 19 oct 2026). Solo la página /spa (`data-page="spa"`).
+   - La franja de anuncio y la cinta de palabras van en dorado con letras crema (como la tienda en lila).
+   - Los rellenos casi negros (botones de reservar) pasan a dorado con texto en tinta.
+   - «Agenda tu cita» deja el dorado noche: en esa sección `--dorado-noche` vale el dorado muy pálido y `--crema` el dorado oscuro, así su texto, sus campos y sus
+     líneas (todos escritos con esas dos variables) quedan claros sin tocar el formulario. */
+:root:has(main[data-page="spa"]) :is([class~="bg-ink"], [class~="bg-[var(--ink)]"], [class~="bg-(--ink)"]):not(.rounded-full, [data-testid="announcement"], footer) { background: var(--dorado); color: var(--ink); }
+main[data-page="spa"] [data-testid="announcement"] { background: var(--dorado); color: var(--pv-crema); }
+main[data-page="spa"] section[aria-hidden="true"] span { color: var(--pv-crema); }
+main[data-page="spa"] [data-testid="spa-cta-book"] { background: var(--pv-crema); color: var(--ink); }
+main[data-page="spa"] #agendar { --dorado-noche: var(--face-soft); --crema: var(--dorado-deep); }
+main[data-page="spa"] #agendar button[class*="h-12"] { color: var(--ink); }
+main[data-page="spa"] #agendar input[type="date"] { color-scheme: light; }
+

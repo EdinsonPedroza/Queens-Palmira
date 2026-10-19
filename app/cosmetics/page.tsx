@@ -36,7 +36,7 @@ export default function CosmeticsPage() {
   return (
     <CartProvider>
       <MotionProvider>
-        <main data-face="cosmetics" className="relative flow-root overflow-x-clip">
+        <main data-face="cosmetics" data-palette="queens" className="relative flow-root overflow-x-clip">
           <ScrollProgress />
           <Navbar face="cosmetics" separate announce />
           <CosmeticsHero />

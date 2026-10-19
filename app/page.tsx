@@ -25,13 +25,13 @@ export const metadata: Metadata = {
 export default function Home() {
   return (
     <MotionProvider>
-      <main className="relative overflow-x-hidden">
+      <main data-palette="spa" className="relative overflow-x-hidden">
         <IntroScreen />
         <ScrollProgress />
         <Navbar face="portal" />
         <Hero />
         <Locations />
-        <Footer face="portal" />
+        <Footer face="portal" tone="crema" />
         <WhatsAppFloat />
       </main>
     </MotionProvider>
