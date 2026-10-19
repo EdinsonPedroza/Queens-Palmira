@@ -11,11 +11,11 @@ const GLAM_KEYWORDS = [
 
 const SPA_KEYWORDS = [
   "Queens Spa",
-  "Faciales",
-  "Masajes Relajantes",
-  "Cejas & Pestañas",
-  "Manicure Spa",
-  "Rituales de Calma",
+  "Manicure",
+  "Pedicure Spa",
+  "Semipermanente",
+  "Uñas en Gel",
+  "Nail Art",
 ]
 
 /** Separador geométrico: pequeño diamante (CSS, sin iconos) */
@@ -54,20 +54,25 @@ function Band({
 }
 
 /**
- * On the store: two tapes crossing in an X — the two personalities running in
- * opposite directions. On the spa page the rose tape would fight the noir, so
- * only the gold one runs.
+ * On the store: two tapes crossing in an X running in opposite directions —
+ * lila (cosmetics) and near-black plum (the footer's colour; it replaced the gold
+ * tape, which clashed with the pink catalog). On the spa page it is a thin near-black strip with gold letters (the colours of the strip above the header).
  */
 export function Marquee({ face = "cosmetics" }: { face?: "cosmetics" | "spa" }) {
   if (face === "spa") {
+    // A thin strip in the colours of the announcement strip above the header (near-black, gold letters, crema diamonds): the store's calm, not a loud gold band.
+    // Same loop as always (the words repeat an even number of times so the half-width slide closes without a jump).
+    const items = [...SPA_KEYWORDS, ...SPA_KEYWORDS, ...SPA_KEYWORDS, ...SPA_KEYWORDS]
     return (
-      <section className="relative h-24 overflow-hidden bg-noir md:h-28" aria-hidden="true">
-        <Band
-          keywords={SPA_KEYWORDS}
-          className="top-1/2 -translate-y-1/2 border-y border-[var(--gold)]/20 bg-noir-soft"
-          textClassName="text-[var(--gold-soft)]"
-          diamondClassName="bg-[var(--gold)]/70"
-        />
+      <section className="relative flex h-11 items-center overflow-hidden bg-[var(--ink)]" aria-hidden="true">
+        <div className="flex w-max items-center whitespace-nowrap animate-marquee">
+          {items.map((kw, i) => (
+            <div key={i} className="flex items-center">
+              <span className="text-[11px] font-semibold uppercase tracking-[0.3em] text-[var(--face)] md:text-xs">{kw}</span>
+              <Diamond className="bg-[var(--crema)]" />
+            </div>
+          ))}
+        </div>
       </section>
     )
   }
@@ -76,16 +81,16 @@ export function Marquee({ face = "cosmetics" }: { face?: "cosmetics" | "spa" }) 
     <section className="relative h-32 overflow-hidden bg-white md:h-44" aria-hidden="true">
       <Band
         keywords={SPA_KEYWORDS}
-        className="top-1/2 -translate-y-1/2 rotate-3 md:rotate-[2.2deg] bg-noir shadow-[0_10px_30px_-10px_rgba(0,0,0,0.5)]"
-        textClassName="text-[var(--gold-soft)]"
-        diamondClassName="bg-white/70"
+        className="top-1/2 -translate-y-1/2 rotate-3 md:rotate-[2.2deg] bg-[var(--ink)] shadow-[0_10px_30px_-12px_color-mix(in_oklab,var(--ink)_55%,transparent)]"
+        textClassName="text-[var(--crema)]"
+        diamondClassName="bg-[var(--face)]"
       />
       <Band
         keywords={GLAM_KEYWORDS}
         reverse
-        className="top-1/2 -translate-y-1/2 -rotate-3 md:rotate-[-2.2deg] bg-queens-gradient-intense shadow-[0_10px_30px_-12px_rgba(255,105,180,0.6)]"
-        textClassName="text-white [text-shadow:0_1px_3px_rgba(44,24,16,0.18)]"
-        diamondClassName="bg-[var(--gold-soft)] shadow-[0_0_6px_rgba(255,244,214,0.6)]"
+        className="top-1/2 -translate-y-1/2 -rotate-3 md:rotate-[-2.2deg] bg-[var(--face)] shadow-[0_10px_30px_-12px_color-mix(in_oklab,var(--face)_60%,transparent)]"
+        textClassName="text-ink"
+        diamondClassName="bg-ink/60"
       />
     </section>
   )

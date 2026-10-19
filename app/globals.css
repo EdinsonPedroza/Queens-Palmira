@@ -1,81 +1,136 @@
 @import "tailwindcss";
 
-@custom-variant dark (&:is(.dark *));
+/* El carrito es un Dialog de Radix y Radix bloquea el scroll con `body[data-scroll-locked] { --removed-body-scroll-bar-size: …px }`.
+   Una variable CSS sin registrar se HEREDA: al ponerla o quitarla en <body> el navegador recalcula el estilo de TODOS los elementos de la
+   página (medido: ~120 ms en un celular lento, al abrir y otra vez al cerrar el carrito). Registrada con `inherits: false` solo la ve el
+   <body>, y nada del sitio la lee: el bloqueo del scroll queda igual y el recálculo desaparece. */
+@property --removed-body-scroll-bar-size {
+  syntax: "<length>";
+  inherits: false;
+  initial-value: 0px;
+}
+
+/* El mismo Dialog pone `document.body.style.pointerEvents = "none"` mientras está abierto (y lo quita al cerrar) para que no se pueda tocar la
+   página de atrás. `pointer-events` también se HEREDA: escribirlo en <body> recalcula el estilo de todos los elementos (medido: ~115 ms al abrir
+   y ~95 ms al cerrar el carrito en un celular lento). El telón del carrito (`fixed inset-0`, pointer-events: auto) ya cubre toda la pantalla y
+   recibe él solo cada toque, así que la página de atrás sigue intocable sin eso: una regla `!important` le gana al estilo en línea de Radix y deja
+   el valor fijo. Si algún día se agrega un modal de Radix SIN telón que cubra la pantalla (un Select modal, por ejemplo), quita esta regla. */
+body {
+  pointer-events: auto !important;
+}
 
 /* ════════════════════════════════════════════════════════════
-   QUEENS COSMETICS — Rose Gold Luxury Palette
-   Rosa pastel · Dorado · Blanco · Rosa intenso · Negro suave
+   QUEENS COSMETICS — Paleta de marca
+   Lila · Ciruela · Crema · Dorado
+   (paleta de color y contrastes queens.pdf)
+
+   Combinaciones aprobadas en el manual: dorado/ciruela/lila sobre
+   crema · crema sobre dorado/lila/ciruela. Contraste WCAG medido:
+   ciruela/crema 12.7 · ciruela/dorado 5.1 · ciruela/lila 4.2 ·
+   crema/lila 3.1 · crema/dorado 2.5 → el dorado NO sirve para texto
+   chico sobre crema; usa --dorado-deep (5.0).
+
+   Texto y superficies oscuras NO usan el ciruela puro: el cliente sintió
+   un "filtro morado". --ink (texto) y --noir (spa) son ciruela casi negro;
+   el ciruela #462649 queda como color de marca de apoyo.
+
+   ACENTO POR CARA (decisión del cliente): dorado = spa, lila = cosméticos,
+   crema = fondo de todo. Los componentes usan --face / --face-deep /
+   --face-light / --face-soft, nunca lila o dorado directo: así la misma
+   pieza se viste sola según la página (ver .face-* más abajo).
    ════════════════════════════════════════════════════════════ */
 :root {
-  --background: oklch(1 0 0);                     /* #FFFFFF */
-  --foreground: oklch(0.18 0.025 40);             /* #2C1810 */
+  /* /cosmetics: franja de anuncio + header suman lo que medía el header solo antes (7.15rem ≈ 122 px). Arriba de la página
+     se ven los dos (--header-h); al bajar la franja se va y queda el header (--nav-h). */
+  --bar-h: 2.5rem;                                /* franja de anuncio (la de abajo no es hermana) */
+  --nav-h: 5.75rem;                                /* el header (logo de 86 px) */
+  --header-h: calc(var(--nav-h) + var(--bar-h));  /* los dos juntos: donde empieza la portada */
+  /* ── Marca ── */
+  --lila: oklch(0.668 0.049 323.8);               /* #A48BA6 */
+  --ciruela: oklch(0.325 0.073 323.9);            /* #462649 */
+  --crema: oklch(0.995 0.022 106.8);              /* #FFFFEE */
+  --dorado: oklch(0.717 0.099 89.8);              /* #BCA157 */
 
-  --card: oklch(0.995 0.003 20);
-  --card-foreground: oklch(0.18 0.025 40);
+  /* ── Derivados (tintes/sombras de los de arriba, no colores nuevos) ── */
+  --lila-light: oklch(0.84 0.04 324);             /* bordes y rellenos suaves */
+  --lila-soft: oklch(0.94 0.024 323);             /* lavados de sección */
+  --dorado-soft: oklch(0.857 0.061 90.4);
+  --dorado-deep: oklch(0.54 0.087 89.3);          /* texto dorado sobre crema (5.0:1) */
+  --dorado-noche: oklch(0.21 0.034 88);           /* el oscuro del spa: el mismo matiz del dorado, muy oscuro (un tinte derivado, no un color nuevo); fondo del formulario de agendar */
+  --lila-deep: oklch(0.52 0.06 324);              /* lila legible como texto sobre crema (~5.5:1) */
+  --ciruela-soft: oklch(0.376 0.069 323.7);       /* superficie elevada sobre ciruela */
+  --ciruela-deep: oklch(0.2 0.035 324);            /* ciruela casi negro: texto y fondo del spa */
 
-  --popover: oklch(0.995 0.003 20);
-  --popover-foreground: oklch(0.18 0.025 40);
+  /* ── Acento por cara. Por defecto = spa (dorado); cosméticos lo pisa abajo ── */
+  --face: var(--dorado);
+  --face-deep: var(--dorado-deep);            /* texto del acento sobre crema (≥5:1) */
+  --face-light: var(--dorado-soft);           /* bordes y rellenos */
+  --face-soft: oklch(0.95 0.035 92);          /* lavados suaves */
 
-  --primary: oklch(0.84 0.065 15);                /* #FFB6C1 rosa pastel */
-  --primary-foreground: oklch(0.18 0.025 40);
+  /* ── Semánticos ── */
+  --background: var(--crema);
+  --foreground: var(--ink);
 
-  --secondary: oklch(0.96 0.012 15);              /* rosa muy suave */
-  --secondary-foreground: oklch(0.18 0.025 40);
+  --card: var(--crema);
+  --card-foreground: var(--ink);
 
-  --muted: oklch(0.96 0.008 20);
-  --muted-foreground: oklch(0.45 0.025 30);
+  --popover: var(--crema);
+  --popover-foreground: var(--ink);
 
-  --accent: oklch(0.75 0.135 85);                 /* #D4AF37 dorado */
-  --accent-foreground: oklch(0.18 0.025 40);
+  --primary: var(--face);
+  --primary-foreground: var(--ink);
+
+  --secondary: var(--lila-soft);
+  --secondary-foreground: var(--ink);
+
+  --muted: oklch(0.965 0.015 100);
+  --muted-foreground: oklch(0.46 0.025 324);      /* ~6:1 sobre crema */
+
+  --accent: var(--face);
+  --accent-foreground: var(--ink);
 
   --destructive: oklch(0.577 0.245 27.325);
   --destructive-foreground: oklch(0.98 0.005 50);
 
-  --border: oklch(0.90 0.015 15);
-  --input: oklch(0.94 0.008 15);
-  --ring: oklch(0.75 0.135 85);
+  --border: oklch(0.9 0.02 323);
+  --input: oklch(0.95 0.015 100);
+  --ring: var(--face);
 
   --radius: 0.75rem;
 
-  /* Queens signature extras */
-  --rose-pastel: oklch(0.84 0.065 15);            /* #FFB6C1 */
-  --rose-pastel-soft: oklch(0.94 0.035 15);
-  --rose-hot: oklch(0.70 0.195 355);              /* #FF69B4 */
-  --gold: oklch(0.75 0.135 85);                   /* #D4AF37 */
-  --gold-soft: oklch(0.85 0.090 85);
-  --gold-deep: oklch(0.60 0.130 75);
-  --ink: oklch(0.18 0.025 40);                    /* #2C1810 */
+  /* Alias de marca que usan los componentes */
+  --ink: var(--ciruela-deep);
 
-  /* Queens Spa — the "dark side" personality */
-  --noir: oklch(0.13 0.008 40);                   /* warm black */
-  --noir-soft: oklch(0.19 0.010 40);
+  /* Queens Spa — la cara oscura: casi negro con un susurro de ciruela */
+  --noir: oklch(0.14 0.015 324);
+  --noir-soft: oklch(0.2 0.025 324);
 }
 
-.dark {
-  --background: oklch(0.12 0.015 30);
-  --foreground: oklch(0.96 0.010 20);
-  --card: oklch(0.16 0.020 30);
-  --card-foreground: oklch(0.96 0.010 20);
-  --popover: oklch(0.16 0.020 30);
-  --popover-foreground: oklch(0.96 0.010 20);
-  --primary: oklch(0.75 0.095 15);
-  --primary-foreground: oklch(0.12 0.015 30);
-  --secondary: oklch(0.22 0.025 20);
-  --secondary-foreground: oklch(0.96 0.010 20);
-  --muted: oklch(0.22 0.015 20);
-  --muted-foreground: oklch(0.70 0.020 20);
-  --accent: oklch(0.78 0.140 85);
-  --accent-foreground: oklch(0.12 0.015 30);
-  --border: oklch(0.28 0.020 20);
-  --input: oklch(0.22 0.015 20);
-  --ring: oklch(0.78 0.140 85);
+/* No hay modo oscuro: la marca es crema en todas las páginas (el único bloque oscuro es el footer). */
+
+/* Cosméticos = lila. Se activa con <main data-face="cosmetics"> (también alcanza los portales de Radix,
+   como el carrito) o con la clase .face-cosmetics en un bloque suelto (las mitades del portal). */
+:root:has(main[data-face="cosmetics"]),
+.face-cosmetics {
+  --face: var(--lila);
+  --face-deep: var(--lila-deep);
+  --face-light: var(--lila-light);
+  --face-soft: oklch(0.965 0.012 323);        /* casi crema: sin lavado lila en secciones enteras */
+}
+/* Spa = dorado. Sirve para volver al dorado dentro de una página lila (p. ej. la tarjeta del spa en /quienes-somos). */
+.face-spa {
+  --face: var(--dorado);
+  --face-deep: var(--dorado-deep);
+  --face-light: var(--dorado-soft);
+  --face-soft: oklch(0.95 0.035 92);
 }
 
 @theme inline {
-  --font-display: var(--font-dm-sans), -apple-system, "SF Pro Display", system-ui, sans-serif;
-  --font-serif: var(--font-dm-sans), system-ui, sans-serif;
-  --font-sans: var(--font-dm-sans), system-ui, sans-serif;
-  --font-body: var(--font-inter), system-ui, sans-serif;
+  /* One family for the whole site: The Seasons (Bold = titles, Regular = the rest). */
+  --font-display: var(--font-seasons), var(--font-glyph-fallback), Georgia, serif;
+  --font-serif: var(--font-seasons), var(--font-glyph-fallback), Georgia, serif;
+  --font-sans: var(--font-seasons), var(--font-glyph-fallback), Georgia, serif;
+  --font-body: var(--font-seasons), var(--font-glyph-fallback), Georgia, serif;
 
   --color-background: var(--background);
   --color-foreground: var(--foreground);
@@ -97,15 +152,29 @@
   --color-input: var(--input);
   --color-ring: var(--ring);
 
-  --color-rose-pastel: oklch(0.84 0.065 15);
-  --color-rose-soft: oklch(0.94 0.035 15);
-  --color-rose-hot: oklch(0.70 0.195 355);
-  --color-gold: oklch(0.75 0.135 85);
-  --color-gold-soft: oklch(0.85 0.090 85);
-  --color-gold-deep: oklch(0.60 0.130 75);
-  --color-ink: oklch(0.18 0.025 40);
-  --color-noir: oklch(0.13 0.008 40);
-  --color-noir-soft: oklch(0.19 0.010 40);
+  /* "Blanco" en esta marca es crema: bg-white / text-white salen crema. */
+  --color-white: var(--crema);
+
+  --color-face: var(--face);
+  --color-face-deep: var(--face-deep);
+  --color-face-light: var(--face-light);
+  --color-face-soft: var(--face-soft);
+
+  --color-lila: var(--lila);
+  --color-lila-light: var(--lila-light);
+  --color-lila-soft: var(--lila-soft);
+  --color-lila-deep: var(--lila-deep);
+  --color-ciruela: var(--ciruela);
+  --color-ciruela-soft: var(--ciruela-soft);
+  --color-ciruela-deep: var(--ciruela-deep);
+  --color-crema: var(--crema);
+  --color-dorado: var(--dorado);
+  --color-dorado-soft: var(--dorado-soft);
+  --color-dorado-deep: var(--dorado-deep);
+
+  --color-ink: var(--ink);
+  --color-noir: var(--noir);
+  --color-noir-soft: var(--noir-soft);
 
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
@@ -119,6 +188,8 @@
 
 html {
   scroll-behavior: smooth;
+  /* The Seasons has a small x-height: +6% keeps body copy as readable as the sans it replaced */
+  font-size: 106.25%;
 }
 
 button, a, [role="button"], label[for], select {
@@ -129,73 +200,71 @@ body {
   background: var(--background);
   color: var(--foreground);
   font-family: var(--font-body);
+  font-weight: 400;
+  /* Digits come from the fallback font (the demo font has no "4"); old-style figures hurt prices and phones */
+  font-variant-numeric: lining-nums;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-::selection {
-  background: var(--rose-hot);
-  color: white;
+/* Titles are always The Seasons Bold; utilities (font-*) can still override. */
+@layer base {
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-display);
+    font-weight: 700;
+  }
 }
 
-/* Scrollbar rosé */
+/* Italics. The italic cuts are their own font families (see app/layout.tsx) so that they are not
+   preloaded on every page, which means anything italic has to switch family here. Kept outside
+   every @layer on purpose: an unlayered rule beats the font-* utilities, so `font-serif italic`
+   still lands on the true italic. Mark italics with <em>, <i> or the `italic` class; an inline
+   `font-style` or a variant such as `md:italic` would get a slanted upright instead. */
+em, i, .italic {
+  font-family: var(--font-seasons-italic), var(--font-glyph-fallback-italic), Georgia, serif;
+}
+
+/* Acento de la cara con texto casi negro */
+::selection {
+  background: var(--face);
+  color: var(--ink);
+}
+
+/* Scrollbar lila */
 ::-webkit-scrollbar {
   width: 10px;
   height: 10px;
 }
 ::-webkit-scrollbar-track {
-  background: var(--rose-pastel-soft);
+  background: var(--crema);
 }
 ::-webkit-scrollbar-thumb {
-  background: linear-gradient(var(--rose-pastel), var(--gold));
+  background: linear-gradient(var(--face-light), var(--face));
   border-radius: 10px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: var(--gold);
+  background: var(--face);
 }
 
 /* Gradientes signature */
 .bg-queens-gradient {
-  background: linear-gradient(135deg, var(--rose-pastel) 0%, var(--gold-soft) 100%);
+  background: linear-gradient(135deg, var(--face-light) 0%, var(--face-soft) 100%);
 }
 .bg-queens-gradient-intense {
-  background: linear-gradient(135deg, var(--rose-hot) 0%, var(--gold) 100%);
+  background: linear-gradient(135deg, var(--face-deep) 0%, var(--face) 100%);
 }
 .text-queens-gradient {
-  background: linear-gradient(135deg, var(--rose-hot) 0%, var(--gold-deep) 100%);
+  background: linear-gradient(135deg, var(--ink) 0%, var(--face-deep) 100%);
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
   color: transparent;
 }
-.border-queens-gradient {
-  border-image: linear-gradient(135deg, var(--rose-pastel), var(--gold)) 1;
-}
-
-/* Glass morphism rosé */
-.glass-rose {
-  background: rgba(255, 182, 193, 0.15);
-  backdrop-filter: blur(16px) saturate(180%);
-  -webkit-backdrop-filter: blur(16px) saturate(180%);
-  border: 1px solid rgba(255, 255, 255, 0.4);
-}
 
 /* Animations */
-@keyframes shimmer-sweep {
-  0%   { background-position: 200% center; }
-  100% { background-position: -200% center; }
-}
-@keyframes shimmer {
-  0% { background-position: -1000px 0; }
-  100% { background-position: 1000px 0; }
-}
-@keyframes float-soft {
-  0%, 100% { transform: translateY(0) rotate(0deg); }
-  50%      { transform: translateY(-14px) rotate(1.5deg); }
-}
-@keyframes pulse-rose {
-  0%, 100% { box-shadow: 0 0 0 0 rgba(255, 105, 180, 0.55); }
-  70%      { box-shadow: 0 0 0 18px rgba(255, 105, 180, 0); }
+@keyframes pulse-face {
+  0%, 100% { box-shadow: 0 0 0 0 color-mix(in oklab, var(--face) 60%, transparent); }
+  70%      { box-shadow: 0 0 0 18px color-mix(in oklab, var(--face) 0%, transparent); }
 }
 @keyframes marquee {
   0%   { transform: translateX(0); }
@@ -204,10 +273,6 @@ body {
 @keyframes marquee-reverse {
   0%   { transform: translateX(-50%); }
   100% { transform: translateX(0); }
-}
-@keyframes glow-gold {
-  0%, 100% { filter: drop-shadow(0 0 12px rgba(212, 175, 55, 0.55)); }
-  50%      { filter: drop-shadow(0 0 28px rgba(212, 175, 55, 0.9)); }
 }
 @keyframes fade-up {
   0%   { opacity: 0; transform: translateY(24px); }
@@ -221,37 +286,104 @@ body {
   from { height: var(--radix-accordion-content-height); }
   to   { height: 0; }
 }
+/* Cart sheet (components/ui/dialog.tsx): the backdrop fades, the panel slides in from the right */
+@keyframes overlay-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+@keyframes overlay-out {
+  from { opacity: 1; }
+  to   { opacity: 0; }
+}
+@keyframes sheet-in {
+  from { transform: translateX(100%); }
+  to   { transform: translateX(0); }
+}
+@keyframes sheet-out {
+  from { transform: translateX(0); }
+  to   { transform: translateX(100%); }
+}
+/* Tone menu of the product card: it enters with a CSS animation (not Framer Motion). The JS version left the panel blank for a frame
+   while it handed over from the animation to the final style: the client saw it as a flicker. */
+@keyframes tone-in    { from { opacity: 0; transform: scale(0.96) translateY(-4px); } to { opacity: 1; transform: none; } }
+@keyframes tone-in-up { from { opacity: 0; transform: scale(0.96) translateY(4px); }  to { opacity: 1; transform: none; } }
 
-.animate-float      { animation: float-soft 6s ease-in-out infinite; }
-.animate-pulse-rose { animation: pulse-rose 2s infinite; }
+/* Cart drawer (components/cart-sidebar.tsx, components/cart-add-ons.tsx): the entrances and the highlight are CSS animations. Framer Motion
+   (WAAPI) hands the element back to its `initial` style for ONE frame when an animation ends, measured frame by frame: the new row, the total,
+   the "Te faltan" number, the new suggestion and the highlight each blinked once, a few hundred ms after an add (measured per frame) (the same glitch as the tone menu above).
+   They are used with fill-mode `backwards` only: a `forwards` fill would pin the end values over Framer's own exit animation. */
+@keyframes cart-row-in   { from { opacity: 0; transform: translateX(28px); } to { opacity: 1; transform: none; } }
+@keyframes cart-pop-in   { from { opacity: 0; transform: translateX(12px); } to { opacity: 1; transform: none; } }
+@keyframes cart-text-in  { from { opacity: 0; transform: translateY(6px); }  to { opacity: 1; transform: none; } }
+@keyframes cart-num-in   { from { opacity: 0.6; transform: translateY(5px); } to { opacity: 1; transform: none; } }
+@keyframes cart-check-pop { from { transform: scale(0.6); } to { transform: none; } }
+/* The big "Queens" of the footer (components/sections/footer.tsx): each letter of the logo's lettering flips up from below and settles with a little bounce
+   (the overshoot of the curve). CSS, not Framer: Framer's entrance blinked for a frame when it ended (see above). The letters rest visible; they only
+   start hidden until the footer scrolls into view (measured per frame). */
+@keyframes footer-letter-in {
+  from { opacity: 0; transform: perspective(700px) translateY(90px) rotateX(-90deg) scale(0.55); }
+  to   { opacity: 1; transform: perspective(700px) translateY(0) rotateX(0deg) scale(1); }
+}
+/* Spa (components/reveal.tsx and sections/spa-cta.tsx): a block rises into place as it scrolls into view, and the closing slab's words flip up one by one.
+   Both rest visible and start from `backwards`, so nothing can jump back when they end (Framer's entrance did). */
+@keyframes reveal-up { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: none; } }
+@keyframes flip-in {
+  from { opacity: 0; transform: perspective(600px) translateY(48px) rotateX(-90deg); }
+  to   { opacity: 1; transform: perspective(600px) translateY(0) rotateX(0deg); }
+}
+/* The element rests at opacity 0 (its own class), so when the animation ends nothing can jump back */
+@keyframes cart-row-wash { from { opacity: var(--wash-from, 0.3); } to { opacity: 0; } }
+
+.animate-pulse-face { animation: pulse-face 2s infinite; }
 .animate-marquee    { animation: marquee 40s linear infinite; }
 .animate-marquee-reverse { animation: marquee-reverse 40s linear infinite; }
-.animate-glow-gold  { animation: glow-gold 3s ease-in-out infinite; }
 .animate-fade-up    { animation: fade-up 0.8s cubic-bezier(0.16, 1, 0.3, 1) both; }
 
-/* Shimmer text overlay */
-.shimmer-gold {
-  background: linear-gradient(
-    90deg,
-    var(--gold-deep) 0%,
-    var(--gold) 40%,
-    #fff4d6 50%,
-    var(--gold) 60%,
-    var(--gold-deep) 100%
-  );
-  background-size: 1000px 100%;
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
-  animation: shimmer 4s linear infinite;
+/* Gold text with a sweeping band of light: components/shimmer-text.tsx explains the layering.
+   Whole-pixel steps keep the copy of the text exactly on top of the original (see there). The band is 240px
+   wide and moves 500px/s: one pass every 2 seconds, the same pace the old background-clip version had. */
+.shimmer-text {
+  position: relative;
+  display: inline-block;
+  color: var(--face-deep);
+}
+.shimmer-text__band {
+  position: absolute;
+  top: -0.35em;
+  bottom: -0.35em; /* taller than the line box: the glyphs overflow it (Q's tail, descenders) */
+  left: 0;
+  width: 240px;
+  overflow: hidden;
+  pointer-events: none;
+  user-select: none;
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 50%, transparent);
+  mask-image: linear-gradient(90deg, transparent, #000 50%, transparent);
+  animation: shimmer-window 2s steps(1000) infinite;
+}
+.shimmer-text__copy {
+  position: absolute;
+  top: 0.35em;
+  left: 0;
+  white-space: nowrap;
+  color: var(--face);
+  animation: shimmer-counter 2s steps(1000) infinite;
+}
+/* the window travels 1000px; the copy travels the same distance the other way, so it never moves on screen */
+@keyframes shimmer-window {
+  from { transform: translateX(-240px); }
+  to   { transform: translateX(760px); }
+}
+@keyframes shimmer-counter {
+  from { transform: translateX(240px); }
+  to   { transform: translateX(-760px); }
 }
 
-/* ── Fondo de imagen de producto — con profundidad (spotlight + vignette rosé) ── */
+/* ── Fondo de imagen de producto — crema cálido con profundidad (sin tinte lila: el lila vive en bordes y acentos) ── */
 .product-image-bg {
   background:
-    radial-gradient(115% 75% at 50% 12%, oklch(0.99 0.006 20) 0%, transparent 52%),
-    radial-gradient(95% 65% at 50% 100%, oklch(0.86 0.075 12 / 0.55) 0%, transparent 72%),
-    linear-gradient(158deg, oklch(0.965 0.028 25) 0%, oklch(0.905 0.055 14) 100%);
+    radial-gradient(115% 75% at 50% 12%, var(--crema) 0%, transparent 52%),
+    radial-gradient(95% 65% at 50% 100%, oklch(0.92 0.035 95 / 0.55) 0%, transparent 72%),
+    linear-gradient(158deg, oklch(0.985 0.015 105) 0%, oklch(0.95 0.03 98) 100%);
 }
 /* Anillo interior sutil que "hunde" el producto en la tarjeta */
 .product-image-bg::after {
@@ -259,33 +391,21 @@ body {
   position: absolute;
   inset: 0;
   pointer-events: none;
-  box-shadow: inset 0 1px 2px rgba(255, 255, 255, 0.7),
-              inset 0 -18px 32px -18px rgba(255, 105, 180, 0.28);
+  box-shadow: inset 0 1px 2px rgba(255, 255, 238, 0.7),
+              inset 0 -18px 32px -18px color-mix(in oklab, var(--face) 28%, transparent);
 }
 /* Halo dorado que aparece detrás del producto al hover */
 .product-image-bg .product-glow {
   position: absolute;
   inset: 12% 18%;
   border-radius: 50%;
-  background: radial-gradient(circle, rgba(212, 175, 55, 0.32) 0%, transparent 70%);
+  background: radial-gradient(circle, color-mix(in oklab, var(--face) 32%, transparent) 0%, transparent 70%);
   opacity: 0;
   transition: opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1);
   pointer-events: none;
   filter: blur(8px);
 }
 .group:hover .product-glow { opacity: 1; }
-
-/* Product card hover */
-.product-card-lift {
-  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1),
-              box-shadow 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-}
-.product-card-lift:hover {
-  transform: translateY(-6px);
-  box-shadow:
-    0 20px 40px -12px rgba(255, 105, 180, 0.25),
-    0 8px 16px -8px rgba(212, 175, 55, 0.2);
-}
 
 /* Button shine effect */
 .btn-shine {
@@ -302,7 +422,7 @@ body {
   background: linear-gradient(
     to right,
     transparent,
-    rgba(255, 255, 255, 0.55),
+    rgba(255, 255, 238, 0.55),
     transparent
   );
   transform: skewX(-20deg);
@@ -312,36 +432,7 @@ body {
   left: 120%;
 }
 
-/* ════════════════════════════════════════════════════════════
-   QUEENS SIGNATURE — Glam motion system
-   (inspirado en la riqueza de SALCHIMAX, traducido a luxury rosa-dorado)
-   ════════════════════════════════════════════════════════════ */
-
-/* ── Shimmer / sheen sweep sobre titulares ── */
-@keyframes sheen-sweep {
-  0%   { background-position: 200% center; }
-  100% { background-position: -200% center; }
-}
-.text-sheen {
-  position: relative;
-  display: inline-block;
-  background-image: linear-gradient(
-    100deg,
-    transparent 30%,
-    rgba(255, 244, 214, 0.85) 48%,
-    rgba(255, 255, 255, 0.95) 50%,
-    rgba(255, 244, 214, 0.85) 52%,
-    transparent 70%
-  );
-  background-size: 200% 100%;
-  background-repeat: no-repeat;
-  -webkit-background-clip: text;
-  background-clip: text;
-  animation: sheen-sweep 5.5s ease-in-out infinite;
-  animation-delay: 1.2s;
-}
-
-/* ── Partículas de brillo que suben (stardust) ── */
+/* ── Partículas de brillo que suben (stardust) — components/floating-sparkles.tsx ── */
 @keyframes sparkle-rise {
   0%   { transform: translateY(0) translateX(0) scale(0); opacity: 0; }
   12%  { opacity: var(--sparkle-opacity, 0.8); transform: translateY(-12vh) scale(1); }
@@ -351,131 +442,106 @@ body {
 .sparkle {
   position: absolute;
   border-radius: 50%;
-  background: radial-gradient(circle, #fff6e0 0%, var(--gold) 55%, transparent 100%);
-  box-shadow: 0 0 6px rgba(212, 175, 55, 0.8);
+  background: radial-gradient(circle, var(--crema) 0%, var(--face) 55%, transparent 100%);
+  box-shadow: 0 0 6px color-mix(in oklab, var(--face) 80%, transparent);
   animation: sparkle-rise var(--sparkle-dur, 7s) var(--sparkle-delay, 0s) infinite ease-out;
   pointer-events: none;
   will-change: transform, opacity;
 }
-.sparkle.rose {
-  background: radial-gradient(circle, #ffe3ef 0%, var(--rose-hot) 55%, transparent 100%);
-  box-shadow: 0 0 6px rgba(255, 105, 180, 0.7);
+.sparkle.alt {
+  background: radial-gradient(circle, var(--crema) 0%, var(--face-light) 55%, transparent 100%);
+  box-shadow: 0 0 6px color-mix(in oklab, var(--face-light) 80%, transparent);
 }
-
-/* ── Twinkle (parpadeo de estrellitas fijas) ── */
-@keyframes twinkle {
-  0%, 100% { opacity: 0.25; transform: scale(0.7); }
-  50%      { opacity: 1;    transform: scale(1.15); }
-}
-.animate-twinkle { animation: twinkle 2.4s ease-in-out infinite; }
-
-/* ── Clip-path text reveal (sube desde máscara) ── */
-@keyframes text-reveal-up {
-  from { clip-path: inset(100% 0 0 0); transform: translateY(10px); }
-  to   { clip-path: inset(0% 0 0 0);   transform: translateY(0); }
-}
-.text-reveal { animation: text-reveal-up 0.8s cubic-bezier(0.16, 1, 0.3, 1) both; }
-
-/* ── Letter stagger reveal ── */
-.letter-stagger span {
-  display: inline-block;
-  animation: text-reveal-up 0.55s cubic-bezier(0.16, 1, 0.3, 1) both;
-}
-
-/* ── Botón con borde dorado líquido (glam liquid) ── */
-.btn-gold-liquid {
-  position: relative;
-  overflow: hidden;
-  z-index: 0;
-  transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
-}
-.btn-gold-liquid::before {
-  content: "";
-  position: absolute;
-  inset: -2px;
-  background: linear-gradient(90deg, var(--gold), #fff4d6, var(--rose-hot), var(--gold), var(--gold-soft));
-  background-size: 300% 100%;
-  animation: sheen-sweep 3s linear infinite;
-  z-index: -1;
-  opacity: 0;
-  transition: opacity 0.35s;
-  border-radius: inherit;
-}
-.btn-gold-liquid:hover::before { opacity: 1; }
-.btn-gold-liquid:hover {
-  box-shadow: 0 0 28px rgba(255, 105, 180, 0.45), 0 0 56px rgba(212, 175, 55, 0.25);
-  transform: translateY(-3px);
-}
-
-/* ── Shockwave click ripple ── */
-@keyframes shockwave {
-  0%   { transform: translate(-50%, -50%) scale(0); opacity: 0.7; }
-  100% { transform: translate(-50%, -50%) scale(4); opacity: 0; }
-}
-.shockwave {
-  position: absolute;
-  width: 80px;
-  height: 80px;
-  border-radius: 50%;
-  border: 2px solid var(--rose-hot);
-  pointer-events: none;
-  animation: shockwave 0.65s ease-out forwards;
-}
-
-/* ── Divisor de sección — línea de gradiente animada ── */
-.section-divider {
-  height: 1px;
-  background: linear-gradient(90deg, transparent, var(--rose-pastel), var(--gold), var(--rose-pastel), transparent);
-  background-size: 200% 100%;
-  animation: sheen-sweep 4s linear infinite;
-}
-
-/* ── Overlay de shimmer ultra-sutil (textura luxury) ── */
-.shimmer-overlay::after {
-  content: "";
-  position: fixed;
-  inset: 0;
-  pointer-events: none;
-  z-index: 9998;
-  background:
-    radial-gradient(circle at 20% 30%, rgba(212, 175, 55, 0.035) 0%, transparent 25%),
-    radial-gradient(circle at 80% 70%, rgba(255, 105, 180, 0.035) 0%, transparent 25%);
-  mix-blend-mode: screen;
-}
-
-/* ════════════════════════════════════════════════════════════
-   DUAL PERSONALITY — Cosmetics (Lado A) · Spa (Lado B)
-   ════════════════════════════════════════════════════════════ */
-
-/* Slow rotation for the text ring around the hero emblem */
-@keyframes spin-slow {
-  to { transform: rotate(360deg); }
-}
-.animate-spin-slow { animation: spin-slow 38s linear infinite; }
 
 /* Hollow gold display type for the spa side */
 .text-outline-gold {
   color: transparent;
-  -webkit-text-stroke: 1.5px oklch(0.75 0.135 85 / 0.32);
+  -webkit-text-stroke: 1.5px color-mix(in oklab, var(--face) 32%, transparent);
 }
 
-/* Film grain — gives the noir side a tactile, editorial texture */
-.bg-grain {
-  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%' height='100%' filter='url(%23n)' opacity='0.55'/></svg>");
-  background-size: 160px 160px;
+/* ════════════════════════════════════════════════════════════
+   AMBIENT LOOPS — the breathing glows, the drifting orbs, the sheen
+
+   Anything that moves forever lives here, in CSS, and only moves
+   `transform` and `opacity`: the browser runs those on the compositor,
+   so a page that is just sitting there costs the main thread nothing.
+
+   They used to be Framer Motion loops (`repeat: Infinity`). Those
+   rewrote inline styles on every frame, on screen or not, and that
+   also forced every other running animation to be recomputed on the
+   main thread each frame: an idle page kept it busy all the time.
+   Keep Framer for entrances and interactions; never loop it forever.
+
+   Each loop is tuned from the element with custom properties.
+   ════════════════════════════════════════════════════════════ */
+
+/* scale and opacity, out and back.  --breathe-x / -y: peak scale · --breathe-from / -to: opacity */
+@keyframes breathe {
+  0%, 100% { transform: scale(1); opacity: var(--breathe-from, 1); }
+  50%      { transform: scale(var(--breathe-x, 1), var(--breathe-y, var(--breathe-x, 1))); opacity: var(--breathe-to, 1); }
+}
+/* a slow wander through two stops.  --drift-y1 / -y2: vertical travel · --drift-s1 / -s2: scale at each stop */
+@keyframes drift {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  33.333%  { transform: translate(30px, var(--drift-y1, -20px)) scale(var(--drift-s1, 1.1)); }
+  66.667%  { transform: translate(-20px, var(--drift-y2, 30px)) scale(var(--drift-s2, 0.95)); }
+}
+/* a gentle rock from side to side */
+@keyframes sway {
+  0%, 100% { transform: rotate(0deg); }
+  33.333%  { transform: rotate(15deg); }
+  66.667%  { transform: rotate(-15deg); }
+}
+/* A band of light crossing a button: 2.5s on the move, then 1s still. The band is a strip three
+   tiles wide (see .ambient-sheen's markup in location.tsx) that slides two tiles to the left. */
+@keyframes sheen-pass {
+  0%            { transform: translateX(33.3333%); }
+  71.429%, 100% { transform: translateX(-33.3333%); }
+}
+
+/* The ring around the WhatsApp button: a disc behind it that grows 18px past its 56px edge and
+   fades, then comes back. Same timing as `pulse-face`, which does it with box-shadow (and so
+   repaints every frame: fine for a rare badge, not for something on every page). */
+@keyframes pulse-ring {
+  0%, 100% { transform: scale(1); opacity: 0.6; }
+  70%      { transform: scale(1.643); opacity: 0; }
+}
+.animate-pulse-ring { background: var(--face); animation: pulse-ring 2s infinite; }
+
+.ambient-breathe { animation: breathe var(--amb-dur, 6s) ease-in-out var(--amb-delay, 0s) infinite both; }
+.ambient-drift   { animation: drift var(--amb-dur, 8s) ease-in-out var(--amb-delay, 0s) infinite both; }
+.ambient-sway    { animation: sway 4s ease-in-out infinite; }
+.ambient-sheen   { animation: sheen-pass 3.5s linear infinite; }
+
+/* components/sheen.tsx: the band that crosses the add-to-cart buttons, eased like the version it replaces */
+@keyframes sheen-slide {
+  from { transform: translateX(-33.3333%); }
+  to   { transform: translateX(33.3333%); }
+}
+.sheen-slide { animation: sheen-slide var(--sheen-dur, 2.8s) ease-in-out infinite; }
+
+/* The big blurred orbs hold still on phones: they cost frames there and add little.
+   (Must stay below the rules above: same specificity, the later one wins.) */
+@media (max-width: 767px) {
+  .ambient-desktop { animation: none; }
 }
 
 /* ── Respeto a prefers-reduced-motion ── */
 @media (prefers-reduced-motion: reduce) {
   .sparkle,
-  .animate-twinkle,
-  .animate-spin-slow,
-  .animate-float,
   .animate-marquee,
   .animate-marquee-reverse,
-  .text-sheen,
-  .section-divider,
-  .btn-gold-liquid::before {
+  .ambient-breathe,
+  .ambient-drift,
+  .ambient-sway,
+  .ambient-sheen,
+  .ambient-sheen-slide,
+  .shimmer-text__band,
+  .shimmer-text__copy {
     animation: none !important;
+  }
+  /* still, the text is simply its deep accent colour */
+  .shimmer-text__band {
+    display: none;
   }
 }

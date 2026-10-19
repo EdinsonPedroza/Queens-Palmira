@@ -14,7 +14,6 @@ import {
   type Variants,
 } from "framer-motion"
 import { ArrowDown, ArrowRight } from "lucide-react"
-import { buttonVariants } from "@/components/ui/button"
 import { FloatingSparkles } from "@/components/floating-sparkles"
 import { INTRO_EXIT_EVENT } from "@/components/intro-screen"
 import { useIsMobile } from "@/hooks/use-is-mobile"
@@ -23,8 +22,8 @@ import { VENUES, faceLinkProps } from "@/lib/site"
 
 /*
  * The portal: one brand split down the middle, and each half is a door.
- *   Lado A (left)  → /cosmetics: white / rose / gold
- *   Lado B (right) → /spa:       noir / gold
+ *   Lado A (left)  → /cosmetics: crema + lila, the store photo in a gold-framed arch
+ *   Lado B (right) → /spa:       crema + dorado, the nails photo in a gold-framed arch
  *
  * The two backgrounds are full-size layers clipped at a shared `split`
  * position, so anything drawn in both (the giant wordmark) swaps personality
@@ -36,8 +35,16 @@ import { VENUES, faceLinkProps } from "@/lib/site"
 
 type Side = "glam" | "spa"
 
+/*
+ * The arch's width is worked out from the title's own width (--lockup), so it always sits beside the
+ * text and never over it (both arches use it, one on each side). If you change the title's size or the
+ * column's padding, recalculate this.
+ */
+const ARCH_WIDTH = "clamp(0px, calc(0.92 * (51.5vw - 8.5rem - 3.72 * var(--lockup))), 19.5rem)"
+
 /** Seam position, in % of the hero width. */
 const SPLIT_REST = 50
+const DEAD_ZONE = 2.5
 const SPLIT_ACTIVE: Record<Side, number> = { glam: 57, spa: 43 }
 const SPLIT_SPRING = { type: "spring", stiffness: 90, damping: 20, mass: 0.9 } as const
 const EASE = [0.16, 1, 0.3, 1] as const
@@ -90,31 +97,40 @@ export function Hero() {
   const glamClip = useMotionTemplate`inset(0 ${splitInverse}% 0 0)`
   const spaClip = useMotionTemplate`inset(0 0 0 ${split}%)`
   const seamLeft = useMotionTemplate`${split}%`
-  const glamWidth = useMotionTemplate`${split}%`
-  const spaWidth = useMotionTemplate`${splitInverse}%`
+  // Neutral strip around the seam (DEAD_ZONE % of the width on each side): neither door covers it, so a click
+  // exactly in the middle goes nowhere, and returning the cursor to the middle of the screen closes whichever side is open.
+  const glamWidth = useMotionTemplate`calc(${split}% - ${DEAD_ZONE}%)`
+  const spaLeft = useMotionTemplate`calc(${split}% + ${DEAD_ZONE}%)`
+  const spaWidth = useMotionTemplate`calc(${splitInverse}% - ${DEAD_ZONE}%)`
   // Full-width rows translated by the seam offset → their center rides the seam
   const shift = useTransform(split, (v) => `${v - SPLIT_REST}%`)
   // The side that loses space steps back
   const glamOpacity = useTransform(split, [SPLIT_ACTIVE.spa, SPLIT_REST], [0.35, 1])
   const spaOpacity = useTransform(split, [SPLIT_REST, SPLIT_ACTIVE.glam], [1, 0.35])
+  // Each arch gives way a little more than the text: the title slides toward it when the OTHER side opens
+  const ovalOpacity = useTransform(split, [SPLIT_REST, SPLIT_ACTIVE.glam], [1, 0.15])
+  const glamOvalOpacity = useTransform(split, [SPLIT_ACTIVE.spa, SPLIT_REST], [0.15, 1])
 
   /*
    * Hover reveal. `split` already says how far a side has opened (50 at rest,
    * 57 / 43 once it is hovered), so one 0→1 value per side drives the lot: that
-   * side's photo dims, and a short description of the service settles into the
-   * free space on its outer edge. It rides the same spring as the widening, so
-   * everything arrives and leaves together. Nothing loops.
+   * side's arch steps back and a short description of the service settles in
+   * next to the title. It rides the same spring as the
+   * widening, so everything arrives and leaves together. Nothing loops.
    */
   const glamOpen = useTransform(split, [SPLIT_REST, SPLIT_ACTIVE.glam], [0, 1])
   const spaOpen = useTransform(split, [SPLIT_ACTIVE.spa, SPLIT_REST], [1, 0])
 
-  const glamVeil = useTransform(glamOpen, [0, 1], [0, 0.5])
   const glamServiceOpacity = useTransform(glamOpen, [0.45, 1], [0, 1])
   const glamServiceX = useTransform(glamOpen, [0.45, 1], [-14, 0])
-
-  const spaVeil = useTransform(spaOpen, [0, 1], [0, 0.55])
   const spaServiceOpacity = useTransform(spaOpen, [0.45, 1], [0, 1])
   const spaServiceX = useTransform(spaOpen, [0.45, 1], [14, 0])
+
+  // The spa half is covered with the palette's crema (#FFFFEE) while it is hovered.
+  const spaVeil = useTransform(spaOpen, [0, 1], [0, 0.35])
+  // An arch also steps back while ITS side is open: the title and its text sit next to it and need a clean crema ground.
+  const archOpacity = useTransform([ovalOpacity, spaOpen], ([a, b]: number[]) => a * (1 - 0.8 * b))
+  const glamArchOpacity = useTransform([glamOvalOpacity, glamOpen], ([a, b]: number[]) => a * (1 - 0.8 * b))
 
   /* Entrance: wait for the intro curtains on a first visit, play at once otherwise */
   useEffect(() => {
@@ -158,7 +174,13 @@ export function Hero() {
     if (e.pointerType !== "mouse") return
     const r = e.currentTarget.getBoundingClientRect()
     const pct = ((e.clientX - r.left) / r.width) * 100
-    setActive(pct < split.get() ? "glam" : "spa")
+    // Back at the middle of the screen: close whichever side is open. Measured from the fixed centre (not the
+    // moving seam) so it cannot flicker.
+    if (Math.abs(pct - SPLIT_REST) < DEAD_ZONE) return setActive(null)
+    // Side under the cursor: against the moving seam while a side is open, against the fixed centre once closed
+    // (the seam is still sliding back then, and comparing with it reopened the side for an instant: the "jump").
+    const edge = activeRef.current ? split.get() : SPLIT_REST
+    setActive(pct < edge ? "glam" : "spa")
   }
 
   return (
@@ -169,11 +191,11 @@ export function Hero() {
       animate={controls}
       onPointerMove={onPointerMove}
       onPointerLeave={() => setActive(null)}
-      className="relative h-[100svh] min-h-[600px] overflow-hidden bg-noir"
+      className="relative h-[100svh] min-h-[600px] overflow-hidden bg-background"
       style={
         {
-          "--emblem": "clamp(6rem, 19vh, 12rem)",
-          "--lockup": "clamp(2.4rem, min(7.4vw, 10.5vh), 7.75rem)",
+          "--emblem": "clamp(5.25rem, 15.5vh, 10rem)",
+          "--lockup": "clamp(2.1rem, min(6.4vw, 9vh), 6.6rem)",
         } as React.CSSProperties
       }
     >
@@ -181,130 +203,66 @@ export function Hero() {
         Queens — Cosmetics y Spa en Palmira
       </h1>
 
-      {/* ════ LADO A · Cosmetics background ════ */}
-      <m.div aria-hidden className="absolute inset-0 bg-white" style={{ clipPath: glamClip }}>
-        <div
-          className="absolute inset-0"
-          style={{
-            background:
-              "radial-gradient(60% 55% at 12% 22%, oklch(0.94 0.035 15 / 0.9) 0%, transparent 70%)," +
-              "radial-gradient(45% 45% at 42% 85%, oklch(0.94 0.035 15 / 0.6) 0%, transparent 70%)," +
-              "radial-gradient(30% 30% at 30% 45%, oklch(0.85 0.090 85 / 0.18) 0%, transparent 70%)",
-          }}
-        />
-        {/* The mirror of the spa photo: one still image on the outer edge, melting
-            into white toward the seam. `multiply` lets the photo's own white drop
-            out so the rose washes above stay visible through it. */}
-        <m.div variants={photoIn} className="absolute inset-y-0 left-0 w-1/2 md:w-[60%]">
-          <Image
-            src="/images/cosmetics/hero.webp"
-            alt=""
-            fill
-            priority
-            sizes="(max-width: 768px) 50vw, 60vw"
-            className="object-cover object-[39%_50%] mix-blend-multiply md:object-[65%_40%]"
+      {/* ════ LADO A · Cosmetics background ════ — crema like the rest of the site. The store photo lives in
+          an ARCH with a gold frame, the mirror of the spa's (the client asked for it in place of the full-height
+          photo under a purple veil). Same width formula as the spa's, so it always sits to the LEFT of the text. */}
+      <m.div aria-hidden className="face-cosmetics absolute inset-0 bg-white" style={{ clipPath: glamClip }}>
+        <m.div style={{ opacity: glamArchOpacity }} className="absolute inset-0">
+          {/* `sizes`: the photo is 1400×2489 and is drawn as wide as `object-cover` needs to fill the arch's height
+              (0.562 × min(76svh, 2.7 × arch width)); on a phone the arch is the narrower side, so 30vw. */}
+          <PortalArch
+            side="glam"
+            src="/images/cosmetics/store-interior.webp"
+            position="object-[50%_46%]"
+            sizes="(max-width: 1023px) 32vw, clamp(240px, 43vh, 480px)"
           />
         </m.div>
-        <div className="absolute inset-0 bg-[linear-gradient(270deg,white_48%,oklch(1_0_0/0.72)_64%,oklch(1_0_0/0.2)_100%)] md:bg-[linear-gradient(270deg,white_40%,oklch(1_0_0/0.7)_62%,oklch(1_0_0/0.15)_100%)]" />
-        <Wordmark className="text-[oklch(0.84_0.065_15/0.2)]" />
-        {/* Dims this side's photo while it is hovered, so the description reads over it */}
-        <m.div className="absolute inset-0 bg-white" style={{ opacity: glamVeil }} />
+        <Wordmark className="text-[color-mix(in_oklab,var(--face-light)_14%,transparent)]" />
       </m.div>
 
-      {/* ════ LADO B · Spa background ════ */}
-      <m.div aria-hidden className="absolute inset-0 bg-noir" style={{ clipPath: spaClip }}>
-        <m.div variants={photoIn} className="absolute inset-y-0 right-0 w-1/2 md:w-[60%]">
-          <Image
-            src="/images/spa/oil.webp"
-            alt=""
-            fill
-            priority
-            sizes="(max-width: 768px) 50vw, 60vw"
-            className="object-cover object-[64%_50%] md:object-[34%_50%] grayscale-[30%] contrast-[1.1]"
+      {/* ════ LADO B · Spa background ════ — crema too; the photo is in an ARCH that rises from the bottom edge
+          (picked by the client over an oval, a card and a circle). Its width comes from the title's own width, so
+          it always sits to the RIGHT of the text and never over it; its height is as much of the screen as the
+          width allows. Both arches are hidden between 768 and 1023px, where there is no room, and are small floating
+          arches on phones. Photo supplied by the client: a French manicure being painted. The file is the right-hand part
+          of ACTUALIZACION/Manicura francesa en un spa de lujo.png (the arch is too narrow to show the rest). */}
+      <m.div aria-hidden className="face-spa absolute inset-0 bg-white" style={{ clipPath: spaClip }}>
+        <m.div style={{ opacity: archOpacity }} className="absolute inset-0">
+          {/* `sizes` is the width the PHOTO is drawn at, not the arch's: on desktop the arch is tall and narrow, so
+              `object-cover` scales the photo by the arch's height (the photo is 813×1146, so 0.71 × min(76svh,
+              2.7 × arch width)). With the arch's own width here the browser picks a file a third too small and
+              stretches it. */}
+          <PortalArch
+            side="spa"
+            src="/images/spa/nails-french.webp"
+            position="object-[60%_50%]"
+            sizes="(max-width: 1023px) 32vw, clamp(332px, 54vh, 640px)"
           />
         </m.div>
-        {/* Melt the photo into the noir toward the seam and the bottom */}
-        <div className="absolute inset-0 bg-[linear-gradient(90deg,var(--noir)_48%,oklch(0.13_0.008_40/0.72)_64%,oklch(0.13_0.008_40/0.2)_100%)] md:bg-[linear-gradient(90deg,var(--noir)_40%,oklch(0.13_0.008_40/0.7)_62%,oklch(0.13_0.008_40/0.15)_100%)]" />
-        <div className="absolute inset-0 bg-[linear-gradient(to_top,var(--noir)_0%,transparent_45%)]" />
-        <Wordmark className="text-outline-gold opacity-50" />
-        <m.div className="absolute inset-0 bg-noir" style={{ opacity: spaVeil }} />
+        <Wordmark className="text-outline-gold opacity-25" />
+        <m.div className="absolute inset-0 bg-white" style={{ opacity: spaVeil }} />
         {!isMobile && <FloatingSparkles count={14} tone="gold" />}
       </m.div>
 
+      {/* Both halves are crema, so a hairline marks the seam */}
+      <m.div aria-hidden style={{ left: seamLeft }} className="pointer-events-none absolute inset-y-0 z-[5] w-px bg-[var(--ink)]/12" />
+
       {/* ════ Content — decorative: the doors below own every interaction ════ */}
-      <div className="pointer-events-none relative z-10 flex h-full flex-col justify-center pt-24 pb-16 md:pt-28 md:pb-20">
-        <m.div style={{ x: shift }} className="flex justify-center">
+      {/* The emblem hangs right under the header; the two titles are centred in what is left below it. */}
+      <div className="pointer-events-none relative z-10 flex h-full flex-col pt-28 pb-16 md:pb-20">
+        <m.div style={{ x: shift }} className="flex shrink-0 justify-center">
           <Emblem />
         </m.div>
 
-        <m.div style={{ x: shift }} className="mt-4 grid grid-cols-2 md:mt-8">
-          {/* Lado A — Cosmetics */}
-          <m.div style={{ opacity: glamOpacity }} className="flex flex-col items-end pl-3 pr-3.5 text-right md:pr-12">
-            {/* `relative` so the service note can hang off the title block at a fixed distance */}
-            <div className="relative flex flex-col items-end">
-            <ServiceNote side="glam" open={glamOpen} opacity={glamServiceOpacity} x={glamServiceX} />
-            <h2 className="font-display uppercase leading-[0.86] tracking-[-0.045em]" style={{ fontSize: "var(--lockup)" }}>
-              <span className="block overflow-hidden pb-[0.1em]">
-                <m.span variants={rise} custom={0} className="block font-bold text-queens-gradient">
-                  QUEENS
-                </m.span>
-              </span>
-              <span className="block overflow-hidden pb-[0.06em]">
-                <m.span variants={rise} custom={1} className="block text-[0.5em] font-light tracking-[0.14em] text-ink">
-                  COSMETICS
-                </m.span>
-              </span>
-            </h2>
-            <m.p
-              variants={fadeUp}
-              custom={0}
-              className="mt-2 md:mt-4 max-w-[10.5rem] md:max-w-xs text-balance text-[11px] md:text-sm leading-relaxed text-ink/65"
-            >
-              {VENUES.cosmetics.tagline}
-            </m.p>
-            <m.div variants={fadeUp} custom={1} className="mt-4 md:mt-7">
-              <span className={cn(buttonVariants({ size: "lg" }), "h-10 px-4 text-xs md:h-14 md:px-8 md:text-base")}>
-                Visítanos
-                <ArrowRight className="h-4 w-4 md:h-5 md:w-5" />
-              </span>
-            </m.div>
-            </div>
+        <div className="flex flex-1 items-center">
+          {/* Four rows shared by both columns (crown, title, line, button): the two titles and the two buttons
+              line up across the seam whatever the length of the text in between. */}
+          <m.div style={{ x: shift }} className="grid w-full grid-cols-2 grid-rows-[auto_auto_auto_auto]">
+            <PortalColumn side="glam" subtitle="COSMETICS" opacity={glamOpacity} open={glamOpen} noteOpacity={glamServiceOpacity} noteX={glamServiceX} />
+            <PortalColumn side="spa" subtitle="SPA" opacity={spaOpacity} open={spaOpen} noteOpacity={spaServiceOpacity} noteX={spaServiceX} />
           </m.div>
-
-          {/* Lado B — Spa */}
-          <m.div style={{ opacity: spaOpacity }} className="flex flex-col items-start pl-3.5 pr-3 text-left md:pl-12">
-            <div className="relative flex flex-col items-start">
-            <ServiceNote side="spa" open={spaOpen} opacity={spaServiceOpacity} x={spaServiceX} />
-            <h2 className="font-display uppercase leading-[0.86] tracking-[-0.045em]" style={{ fontSize: "var(--lockup)" }}>
-              <span className="block overflow-hidden pb-[0.1em]">
-                <m.span variants={rise} custom={0} className="block font-bold text-[var(--gold)]">
-                  QUEENS
-                </m.span>
-              </span>
-              <span className="block overflow-hidden pb-[0.06em]">
-                <m.span variants={rise} custom={1} className="block text-[0.5em] font-light tracking-[0.14em] text-white">
-                  SPA
-                </m.span>
-              </span>
-            </h2>
-            <m.p
-              variants={fadeUp}
-              custom={0}
-              className="mt-2 md:mt-4 max-w-[10.5rem] md:max-w-xs text-balance text-[11px] md:text-sm leading-relaxed text-white/65"
-            >
-              {VENUES.spa.tagline}
-            </m.p>
-            <m.div variants={fadeUp} custom={1} className="mt-4 md:mt-7">
-              <span className={cn(buttonVariants({ variant: "gold", size: "lg" }), "h-10 px-4 text-xs md:h-14 md:px-8 md:text-base")}>
-                Visítanos
-                <ArrowRight className="h-4 w-4 md:h-5 md:w-5" />
-              </span>
-            </m.div>
-            </div>
-          </m.div>
-        </m.div>
+        </div>
       </div>
-s
       {/* ════ The two doors ════ */}
       <Door
         href={VENUES.cosmetics.href}
@@ -313,7 +271,7 @@ s
         onActivate={() => setActive("glam")}
         onRelease={() => setActive(null)}
         style={{ left: 0, width: glamWidth }}
-        ringClassName="ring-[var(--rose-hot)]"
+        ringClassName="ring-[var(--lila-deep)]"
       />
       <Door
         href={VENUES.spa.href}
@@ -321,8 +279,8 @@ s
         testId="portal-door-spa"
         onActivate={() => setActive("spa")}
         onRelease={() => setActive(null)}
-        style={{ left: seamLeft, width: spaWidth }}
-        ringClassName="ring-[var(--gold)]"
+        style={{ left: spaLeft, width: spaWidth }}
+        ringClassName="ring-[var(--dorado-deep)]"
       />
 
       {/* Scroll cue, pinned to the seam. The addresses that used to sit in the
@@ -334,7 +292,7 @@ s
         style={{ left: seamLeft }}
         className="absolute bottom-4 z-30 -translate-x-1/2 md:bottom-6"
       >
-        <span className="flex h-11 w-11 items-center justify-center rounded-full border border-[var(--gold)]/70 bg-[linear-gradient(90deg,var(--noir)_50%,white_50%)] text-[var(--gold)] transition hover:scale-110">
+        <span className="flex h-11 w-11 items-center justify-center rounded-full border border-[var(--ink)]/30 bg-white text-[var(--ink)] shadow-sm transition hover:scale-110">
           <ArrowDown className="h-4 w-4" />
         </span>
       </m.a>
@@ -343,12 +301,141 @@ s
 }
 
 /*
+ * A photo in an arch with a thin gold line beside it, one on each side of the portal. The line is HALF
+ * of an outline concentric with the photo (same shape, a few pixels out): it rises along the side that
+ * faces the middle of the page, follows the curve and stops at the very top of the arch, as in the
+ * client's reference. It is open at the bottom too: on a desktop the arch stands on the edge of the screen.
+ * The line is gold on BOTH sides (client's request), whatever the half's own accent is.
+ * Its width comes from `ARCH_WIDTH`; between 768px and 1023px there is no room for it, and on a
+ * phone it is a small arch in the top corner.
+ */
+function PortalArch({ side, src, position, sizes }: { side: Side; src: string; position: string; sizes: string }) {
+  const isLeft = side === "glam"
+  return (
+    <m.div
+      variants={photoIn}
+      style={{ "--arch-w": ARCH_WIDTH } as React.CSSProperties}
+      className={cn(
+        "absolute top-[13%] aspect-[1/1.5] w-[30vw] max-[1024px]:md:hidden min-[1024px]:top-auto min-[1024px]:bottom-0 min-[1024px]:aspect-auto min-[1024px]:h-[min(76svh,calc(var(--arch-w)*2.7))] min-[1024px]:w-[var(--arch-w)]",
+        isLeft ? "left-[4vw] min-[1024px]:left-[3vw]" : "right-[4vw] min-[1024px]:right-[3vw]",
+      )}
+    >
+      {/* Half the outline: the box starts one gap outside the photo on the middle-facing side and is half the
+          photo's width plus the gap wide, so its single rounded corner (clamped to a quarter circle by the box's
+          own width) is exactly the outer arc, ending at the arch's centre line. Gap: 8px on a phone, 16px from
+          `min-[1024px]`. The colour is inline on purpose: `globals.css` has an unlayered
+          `* { border-color: var(--border) }` that beats every `border-[...]` utility (and so greys out the borders
+          all over the site), but not an inline style. */}
+      <div
+        aria-hidden
+        className={cn(
+          "absolute -top-2 bottom-0 w-[calc(50%+0.5rem)] border-t min-[1024px]:-top-4 min-[1024px]:w-[calc(50%+1rem)]",
+          isLeft
+            ? "-right-2 rounded-tr-[999px] border-r min-[1024px]:-right-4"
+            : "-left-2 rounded-tl-[999px] border-l min-[1024px]:-left-4",
+        )}
+        style={{ borderColor: "color-mix(in oklab, var(--dorado) 80%, transparent)" }}
+      />
+      <div className="relative h-full w-full overflow-hidden rounded-t-[999px] rounded-b-2xl bg-[var(--face-soft)] shadow-[0_30px_60px_-24px_rgba(35,16,37,0.4)]">
+        <Image src={src} alt="" fill priority sizes={sizes} className={cn("object-cover", position)} />
+      </div>
+    </m.div>
+  )
+}
+
+/*
+ * One side's text: title, a short line, the "Visítanos" pill and, on hover, the longer service note.
+ * It spans the grid's four rows (subgrid) so both sides share them. Row 1 is the spa's crown with its
+ * hairline (the store leaves it empty), row 2 the title, row 3 the short line, row 4 the pill.
+ */
+function PortalColumn({
+  side,
+  subtitle,
+  opacity,
+  open,
+  noteOpacity,
+  noteX,
+}: {
+  side: Side
+  subtitle: string
+  /** The column steps back while the other side is open. */
+  opacity: MotionValue<number>
+  open: MotionValue<number>
+  noteOpacity: MotionValue<number>
+  noteX: MotionValue<number>
+}) {
+  const isSpa = side === "spa"
+  const venue = isSpa ? VENUES.spa : VENUES.cosmetics
+
+  return (
+    <m.div
+      style={{ opacity }}
+      className={cn(
+        "row-span-4 grid grid-rows-subgrid",
+        isSpa
+          ? "face-spa justify-items-start pl-3.5 pr-3 text-left md:pl-12"
+          : "face-cosmetics justify-items-end pl-3 pr-3.5 text-right md:pr-12",
+      )}
+    >
+      {isSpa && (
+        // The brand's own crown (cut from the isotipo) and a hairline
+        <m.div variants={fadeUp} custom={0} aria-hidden className="row-start-1 mb-3 flex h-6 items-center gap-3 md:mb-4">
+          <Image src="/images/brand/corona-dorado.webp" alt="" width={257} height={168} unoptimized className="h-4 w-auto md:h-[1.15rem]" />
+          <span className="h-px w-10 bg-[var(--face)]/60 md:w-24" />
+        </m.div>
+      )}
+
+      {/* `relative`: the service note hangs off the title block, level with its top, at a fixed distance */}
+      <div className="relative row-start-2">
+        <ServiceNote side={side} open={open} opacity={noteOpacity} x={noteX} />
+        <h2 className="font-display uppercase leading-[0.86] tracking-[-0.025em]" style={{ fontSize: "var(--lockup)" }}>
+          <span className="block overflow-hidden pb-[0.1em]">
+            <m.span variants={rise} custom={0} className="block font-bold text-[var(--face)]">
+              QUEENS
+            </m.span>
+          </span>
+          <span className="block overflow-hidden pb-[0.06em]">
+            <m.span variants={rise} custom={1} className="block text-[0.5em] font-light tracking-[0.14em] text-ink">
+              {subtitle}
+            </m.span>
+          </span>
+        </h2>
+      </div>
+
+      {/* From `md` up: on a phone each half is too narrow for a line of text. Its width follows the title's. */}
+      <m.p
+        variants={fadeUp}
+        custom={1}
+        className="row-start-3 mt-3 hidden max-w-[calc(var(--lockup)*3.72)] text-[clamp(0.8rem,1.15vw,1.05rem)] leading-snug text-ink/80 md:block"
+      >
+        {venue.portalIntro}
+      </m.p>
+
+      <m.div variants={fadeUp} custom={2} className="row-start-4 mt-6 md:mt-7">
+        <span
+          className={cn(
+            "inline-flex h-10 items-center gap-2 rounded-full border px-5 text-xs font-medium md:h-12 md:px-7 md:text-base border-[var(--face)] text-[var(--face-deep)]",
+            isSpa
+              ? "shadow-[0_0_20px_rgba(188,161,87,0.36),inset_0_0_12px_rgba(188,161,87,0.14)]"
+              : "shadow-[0_0_20px_rgba(164,139,166,0.36),inset_0_0_12px_rgba(164,139,166,0.14)]",
+          )}
+        >
+          Visítanos
+          <ArrowRight className="h-4 w-4 md:h-5 md:w-5" />
+        </span>
+      </m.div>
+    </m.div>
+  )
+}
+
+/*
  * The service note: shown when its side is hovered, hanging off the title block
  * at a fixed distance — to the left of Cosmetics' title, to the right of the
- * Spa's. Anchoring it to the title (rather than to the screen edge) keeps it a
- * neighbour of the title at any width instead of stranded against the window.
- * Wide screens only: below `xl` there is no room beside the title, and touch
- * has no hover.
+ * Spa's — with its top level with the "QUEENS" title. Anchoring it to the title
+ * (rather than to the screen edge) keeps it a neighbour of the title at any width
+ * instead of stranded against the window. Wide screens only: below `xl` there is
+ * no room beside the title, and touch has no hover. Each side also has a short
+ * line that is always on screen (`portalIntro`); this one tells the services.
  */
 function ServiceNote({
   side,
@@ -375,52 +462,26 @@ function ServiceNote({
     <div
       aria-hidden
       className={cn(
-        "pointer-events-none absolute top-1/2 hidden w-60 -translate-y-1/2 text-left xl:block 2xl:w-72",
-        isSpa ? "left-full ml-16 2xl:ml-24" : "right-full mr-16 2xl:mr-24",
+        "pointer-events-none absolute top-0 hidden w-56 text-left xl:block 2xl:w-64",
+        isSpa ? "face-spa left-full ml-16 2xl:ml-24" : "face-cosmetics right-full mr-16 2xl:mr-24",
       )}
     >
-      <m.div style={{ opacity, x }} className={isSpa ? "[text-shadow:0_2px_20px_rgba(0,0,0,0.55)]" : undefined}>
-        <span className={cn("mb-5 block h-px w-12", isSpa ? "bg-[var(--gold)]" : "bg-[var(--gold-deep)]")} />
-        <p
-          className={cn(
-            "font-display text-[11px] font-semibold uppercase tracking-[0.34em]",
-            isSpa ? "text-[var(--gold)]" : "text-[var(--gold-deep)]",
-          )}
-        >
+      <m.div style={{ opacity, x }}>
+        <span className="mb-4 block h-px w-10 bg-[var(--face-deep)]" />
+        <p className="font-display text-[10px] font-semibold uppercase tracking-[0.32em] text-[var(--face-deep)]">
           {isSpa ? "El spa" : "La tienda"}
         </p>
-        <p
-          className={cn(
-            "mt-4 font-display text-[1.25rem] font-light leading-[1.35] tracking-[-0.01em] 2xl:text-[1.5rem]",
-            isSpa ? "text-white" : "text-ink",
-          )}
-        >
+        <p className="mt-3 font-display text-[1rem] font-light leading-[1.4] tracking-[-0.005em] text-ink 2xl:text-[1.2rem]">
           {venue.service}
         </p>
-        <span
-          className={cn(
-            "relative mt-6 inline-flex h-10 items-center gap-3 overflow-hidden rounded-full border pl-5 pr-1.5 2xl:h-11 2xl:pl-6",
-            isSpa ? "border-[var(--gold)]/45 text-[var(--gold)] [text-shadow:none]" : "border-ink/25 text-ink",
-          )}
-        >
-          <m.span
-            aria-hidden
-            className={cn("absolute inset-0 origin-left", isSpa ? "bg-[var(--gold)]/15" : "bg-ink/[0.07]")}
-            style={{ scaleX: fill }}
-          />
-          <span className="relative text-[11px] font-semibold uppercase tracking-[0.22em] 2xl:text-[12px]">
-            {venue.serviceCta}
-          </span>
-          <span
-            className={cn(
-              "relative flex h-7 w-7 items-center justify-center rounded-full border 2xl:h-8 2xl:w-8",
-              isSpa ? "border-[var(--gold)]/45" : "border-ink/25",
-            )}
-          >
-            <m.span style={{ rotate: arrowTurn }} className="flex">
-              <ArrowRight className="h-3.5 w-3.5" />
-            </m.span>
-          </span>
+        {/* "Ver más": just a word, an arrow and a hairline that draws itself as the side opens */}
+        <span className="relative mt-5 inline-flex items-center gap-2 pb-1.5 text-[10px] font-medium uppercase tracking-[0.28em] text-ink/75 2xl:text-[11px]">
+          <span>{venue.serviceCta}</span>
+          <m.span style={{ rotate: arrowTurn }} className="flex">
+            <ArrowRight className="h-3 w-3" />
+          </m.span>
+          <span aria-hidden className="absolute inset-x-0 bottom-0 h-px bg-current opacity-20" />
+          <m.span aria-hidden className="absolute inset-x-0 bottom-0 h-px origin-left bg-current" style={{ scaleX: fill }} />
         </span>
       </m.div>
     </div>
@@ -468,10 +529,10 @@ function Wordmark({ className }: { className?: string }) {
   return (
     <div
       className={cn(
-        "pointer-events-none absolute inset-x-0 bottom-0 flex select-none justify-center font-display font-bold uppercase leading-[0.75] tracking-[-0.06em]",
+        "pointer-events-none absolute inset-x-0 bottom-0 flex select-none justify-center font-display font-bold uppercase leading-[0.75] tracking-[-0.03em]",
         className,
       )}
-      style={{ fontSize: "22.5vw", transform: "translateY(16%)" }}
+      style={{ fontSize: "18vw", transform: "translateY(17%)" }}
     >
       Queens
     </div>
@@ -495,18 +556,19 @@ function EmblemHalf({ side }: { side: Side }) {
   // glow behind it were removed: the client found the hero too busy.
   return (
     <div className="absolute inset-0" style={{ clipPath: isSpa ? "inset(0 0 0 50%)" : "inset(0 50% 0 0)" }}>
+      {/* Each half wears its own colour on crema: lila (cosmetics) and gold (spa).
+          `unoptimized`: the artwork is already a small WebP (14 KB) with hairline strokes, and
+          re-encoding it through the image optimizer (AVIF, smaller sizes) is what softened it. Served
+          as is, at its full 556×803, it stays crisp on any screen; the browser only scales it down. */}
       <Image
-        src="/images/logoFondo.webp"
+        src={isSpa ? "/images/brand/isotipo-dorado.webp" : "/images/brand/isotipo-lila.webp"}
         alt=""
         fill
         priority
-        quality={85}
-        sizes="(max-width: 768px) 45vw, 22rem"
+        unoptimized
         className={cn(
           "object-contain p-[6%]",
-          isSpa
-            ? "brightness-110 drop-shadow-[0_0_14px_rgba(212,175,55,0.35)]"
-            : "drop-shadow-[0_6px_12px_rgba(212,175,55,0.25)]",
+          isSpa ? "drop-shadow-[0_0_14px_rgba(188,161,87,0.3)]" : "drop-shadow-[0_6px_12px_rgba(35,16,37,0.15)]",
         )}
       />
     </div>

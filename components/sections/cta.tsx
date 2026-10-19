@@ -1,10 +1,9 @@
 "use client"
 
 import { useRef } from "react"
-import { m, useInView, useMotionValue, useSpring, useTransform } from "framer-motion"
+import { m, useInView, useMotionValue, useSpring } from "framer-motion"
 import { MessageCircle, Sparkles } from "lucide-react"
 import { Button } from "@/components/ui/button"
-import { useIsMobile } from "@/hooks/use-is-mobile"
 import { WA_ADVICE } from "@/lib/whatsapp"
 
 const WORDS = ["¿Lista", "para", "encontrar", "tu", "próximo", "favorito?"]
@@ -34,25 +33,33 @@ function MagneticButton({ children, className, href }: { children: React.ReactNo
 export function CTA() {
   const ref = useRef<HTMLElement>(null)
   const inView = useInView(ref, { once: true, margin: "-80px" })
-  const isMobile = useIsMobile()
 
   return (
     <section ref={ref} className="relative py-20 md:py-28 overflow-hidden">
       <div className="absolute inset-0 bg-queens-gradient-intense" />
 
-      {/* Animated orbs */}
+      {/* Drifting orbs. They move forever, so they are CSS loops (see "AMBIENT LOOPS" in globals.css)
+          with their own pace and start; on phones they hold still. */}
       {[
-        { size: 320, x: "10%", y: "20%", color: "oklch(1 0 0 / 8%)", dur: 8 },
-        { size: 220, x: "75%", y: "60%", color: "oklch(0.75 0.135 85 / 20%)", dur: 11 },
-        { size: 180, x: "55%", y: "10%", color: "oklch(1 0 0 / 6%)", dur: 7 },
-        { size: 260, x: "20%", y: "70%", color: "oklch(0.75 0.135 85 / 15%)", dur: 13 },
+        { size: 320, x: "10%", y: "20%", color: "oklch(0.995 0.022 106.8 / 8%)", dur: 8 },
+        { size: 220, x: "75%", y: "60%", color: "color-mix(in oklab, var(--face) 20%, transparent)", dur: 11 },
+        { size: 180, x: "55%", y: "10%", color: "oklch(0.995 0.022 106.8 / 6%)", dur: 7 },
+        { size: 260, x: "20%", y: "70%", color: "color-mix(in oklab, var(--face) 15%, transparent)", dur: 13 },
       ].map((orb, i) => (
-        <m.div
+        <div
           key={i}
-          className="pointer-events-none absolute rounded-full blur-3xl"
-          style={{ width: orb.size, height: orb.size, left: orb.x, top: orb.y, background: orb.color }}
-          animate={isMobile ? undefined : { x: [0, 30, -20, 0], y: [0, -20, 30, 0], scale: [1, 1.1, 0.95, 1] }}
-          transition={{ duration: orb.dur, repeat: Infinity, ease: "easeInOut", delay: i * 1.5 }}
+          className="ambient-drift ambient-desktop pointer-events-none absolute rounded-full blur-3xl"
+          style={
+            {
+              width: orb.size,
+              height: orb.size,
+              left: orb.x,
+              top: orb.y,
+              background: orb.color,
+              "--amb-dur": `${orb.dur}s`,
+              "--amb-delay": `${i * 1.5}s`,
+            } as React.CSSProperties
+          }
         />
       ))}
 
@@ -62,13 +69,10 @@ export function CTA() {
           animate={inView ? { scale: 1, rotate: 0 } : {}}
           transition={{ type: "spring", stiffness: 300, damping: 20, delay: 0.1 }}
         >
-          <m.div
-            animate={{ rotate: [0, 15, -15, 0] }}
-            transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-            className="inline-block mb-6"
-          >
+          {/* rocks forever: a CSS loop too */}
+          <div className="ambient-sway inline-block mb-6">
             <Sparkles className="h-10 w-10 text-white/80" />
-          </m.div>
+          </div>
         </m.div>
 
         {/* Word-by-word headline */}
@@ -96,7 +100,7 @@ export function CTA() {
           animate={inView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.7, delay: 0.7, ease: [0.16, 1, 0.3, 1] }}
         >
-          Escríbenos por WhatsApp y te asesoramos con los productos perfectos para ti. Local 128, Unicentro Palmira.
+          Escríbenos por WhatsApp y te asesoramos con los productos perfectos para ti. Local 1-28, Unicentro Palmira.
         </m.p>
 
         <m.div

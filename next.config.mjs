@@ -10,7 +10,7 @@ const ContentSecurityPolicy = `
   img-src 'self' data: blob: https://images.unsplash.com https://plus.unsplash.com https://*.tile.openstreetmap.org https://www.googletagmanager.com https://www.google-analytics.com;
   font-src 'self';
   connect-src 'self' https://vitals.vercel-insights.com https://va.vercel-scripts.com https://www.googletagmanager.com https://www.google-analytics.com https://*.google-analytics.com https://*.analytics.google.com;
-  frame-src 'none';
+  frame-src https://www.google.com https://maps.google.com;
   object-src 'none';
   base-uri 'self';
   form-action 'self';
@@ -43,7 +43,9 @@ const nextConfig = {
       { protocol: "https", hostname: "plus.unsplash.com" },
     ],
     formats: ["image/avif", "image/webp"],
-    qualities: [75, 85],
+    // 90 is what the brand marks ask for (QueensLogo, the portal emblem, the intro): a value missing
+    // from this list is silently replaced by the nearest one, so they were being served at 85.
+    qualities: [75, 85, 90],
     deviceSizes: [375, 640, 750, 828, 1080, 1200, 1920],
     imageSizes: [16, 32, 64, 128, 256],
   },

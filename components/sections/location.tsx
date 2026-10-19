@@ -1,44 +1,34 @@
 "use client"
 
-import dynamic from "next/dynamic"
 import { useRef, useState } from "react"
 import { m, useScroll, useTransform, useSpring, AnimatePresence } from "framer-motion"
-import { MapPin, Clock, Phone, Instagram, MessageCircle, Navigation } from "lucide-react"
+import { MapPin, Clock, Phone, Navigation } from "lucide-react"
+import { InstagramIcon } from "@/components/instagram-icon"
 import { Button } from "@/components/ui/button"
-import { useIsMobile } from "@/hooks/use-is-mobile"
+import { GoogleMap } from "@/components/google-map"
+import { WhatsAppIcon } from "@/components/whatsapp-icon"
+import { WhenNear } from "@/components/when-near"
 import { WA_SPA, WA_VISIT } from "@/lib/whatsapp"
 import { BUSINESS, VENUES } from "@/lib/site"
 
-const Map = dynamic(
-  () => import("@/components/map-react-leaflet").then(m => m.MapReactLeaflet),
-  { ssr: false, loading: () => <div className="h-full w-full bg-[var(--loc-card)]" /> }
-)
+const MapPlaceholder = () => <div className="h-full w-full bg-[var(--loc-card)]" />
 
 /*
  * Each personality has its own venue, so this section takes one and dresses it:
- * light for the store at Unicentro, noir for the spa on Carrera 25. The theme is
- * injected as CSS custom properties so the markup below stays single-path.
+ * both venues sit on crema; the accent (lila for the store, gold for the spa)
+ * comes from --face. The theme is injected as CSS custom properties so the
+ * markup below stays single-path.
  */
 const THEMES = {
   light: {
-    "--loc-bg": "oklch(0.97 0.008 15)",
-    "--loc-card": "oklch(1 0 0)",
-    "--loc-border": "oklch(0.84 0.065 15 / 0.4)",
+    "--loc-bg": "oklch(0.97 0.02 103)",
+    "--loc-card": "oklch(0.995 0.022 106.8)",
+    "--loc-border": "color-mix(in oklab, var(--face-light) 40%, transparent)",
     "--loc-text": "var(--ink)",
     "--loc-muted": "var(--muted-foreground)",
-    "--loc-accent": "var(--gold-deep)",
-    "--loc-icon-bg": "linear-gradient(135deg, var(--rose-pastel-soft) 0%, oklch(0.88 0.07 85) 100%)",
-    "--loc-shadow": "0 2px 12px -4px oklch(0.18 0.025 40 / 0.06)",
-  },
-  noir: {
-    "--loc-bg": "var(--noir)",
-    "--loc-card": "var(--noir-soft)",
-    "--loc-border": "oklch(1 0 0 / 0.12)",
-    "--loc-text": "oklch(1 0 0)",
-    "--loc-muted": "oklch(1 0 0 / 0.6)",
-    "--loc-accent": "var(--gold)",
-    "--loc-icon-bg": "linear-gradient(135deg, oklch(0.75 0.135 85 / 0.22) 0%, oklch(0.75 0.135 85 / 0.08) 100%)",
-    "--loc-shadow": "0 2px 12px -4px oklch(0 0 0 / 0.5)",
+    "--loc-accent": "var(--face-deep)",
+    "--loc-icon-bg": "linear-gradient(135deg, var(--face-soft) 0%, oklch(0.88 0.051 90) 100%)",
+    "--loc-shadow": "0 2px 12px -4px oklch(0.325 0.073 323.9 / 0.06)",
   },
 } as const
 
@@ -53,16 +43,16 @@ const COPY: Record<VenueKey, {
 }> = {
   cosmetics: {
     theme: "light",
-    title: "Nuestra tienda en",
+    title: "Nuestra sede en",
     place: "Unicentro Palmira",
     lead: "Ven y vive la experiencia Queens en persona. Te esperamos con un espacio pensado para consentirte.",
     cta: { href: WA_VISIT, label: "Confirmar disponibilidad" },
   },
   spa: {
-    theme: "noir",
+    theme: "light",
     title: "Nuestro spa en",
     place: "la Carrera 25",
-    lead: "Una casa aparte de la tienda, pensada solo para bajar el ritmo. Reserva tu ritual y te esperamos con todo listo.",
+    lead: "Una casa aparte de la tienda, pensada para consentir tus uñas. Reserva tu cita y te esperamos con todo listo.",
     cta: { href: WA_SPA, label: "Reservar mi cita" },
   },
 }
@@ -106,7 +96,6 @@ const leadRise = {
 export function Location({ face = "cosmetics" }: { face?: VenueKey }) {
   const sectionRef = useRef<HTMLElement>(null)
   const [hoveredCard, setHoveredCard] = useState<number | null>(null)
-  const isMobile = useIsMobile()
 
   const copy = COPY[face]
   const venue = VENUES[face]
@@ -114,7 +103,7 @@ export function Location({ face = "cosmetics" }: { face?: VenueKey }) {
     { icon: <MapPin className="h-5 w-5" />, title: "Dirección", lines: [venue.address, venue.region] },
     { icon: <Clock className="h-5 w-5" />, title: "Horario", lines: venue.hours },
     { icon: <Phone className="h-5 w-5" />, title: "Contacto", lines: [`WhatsApp: ${BUSINESS.phoneDisplay}`] },
-    { icon: <Instagram className="h-5 w-5" />, title: "Síguenos", lines: [BUSINESS.instagram], href: BUSINESS.instagramUrl },
+    { icon: <InstagramIcon className="h-5 w-5" />, title: "Síguenos", lines: [BUSINESS.instagram], href: BUSINESS.instagramUrl },
   ]
 
   const { scrollYProgress } = useScroll({
@@ -123,8 +112,6 @@ export function Location({ face = "cosmetics" }: { face?: VenueKey }) {
   })
 
   const bgY = useTransform(scrollYProgress, [0, 1], ["0%", "30%"])
-  const titleX = useTransform(scrollYProgress, [0, 0.5], ["-8%", "0%"])
-  const titleOpacity = useTransform(scrollYProgress, [0, 0.2], [0, 1])
   const mapScale = useTransform(scrollYProgress, [0.1, 0.4], [0.88, 1])
   const mapY = useTransform(scrollYProgress, [0.1, 0.4], ["6%", "0%"])
 
@@ -135,7 +122,7 @@ export function Location({ face = "cosmetics" }: { face?: VenueKey }) {
     <section
       ref={sectionRef}
       id="ubicacion"
-      className="relative overflow-hidden py-24 md:py-36"
+      className="relative scroll-mt-[var(--nav-h)] overflow-hidden py-5 md:py-7"
       style={{ ...THEMES[copy.theme], background: "var(--loc-bg)" } as React.CSSProperties}
     >
       {/* Fondo animado — líneas diagonales */}
@@ -152,8 +139,8 @@ export function Location({ face = "cosmetics" }: { face?: VenueKey }) {
               top: `${10 + i * 12}%`,
               background:
                 i % 2 === 0
-                  ? "linear-gradient(90deg, transparent, oklch(0.84 0.065 15 / 0.15), transparent)"
-                  : "linear-gradient(90deg, transparent, oklch(0.75 0.135 85 / 0.10), transparent)",
+                  ? "linear-gradient(90deg, transparent, color-mix(in oklab, var(--face-light) 15%, transparent), transparent)"
+                  : "linear-gradient(90deg, transparent, color-mix(in oklab, var(--face) 10%, transparent), transparent)",
               transform: `rotate(${i % 2 === 0 ? -1.5 : 1.5}deg)`,
             }}
             initial={{ scaleX: 0, opacity: 0 }}
@@ -163,23 +150,33 @@ export function Location({ face = "cosmetics" }: { face?: VenueKey }) {
           />
         ))}
 
+        {/* The two glows breathe forever: CSS loops (see "AMBIENT LOOPS" in globals.css), still on phones */}
         {/* Orbe de glow rosa */}
-        <m.div
-          className="absolute -left-32 top-1/2 h-[600px] w-[600px] -translate-y-1/2 rounded-full"
-          style={{
-            background: "radial-gradient(circle, oklch(0.84 0.065 15 / 0.18) 0%, transparent 70%)",
-          }}
-          animate={isMobile ? undefined : { scale: [1, 1.12, 1], opacity: [0.6, 1, 0.6] }}
-          transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
+        <div
+          className="ambient-breathe ambient-desktop absolute -left-32 top-1/2 h-[600px] w-[600px] -translate-y-1/2 rounded-full"
+          style={
+            {
+              background: "radial-gradient(circle, color-mix(in oklab, var(--face-light) 20%, transparent) 0%, transparent 70%)",
+              "--breathe-x": 1.12,
+              "--breathe-from": 0.6,
+              "--breathe-to": 1,
+              "--amb-dur": "6s",
+            } as React.CSSProperties
+          }
         />
         {/* Orbe de glow dorado */}
-        <m.div
-          className="absolute -right-32 bottom-0 h-[500px] w-[500px] rounded-full"
-          style={{
-            background: "radial-gradient(circle, oklch(0.75 0.135 85 / 0.12) 0%, transparent 70%)",
-          }}
-          animate={isMobile ? undefined : { scale: [1, 1.18, 1], opacity: [0.5, 0.9, 0.5] }}
-          transition={{ duration: 8, repeat: Infinity, ease: "easeInOut", delay: 2 }}
+        <div
+          className="ambient-breathe ambient-desktop absolute -right-32 bottom-0 h-[500px] w-[500px] rounded-full"
+          style={
+            {
+              background: "radial-gradient(circle, color-mix(in oklab, var(--face) 12%, transparent) 0%, transparent 70%)",
+              "--breathe-x": 1.18,
+              "--breathe-from": 0.5,
+              "--breathe-to": 0.9,
+              "--amb-dur": "8s",
+              "--amb-delay": "2s",
+            } as React.CSSProperties
+          }
         />
       </m.div>
 
@@ -187,39 +184,27 @@ export function Location({ face = "cosmetics" }: { face?: VenueKey }) {
 
         {/* Header con slide brutal */}
         <m.div
-          style={{ x: titleX, opacity: titleOpacity }}
-          className="mb-14 md:mb-20"
+          className="mb-3 md:mb-4"
           variants={headerVariants}
           initial="hidden"
           whileInView="show"
           viewport={{ once: true, margin: "-60px" }}
         >
           <m.span
-            className="mb-3 inline-block text-xs font-semibold uppercase tracking-[0.35em] text-[var(--loc-accent)]"
+            className="mb-4 inline-block text-xs font-semibold uppercase tracking-[0.3em] text-[var(--loc-accent)]"
             variants={labelRise}
           >
             Visítanos
           </m.span>
 
           <div className="overflow-hidden">
+            {/* Same look as the catalog's title (client request): one bold line in the ink colour, no italic, no gradient */}
             <m.h2
               className="font-display font-bold text-[var(--loc-text)]"
-              style={{ fontSize: "clamp(2.2rem, 5vw, 4rem)", letterSpacing: "-0.025em", lineHeight: 1.1 }}
+              style={{ fontSize: "clamp(1.9rem, 4vw, 3rem)", letterSpacing: "-0.03em", lineHeight: 1.1 }}
               variants={titleRise}
             >
-              {copy.title}{" "}
-              <br className="hidden md:block" />
-              <em
-                className="font-serif italic font-light"
-                style={{
-                  background: "linear-gradient(135deg, var(--rose-pastel) 0%, var(--gold) 100%)",
-                  WebkitBackgroundClip: "text",
-                  WebkitTextFillColor: "transparent",
-                  backgroundClip: "text",
-                }}
-              >
-                {copy.place}
-              </em>
+              {copy.title} {copy.place}
             </m.h2>
           </div>
 
@@ -229,25 +214,25 @@ export function Location({ face = "cosmetics" }: { face?: VenueKey }) {
         </m.div>
 
         {/* Grid principal */}
-        <div className="grid lg:grid-cols-[1.25fr_1fr] gap-8 lg:gap-14 items-start">
+        <div className="grid lg:grid-cols-[0.9fr_1fr] gap-8 lg:gap-14 items-start">
 
           {/* ── MAPA ── */}
           <m.div
             style={{ scale: springMapScale, y: springMapY }}
-            className="relative"
+            className="relative mt-4 lg:mt-9"
           >
 
             {/* Etiqueta flotante */}
             <m.div
-              className="absolute -top-5 left-6 z-20 flex items-center gap-2 rounded-full border border-[var(--gold)]/40 bg-[var(--loc-card)] px-4 py-2 shadow-lg"
+              className="absolute -top-5 left-6 z-20 flex items-center gap-2 rounded-full border border-[var(--face)]/40 bg-[var(--loc-card)] px-4 py-2 shadow-lg"
               initial={{ opacity: 0, y: 16, scale: 0.85 }}
               whileInView={{ opacity: 1, y: 0, scale: 1 }}
               viewport={{ once: true }}
               transition={{ duration: 0.6, delay: 0.5, ease: [0.16, 1, 0.3, 1] }}
             >
               <span className="relative flex h-2.5 w-2.5">
-                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[var(--rose-hot)] opacity-75" />
-                <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-[var(--rose-hot)]" />
+                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[var(--face-deep)] opacity-75" />
+                <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-[var(--face-deep)]" />
               </span>
               <span className="text-xs font-semibold text-[var(--loc-text)]">
                 {venue.name} · {venue.address}
@@ -257,7 +242,7 @@ export function Location({ face = "cosmetics" }: { face?: VenueKey }) {
             {/* react-leaflet map */}
             <m.div
               className="relative overflow-hidden rounded-3xl shadow-2xl"
-              style={{ height: "clamp(340px, 45vw, 520px)" }}
+              style={{ height: "clamp(340px, 44vw, 540px)" }}
               initial={{ opacity: 0, scale: 0.96, y: 24 }}
               whileInView={{ opacity: 1, scale: 1, y: 0 }}
               viewport={{ once: true, amount: 0.3 }}
@@ -265,9 +250,22 @@ export function Location({ face = "cosmetics" }: { face?: VenueKey }) {
             >
               <div
                 className="pointer-events-none absolute inset-0 z-10 rounded-3xl"
-                style={{ boxShadow: "inset 0 0 0 2px oklch(0.75 0.135 85 / 0.30)" }}
+                style={{ boxShadow: "inset 0 0 0 2px color-mix(in oklab, var(--face) 30%, transparent)" }}
               />
-              <Map venue={venue} />
+              {/* This section closes the page: Google's map only loads once the visitor is getting close */}
+              <WhenNear className="h-full w-full" fallback={<MapPlaceholder />}>
+                <GoogleMap venue={venue} />
+              </WhenNear>
+              {/* The whole map is a link (the client: "apenas le dé clic se abra"): one click opens it in Google Maps. It sits over the embed, so the
+                  embedded map itself is a preview that cannot be dragged or zoomed. */}
+              <a
+                href={venue.gmaps}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label={`Abrir ${venue.name} en Google Maps`}
+                data-testid="map-open"
+                className="absolute inset-0 z-20 cursor-pointer focus-visible:outline-2 focus-visible:outline-offset-[-4px] focus-visible:outline-(--face)"
+              />
             </m.div>
 
             {/* Botón "Ver en Maps" */}
@@ -280,7 +278,7 @@ export function Location({ face = "cosmetics" }: { face?: VenueKey }) {
               whileInView={{ opacity: 1, scale: 1 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: 0.7, ease: [0.16, 1, 0.3, 1] }}
-              whileHover={{ scale: 1.06, backgroundColor: "oklch(0.75 0.135 85)" }}
+              whileHover={{ scale: 1.06, backgroundColor: "var(--face)" }}
               whileTap={{ scale: 0.95 }}
             >
               <Navigation className="h-3.5 w-3.5" />
@@ -316,18 +314,21 @@ export function Location({ face = "cosmetics" }: { face?: VenueKey }) {
               >
                 <Button asChild variant="whatsapp" size="lg" className="w-full relative overflow-hidden">
                   <a href={copy.cta.href} target="_blank" rel="noopener noreferrer">
-                    {/* Shimmer on hover */}
-                    <m.span
-                      className="pointer-events-none absolute inset-0"
+                    {/* A band of light crossing the button, forever: a CSS loop (see "AMBIENT LOOPS" in
+                        globals.css). It is a strip three tiles wide (each tile twice the button, with
+                        the band in its middle) that slides two tiles to the left: pixel for pixel what
+                        animating `background-position` on a 200% background gave, but `transform`
+                        runs on the compositor and `background-position` repaints every frame. */}
+                    <span
+                      aria-hidden
+                      className="ambient-sheen pointer-events-none absolute inset-y-0 left-[-200%] w-[600%]"
                       style={{
                         background:
-                          "linear-gradient(105deg, transparent 40%, oklch(1 0 0 / 0.15) 50%, transparent 60%)",
-                        backgroundSize: "200% 100%",
+                          "linear-gradient(105deg, transparent 40%, oklch(0.995 0.022 106.8 / 0.15) 50%, transparent 60%)",
+                        backgroundSize: "33.3333% 100%",
                       }}
-                      animate={{ backgroundPosition: ["-200% 0%", "200% 0%"] }}
-                      transition={{ duration: 2.5, repeat: Infinity, ease: "linear", repeatDelay: 1 }}
                     />
-                    <MessageCircle className="h-5 w-5" />
+                    <WhatsAppIcon className="h-5 w-5" />
                     {copy.cta.label}
                   </a>
                 </Button>
@@ -388,9 +389,9 @@ function MagneticCard({
       }}
       animate={{
         boxShadow: isHovered
-          ? "0 16px 40px -8px oklch(0.75 0.135 85 / 0.25), 0 4px 16px -4px oklch(0.84 0.065 15 / 0.20)"
+          ? "0 16px 40px -8px color-mix(in oklab, var(--face) 25%, transparent), 0 4px 16px -4px color-mix(in oklab, var(--face-light) 20%, transparent)"
           : "var(--loc-shadow)",
-        borderColor: isHovered ? "var(--gold)" : "var(--loc-border)",
+        borderColor: isHovered ? "var(--face)" : "var(--loc-border)",
       }}
       onMouseMove={handleMouseMove}
       onMouseEnter={onHover}
@@ -401,7 +402,7 @@ function MagneticCard({
         className="pointer-events-none absolute inset-0"
         style={{
           background:
-            "linear-gradient(135deg, oklch(0.84 0.065 15 / 0.05) 0%, oklch(0.75 0.135 85 / 0.05) 100%)",
+            "linear-gradient(135deg, color-mix(in oklab, var(--face-light) 5%, transparent) 0%, color-mix(in oklab, var(--face) 5%, transparent) 100%)",
         }}
         animate={{ opacity: isHovered ? 1 : 0 }}
         transition={{ duration: 0.3 }}
@@ -414,7 +415,7 @@ function MagneticCard({
             className="pointer-events-none absolute inset-0 rounded-2xl"
             style={{
               background:
-                "linear-gradient(135deg, oklch(0.75 0.135 85 / 0.2) 0%, oklch(0.84 0.065 15 / 0.15) 100%)",
+                "linear-gradient(135deg, color-mix(in oklab, var(--face) 20%, transparent) 0%, color-mix(in oklab, var(--face-light) 15%, transparent) 100%)",
               padding: "1.5px",
             }}
             initial={{ opacity: 0 }}
@@ -428,10 +429,7 @@ function MagneticCard({
       <m.div
         className="relative flex h-12 w-12 shrink-0 items-center justify-center rounded-xl text-[var(--loc-accent)]"
         style={{ background: "var(--loc-icon-bg)" }}
-        animate={{
-          scale: isHovered ? 1.15 : 1,
-          rotate: isHovered ? [0, -6, 6, 0] : 0,
-        }}
+        animate={{ scale: isHovered ? 1.15 : 1 }}
         transition={{ type: "spring", stiffness: 400, damping: 15 }}
       >
         {card.icon}

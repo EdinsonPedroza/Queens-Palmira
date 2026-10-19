@@ -2,6 +2,7 @@
 
 import { useState, useRef } from "react"
 import Image from "next/image"
+import * as DialogPrimitive from "@radix-ui/react-dialog"
 import { ChevronLeft, ChevronRight, BookOpen, X, ZoomIn } from "lucide-react"
 
 const TOTAL_PAGES = 83
@@ -13,15 +14,25 @@ function pageUrl(n: number) {
 export function DigitalCatalog() {
   const [open, setOpen] = useState(false)
   const [current, setCurrent] = useState(1)
-  const scrollRef = useRef<HTMLDivElement>(null)
+  const viewerRef = useRef<HTMLDivElement>(null)
+  // The button the viewer was opened from, so focus can go back to it on close
+  const openerRef = useRef<HTMLButtonElement | null>(null)
+
+  function openAt(page: number, opener: HTMLButtonElement) {
+    openerRef.current = opener
+    setCurrent(page)
+    setOpen(true)
+  }
 
   function prev() { setCurrent((p) => Math.max(1, p - 1)) }
   function next() { setCurrent((p) => Math.min(TOTAL_PAGES, p + 1)) }
 
+  // Escape is handled by the dialog itself. Arrows turn pages, except while typing in the
+  // page box, where they belong to the field.
   function handleKey(e: React.KeyboardEvent) {
+    if ((e.target as HTMLElement).tagName === "INPUT") return
     if (e.key === "ArrowLeft") prev()
     if (e.key === "ArrowRight") next()
-    if (e.key === "Escape") setOpen(false)
   }
 
   return (
@@ -29,19 +40,19 @@ export function DigitalCatalog() {
       {/* ── Section strip ── */}
       <section
         id="catalogo-digital"
-        className="relative py-20 md:py-28 bg-gradient-to-b from-white to-[var(--rose-pastel)]/10 overflow-hidden"
+        className="relative py-20 md:py-28 bg-gradient-to-b from-white to-[var(--dorado-soft)]/15 overflow-hidden"
       >
         <div
           className="absolute inset-0 pointer-events-none"
           aria-hidden="true"
           style={{
             background:
-              "radial-gradient(ellipse 60% 40% at 50% 100%, oklch(0.92 0.04 0) / 0.3, transparent)",
+              "radial-gradient(ellipse 60% 40% at 50% 100%, oklch(0.92 0.025 323 / 0.3), transparent)",
           }}
         />
 
         <div className="relative mx-auto max-w-5xl px-6 md:px-10 text-center">
-          <span className="inline-block text-xs font-semibold tracking-[0.3em] uppercase text-[var(--gold-deep)] mb-3">
+          <span className="inline-block text-xs font-semibold tracking-[0.3em] uppercase text-[var(--face-deep)] mb-3">
             Catálogo virtual
           </span>
           <h2
@@ -61,8 +72,8 @@ export function DigitalCatalog() {
             {[1, 3, 4, 5, 6].map((n) => (
               <button
                 key={n}
-                onClick={() => { setCurrent(n); setOpen(true) }}
-                className="group relative flex-shrink-0 w-28 md:w-36 aspect-[3/4] rounded-xl overflow-hidden shadow-md hover:shadow-xl transition-shadow duration-300 border border-[var(--rose-pastel)]"
+                onClick={(e) => openAt(n, e.currentTarget)}
+                className="group relative flex-shrink-0 w-28 md:w-36 aspect-[3/4] rounded-xl overflow-hidden shadow-md hover:shadow-xl transition-shadow duration-300 border border-[var(--face-light)]"
                 aria-label={`Ver página ${n}`}
               >
                 <Image
@@ -80,9 +91,9 @@ export function DigitalCatalog() {
           </div>
 
           <button
-            onClick={() => { setCurrent(1); setOpen(true) }}
+            onClick={(e) => openAt(1, e.currentTarget)}
             data-testid="open-digital-catalog"
-            className="inline-flex items-center gap-2 px-8 py-3.5 rounded-full bg-[var(--gold)] text-white font-semibold tracking-wide shadow-lg hover:bg-[var(--gold-deep)] transition-colors duration-200"
+            className="inline-flex items-center gap-2 px-8 py-3.5 rounded-full bg-[var(--face)] text-white font-semibold tracking-wide shadow-lg hover:bg-[var(--face-deep)] transition-colors duration-200"
           >
             <BookOpen size={18} />
             Ver catálogo completo
@@ -90,92 +101,106 @@ export function DigitalCatalog() {
         </div>
       </section>
 
-      {/* ── Full-screen viewer ── */}
-      {open && (
-        <div
-          role="dialog"
-          aria-modal="true"
-          aria-label="Visor de catálogo Queens Cosmetics"
-          className="fixed inset-0 z-[200] flex flex-col bg-[var(--ink)]/95 backdrop-blur-sm"
-          onKeyDown={handleKey}
-          tabIndex={-1}
-        >
-          {/* Toolbar */}
-          <div className="flex items-center justify-between px-4 py-3 border-b border-white/10 shrink-0">
-            <div className="flex items-center gap-2">
-              <BookOpen size={18} className="text-[var(--gold)]" />
-              <span className="font-display text-white text-sm font-semibold tracking-wider">
-                QUEENS — Catálogo Virtual
-              </span>
+      {/* ── Full-screen viewer ──
+          A Radix Dialog (the same primitive as the cart, so it costs no extra JS): it takes focus
+          when it opens, so Escape and the arrow keys work without clicking inside first; it keeps
+          Tab inside, locks the page behind it and hands focus back to the button that opened it. */}
+      <DialogPrimitive.Root open={open} onOpenChange={setOpen}>
+        <DialogPrimitive.Portal>
+          {/* The backdrop has to be the Overlay: in Radix the Overlay is what locks the page scroll */}
+          <DialogPrimitive.Overlay className="fixed inset-0 z-[200] bg-[var(--ink)]/95 backdrop-blur-sm" />
+          <DialogPrimitive.Content
+            ref={viewerRef}
+            data-testid="digital-catalog-viewer"
+            aria-describedby={undefined}
+            // Focus the viewer itself, not its first button: with the close button focused, a stray
+            // Space or Enter would shut the catalog.
+            onOpenAutoFocus={(e) => {
+              e.preventDefault()
+              viewerRef.current?.focus()
+            }}
+            onCloseAutoFocus={(e) => {
+              e.preventDefault()
+              openerRef.current?.focus({ preventScroll: true })
+            }}
+            onKeyDown={handleKey}
+            className="fixed inset-0 z-[200] flex flex-col outline-none"
+          >
+            {/* Toolbar */}
+            <div className="flex items-center justify-between px-4 py-3 border-b border-white/10 shrink-0">
+              <div className="flex items-center gap-2">
+                <BookOpen size={18} className="text-[var(--face)]" />
+                <DialogPrimitive.Title asChild>
+                  <span className="font-display text-white text-sm font-semibold tracking-wider">
+                    QUEENS — Catálogo Virtual
+                  </span>
+                </DialogPrimitive.Title>
+              </div>
+              <div className="flex items-center gap-3">
+                <span className="text-white/50 text-xs tabular-nums">
+                  {current} / {TOTAL_PAGES}
+                </span>
+                <DialogPrimitive.Close
+                  className="text-white/70 hover:text-white transition-colors p-1"
+                  aria-label="Cerrar catálogo"
+                >
+                  <X size={22} />
+                </DialogPrimitive.Close>
+              </div>
             </div>
-            <div className="flex items-center gap-3">
-              <span className="text-white/50 text-xs tabular-nums">
-                {current} / {TOTAL_PAGES}
-              </span>
+
+            {/* Page viewer */}
+            <div className="flex-1 flex items-center justify-center p-4 overflow-auto">
+              <div className="relative max-h-full max-w-sm md:max-w-md lg:max-w-lg w-full aspect-[3/4] rounded-xl overflow-hidden shadow-2xl">
+                <Image
+                  key={current}
+                  src={pageUrl(current)}
+                  alt={`Catálogo Queens página ${current}`}
+                  fill
+                  sizes="(max-width: 768px) 100vw, 50vw"
+                  className="object-contain"
+                  priority
+                />
+              </div>
+            </div>
+
+            {/* Navigation */}
+            <div className="flex items-center justify-center gap-4 py-4 shrink-0 border-t border-white/10">
               <button
-                onClick={() => setOpen(false)}
-                className="text-white/70 hover:text-white transition-colors p-1"
-                aria-label="Cerrar catálogo"
+                onClick={prev}
+                disabled={current === 1}
+                className="flex items-center gap-1 px-5 py-2 rounded-full bg-white/10 text-white text-sm font-medium hover:bg-white/20 disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
+                aria-label="Página anterior"
               >
-                <X size={22} />
+                <ChevronLeft size={16} /> Anterior
+              </button>
+
+              {/* Page jump */}
+              <input
+                type="number"
+                min={1}
+                max={TOTAL_PAGES}
+                value={current}
+                onChange={(e) => {
+                  const v = parseInt(e.target.value)
+                  if (v >= 1 && v <= TOTAL_PAGES) setCurrent(v)
+                }}
+                className="w-14 text-center bg-white/10 text-white text-sm rounded-lg py-1.5 px-2 border border-white/20 focus:outline-none focus:border-[var(--face)]"
+                aria-label="Ir a página"
+              />
+
+              <button
+                onClick={next}
+                disabled={current === TOTAL_PAGES}
+                className="flex items-center gap-1 px-5 py-2 rounded-full bg-white/10 text-white text-sm font-medium hover:bg-white/20 disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
+                aria-label="Página siguiente"
+              >
+                Siguiente <ChevronRight size={16} />
               </button>
             </div>
-          </div>
-
-          {/* Page viewer */}
-          <div
-            ref={scrollRef}
-            className="flex-1 flex items-center justify-center p-4 overflow-auto"
-          >
-            <div className="relative max-h-full max-w-sm md:max-w-md lg:max-w-lg w-full aspect-[3/4] rounded-xl overflow-hidden shadow-2xl">
-              <Image
-                key={current}
-                src={pageUrl(current)}
-                alt={`Catálogo Queens página ${current}`}
-                fill
-                sizes="(max-width: 768px) 100vw, 50vw"
-                className="object-contain"
-                priority
-              />
-            </div>
-          </div>
-
-          {/* Navigation */}
-          <div className="flex items-center justify-center gap-4 py-4 shrink-0 border-t border-white/10">
-            <button
-              onClick={prev}
-              disabled={current === 1}
-              className="flex items-center gap-1 px-5 py-2 rounded-full bg-white/10 text-white text-sm font-medium hover:bg-white/20 disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
-              aria-label="Página anterior"
-            >
-              <ChevronLeft size={16} /> Anterior
-            </button>
-
-            {/* Page jump */}
-            <input
-              type="number"
-              min={1}
-              max={TOTAL_PAGES}
-              value={current}
-              onChange={(e) => {
-                const v = parseInt(e.target.value)
-                if (v >= 1 && v <= TOTAL_PAGES) setCurrent(v)
-              }}
-              className="w-14 text-center bg-white/10 text-white text-sm rounded-lg py-1.5 px-2 border border-white/20 focus:outline-none focus:border-[var(--gold)]"
-              aria-label="Ir a página"
-            />
-
-            <button
-              onClick={next}
-              disabled={current === TOTAL_PAGES}
-              className="flex items-center gap-1 px-5 py-2 rounded-full bg-white/10 text-white text-sm font-medium hover:bg-white/20 disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
-              aria-label="Página siguiente"
-            >
-              Siguiente <ChevronRight size={16} />
-            </button>
-          </div>
-        </div>
-      )}
+          </DialogPrimitive.Content>
+        </DialogPrimitive.Portal>
+      </DialogPrimitive.Root>
     </>
   )
 }

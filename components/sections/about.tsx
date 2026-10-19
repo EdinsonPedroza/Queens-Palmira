@@ -4,66 +4,69 @@ import Image from "next/image"
 import Link from "next/link"
 import { m, type Variants } from "framer-motion"
 import {
+  ArrowDown,
   ArrowUpRight,
   CalendarHeart,
   Check,
   Gift,
   Heart,
   MapPin,
-  MessageCircle,
   ShieldCheck,
   Smile,
   Sparkles,
 } from "lucide-react"
-import { Button } from "@/components/ui/button"
+import { Reveal } from "@/components/reveal"
+import { WhatsAppIcon } from "@/components/whatsapp-icon"
 import { cn } from "@/lib/utils"
 import { VENUES, faceLinkProps } from "@/lib/site"
 import { WA_ADVICE } from "@/lib/whatsapp"
 
 /*
- * "Quiénes somos": the warm page. Where the portal is a split screen, this is
- * the opposite — soft light, rounded corners, snapshot-style photos tilted like
- * they were left on a table. Every claim comes from facts already on the site
- * (originals, advice, samples, exchanges, appointments); there is no founding
- * story, year or name here until the client supplies one.
+ * "Quiénes somos", in the language of the store and the spa (client request): the header is its own bar under the strip and the page starts below it,
+ * flat and square pieces with fine lines, small spaced-capitals eyebrows, one-colour titles, square near-black buttons and compact spacing. It stays the warm page:
+ * the three shop photos are still left on the table like snapshots (white mat and a caption), now straight instead of tilted. Every claim comes from facts already on
+ * the site (originals, advice, samples, exchanges, appointments); there is no founding story, year or name here until the client supplies one.
+ * Entrances below the hero are CSS (`<Reveal>`): Framer's `initial`+`animate` blinked each block for a frame when it ended (see CLAUDE.md).
  */
 
 const EASE = [0.16, 1, 0.3, 1] as const
 
 const rise: Variants = {
-  hidden: { y: "110%" },
-  show: (i: number = 0) => ({ y: "0%", transition: { duration: 0.95, delay: i * 0.1, ease: EASE } }),
+  hidden: { y: "112%" },
+  show: (i: number = 0) => ({ y: "0%", transition: { duration: 1, delay: 0.15 + i * 0.1, ease: EASE } }),
 }
 
 const fadeUp: Variants = {
-  hidden: { opacity: 0, y: 28 },
-  show: (i: number = 0) => ({ opacity: 1, y: 0, transition: { duration: 0.8, delay: i * 0.08, ease: EASE } }),
+  hidden: { opacity: 0, y: 22 },
+  show: (i: number = 0) => ({ opacity: 1, y: 0, transition: { duration: 0.85, delay: 0.5 + i * 0.1, ease: EASE } }),
 }
 
-const VIEW = { once: true, margin: "-80px" } as const
+/* Fine lines, like the store's controls and the cart's: the `* { border-color }` rule of globals.css beats the utilities (see CLAUDE.md), so the colour goes inline. */
+const HAIRLINE = "color-mix(in oklab, var(--ink) 12%, transparent)"
+const HAIRLINE_STRONG = "color-mix(in oklab, var(--ink) 22%, transparent)"
+/** Cards drawn as one box whose cells are split by 1 px gaps (the gap shows the box's own colour), so the lines are right at every breakpoint.
+ * The cell itself is static (white, with the hover); only what is INSIDE it is revealed, or the unrevealed cells would show the line colour as a solid block. */
+const CELLS = "grid gap-px p-px bg-[color-mix(in_oklab,var(--ink)_12%,transparent)]"
 
-/* ── Placeholder photos: swap for real ones of the shop, the team and the clients ── */
+/* ── Shop photos are real; the spa one is still a placeholder (plus: the team and the clients) ── */
 const SNAPSHOTS = [
   {
-    src: "/images/spa/facial.webp",
-    alt: "Un facial en Queens Spa",
-    caption: "Tu rato de calma",
-    className: "left-0 top-6 w-[46%] -rotate-6 md:top-10",
-    cover: true,
+    src: "/images/cosmetics/store-makeup.webp",
+    caption: "Te asesoramos con calma",
+    pos: "38% 46%",
+    className: "mt-8 md:mt-12",
   },
   {
-    src: "/images/spa/mask.webp",
-    alt: "Mascarilla facial",
-    caption: "Manos que saben",
-    className: "right-0 top-0 w-[44%] rotate-5",
-    cover: true,
+    src: "/images/cosmetics/store-neon-logo.webp",
+    caption: "Pasa, estás en casa",
+    pos: "50% 36%",
+    className: "",
   },
   {
-    src: "/images/products/Brillo Labial Essence Juicy Bomb.webp",
-    alt: "Brillos labiales de la tienda",
+    src: "/images/cosmetics/store-counter.webp",
     caption: "Tu color favorito",
-    className: "bottom-0 left-[26%] w-[48%] -rotate-2",
-    cover: false,
+    pos: "50% 60%",
+    className: "mt-4 md:mt-24",
   },
 ]
 
@@ -109,32 +112,48 @@ const HOUSES = [
     venue: VENUES.cosmetics,
     eyebrow: "La tienda",
     text: "Maquillaje, skincare y cuidado capilar. Pasa, prueba y te asesoramos.",
-    image: "/images/products/Maybelline Superstay Matte Ink.webp",
-    cover: false,
-    tone: "light" as const,
+    image: "/images/cosmetics/store-interior.webp" as string | null,
+    alt: "Interior de la tienda de Queens en Unicentro Palmira",
+    cover: true,
+    pos: "50% 47%",
+    tone: "lila" as const,
   },
   {
     venue: VENUES.spa,
     eyebrow: "El spa",
-    text: "Faciales, masajes y rituales para desconectarte. Con cita previa.",
-    image: "/images/spa/stones.webp",
+    text: "Manicure, pedicure y uñas de diseño. Con cita previa.",
+    // placeholder nail photo (Pexels): swap for the spa's own work when it arrives
+    image: "/images/spa/nails-gold.webp" as string | null,
+    alt: "Uñas con diseño sobre satín dorado en Queens Spa",
     cover: true,
-    tone: "noir" as const,
+    pos: "50% 36%",
+    tone: "gold" as const,
   },
 ]
 
-function SectionLabel({ children, className }: { children: React.ReactNode; className?: string }) {
+/** The store's section header: spaced-capitals eyebrow and a one-colour title. */
+function SectionHeader({ id, eyebrow, title, text, center }: { id: string; eyebrow: string; title: string; text?: string; center?: boolean }) {
   return (
-    <m.p
-      variants={fadeUp}
-      className={cn(
-        "mb-5 flex items-center gap-3 text-[11px] font-bold uppercase tracking-[0.32em] text-[var(--gold-deep)]",
-        className,
-      )}
-    >
-      <span className="h-px w-10 bg-[var(--gold-deep)]/50" />
+    <Reveal className={cn("mb-4 md:mb-5", center ? "mx-auto max-w-2xl text-center" : "max-w-2xl")}>
+      <span className="mb-2.5 inline-block text-xs font-semibold uppercase tracking-[0.3em] text-[var(--face-deep)]">{eyebrow}</span>
+      <h2
+        id={id}
+        className="font-display font-semibold text-ink"
+        style={{ fontSize: "clamp(1.8rem, 3.8vw, 2.8rem)", lineHeight: 1.05, letterSpacing: "-0.03em" }}
+      >
+        {title}
+      </h2>
+      {text && <p className="mt-3 max-w-xl text-sm leading-relaxed text-ink/70 md:text-base">{text}</p>}
+    </Reveal>
+  )
+}
+
+/** A square box with an icon, outlined with a fine ring; it fills with ink when its card is hovered. */
+function IconBox({ children }: { children: React.ReactNode }) {
+  return (
+    <span className="grid h-11 w-11 shrink-0 place-items-center text-[var(--face-deep)] shadow-[inset_0_0_0_1px_color-mix(in_oklab,var(--ink)_22%,transparent)] transition-[background-color,color,box-shadow] duration-300 group-hover:bg-ink group-hover:text-[var(--face)] group-hover:shadow-[inset_0_0_0_1px_var(--ink)]">
       {children}
-    </m.p>
+    </span>
   )
 }
 
@@ -147,175 +166,133 @@ export function About() {
         aria-labelledby="about-title"
         initial="hidden"
         animate="show"
-        className="relative overflow-hidden bg-[linear-gradient(180deg,oklch(0.96_0.028_15)_0%,oklch(0.99_0.008_30)_100%)] pb-20 pt-32 md:pb-28 md:pt-40"
+        /* Starts below the strip + header (--header-h). lg+: fills the rest of the screen, like the store's and the spa's. */
+        className="relative mt-[var(--header-h)] overflow-hidden bg-white lg:flex lg:min-h-[calc(100svh_-_var(--header-h))] lg:items-center"
       >
-        <div
-          aria-hidden
-          className="pointer-events-none absolute -left-24 top-10 h-[34rem] w-[34rem] rounded-full blur-3xl"
-          style={{ background: "radial-gradient(circle, oklch(0.84 0.065 15 / 0.35) 0%, transparent 70%)" }}
-        />
-        <div
-          aria-hidden
-          className="pointer-events-none absolute -right-24 bottom-0 h-[28rem] w-[28rem] rounded-full blur-3xl"
-          style={{ background: "radial-gradient(circle, oklch(0.85 0.09 85 / 0.22) 0%, transparent 70%)" }}
-        />
-
-        <div className="relative mx-auto grid max-w-7xl items-center gap-14 px-6 md:px-10 lg:grid-cols-[1.05fr_1fr] lg:gap-10">
+        <div className="relative mx-auto grid w-full max-w-7xl items-center gap-10 px-6 py-10 md:px-10 md:py-14 lg:grid-cols-[0.95fr_1.05fr] lg:gap-14 lg:py-12">
           <div>
             <m.p
               variants={fadeUp}
-              custom={0}
-              className="mb-6 flex items-center gap-3 text-[11px] font-bold uppercase tracking-[0.32em] text-[var(--gold-deep)]"
+              custom={-1}
+              className="mb-3 text-[11px] font-medium uppercase tracking-[0.3em] text-ink/80 lg:mb-[1vw] lg:text-[clamp(9px,0.85vw,13px)]"
             >
-              <span className="h-px w-10 bg-[var(--gold-deep)]/50" />
               Quiénes somos
             </m.p>
 
             <h1
               id="about-title"
-              className="font-display leading-[0.95] tracking-[-0.04em] text-ink"
-              style={{ fontSize: "clamp(2.8rem, 7.5vw, 6rem)" }}
+              className="font-display text-[clamp(2.7rem,12.5vw,3.6rem)] uppercase leading-[0.88] tracking-[-0.025em] text-ink md:text-[clamp(3.4rem,9vw,5.2rem)] lg:text-[clamp(2.4rem,5vw,5.6rem)]"
             >
-              <span className="block overflow-hidden pb-[0.06em]">
-                <m.span variants={rise} custom={0} className="block font-light">
+              <span className="block overflow-hidden pb-[0.04em]">
+                <m.span variants={rise} custom={0} className="block font-bold">
                   Hola, somos
                 </m.span>
               </span>
-              <span className="block overflow-hidden pb-[0.12em]">
-                <m.span variants={rise} custom={1} className="block font-bold text-queens-gradient">
+              <span className="block overflow-hidden pb-[0.1em]">
+                <m.span variants={rise} custom={1} className="block font-bold">
                   Queens.
                 </m.span>
               </span>
             </h1>
 
-            <m.p variants={fadeUp} custom={2} className="mt-7 max-w-lg text-lg leading-relaxed text-ink/70 md:text-xl">
-              Una casa de belleza en Palmira donde nos gusta que te sientas como en familia: bienvenida, escuchada y
-              bien aconsejada.
+            <m.p
+              variants={fadeUp}
+              custom={0}
+              className="mt-4 max-w-md text-[1rem] leading-relaxed text-ink/85 md:max-w-xl md:text-[1.05rem] lg:mt-[1.2vw] lg:max-w-lg lg:text-[clamp(0.95rem,1.22vw,1.375rem)] lg:leading-[1.5]"
+            >
+              Una casa de belleza en Palmira donde nos gusta que te sientas como en familia: bienvenida, escuchada y bien aconsejada.
             </m.p>
 
-            <m.div variants={fadeUp} custom={3} className="mt-9 flex flex-col gap-4 sm:flex-row sm:items-center">
-              <Button asChild size="lg" data-testid="about-cta-whatsapp">
-                <a href={WA_ADVICE} target="_blank" rel="noopener noreferrer">
-                  <MessageCircle className="h-5 w-5" />
-                  Escríbenos, te contamos todo
-                </a>
-              </Button>
+            <m.div
+              variants={fadeUp}
+              custom={1}
+              className="mt-7 flex flex-wrap items-center gap-x-6 gap-y-4 lg:mt-[1.9vw] lg:flex-nowrap lg:gap-x-[1.8vw]"
+            >
+              <a
+                href={WA_ADVICE}
+                target="_blank"
+                rel="noopener noreferrer"
+                data-testid="about-cta-whatsapp"
+                className="inline-flex items-center gap-[1.4em] whitespace-nowrap bg-[var(--ink)] px-8 py-4 text-xs font-medium uppercase tracking-[0.2em] text-[var(--crema)] transition-colors duration-200 hover:bg-[var(--face)] hover:text-[var(--ink)] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-(--ink) lg:px-[2.2vw] lg:py-[1.15vw] lg:text-[clamp(10px,0.95vw,14px)]"
+              >
+                Escríbenos
+                <ArrowUpRight className="h-[1.1em] w-[1.1em]" strokeWidth={1.5} />
+              </a>
+              <span aria-hidden className="hidden h-[3vw] w-px bg-ink/25 lg:block" />
               <a
                 href="#casas"
-                className="inline-flex items-center gap-2 text-sm font-semibold text-ink/70 underline decoration-[var(--rose-hot)]/50 underline-offset-[6px] transition hover:text-ink hover:decoration-[var(--rose-hot)]"
+                className="inline-flex items-center gap-[1.2em] whitespace-nowrap text-xs font-medium uppercase tracking-[0.2em] text-ink transition-opacity hover:opacity-70 lg:text-[clamp(10px,0.95vw,14px)]"
               >
                 Conoce nuestras casas
+                <ArrowDown className="h-[1.1em] w-[1.1em]" strokeWidth={1.5} />
               </a>
             </m.div>
           </div>
 
-          {/* Snapshots, left on the table */}
-          <m.div variants={fadeUp} custom={2} className="relative mx-auto aspect-[5/5.2] w-full max-w-[34rem]" aria-hidden>
+          {/* Snapshots, left on the table: a white mat and a caption each, straight and staggered */}
+          <div className="grid grid-cols-3 items-start gap-3 md:gap-5" aria-hidden>
             {SNAPSHOTS.map((s, i) => (
-              <m.figure
+              <Reveal
+                as="figure"
                 key={s.src}
-                initial={{ opacity: 0, y: 40, scale: 0.92 }}
-                animate={{ opacity: 1, y: 0, scale: 1 }}
-                transition={{ duration: 0.9, delay: 0.5 + i * 0.15, ease: EASE }}
-                className={cn(
-                  "absolute rounded-md bg-white p-2.5 pb-10 shadow-[0_18px_40px_-14px_rgba(44,24,16,0.35)]",
-                  s.className,
-                )}
+                delay={250 + i * 140}
+                className={cn("bg-white p-1.5 md:p-2.5", s.className)}
+                style={{ boxShadow: `0 0 0 1px ${HAIRLINE}, 0 22px 40px -22px rgba(70,38,73,0.4)` }}
               >
-                <div className="relative aspect-[4/5] overflow-hidden rounded-sm bg-[oklch(0.96_0.02_15)]">
+                <div className="relative aspect-[4/5] overflow-hidden bg-[oklch(0.96_0.02_103)]">
                   <Image
                     src={s.src}
                     alt=""
                     fill
-                    sizes="(max-width: 1024px) 40vw, 18vw"
-                    className={s.cover ? "object-cover" : "object-contain p-3"}
+                    sizes="(max-width: 1024px) 30vw, 17vw"
+                    style={{ objectPosition: s.pos }}
+                    className="object-cover"
                   />
                 </div>
-                <figcaption className="absolute inset-x-0 bottom-2.5 text-center font-serif text-sm italic text-ink/60">
+                <figcaption className="hidden px-1 pb-1 pt-3 text-center text-[10px] font-semibold uppercase leading-snug tracking-[0.18em] text-ink/65 md:block">
                   {s.caption}
                 </figcaption>
-              </m.figure>
+              </Reveal>
             ))}
-          </m.div>
+          </div>
         </div>
       </m.section>
 
       {/* ═════ Lo que nos mueve ═════ */}
-      <section aria-labelledby="values-title" className="relative bg-white py-24 md:py-32">
+      <section aria-labelledby="values-title" className="relative bg-gradient-to-b from-white to-[var(--dorado-soft)]/20 py-8 md:py-10">
         <div className="mx-auto max-w-7xl px-6 md:px-10">
-          <m.div initial="hidden" whileInView="show" viewport={VIEW} className="mx-auto max-w-2xl text-center">
-            <SectionLabel className="justify-center">Lo que nos mueve</SectionLabel>
-            <h2
-              id="values-title"
-              className="font-display leading-[1] tracking-[-0.035em] text-ink"
-              style={{ fontSize: "clamp(2.1rem, 5vw, 3.8rem)" }}
-            >
-              <span className="block overflow-hidden pb-[0.06em]">
-                <m.span variants={rise} className="block font-light">
-                  Tratarte como
-                </m.span>
-              </span>
-              <span className="block overflow-hidden pb-[0.1em]">
-                <m.span variants={rise} custom={1} className="block font-bold text-queens-gradient">
-                  nos gustaría que nos traten.
-                </m.span>
-              </span>
-            </h2>
-          </m.div>
+          <SectionHeader id="values-title" eyebrow="Lo que nos mueve" title="Tratarte como nos gustaría que nos traten." />
 
-          <div className="mt-14 grid gap-5 sm:grid-cols-2 lg:grid-cols-4 lg:gap-6">
+          <div className={cn(CELLS, "sm:grid-cols-2 lg:grid-cols-4")}>
             {VALUES.map((v, i) => (
-              <m.article
+              <article
                 key={v.title}
-                initial={{ opacity: 0, y: 32 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={VIEW}
-                transition={{ duration: 0.8, delay: i * 0.08, ease: EASE }}
-                className="group rounded-3xl border border-[oklch(0.84_0.065_15/0.35)] bg-[linear-gradient(180deg,oklch(0.985_0.012_15)_0%,white_100%)] p-7 transition-shadow duration-500 hover:shadow-[0_18px_40px_-18px_rgba(255,105,180,0.4)]"
+                className="group bg-white transition-colors duration-300 hover:bg-[color-mix(in_oklab,var(--face)_10%,var(--crema))]"
               >
-                <span className="mb-5 flex h-12 w-12 items-center justify-center rounded-2xl bg-[linear-gradient(135deg,var(--rose-pastel-soft)_0%,oklch(0.88_0.07_85)_100%)] text-[var(--gold-deep)] transition-transform duration-500 group-hover:-rotate-6 group-hover:scale-110">
-                  <v.icon className="h-5 w-5" />
-                </span>
-                <h3 className="font-display text-xl font-semibold tracking-tight text-ink">{v.title}</h3>
-                <p className="mt-2 text-sm leading-relaxed text-ink/65">{v.text}</p>
-              </m.article>
+                <Reveal delay={i * 80} className="p-6 md:p-7">
+                  <IconBox>
+                    <v.icon className="h-5 w-5" strokeWidth={1.5} />
+                  </IconBox>
+                  <h3 className="mt-5 text-[13px] font-semibold uppercase tracking-[0.1em] text-ink">{v.title}</h3>
+                  <p className="mt-2 text-sm leading-relaxed text-ink/65">{v.text}</p>
+                </Reveal>
+              </article>
             ))}
           </div>
         </div>
       </section>
 
       {/* ═════ Dos casas, una familia ═════ */}
-      <section
-        id="casas"
-        aria-labelledby="casas-title"
-        className="relative scroll-mt-20 overflow-hidden bg-[oklch(0.975_0.014_15)] py-24 md:py-32"
-      >
+      <section id="casas" aria-labelledby="casas-title" className="relative scroll-mt-[var(--nav-h)] overflow-hidden bg-white py-8 md:py-10">
         <div className="mx-auto max-w-7xl px-6 md:px-10">
-          <m.div initial="hidden" whileInView="show" viewport={VIEW} className="mb-14 max-w-2xl">
-            <SectionLabel>Nuestras casas</SectionLabel>
-            <h2
-              id="casas-title"
-              className="font-display leading-[1] tracking-[-0.035em] text-ink"
-              style={{ fontSize: "clamp(2.1rem, 5vw, 3.8rem)" }}
-            >
-              <span className="block overflow-hidden pb-[0.06em]">
-                <m.span variants={rise} className="block font-light">
-                  Dos casas,
-                </m.span>
-              </span>
-              <span className="block overflow-hidden pb-[0.1em]">
-                <m.span variants={rise} custom={1} className="block font-bold text-queens-gradient">
-                  la misma familia.
-                </m.span>
-              </span>
-            </h2>
-            <m.p variants={fadeUp} custom={2} className="mt-5 text-base leading-relaxed text-ink/65 md:text-lg">
-              La tienda para consentirte con lo que te gusta, y el spa para que te tomes un respiro. Dos lugares, la
-              misma manera de atenderte.
-            </m.p>
-          </m.div>
+          <SectionHeader
+            id="casas-title"
+            eyebrow="Nuestras casas"
+            title="Dos casas, la misma familia."
+            text="La tienda para consentirte con lo que te gusta, y el spa para que tus uñas salgan impecables. Dos lugares, la misma manera de atenderte."
+          />
 
-          <div className="grid gap-6 md:grid-cols-2">
+          <div className="grid gap-5 md:grid-cols-2 md:gap-6">
             {HOUSES.map((h, i) => (
               <HouseCard key={h.venue.href} house={h} index={i} />
             ))}
@@ -324,143 +301,94 @@ export function About() {
       </section>
 
       {/* ═════ Cómo es venir ═════ */}
-      <section aria-labelledby="steps-title" className="relative bg-white py-24 md:py-32">
-        <div className="mx-auto grid max-w-7xl gap-14 px-6 md:px-10 lg:grid-cols-[0.9fr_1.1fr] lg:gap-20">
-          <m.div initial="hidden" whileInView="show" viewport={VIEW} className="lg:sticky lg:top-32 lg:self-start">
-            <SectionLabel>Cómo es venir</SectionLabel>
-            <h2
+      <section aria-labelledby="steps-title" className="relative bg-gradient-to-b from-white to-[var(--dorado-soft)]/20 py-8 md:py-10">
+        <div className="mx-auto grid max-w-7xl gap-6 px-6 md:px-10 lg:grid-cols-[0.8fr_1.2fr] lg:gap-14">
+          <div className="lg:sticky lg:top-[calc(var(--nav-h)+1.5rem)] lg:self-start">
+            <SectionHeader
               id="steps-title"
-              className="font-display leading-[1] tracking-[-0.035em] text-ink"
-              style={{ fontSize: "clamp(2.1rem, 5vw, 3.8rem)" }}
-            >
-              <span className="block overflow-hidden pb-[0.06em]">
-                <m.span variants={rise} className="block font-light">
-                  Sin afán,
-                </m.span>
-              </span>
-              <span className="block overflow-hidden pb-[0.1em]">
-                <m.span variants={rise} custom={1} className="block font-bold text-queens-gradient">
-                  con cariño.
-                </m.span>
-              </span>
-            </h2>
-            <m.p variants={fadeUp} custom={2} className="mt-5 max-w-sm text-base leading-relaxed text-ink/65 md:text-lg">
-              Esto es lo que queremos que sientas desde que cruzas la puerta.
-            </m.p>
-          </m.div>
+              eyebrow="Cómo es venir"
+              title="Sin afán, con cariño."
+              text="Esto es lo que queremos que sientas desde que cruzas la puerta."
+            />
+          </div>
 
-          <ol className="space-y-4">
+          <ol className={cn(CELLS, "grid-cols-1")}>
             {STEPS.map((s, i) => (
-              <m.li
-                key={s.title}
-                initial={{ opacity: 0, x: 32 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={VIEW}
-                transition={{ duration: 0.75, delay: i * 0.08, ease: EASE }}
-                className="flex items-start gap-5 rounded-3xl border border-[oklch(0.84_0.065_15/0.3)] bg-[oklch(0.985_0.01_15)] p-6 md:gap-7 md:p-8"
-              >
-                <span
-                  aria-hidden
-                  className="font-display text-4xl font-bold leading-none tracking-tight text-queens-gradient md:text-5xl"
-                >
-                  {String(i + 1).padStart(2, "0")}
-                </span>
-                <div>
-                  <h3 className="font-display text-xl font-semibold tracking-tight text-ink md:text-2xl">{s.title}</h3>
-                  <p className="mt-1.5 text-sm leading-relaxed text-ink/65 md:text-base">{s.text}</p>
-                </div>
-              </m.li>
+              <li key={s.title} className="group bg-white transition-colors duration-300 hover:bg-[color-mix(in_oklab,var(--face)_10%,var(--crema))]">
+                <Reveal delay={i * 80} className="grid grid-cols-[2.5rem_1fr] items-baseline gap-x-4 px-5 py-5 md:grid-cols-[3.25rem_1fr] md:px-7 md:py-6">
+                  <span aria-hidden className="text-[11px] font-bold tracking-[0.16em] text-[var(--face-deep)] [font-variant-numeric:lining-nums]">
+                    {String(i + 1).padStart(2, "0")}
+                  </span>
+                  <div>
+                    <h3 className="text-[13px] font-semibold uppercase tracking-[0.1em] text-ink md:text-[14px]">{s.title}</h3>
+                    <p className="mt-1.5 text-sm leading-relaxed text-ink/65">{s.text}</p>
+                  </div>
+                </Reveal>
+              </li>
             ))}
           </ol>
         </div>
       </section>
 
       {/* ═════ Lo que prometemos ═════ */}
-      <section aria-labelledby="promises-title" className="relative overflow-hidden bg-noir py-24 text-white md:py-28">
-        <div aria-hidden className="pointer-events-none absolute inset-0 bg-grain opacity-[0.07] mix-blend-overlay" />
-        <div
-          aria-hidden
-          className="pointer-events-none absolute -top-24 left-1/2 h-[30rem] w-[44rem] -translate-x-1/2 rounded-full blur-3xl"
-          style={{ background: "radial-gradient(circle, oklch(0.75 0.135 85 / 0.14) 0%, transparent 70%)" }}
-        />
-        <div className="relative mx-auto max-w-5xl px-6 md:px-10">
-          <m.div initial="hidden" whileInView="show" viewport={VIEW} className="text-center">
-            <m.p
-              variants={fadeUp}
-              className="mb-5 flex items-center justify-center gap-3 text-[11px] font-bold uppercase tracking-[0.32em] text-[var(--gold)]"
-            >
-              <span className="h-px w-10 bg-[var(--gold)]/60" />
-              Lo que prometemos
-              <span className="h-px w-10 bg-[var(--gold)]/60" />
-            </m.p>
-            <m.h2
-              id="promises-title"
-              variants={fadeUp}
-              custom={1}
-              className="font-display leading-[1] tracking-[-0.035em]"
-              style={{ fontSize: "clamp(2rem, 4.6vw, 3.4rem)" }}
-            >
-              <span className="font-light">Puedes venir </span>
-              <span className="font-bold shimmer-gold">tranquila.</span>
-            </m.h2>
-          </m.div>
+      <section aria-labelledby="promises-title" className="relative bg-white py-8 text-ink md:py-10">
+        <div className="mx-auto max-w-5xl px-6 md:px-10">
+          <SectionHeader id="promises-title" eyebrow="Lo que prometemos" title="Puedes venir tranquila." center />
 
-          <ul className="mt-12 grid gap-4 sm:grid-cols-2">
+          <ul className={cn(CELLS, "sm:grid-cols-2")}>
             {PROMISES.map((p, i) => (
-              <m.li
-                key={p.text}
-                initial={{ opacity: 0, y: 24 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={VIEW}
-                transition={{ duration: 0.7, delay: i * 0.07, ease: EASE }}
-                className="flex items-center gap-4 rounded-2xl border border-white/10 bg-white/[0.03] p-5"
-              >
-                <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-[var(--gold)]/40 bg-[var(--gold)]/10 text-[var(--gold)]">
-                  <p.icon className="h-5 w-5" />
-                </span>
-                <span className="text-sm leading-relaxed text-white/80 md:text-base">{p.text}</span>
-              </m.li>
+              <li key={p.text} className="group bg-white transition-colors duration-300 hover:bg-[color-mix(in_oklab,var(--face)_10%,var(--crema))]">
+                <Reveal delay={i * 70} className="flex items-center gap-4 p-5">
+                  <IconBox>
+                    <p.icon className="h-5 w-5" strokeWidth={1.5} />
+                  </IconBox>
+                  <span className="text-sm leading-relaxed text-ink/80 md:text-base">{p.text}</span>
+                </Reveal>
+              </li>
             ))}
           </ul>
         </div>
       </section>
 
       {/* ═════ Cierre ═════ */}
-      <section aria-labelledby="visit-title" className="relative overflow-hidden py-24 md:py-28">
-        <div aria-hidden className="absolute inset-0 bg-queens-gradient-intense" />
+      <section aria-labelledby="visit-title" className="relative overflow-hidden bg-[var(--face)] py-12 md:py-14">
         <div
           aria-hidden
           className="pointer-events-none absolute -left-20 top-0 h-[26rem] w-[26rem] rounded-full blur-3xl"
-          style={{ background: "oklch(1 0 0 / 0.12)" }}
+          style={{ background: "oklch(0.995 0.022 106.8 / 0.12)" }}
         />
-        <div className="relative mx-auto max-w-3xl px-6 text-center text-white md:px-10">
-          <m.div initial="hidden" whileInView="show" viewport={VIEW}>
-            <m.h2
+        <div className="relative mx-auto max-w-3xl px-6 text-center text-ink md:px-10">
+          <Reveal>
+            <h2
               id="visit-title"
-              variants={fadeUp}
-              className="font-display font-semibold leading-tight tracking-[-0.04em]"
-              style={{ fontSize: "clamp(2.2rem, 5vw, 3.8rem)" }}
+              className="font-display font-semibold"
+              style={{ fontSize: "clamp(1.9rem, 4.4vw, 3.4rem)", lineHeight: 1.05, letterSpacing: "-0.03em" }}
             >
               Pasa a saludarnos.
-            </m.h2>
-            <m.p variants={fadeUp} custom={1} className="mx-auto mt-5 max-w-xl text-base text-white/85 md:text-lg">
-              Nos encanta conocer a quienes nos visitan. Escríbenos o cuéntanos cuándo vienes y te esperamos.
-            </m.p>
-            <m.div variants={fadeUp} custom={2} className="mt-9 flex flex-col items-center justify-center gap-4 sm:flex-row">
-              <Button asChild variant="whatsapp" size="xl">
-                <a href={WA_ADVICE} target="_blank" rel="noopener noreferrer">
-                  <MessageCircle className="h-6 w-6" />
-                  Escríbenos por WhatsApp
-                </a>
-              </Button>
-              <Button asChild size="xl" className="border-white bg-white text-ink shadow-xl hover:bg-white/90">
-                <Link href="/#ubicaciones">
-                  <MapPin className="h-5 w-5" />
-                  Cómo llegar
-                </Link>
-              </Button>
-            </m.div>
-          </m.div>
+            </h2>
+          </Reveal>
+          <Reveal as="p" delay={120} className="mx-auto mt-4 max-w-xl text-base leading-relaxed text-ink/80 md:text-lg">
+            Nos encanta conocer a quienes nos visitan. Escríbenos o cuéntanos cuándo vienes y te esperamos.
+          </Reveal>
+          <Reveal delay={240} className="mt-8 flex flex-col items-center justify-center gap-x-8 gap-y-5 sm:flex-row">
+            <a
+              href={WA_ADVICE}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-3 whitespace-nowrap bg-[var(--ink)] px-8 py-4 text-xs font-medium uppercase tracking-[0.2em] text-[var(--crema)] transition-colors duration-200 hover:bg-[var(--crema)] hover:text-[var(--ink)] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[var(--ink)]"
+            >
+              <WhatsAppIcon className="h-4 w-4" />
+              Escríbenos por WhatsApp
+            </a>
+            <Link
+              href="/#ubicaciones"
+              className="group inline-flex items-center gap-[1.2em] whitespace-nowrap text-xs font-medium uppercase tracking-[0.2em] text-ink transition-opacity hover:opacity-70"
+            >
+              <MapPin className="h-[1.2em] w-[1.2em]" strokeWidth={1.5} />
+              Cómo llegar
+              <ArrowUpRight className="h-[1.1em] w-[1.1em] transition-transform duration-300 group-hover:rotate-45" strokeWidth={1.5} />
+            </Link>
+          </Reveal>
         </div>
       </section>
     </>
@@ -468,88 +396,68 @@ export function About() {
 }
 
 function HouseCard({ house, index }: { house: (typeof HOUSES)[number]; index: number }) {
-  const isNoir = house.tone === "noir"
   const { venue } = house
+  const face = venue.href === "/spa" ? "face-spa" : "face-cosmetics"
 
   return (
-    <m.div
-      initial={{ opacity: 0, y: 40 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={VIEW}
-      transition={{ duration: 0.9, delay: index * 0.12, ease: EASE }}
-    >
+    <Reveal delay={index * 120} className="h-full">
       <Link
         href={venue.href}
         {...faceLinkProps(venue.href)}
         data-testid={`about-house-${venue.href.replace("/", "")}`}
+        style={{ boxShadow: `inset 0 0 0 1px ${HAIRLINE}` }}
         className={cn(
-          "group relative flex h-full flex-col overflow-hidden rounded-3xl outline-none focus-visible:ring-2 focus-visible:ring-offset-2",
-          isNoir
-            ? "bg-noir text-white focus-visible:ring-[var(--gold)]"
-            : "border border-[oklch(0.84_0.065_15/0.4)] bg-white text-ink focus-visible:ring-[var(--rose-hot)]",
+          "group relative flex h-full flex-col overflow-hidden bg-white text-ink outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-[var(--face-deep)]",
+          face,
         )}
       >
-        <div
-          className={cn(
-            "relative aspect-[16/10] overflow-hidden",
-            isNoir ? "bg-noir-soft" : "bg-[linear-gradient(135deg,oklch(0.96_0.03_15)_0%,oklch(0.98_0.012_85)_100%)]",
+        <div className="relative aspect-[16/10] overflow-hidden bg-[linear-gradient(135deg,oklch(0.96_0.02_103)_0%,oklch(0.98_0.009_90)_100%)]">
+          {house.image ? (
+            <Image
+              src={house.image}
+              alt={house.alt}
+              fill
+              sizes="(max-width: 768px) 100vw, 50vw"
+              style={{ objectPosition: house.pos }}
+              className={cn(
+                "transition duration-[1200ms] ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-[1.05]",
+                house.cover ? "object-cover" : "object-contain p-8",
+              )}
+            />
+          ) : (
+            <div className="absolute inset-0 grid place-items-center bg-face-soft">
+              <Image
+                src="/images/brand/isotipo-dorado.webp"
+                alt={house.alt}
+                width={556}
+                height={803}
+                sizes="160px"
+                className="h-3/4 w-auto transition duration-[1200ms] ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-[1.05]"
+              />
+            </div>
           )}
-        >
-          <Image
-            src={house.image}
-            alt=""
-            fill
-            sizes="(max-width: 768px) 100vw, 50vw"
-            className={cn(
-              "transition duration-[1200ms] ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-[1.05]",
-              house.cover ? "object-cover" : "object-contain p-8",
-              isNoir && "grayscale contrast-[1.1] brightness-[0.85] group-hover:grayscale-0 group-hover:brightness-100",
-            )}
-          />
-          {isNoir && <div className="absolute inset-0 bg-gradient-to-t from-noir via-transparent to-transparent" />}
         </div>
 
-        <div className="flex flex-1 flex-col p-7 md:p-9">
-          <p
-            className={cn(
-              "text-[11px] font-bold uppercase tracking-[0.3em]",
-              isNoir ? "text-[var(--gold)]" : "text-[var(--gold-deep)]",
-            )}
-          >
-            {house.eyebrow}
-          </p>
-          <h3 className="mt-3 font-display text-3xl font-bold tracking-[-0.03em] md:text-4xl">{venue.name}</h3>
-          <p className={cn("mt-3 max-w-sm text-base leading-relaxed", isNoir ? "text-white/65" : "text-ink/65")}>
-            {house.text}
-          </p>
-          <p
-            className={cn(
-              "mt-5 flex items-center gap-2 text-sm",
-              isNoir ? "text-white/55" : "text-ink/55",
-            )}
-          >
-            <MapPin className={cn("h-4 w-4 shrink-0", isNoir ? "text-[var(--gold)]" : "text-[var(--gold-deep)]")} />
+        <div className="flex flex-1 flex-col p-6 md:p-7">
+          <p className="text-[11px] font-semibold uppercase tracking-[0.3em] text-[var(--face-deep)]">{house.eyebrow}</p>
+          <h3 className="mt-2.5 font-display text-2xl font-bold tracking-[-0.01em] md:text-3xl">{venue.name}</h3>
+          <p className="mt-2.5 max-w-sm text-sm leading-relaxed text-ink/70">{house.text}</p>
+          <p className="mt-4 flex items-center gap-2 text-sm text-ink/60">
+            <MapPin className="h-4 w-4 shrink-0 text-[var(--face-deep)]" />
             {venue.address}
           </p>
 
-          <span className="mt-auto flex items-center justify-between pt-8">
-            <span className="font-display text-lg font-semibold uppercase tracking-tight transition-transform duration-500 group-hover:translate-x-1.5">
-              Conocer
-            </span>
+          <span className="mt-auto flex items-center justify-between pt-6">
+            <span className="text-xs font-semibold uppercase tracking-[0.2em] transition-transform duration-500 group-hover:translate-x-1.5">Conocer</span>
             <span
               aria-hidden
-              className={cn(
-                "flex h-12 w-12 items-center justify-center rounded-full border transition duration-500 group-hover:rotate-45",
-                isNoir
-                  ? "border-white/25 group-hover:border-[var(--gold)] group-hover:bg-[var(--gold)] group-hover:text-noir"
-                  : "border-ink/20 group-hover:border-[var(--rose-hot)] group-hover:bg-[var(--rose-hot)] group-hover:text-white",
-              )}
+              className="grid h-10 w-10 place-items-center text-ink shadow-[inset_0_0_0_1px_color-mix(in_oklab,var(--ink)_25%,transparent)] transition-[background-color,color,box-shadow] duration-500 group-hover:bg-ink group-hover:text-[var(--face)] group-hover:shadow-[inset_0_0_0_1px_var(--ink)]"
             >
-              <ArrowUpRight className="h-5 w-5" />
+              <ArrowUpRight className="h-4 w-4 transition-transform duration-500 group-hover:rotate-45" strokeWidth={1.5} />
             </span>
           </span>
         </div>
       </Link>
-    </m.div>
+    </Reveal>
   )
 }

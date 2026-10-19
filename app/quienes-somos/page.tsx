@@ -1,5 +1,6 @@
 import type { Metadata } from "next"
 import dynamic from "next/dynamic"
+import { MotionProvider } from "@/components/motion-provider"
 import { Navbar } from "@/components/navbar"
 import { ScrollProgress } from "@/components/scroll-progress"
 import { About } from "@/components/sections/about"
@@ -18,15 +19,18 @@ export const metadata: Metadata = {
   },
 }
 
-/* The warm page: who we are, in plain words. No intro screen, no cart. */
+/* The warm page: who we are, in plain words. No intro screen, no cart. Built in the store's language (strip + solid header, flat square pieces, fine lines). */
 export default function AboutPage() {
   return (
-    <main className="relative overflow-x-hidden">
-      <ScrollProgress />
-      <Navbar face="about" />
-      <About />
-      <Footer face="about" />
-      <WhatsAppFloat />
-    </main>
+    <MotionProvider>
+      {/* flow-root: the hero's margin-top (the strip + header) must stay inside <main>, or the strip, which hangs from the top of <main>, would slide down with it */}
+      <main data-face="cosmetics" className="relative flow-root overflow-x-clip">
+        <ScrollProgress />
+        <Navbar face="about" separate announce />
+        <About />
+        <Footer face="about" />
+        <WhatsAppFloat />
+      </main>
+    </MotionProvider>
   )
 }

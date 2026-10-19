@@ -2,108 +2,104 @@
 
 import { useRef } from "react"
 import Link from "next/link"
-import { m, useInView } from "framer-motion"
-import { ArrowUpRight, CalendarHeart } from "lucide-react"
-import { Button } from "@/components/ui/button"
-import { useIsMobile } from "@/hooks/use-is-mobile"
+import { useInView } from "framer-motion"
+import { ArrowUpRight } from "lucide-react"
+import { Reveal } from "@/components/reveal"
+import { WhatsAppIcon } from "@/components/whatsapp-icon"
+import { cn } from "@/lib/utils"
 import { VENUES, faceLinkProps } from "@/lib/site"
 import { WA_SPA } from "@/lib/whatsapp"
 
-const WORDS = ["Tu", "cuerpo", "te", "va", "a", "dar", "las", "gracias."]
-const EASE = [0.16, 1, 0.3, 1] as const
+const WORDS = ["Tus", "manos", "te", "van", "a", "dar", "las", "gracias."]
 
+/*
+ * The closing slab, flat like the store's blocks ("una losa del acento con texto casi negro"): solid gold, a one-colour title in the store's weight, and the
+ * square near-black button that turns crema on hover. What stays from before: the soft light that drifts over the gold and the title's words flipping up one by one
+ * (now a CSS animation: Framer's entrance sent each word back to its start for a frame when it ended).
+ */
 export function SpaCTA() {
   const ref = useRef<HTMLElement>(null)
   const inView = useInView(ref, { once: true, margin: "-80px" })
-  const isMobile = useIsMobile()
 
   return (
-    <section ref={ref} className="relative overflow-hidden bg-noir py-24 text-white md:py-32">
-      <div aria-hidden className="pointer-events-none absolute inset-0 bg-grain opacity-[0.08] mix-blend-overlay" />
-
-      {/* Gold haze instead of the store's rose gradient */}
+    <section ref={ref} className="relative overflow-hidden bg-[var(--face)] py-12 text-ink md:py-16">
+      {/* Soft crema glows over the gold slab. They drift forever, so they are CSS loops (see
+          "AMBIENT LOOPS" in globals.css) with their own pace and start; on phones they hold still. */}
       {[
         { size: 420, x: "8%", y: "12%", dur: 9 },
         { size: 300, x: "72%", y: "55%", dur: 12 },
         { size: 240, x: "45%", y: "8%", dur: 8 },
       ].map((orb, i) => (
-        <m.div
+        <div
           key={i}
           aria-hidden
-          className="pointer-events-none absolute rounded-full blur-3xl"
-          style={{
-            width: orb.size,
-            height: orb.size,
-            left: orb.x,
-            top: orb.y,
-            background: "radial-gradient(circle, oklch(0.75 0.135 85 / 0.16) 0%, transparent 70%)",
-          }}
-          animate={isMobile ? undefined : { x: [0, 30, -20, 0], y: [0, -24, 28, 0], scale: [1, 1.12, 0.96, 1] }}
-          transition={{ duration: orb.dur, repeat: Infinity, ease: "easeInOut", delay: i * 1.4 }}
+          className="ambient-drift ambient-desktop pointer-events-none absolute rounded-full blur-3xl"
+          style={
+            {
+              width: orb.size,
+              height: orb.size,
+              left: orb.x,
+              top: orb.y,
+              background: "radial-gradient(circle, color-mix(in oklab, var(--crema) 30%, transparent) 0%, transparent 70%)",
+              "--drift-y1": "-24px",
+              "--drift-y2": "28px",
+              "--drift-s1": 1.12,
+              "--drift-s2": 0.96,
+              "--amb-dur": `${orb.dur}s`,
+              "--amb-delay": `${i * 1.4}s`,
+            } as React.CSSProperties
+          }
         />
       ))}
 
       <div className="relative mx-auto max-w-4xl px-6 text-center md:px-10">
-        <m.p
-          className="mb-7 flex items-center justify-center gap-3 text-[11px] font-bold uppercase tracking-[0.32em] text-[var(--gold)]"
-          initial={{ opacity: 0, y: 16 }}
-          animate={inView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.7, ease: EASE }}
-        >
-          <span className="h-px w-10 bg-[var(--gold)]/60" />
-          Reserva tu ritual
-          <span className="h-px w-10 bg-[var(--gold)]/60" />
-        </m.p>
+        <Reveal as="p" className="mb-4 text-xs font-semibold uppercase tracking-[0.3em] text-ink/75">
+          Reserva tu cita
+        </Reveal>
 
         <h2
-          className="font-display uppercase leading-[0.9] tracking-[-0.045em]"
-          style={{ fontSize: "clamp(2.3rem, 6vw, 5rem)" }}
+          className="font-display font-semibold"
+          style={{ fontSize: "clamp(1.9rem, 4.4vw, 3.4rem)", lineHeight: 1.05, letterSpacing: "-0.03em" }}
         >
           {WORDS.map((word, i) => (
-            <m.span
+            <span
               key={i}
-              className={i === WORDS.length - 1 ? "mr-[0.25em] inline-block font-bold shimmer-gold" : "mr-[0.25em] inline-block font-light"}
-              initial={{ opacity: 0, y: 48, rotateX: -90 }}
-              animate={inView ? { opacity: 1, y: 0, rotateX: 0 } : {}}
-              transition={{ duration: 0.6, delay: 0.15 + i * 0.07, ease: EASE }}
-              style={{ transformPerspective: 600 }}
+              className={cn(
+                "mr-[0.25em] inline-block",
+                inView ? "motion-safe:animate-[flip-in_600ms_cubic-bezier(0.16,1,0.3,1)_backwards]" : "opacity-0",
+              )}
+              style={{ animationDelay: `${150 + i * 70}ms` }}
             >
               {word}
-            </m.span>
+            </span>
           ))}
         </h2>
 
-        <m.p
-          className="mx-auto mt-7 max-w-xl text-base leading-relaxed text-white/60 md:text-lg"
-          initial={{ opacity: 0, y: 20 }}
-          animate={inView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.7, delay: 0.7, ease: EASE }}
-        >
-          Escríbenos y cuadramos tu cita. {VENUES.spa.address}, Palmira.
-        </m.p>
+        <Reveal as="p" delay={450} className="mx-auto mt-5 max-w-xl text-base leading-relaxed text-ink/75 md:text-lg">
+          Escríbenos y cuadramos tu cita. <span className="whitespace-nowrap">{VENUES.spa.address}, Palmira.</span>
+        </Reveal>
 
-        <m.div
-          className="mt-10 flex flex-col items-center justify-center gap-5 sm:flex-row"
-          initial={{ opacity: 0, y: 28 }}
-          animate={inView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.7, delay: 0.85, ease: EASE }}
-        >
-          <Button asChild variant="gold" size="xl" data-testid="spa-cta-book">
-            <a href={WA_SPA} target="_blank" rel="noopener noreferrer">
-              <CalendarHeart className="h-6 w-6" />
-              Reservar por WhatsApp
-            </a>
-          </Button>
+        <Reveal className="mt-8 flex flex-col items-center justify-center gap-x-8 gap-y-5 sm:flex-row" delay={600}>
+          <a
+            href={WA_SPA}
+            target="_blank"
+            rel="noopener noreferrer"
+            data-testid="spa-cta-book"
+            className="inline-flex items-center gap-3 whitespace-nowrap bg-[var(--ink)] px-8 py-4 text-xs font-medium uppercase tracking-[0.2em] text-[var(--crema)] transition-colors duration-200 hover:bg-[var(--crema)] hover:text-[var(--ink)] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[var(--ink)]"
+          >
+            <WhatsAppIcon className="h-4 w-4" />
+            Reservar por WhatsApp
+          </a>
 
           <Link
             href="/cosmetics"
             {...faceLinkProps("/cosmetics")}
-            className="group inline-flex items-center gap-2 text-sm font-semibold text-white/70 underline decoration-[var(--gold)]/40 underline-offset-[6px] transition hover:text-white hover:decoration-[var(--gold)]"
+            className="group inline-flex items-center gap-[1.2em] whitespace-nowrap text-xs font-medium uppercase tracking-[0.2em] text-ink transition-opacity hover:opacity-70"
           >
             ¿Buscabas la tienda?
-            <ArrowUpRight className="h-4 w-4 transition-transform duration-300 group-hover:rotate-45" />
+            <ArrowUpRight className="h-[1.1em] w-[1.1em] transition-transform duration-300 group-hover:rotate-45" strokeWidth={1.5} />
           </Link>
-        </m.div>
+        </Reveal>
       </div>
     </section>
   )

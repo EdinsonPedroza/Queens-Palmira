@@ -7,8 +7,8 @@ export default function manifest(): MetadataRoute.Manifest {
     description: "Cosmética premium en Unicentro Palmira. Maquillaje, skincare, esmaltes y línea capilar.",
     start_url: "/",
     display: "standalone",
-    background_color: "#FFB6C1",
-    theme_color: "#FFB6C1",
+    background_color: "#FFFFEE",
+    theme_color: "#FFFFEE",
     lang: "es-CO",
     icons: [
       {

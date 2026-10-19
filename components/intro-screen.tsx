@@ -7,6 +7,20 @@ import { seededRandom } from "@/lib/utils"
 
 const LETTERS = "QUEENS".split("")
 
+/*
+ * The logo at the centre. It is drawn 112px tall on phones and 160px from `md`
+ * (h-28 / md:h-40), that is 78px and 111px wide: with `sizes` the browser takes
+ * the smallest file that is still sharp at its pixel density, instead of the
+ * full-size artwork.
+ */
+const INTRO_LOGO = {
+  src: "/images/brand/isotipo-crema.webp",
+  width: 556,
+  height: 803,
+  quality: 90,
+  sizes: "(min-width: 768px) 111px, 78px",
+} as const
+
 /** Fired when the intro starts opening, so the hero can time its entrance to the reveal. */
 export const INTRO_EXIT_EVENT = "queens:intro-exit"
 
@@ -49,70 +63,114 @@ function Spark({ angle, delay, dist, size, color }: { angle: number; delay: numb
   )
 }
 
+const SEEN_KEY = "queens-intro-seen"
+const SCROLL_KEYS = new Set([" ", "ArrowUp", "ArrowDown", "PageUp", "PageDown", "Home", "End"])
+
+/*
+ * Holds the page still while the intro is up, and returns the function that lets go.
+ *
+ * It blocks the input that scrolls instead of setting `overflow: hidden`. Hiding the
+ * scrollbar makes the page wider by the scrollbar's width, and narrower again the moment
+ * the intro leaves — which is exactly when the hero is animating in, so on a desktop the
+ * whole layout would jump sideways. This way the layout never changes.
+ */
+function holdScroll() {
+  const block = (e: Event) => e.preventDefault()
+  const blockKeys = (e: KeyboardEvent) => {
+    if (SCROLL_KEYS.has(e.key)) e.preventDefault()
+  }
+  window.addEventListener("wheel", block, { passive: false })
+  window.addEventListener("touchmove", block, { passive: false })
+  window.addEventListener("keydown", blockKeys)
+  return () => {
+    window.removeEventListener("wheel", block)
+    window.removeEventListener("touchmove", block)
+    window.removeEventListener("keydown", blockKeys)
+  }
+}
+
 export function IntroScreen() {
   const [visible, setVisible] = useState(false)
   const [exiting, setExiting] = useState(false)
-  const unlockedRef = useRef(false)
+  const releaseScrollRef = useRef<(() => void) | null>(null)
 
-  // Unlocks scroll exactly once, from whichever path gets there first —
+  // Ends the intro exactly once, from whichever path gets there first —
   // the normal exit-animation callback, or the safety-net fallback below.
-  const unlock = () => {
-    if (unlockedRef.current) return
-    unlockedRef.current = true
-    document.body.style.overflow = ""
-    sessionStorage.setItem("queens-intro-seen", "1")
+  const finish = () => {
+    if (!releaseScrollRef.current) return
+    releaseScrollRef.current()
+    releaseScrollRef.current = null
+    try {
+      sessionStorage.setItem(SEEN_KEY, "1")
+    } catch {
+      /* storage blocked: nothing to remember */
+    }
     setVisible(false)
   }
 
   useEffect(() => {
-    if (sessionStorage.getItem("queens-intro-seen")) return
+    // Storage can be blocked (some private modes and in-app browsers) and reading it then
+    // throws. No storage means no intro, which is also what the hero assumes.
+    let seen = true
+    try {
+      seen = !!sessionStorage.getItem(SEEN_KEY)
+    } catch {
+      /* keep `seen` */
+    }
+    if (seen) return
     // The intro is gated on sessionStorage, which only exists after mount, so it
     // deliberately never renders on the server.
     // eslint-disable-next-line react-hooks/set-state-in-effect
     setVisible(true)
-    document.body.style.overflow = "hidden"
+    const release = holdScroll()
+    releaseScrollRef.current = release
     const t = setTimeout(() => {
       setExiting(true)
       window.dispatchEvent(new Event(INTRO_EXIT_EVENT))
     }, 2400)
     // Safety net: if AnimatePresence's onExitComplete never fires (observed
     // under React Strict Mode's double-effect dev remount), the page would
-    // stay scroll-locked forever. Force the unlock a beat after the exit
-    // animation should have finished either way.
-    const safety = setTimeout(unlock, 3600)
+    // stay held forever. Force the end a beat after the exit animation
+    // should have finished either way.
+    const safety = setTimeout(finish, 3600)
     return () => {
       clearTimeout(t)
       clearTimeout(safety)
-      // Covers the Strict Mode dev remount: undo this pass's lock so the
+      // Covers the Strict Mode dev remount: let go of this pass's hold so the
       // next mount starts clean instead of stacking on top of it.
-      document.body.style.overflow = ""
+      release()
+      releaseScrollRef.current = null
     }
   }, [])
 
-  const handleExitComplete = unlock
+  const handleExitComplete = finish
 
-  if (!visible) return null
+  // Until the intro shows (and that includes the server render) this is a hidden copy of its
+  // logo. The intro only exists in the browser, so on its own the logo would not start
+  // downloading until the page had hydrated — too late for its own entrance animation. This
+  // puts it in the HTML, so it arrives with the page and is already there when the intro mounts.
+  if (!visible) return <Image {...INTRO_LOGO} alt="" aria-hidden priority className="hidden" />
 
-  // 18 sparks alternating gold / rose + a softer inner ring
+  // 18 sparks alternating lila / gold + a softer inner ring
   const sparks = [
     ...Array.from({ length: 18 }, (_, i) => ({
       angle: i * 20,
       delay: 0.16 + i * 0.008,
       size: seededRandom(i * 3) * 2.5 + 1.5,
       dist: 120 + seededRandom(i * 3 + 1) * 80,
-      color: i % 3 === 0 ? "#FF69B4" : "#D4AF37",
+      color: i % 3 === 0 ? "#A48BA6" : "#BCA157",
     })),
     ...Array.from({ length: 9 }, (_, i) => ({
       angle: i * 40 + 12,
       delay: 0.26 + i * 0.01,
       size: 1.5,
       dist: 80 + seededRandom(i * 3 + 2) * 40,
-      color: "#fff4d6",
+      color: "#FFFFEE",
     })),
   ]
 
   // Split down the middle like the hero underneath: Lado A (cosmetics, rose) on
-  // the left, Lado B (spa, noir) on the right — the curtains part sideways.
+  // the left, Lado B (spa, gold) on the right — the curtains part sideways.
   const curtainLeft = {
     initial: { x: 0 },
     exit: { x: "-100%", transition: { duration: 0.75, ease: [0.76, 0, 0.24, 1] as const } },
@@ -132,16 +190,16 @@ export function IntroScreen() {
             variants={curtainLeft}
             initial="initial"
             exit="exit"
-            className="fixed inset-y-0 left-0 w-1/2 z-[98] pointer-events-none bg-queens-gradient"
-            style={{ willChange: "transform" }}
+            className="fixed inset-y-0 left-0 w-1/2 z-[98] pointer-events-none"
+            style={{ willChange: "transform", background: "linear-gradient(135deg, var(--lila) 0%, var(--lila-deep) 100%)" }}
           />
           <m.div
             key="curtain-right"
             variants={curtainRight}
             initial="initial"
             exit="exit"
-            className="fixed inset-y-0 right-0 w-1/2 z-[98] pointer-events-none bg-noir"
-            style={{ willChange: "transform" }}
+            className="fixed inset-y-0 right-0 w-1/2 z-[98] pointer-events-none"
+            style={{ willChange: "transform", background: "linear-gradient(135deg, var(--dorado) 0%, var(--dorado-deep) 100%)" }}
           />
 
           <m.div
@@ -158,14 +216,14 @@ export function IntroScreen() {
               transition={{ duration: 2.2, times: [0, 0.4, 1] }}
               style={{
                 background:
-                  "radial-gradient(ellipse 55% 50% at 50% 48%, rgba(255,255,255,0.7) 0%, rgba(255,244,214,0.3) 38%, transparent 70%)",
+                  "radial-gradient(ellipse 55% 50% at 50% 48%, rgba(255,255,255,0.7) 0%, rgba(255,255,238,0.3) 38%, transparent 70%)",
               }}
             />
 
             {/* Center seam between the two personalities */}
             <m.div
               className="absolute inset-y-0 left-1/2 w-px -translate-x-1/2 origin-center pointer-events-none"
-              style={{ background: "linear-gradient(to bottom, transparent, #D4AF37 30%, #D4AF37 70%, transparent)" }}
+              style={{ background: "linear-gradient(to bottom, transparent, #BCA157 30%, #BCA157 70%, transparent)" }}
               initial={{ scaleY: 0, opacity: 0 }}
               animate={{ scaleY: 1, opacity: 0.7 }}
               transition={{ duration: 0.9, delay: 0.05, ease: [0.16, 1, 0.3, 1] }}
@@ -173,9 +231,9 @@ export function IntroScreen() {
 
             {/* Logo + bursts */}
             <div className="relative flex items-center justify-center">
-              <Ring delay={0.1} scaleTo={2.2} color="#D4AF37" opacity={0.45} />
-              <Ring delay={0.22} scaleTo={3.1} color="#FF69B4" opacity={0.3} />
-              <Ring delay={0.36} scaleTo={4.2} color="#D4AF37" opacity={0.18} />
+              <Ring delay={0.1} scaleTo={2.2} color="#BCA157" opacity={0.45} />
+              <Ring delay={0.22} scaleTo={3.1} color="#462649" opacity={0.3} />
+              <Ring delay={0.36} scaleTo={4.2} color="#BCA157" opacity={0.18} />
               <Ring delay={0.5} scaleTo={5.5} color="#ffffff" opacity={0.12} />
 
               {sparks.map((s, i) => (
@@ -200,13 +258,10 @@ export function IntroScreen() {
                   }}
                 />
                 <Image
-                  src="/images/logoFondo.webp"
+                  {...INTRO_LOGO}
                   alt="Queens Cosmetics"
-                  width={120}
-                  height={120}
                   priority
-                  quality={85}
-                  className="relative w-24 h-24 md:w-32 md:h-32 object-contain drop-shadow-[0_8px_30px_rgba(212,175,55,0.5)]"
+                  className="relative h-28 w-auto md:h-40 drop-shadow-[0_8px_30px_rgba(70,38,73,0.35)]"
                 />
               </m.div>
             </div>
@@ -217,7 +272,7 @@ export function IntroScreen() {
                 <m.span
                   key={i}
                   className="font-display text-5xl sm:text-6xl md:text-7xl font-bold leading-none select-none text-white"
-                  style={{ willChange: "transform", textShadow: "0 4px 24px rgba(212,175,55,0.4)" }}
+                  style={{ willChange: "transform", textShadow: "0 4px 24px color-mix(in oklab, var(--face) 40%, transparent)" }}
                   initial={{ y: 90, opacity: 0, skewX: -6 }}
                   animate={{ y: 0, opacity: 1, skewX: 0 }}
                   transition={{ duration: 0.42, delay: 0.4 + i * 0.06, ease: [0.22, 1, 0.36, 1] }}
@@ -243,15 +298,15 @@ export function IntroScreen() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 1.15 }}
             >
-              <span className="pr-5 text-right text-ink/60">Cosmetics</span>
-              <span className="pl-5 text-left text-[var(--gold-soft)]">Spa</span>
+              <span className="pr-5 text-right text-white/85">Cosmetics</span>
+              <span className="pl-5 text-left text-white/85">Spa</span>
             </m.p>
 
             {/* Loading bar */}
             <m.div
               className="absolute bottom-0 left-0 h-[2px] origin-left"
               style={{
-                background: "linear-gradient(90deg, #D4AF37, #fff4d6, #FF69B4)",
+                background: "linear-gradient(90deg, #BCA157, #FFFFEE, #462649)",
                 willChange: "transform",
               }}
               initial={{ scaleX: 0 }}

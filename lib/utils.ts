@@ -20,10 +20,22 @@ export function seededRandom(seed: number): number {
   return ((t ^ (t >>> 14)) >>> 0) / 4294967296
 }
 
+/*
+ * Colombian pesos, e.g. "$ 45.000" (a no-break space after the sign, a dot every three digits, no decimals).
+ *
+ * Whole numbers (every price in the site) are formatted by hand. `new Intl.NumberFormat("es-CO", { style: "currency", ... })` costs about 17 ms
+ * the first time it is created (the browser loads its locale data; 69 ms on a slow phone) and every product card prints a price, so it was
+ * the single biggest cost of hydrating the catalog. The hand-made string is byte-for-byte the one Intl produces (checked for every integer from
+ * -1 000 000 to 5 000 000 plus millions of random ones, in Node and in Chrome); anything else (decimals, NaN, huge numbers) still goes through Intl.
+ */
+let intl: Intl.NumberFormat | undefined
+
 export function formatCOP(value: number): string {
-  return new Intl.NumberFormat("es-CO", {
-    style: "currency",
-    currency: "COP",
-    maximumFractionDigits: 0,
-  }).format(value)
+  if (Number.isSafeInteger(value) && value !== 0) {
+    const digits = String(Math.abs(value)).replace(/\B(?=(\d{3})+(?!\d))/g, ".")
+    return `${value < 0 ? "-" : ""}$\u00A0${digits}`
+  }
+  if (value === 0 && !Object.is(value, -0)) return "$\u00A00"
+  intl ??= new Intl.NumberFormat("es-CO", { style: "currency", currency: "COP", maximumFractionDigits: 0 })
+  return intl.format(value)
 }

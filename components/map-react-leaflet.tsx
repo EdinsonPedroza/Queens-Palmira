@@ -94,7 +94,7 @@ export function MapReactLeaflet({ venue, venues, zoom = 17 }: MapProps) {
                 href={v.gmaps}
                 target="_blank"
                 rel="noopener noreferrer"
-                style={{ color: "#D4AF37", fontWeight: 600, textDecoration: "none", display: "inline-block", marginTop: 4 }}
+                style={{ color: "var(--face-deep)", fontWeight: 600, textDecoration: "none", display: "inline-block", marginTop: 4 }}
               >
                 Ver en Google Maps →
               </a>

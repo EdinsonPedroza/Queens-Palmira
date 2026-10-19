@@ -21,6 +21,10 @@ export const WA_VISIT = waLink(
   "Hola Queens! Quiero visitar la tienda en Unicentro Palmira, tienen disponibilidad?",
 )
 
+export const WA_NEWS = waLink(
+  "Hola Queens! Quiero recibir novedades, lanzamientos y ofertas.",
+)
+
 export const WA_ADVICE = waLink(
   "Hola Queens! Me gustaría una asesoría personalizada de productos.",
 )
@@ -29,9 +33,32 @@ export const WA_SPA = waLink(
   "Hola Queens Spa! Quiero reservar una cita, ¿qué horarios tienen disponibles?",
 )
 
-export const WA_SPA_INFO = waLink(
-  "Hola Queens Spa! Me gustaría información sobre sus rituales y precios.",
-)
+export interface BookingRequest {
+  name: string
+  phone?: string
+  service: string
+  duration?: string
+  /** Already written out for a person, e.g. "lunes, 20 de octubre". */
+  date: string
+  time?: string
+  notes?: string
+}
+
+/** The message the spa's booking form sends: everything the spa needs to answer with a time, in one go. */
+export function buildBookingMessage(r: BookingRequest): string {
+  const lines = [
+    "Hola Queens Spa! Quiero agendar una cita:",
+    "",
+    `• Nombre: ${r.name}`,
+    ...(r.phone ? [`• Teléfono: ${r.phone}`] : []),
+    `• Servicio: ${r.service}${r.duration ? ` (${r.duration})` : ""}`,
+    `• Fecha: ${r.date}`,
+  ]
+  if (r.time) lines.push(`• Hora preferida: ${r.time}`)
+  if (r.notes) lines.push(`• Detalles: ${r.notes}`)
+  lines.push("", "¿Tienen disponibilidad?")
+  return lines.join("\n")
+}
 
 export function spaBookingLink(service: string): string {
   return waLink(`Hola Queens Spa! Quiero reservar: ${service}. ¿Qué horarios tienen disponibles?`)
