@@ -1,0 +1,486 @@
+/*
+ * ENTRADA DEL PORTAL — versiones en lila y crema (las dos combinaciones del logo que aprobó el cliente).
+ *
+ * Todo es CSS (nada de Framer): una entrada de Framer parpadea un cuadro al terminar en este proyecto (ver CLAUDE.md).
+ * El estado "normal" de cada elemento es el FINAL; las animaciones solo dicen de dónde vienen (`backwards`), así con
+ * "reducir movimiento" (que quita las animaciones) queda la composición terminada, quieta.
+ *
+ * El JS solo cambia `data-phase` de "in" a "out" cuando empieza la salida; cada versión dice en CSS qué hace entonces.
+ * Los tamaños salen del CONTENEDOR (`cqh`/`cqw`), no de la ventana: la misma versión se ve igual en pantalla completa
+ * (la entrada real) y dentro de un recuadro (la vista previa).
+ */
+
+.root {
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-io: cubic-bezier(0.76, 0, 0.24, 1);
+  --ease-in: cubic-bezier(0.5, 0, 0.75, 0);
+  /* Alto del logo: casi la mitad de la pantalla, y nunca más ancho que ella en un celular. */
+  --h: min(48vh, 150vw);
+
+  position: fixed;
+  inset: 0;
+  z-index: 99;
+  overflow: hidden;
+  container-type: size;
+  isolation: isolate;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+@supports (width: 1cqw) {
+  .root {
+    --h: min(48cqh, 150cqw);
+  }
+}
+
+.root[data-contained] {
+  position: absolute;
+  z-index: 0;
+}
+
+.root[data-clickable] {
+  cursor: pointer;
+}
+
+.layer {
+  position: absolute;
+  inset: 0;
+}
+
+.cream {
+  background: var(--crema);
+}
+
+.lilaBg {
+  background: var(--lila);
+}
+
+/* El logo oficial (corona, monograma, "Queens", "cosmetics") es una máscara: el color sale del fondo, así un solo archivo sirve
+   para lila sobre crema y crema sobre lila. `--mask` lo pone el componente en el elemento raíz. */
+.mask {
+  background-color: var(--c, var(--lila));
+  -webkit-mask-image: var(--mask);
+  mask-image: var(--mask);
+  -webkit-mask-size: 100% 100%;
+  mask-size: 100% 100%;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+}
+
+.logo {
+  position: absolute;
+  left: 50%;
+  top: var(--y, 50%);
+  height: var(--h);
+  aspect-ratio: 1530 / 2890;
+  translate: -50% -50%;
+}
+
+.lila {
+  --c: var(--lila);
+}
+
+.crema {
+  --c: var(--crema);
+}
+
+/* Las dos palabras bajo el logo ("La tienda" | "El spa"): cada una a su lado del eje. El espaciado entre letras deja un hueco
+   al final de la palabra, por eso la de la izquierda se corre 0,42em para que el hueco visible sea igual a los dos lados. */
+.tag {
+  position: absolute;
+  top: calc(var(--y, 50%) + var(--h) / 2 + 4.5cqh);
+  font-size: clamp(10px, 2cqmin, 16px);
+  letter-spacing: 0.42em;
+  line-height: 1;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.tagL {
+  right: calc(50% + 0.98em);
+  text-align: right;
+}
+
+.tagR {
+  left: calc(50% + 1.4em);
+}
+
+.onCream {
+  color: var(--lila-deep);
+}
+
+.onLila {
+  color: var(--crema);
+}
+
+/* ═════ A · DOS CARAS ═════ crema | lila: el logo cambia de color justo en el eje y la pantalla se abre como una puerta doble. */
+.root[data-v="dos-caras"] {
+  --y: 45%;
+}
+
+.aRight {
+  clip-path: inset(0 0 0 50%);
+}
+
+/* ═════ B · CORTINA DE COLOR ═════ una cortina lila sube; el logo se invierte justo en su borde. */
+.root[data-v="cortina"] {
+  --y: 45%;
+}
+
+/* `clip-path: none` no se interpola con `inset()`: el valor completo de reposo es lo que hace que la cortina SUBA en vez de saltar. */
+.bPanel {
+  clip-path: inset(0 0 0 0);
+}
+
+/* ═════ C · LETRAS ═════ la corona y el monograma se dibujan; las seis letras del logo suben una por una. */
+.cBox {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  height: var(--h);
+  aspect-ratio: 1530 / 2890;
+  translate: -50% -50%;
+}
+
+.cPart {
+  position: absolute;
+  inset: 0;
+}
+
+/* Franjas del logo (en % de su alto): corona + monograma, y la palabra "cosmetics". Las cortes caen en los huecos entre ellas. */
+.cIso {
+  clip-path: inset(0 0 23.53% 0);
+}
+
+.cCos {
+  clip-path: inset(93.53% 0 0 0);
+}
+
+.cLetter {
+  position: absolute;
+  background-color: var(--lila);
+  -webkit-mask-size: 100% 100%;
+  mask-size: 100% 100%;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  transform-origin: 50% 100%;
+}
+
+/* ═════ D · ARCO ═════ el arco de las fotos del portal, lila con el logo crema, que se abre en dos hojas. */
+.dGate {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: var(--aw);
+  height: calc(var(--aw) * 2);
+  translate: -50% -50%;
+  perspective: calc(var(--aw) * 5);
+  clip-path: inset(0 0 0 0);
+}
+
+.dLeaf {
+  position: absolute;
+  top: 0;
+  height: 100%;
+  width: calc(50% + 0.5px);
+  overflow: hidden;
+}
+
+.dLeafL {
+  left: 0;
+  transform-origin: 0 50%;
+}
+
+.dLeafR {
+  right: 0;
+  transform-origin: 100% 50%;
+}
+
+.dArch {
+  position: absolute;
+  top: 0;
+  height: 100%;
+  width: var(--aw);
+  background: var(--lila);
+  border-radius: 9999px 9999px 0 0;
+}
+
+.dLeafL .dArch {
+  left: 0;
+}
+
+.dLeafR .dArch {
+  right: 0;
+}
+
+.dLogo {
+  --h: calc(var(--aw) * 1.1);
+  --y: 55%;
+}
+
+/* Ancho del arco; su alto es el doble, así que la base queda a `--aw` bajo el centro. */
+.root[data-v="arco"] {
+  --aw: min(31cqh, 66cqw);
+  --y: 50%;
+}
+
+.dTag {
+  top: calc(50% + var(--aw) + 3.5cqh);
+}
+
+/* ═════ E · MÍNIMA ═════ solo el logo; la más corta. */
+.root[data-v="minima"] {
+  --y: 47%;
+}
+
+/* ═════ Fotogramas ═════ */
+@keyframes logoIn {
+  from {
+    opacity: 0;
+    transform: translateY(4%) scale(0.94);
+  }
+}
+
+@keyframes tagIn {
+  from {
+    opacity: 0;
+    transform: translateY(0.9em);
+  }
+}
+
+@keyframes fadeOut {
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes aWipe {
+  from {
+    clip-path: inset(0 0 0 100%);
+  }
+}
+
+@keyframes aOutL {
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@keyframes aOutR {
+  to {
+    transform: translateX(50%);
+  }
+}
+
+@keyframes bSweep {
+  from {
+    clip-path: inset(100% 0 0 0);
+  }
+}
+
+@keyframes bLift {
+  to {
+    transform: translateY(-100%);
+  }
+}
+
+@keyframes cIsoIn {
+  from {
+    clip-path: inset(0 0 100% 0);
+    transform: translateY(2.5%) scale(0.97);
+  }
+}
+
+@keyframes cLetterIn {
+  from {
+    opacity: 0;
+    transform: perspective(520px) translateY(55%) rotateX(-80deg) scale(0.7);
+  }
+}
+
+@keyframes cCosIn {
+  from {
+    clip-path: inset(93.53% 100% 0 0);
+  }
+}
+
+@keyframes cOut {
+  to {
+    opacity: 0;
+    transform: translateY(-6%);
+  }
+}
+
+@keyframes dRise {
+  from {
+    clip-path: inset(100% 0 0 0);
+  }
+}
+
+@keyframes dOpenL {
+  0% {
+    transform: rotateY(0deg);
+    opacity: 1;
+  }
+  30% {
+    opacity: 1;
+  }
+  72% {
+    opacity: 0;
+  }
+  100% {
+    transform: rotateY(84deg);
+    opacity: 0;
+  }
+}
+
+@keyframes dOpenR {
+  0% {
+    transform: rotateY(0deg);
+    opacity: 1;
+  }
+  30% {
+    opacity: 1;
+  }
+  72% {
+    opacity: 0;
+  }
+  100% {
+    transform: rotateY(-84deg);
+    opacity: 0;
+  }
+}
+
+@keyframes eOut {
+  to {
+    opacity: 0;
+    transform: scale(0.985);
+  }
+}
+
+@keyframes rootOut {
+  to {
+    opacity: 0;
+  }
+}
+
+/* ═════ Movimiento ═════ (con "reducir movimiento" no corre nada: queda la composición final y la salida es un fundido) */
+@media (prefers-reduced-motion: no-preference) {
+  .logoIn {
+    animation: logoIn 800ms var(--ease-out) 80ms backwards;
+  }
+
+  .tagIn {
+    animation: tagIn 600ms var(--ease-out) 1000ms backwards;
+  }
+
+  /* A */
+  .aRight {
+    animation: aWipe 700ms var(--ease-io) 450ms backwards;
+  }
+
+  .root[data-phase="out"] .aBase {
+    clip-path: inset(0 50% 0 0);
+    animation: aOutL 800ms var(--ease-io) forwards;
+  }
+
+  .root[data-phase="out"] .aRight {
+    animation: aOutR 800ms var(--ease-io) forwards;
+  }
+
+  /* B */
+  .bPanel {
+    animation: bSweep 750ms var(--ease-io) 800ms backwards;
+  }
+
+  .bTag {
+    animation: tagIn 600ms var(--ease-out) 1450ms backwards;
+  }
+
+  .root[data-phase="out"] .bPanel {
+    animation: bLift 900ms var(--ease-io) forwards;
+  }
+
+  .root[data-phase="out"] .bBase {
+    animation: fadeOut 450ms linear 250ms forwards;
+  }
+
+  /* C */
+  .cIso {
+    animation: cIsoIn 900ms var(--ease-out) 80ms backwards;
+  }
+
+  .cLetter {
+    animation: cLetterIn 750ms cubic-bezier(0.34, 1.56, 0.64, 1) calc(520ms + var(--i) * 65ms) backwards;
+  }
+
+  .cCos {
+    animation: cCosIn 600ms var(--ease-out) 1250ms backwards;
+  }
+
+  .root[data-phase="out"] .cIso,
+  .root[data-phase="out"] .cLetter,
+  .root[data-phase="out"] .cCos {
+    animation: cOut 400ms var(--ease-in) calc(var(--o, 0) * 25ms) forwards;
+  }
+
+  /* La cubierta deja pasar el portal cuando el logo ya casi se fue: si no, los dos se ven encimados un instante. */
+  .root[data-phase="out"] .cBg {
+    animation: fadeOut 350ms linear 300ms forwards;
+  }
+
+  /* D */
+  .dGate {
+    animation: dRise 800ms var(--ease-out) 80ms backwards;
+  }
+
+  .dLogo {
+    animation: logoIn 700ms var(--ease-out) 600ms backwards;
+  }
+
+  .dTag {
+    animation: tagIn 600ms var(--ease-out) 1100ms backwards;
+  }
+
+  .root[data-phase="out"] .dGate {
+    animation: none;
+    clip-path: none;
+  }
+
+  .root[data-phase="out"] .dLeafL {
+    animation: dOpenL 950ms cubic-bezier(0.7, 0, 0.3, 1) forwards;
+  }
+
+  .root[data-phase="out"] .dLeafR {
+    animation: dOpenR 950ms cubic-bezier(0.7, 0, 0.3, 1) forwards;
+  }
+
+  .root[data-phase="out"] .dBg,
+  .root[data-phase="out"] .dTag {
+    animation: fadeOut 450ms linear 100ms forwards;
+  }
+
+  /* E */
+  .eLogo {
+    animation: logoIn 700ms var(--ease-out) 100ms backwards;
+  }
+
+  .eTag {
+    animation: tagIn 600ms var(--ease-out) 500ms backwards;
+  }
+
+  .root[data-phase="out"] .eLogo,
+  .root[data-phase="out"] .eTag {
+    animation: eOut 400ms var(--ease-in) forwards;
+  }
+
+  .root[data-phase="out"] .eBg {
+    animation: fadeOut 300ms linear 250ms forwards;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .root[data-phase="out"] {
+    animation: rootOut 300ms linear forwards;
+  }
+}

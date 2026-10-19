@@ -3,18 +3,21 @@
 import { useEffect, useRef, useState } from "react"
 import { m, AnimatePresence } from "framer-motion"
 import Image from "next/image"
+import { IntroPlayer } from "@/components/intro/intro-player"
+import { isIntroVersionId, type IntroVersionId } from "@/components/intro/intro-versions"
 import { seededRandom } from "@/lib/utils"
 
 const LETTERS = "QUEENS".split("")
 
 /*
- * The logo at the centre. It is drawn 112px tall on phones and 160px from `md`
- * (h-28 / md:h-40), that is 78px and 111px wide: with `sizes` the browser takes
- * the smallest file that is still sharp at its pixel density, instead of the
- * full-size artwork.
+ * The logo at the centre, in the two colours of the house: the left half in lila (Cosmetics) and the
+ * right half in gold (Spa), the same pairing as the emblem of the portal. It is drawn 112px tall on
+ * phones and 160px from `md` (h-28 / md:h-40), that is 78px and 111px wide: with `sizes` the browser
+ * takes the smallest file that is still sharp at its pixel density, instead of the full-size artwork.
  */
+const LOGO_LILA = "/images/brand/isotipo-lila.webp"
+const LOGO_DORADO = "/images/brand/isotipo-dorado.webp"
 const INTRO_LOGO = {
-  src: "/images/brand/isotipo-crema.webp",
   width: 556,
   height: 803,
   quality: 90,
@@ -23,19 +26,6 @@ const INTRO_LOGO = {
 
 /** Fired when the intro starts opening, so the hero can time its entrance to the reveal. */
 export const INTRO_EXIT_EVENT = "queens:intro-exit"
-
-/* ── Expanding ring ── */
-function Ring({ delay, scaleTo, color, opacity }: { delay: number; scaleTo: number; color: string; opacity: number }) {
-  return (
-    <m.div
-      className="absolute rounded-full pointer-events-none"
-      style={{ width: 150, height: 150, border: `1.5px solid ${color}`, willChange: "transform, opacity" }}
-      initial={{ scale: 1, opacity }}
-      animate={{ scale: scaleTo, opacity: 0 }}
-      transition={{ duration: 1.7, delay, ease: "easeOut" }}
-    />
-  )
-}
 
 /* ── Sparkle particle bursting outward ── */
 function Spark({ angle, delay, dist, size, color }: { angle: number; delay: number; dist: number; size: number; color: string }) {
@@ -92,6 +82,7 @@ function holdScroll() {
 export function IntroScreen() {
   const [visible, setVisible] = useState(false)
   const [exiting, setExiting] = useState(false)
+  const [variant, setVariant] = useState<IntroVersionId | null>(null)
   const releaseScrollRef = useRef<(() => void) | null>(null)
 
   // Ends the intro exactly once, from whichever path gets there first —
@@ -109,10 +100,17 @@ export function IntroScreen() {
   }
 
   useEffect(() => {
+    // TEMPORARY (see /intro-versiones): `/?intro=<version>` plays one of the new versions and `/?intro=actual` this one, even if the
+    // session already saw the intro. Delete with the preview page once the client picks.
+    const asked = new URLSearchParams(window.location.search).get("intro")
+    const forced = isIntroVersionId(asked) ? asked : null
+    const replay = forced !== null || asked === "actual"
     // Storage can be blocked (some private modes and in-app browsers) and reading it then
     // throws. No storage means no intro, which is also what the hero assumes.
     let seen = true
     try {
+      // Clearing the flag here makes the hero wait for the intro as well: this effect runs before the hero's (it comes first in the page).
+      if (replay) sessionStorage.removeItem(SEEN_KEY)
       seen = !!sessionStorage.getItem(SEEN_KEY)
     } catch {
       /* keep `seen` */
@@ -122,8 +120,16 @@ export function IntroScreen() {
     // deliberately never renders on the server.
     // eslint-disable-next-line react-hooks/set-state-in-effect
     setVisible(true)
+    setVariant(forced)
     const release = holdScroll()
     releaseScrollRef.current = release
+    if (forced) {
+      // The new versions keep their own clock (IntroPlayer): nothing else to schedule here.
+      return () => {
+        release()
+        releaseScrollRef.current = null
+      }
+    }
     const t = setTimeout(() => {
       setExiting(true)
       window.dispatchEvent(new Event(INTRO_EXIT_EVENT))
@@ -145,32 +151,50 @@ export function IntroScreen() {
 
   const handleExitComplete = finish
 
-  // Until the intro shows (and that includes the server render) this is a hidden copy of its
+  // Until the intro shows (and that includes the server render) these are hidden copies of its
   // logo. The intro only exists in the browser, so on its own the logo would not start
   // downloading until the page had hydrated — too late for its own entrance animation. This
   // puts it in the HTML, so it arrives with the page and is already there when the intro mounts.
-  if (!visible) return <Image {...INTRO_LOGO} alt="" aria-hidden priority className="hidden" />
+  if (!visible)
+    return (
+      <>
+        <Image {...INTRO_LOGO} src={LOGO_LILA} alt="" aria-hidden priority className="hidden" />
+        <Image {...INTRO_LOGO} src={LOGO_DORADO} alt="" aria-hidden priority className="hidden" />
+      </>
+    )
 
-  // 18 sparks alternating lila / gold + a softer inner ring
+  if (variant)
+    return (
+      <IntroPlayer
+        id={variant}
+        onExitStart={() => window.dispatchEvent(new Event(INTRO_EXIT_EVENT))}
+        onDone={handleExitComplete}
+      />
+    )
+
+  // Sparks follow the seam: the ones that fly to the left are lila, the ones to the right are gold, so the
+  // two colours never mix in mid-air. The softer inner ring is ink, because crema would vanish on crema.
+  const sideColor = (angle: number) => (Math.cos((angle * Math.PI) / 180) < 0 ? "#A48BA6" : "#BCA157")
   const sparks = [
     ...Array.from({ length: 18 }, (_, i) => ({
-      angle: i * 20,
+      angle: i * 20 + 10,
       delay: 0.16 + i * 0.008,
       size: seededRandom(i * 3) * 2.5 + 1.5,
       dist: 120 + seededRandom(i * 3 + 1) * 80,
-      color: i % 3 === 0 ? "#A48BA6" : "#BCA157",
+      color: sideColor(i * 20 + 10),
     })),
     ...Array.from({ length: 9 }, (_, i) => ({
       angle: i * 40 + 12,
       delay: 0.26 + i * 0.01,
       size: 1.5,
       dist: 80 + seededRandom(i * 3 + 2) * 40,
-      color: "#FFFFEE",
+      color: "color-mix(in oklab, var(--ink) 45%, transparent)",
     })),
   ]
 
-  // Split down the middle like the hero underneath: Lado A (cosmetics, rose) on
-  // the left, Lado B (spa, gold) on the right — the curtains part sideways.
+  // Split down the middle like the portal underneath: two crema halves, Lado A (cosmetics) with a breath of
+  // lila on the left and Lado B (spa) with a breath of gold on the right. They are the same crema as the
+  // portal's halves, so when the curtains part sideways nothing changes colour: the portal is just there.
   const curtainLeft = {
     initial: { x: 0 },
     exit: { x: "-100%", transition: { duration: 0.75, ease: [0.76, 0, 0.24, 1] as const } },
@@ -191,7 +215,10 @@ export function IntroScreen() {
             initial="initial"
             exit="exit"
             className="fixed inset-y-0 left-0 w-1/2 z-[98] pointer-events-none"
-            style={{ willChange: "transform", background: "linear-gradient(135deg, var(--lila) 0%, var(--lila-deep) 100%)" }}
+            style={{
+              willChange: "transform",
+              background: "linear-gradient(135deg, color-mix(in oklab, var(--lila-soft) 55%, var(--crema)) 0%, var(--crema) 70%)",
+            }}
           />
           <m.div
             key="curtain-right"
@@ -199,7 +226,11 @@ export function IntroScreen() {
             initial="initial"
             exit="exit"
             className="fixed inset-y-0 right-0 w-1/2 z-[98] pointer-events-none"
-            style={{ willChange: "transform", background: "linear-gradient(135deg, var(--dorado) 0%, var(--dorado-deep) 100%)" }}
+            style={{
+              willChange: "transform",
+              background:
+                "linear-gradient(225deg, color-mix(in oklab, var(--dorado-soft) 22%, var(--crema)) 0%, var(--crema) 70%)",
+            }}
           />
 
           <m.div
@@ -208,34 +239,8 @@ export function IntroScreen() {
             exit={{ opacity: 0, transition: { duration: 0.18 } }}
             className="fixed inset-0 z-[99] flex flex-col items-center justify-center overflow-hidden"
           >
-            {/* Ambient radial glow */}
-            <m.div
-              className="absolute inset-0 pointer-events-none"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: [0, 0.5, 0.3] }}
-              transition={{ duration: 2.2, times: [0, 0.4, 1] }}
-              style={{
-                background:
-                  "radial-gradient(ellipse 55% 50% at 50% 48%, rgba(255,255,255,0.7) 0%, rgba(255,255,238,0.3) 38%, transparent 70%)",
-              }}
-            />
-
-            {/* Center seam between the two personalities */}
-            <m.div
-              className="absolute inset-y-0 left-1/2 w-px -translate-x-1/2 origin-center pointer-events-none"
-              style={{ background: "linear-gradient(to bottom, transparent, #BCA157 30%, #BCA157 70%, transparent)" }}
-              initial={{ scaleY: 0, opacity: 0 }}
-              animate={{ scaleY: 1, opacity: 0.7 }}
-              transition={{ duration: 0.9, delay: 0.05, ease: [0.16, 1, 0.3, 1] }}
-            />
-
             {/* Logo + bursts */}
             <div className="relative flex items-center justify-center">
-              <Ring delay={0.1} scaleTo={2.2} color="#BCA157" opacity={0.45} />
-              <Ring delay={0.22} scaleTo={3.1} color="#462649" opacity={0.3} />
-              <Ring delay={0.36} scaleTo={4.2} color="#BCA157" opacity={0.18} />
-              <Ring delay={0.5} scaleTo={5.5} color="#ffffff" opacity={0.12} />
-
               {sparks.map((s, i) => (
                 <Spark key={i} {...s} />
               ))}
@@ -246,23 +251,26 @@ export function IntroScreen() {
                 transition={{ duration: 0.55, ease: [0.34, 1.5, 0.64, 1], delay: 0.06 }}
                 className="relative"
               >
-                <m.div
-                  className="absolute inset-0 rounded-full pointer-events-none"
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: [0, 0.9, 0.5] }}
-                  transition={{ duration: 1.3, times: [0, 0.3, 1] }}
-                  style={{
-                    background: "radial-gradient(circle, rgba(255,255,255,0.9) 0%, transparent 70%)",
-                    filter: "blur(22px)",
-                    transform: "scale(1.7)",
-                  }}
-                />
-                <Image
-                  {...INTRO_LOGO}
-                  alt="Queens Cosmetics"
-                  priority
-                  className="relative h-28 w-auto md:h-40 drop-shadow-[0_8px_30px_rgba(70,38,73,0.35)]"
-                />
+                {/* One isotype, two halves: lila on the Cosmetics side, gold on the Spa side */}
+                <div className="relative drop-shadow-[0_8px_24px_rgba(35,16,37,0.16)]">
+                  <Image
+                    {...INTRO_LOGO}
+                    src={LOGO_LILA}
+                    alt="Queens Cosmetics"
+                    priority
+                    className="relative h-28 w-auto md:h-40"
+                    style={{ clipPath: "inset(0 50% 0 0)" }}
+                  />
+                  <Image
+                    {...INTRO_LOGO}
+                    src={LOGO_DORADO}
+                    alt=""
+                    aria-hidden
+                    priority
+                    className="absolute inset-0 h-full w-full"
+                    style={{ clipPath: "inset(0 0 0 50%)" }}
+                  />
+                </div>
               </m.div>
             </div>
 
@@ -271,8 +279,8 @@ export function IntroScreen() {
               {LETTERS.map((letter, i) => (
                 <m.span
                   key={i}
-                  className="font-display text-5xl sm:text-6xl md:text-7xl font-bold leading-none select-none text-white"
-                  style={{ willChange: "transform", textShadow: "0 4px 24px color-mix(in oklab, var(--face) 40%, transparent)" }}
+                  className="font-display text-5xl sm:text-6xl md:text-7xl font-bold leading-none select-none text-[var(--ink)]"
+                  style={{ willChange: "transform" }}
                   initial={{ y: 90, opacity: 0, skewX: -6 }}
                   animate={{ y: 0, opacity: 1, skewX: 0 }}
                   transition={{ duration: 0.42, delay: 0.4 + i * 0.06, ease: [0.22, 1, 0.36, 1] }}
@@ -282,53 +290,16 @@ export function IntroScreen() {
               ))}
             </div>
 
-            {/* Animated underline */}
-            <m.div
-              className="h-px bg-gradient-to-r from-transparent via-white to-transparent mt-4 origin-center"
-              initial={{ scaleX: 0, opacity: 0 }}
-              animate={{ scaleX: 1, opacity: 1 }}
-              transition={{ duration: 0.6, delay: 1, ease: [0.16, 1, 0.3, 1] }}
-              style={{ width: "min(440px, 84vw)", willChange: "transform" }}
-            />
-
-            {/* Tagline — each word sits on its own side of the seam */}
+            {/* Tagline — each word sits on its own side of the seam, in its own colour */}
             <m.p
               className="grid w-full grid-cols-2 font-display uppercase tracking-[0.45em] text-[10px] md:text-xs mt-4"
               initial={{ opacity: 0, y: 6 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 1.15 }}
             >
-              <span className="pr-5 text-right text-white/85">Cosmetics</span>
-              <span className="pl-5 text-left text-white/85">Spa</span>
+              <span className="pr-5 text-right text-[var(--lila-deep)]">Cosmetics</span>
+              <span className="pl-5 text-left text-[var(--dorado-deep)]">Spa</span>
             </m.p>
-
-            {/* Loading bar */}
-            <m.div
-              className="absolute bottom-0 left-0 h-[2px] origin-left"
-              style={{
-                background: "linear-gradient(90deg, #BCA157, #FFFFEE, #462649)",
-                willChange: "transform",
-              }}
-              initial={{ scaleX: 0 }}
-              animate={{ scaleX: 1 }}
-              transition={{ duration: 2.3, delay: 0.08, ease: "linear" }}
-            />
-
-            {/* Corner brackets */}
-            {[
-              "top-5 left-5 border-t border-l",
-              "top-5 right-5 border-t border-r",
-              "bottom-5 left-5 border-b border-l",
-              "bottom-5 right-5 border-b border-r",
-            ].map((pos, i) => (
-              <m.div
-                key={i}
-                className={`absolute w-8 h-8 ${pos} border-white/45`}
-                initial={{ opacity: 0, scale: 0.6 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ duration: 0.35, delay: 0.55 + i * 0.06 }}
-              />
-            ))}
           </m.div>
         </>
       )}
