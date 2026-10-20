@@ -20,3 +20,6 @@ next-env.d.ts
 
 # Debug artifacts
 .playwright-mcp/
+
+# Cloudflare local state
+.wrangler/

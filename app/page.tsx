@@ -4,7 +4,7 @@ import { CartProvider } from "@/context/cart-provider"
 import { MotionProvider } from "@/components/motion-provider"
 import { Navbar } from "@/components/navbar"
 import { ScrollProgress } from "@/components/scroll-progress"
-import { HomeHero } from "@/components/sections/home-hero"
+import { CosmeticsHero } from "@/components/sections/cosmetics-hero"
 import { WhatsAppFloat } from "@/components/whatsapp-float"
 import { CartSidebar } from "@/components/cart-sidebar"
 import { CartFloat } from "@/components/cart-float"
@@ -39,7 +39,7 @@ export default function HomePage() {
         <main data-face="cosmetics" data-palette="queens" className="relative flow-root overflow-x-clip">
           <ScrollProgress />
           <Navbar face="cosmetics" separate announce />
-          <HomeHero />
+          <CosmeticsHero />
           <Catalog />
           <Gallery />
           <Testimonials />
