@@ -1,0 +1,11 @@
+{
+  // Cloudflare Workers with static assets: it serves the folder that `npm run build` writes (`out/`, a static export of Next.js).
+  // Having this file is what stops Cloudflare from auto-configuring the project with the OpenNext adapter (which does not apply here: there is no server).
+  "name": "queens-cosmetics",
+  "compatibility_date": "2026-10-01",
+  "assets": {
+    "directory": "./out",
+    // Unknown paths answer with out/404.html
+    "not_found_handling": "404-page"
+  }
+}
