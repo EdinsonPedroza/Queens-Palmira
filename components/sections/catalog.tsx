@@ -33,8 +33,10 @@ export const CONTROL_ON    = "bg-[var(--lila-deep)] text-[var(--crema)]"
 
 /* Barra de categorías "subrayado editorial" (elegida por el cliente entre seis versiones): solo texto sobre el crema, con una línea fina
  * lila abajo y, bajo la categoría abierta, una línea gruesa del lila del logo que SE DESLIZA de una a otra (220 ms, ease-in-out fuerte;
- * solo transform) y la categoría en lila oscuro y negrita. Sin números de cantidad (el cliente los quitó). En celular se desplaza de lado.
- * Con una búsqueda en toda la tienda no hay categoría activa y la línea gruesa se desvanece. Con "reducir movimiento" no se desliza. */
+ * solo transform) y la categoría en lila oscuro y negrita. Sin números de cantidad (el cliente los quitó). En celular se desplaza de lado y,
+ * para que se entienda que hay más (el cliente: «no se entiende si se pueden mover hacia la izquierda»; eligió «se asoma y se difumina»), la categoría
+ * siguiente queda medio cortada y el borde se funde con el crema: el difuminado solo sale del lado donde hay más (el derecho al inicio, el izquierdo al
+ * desplazarte) y desaparece al llegar al final o cuando todo cabe. Con una búsqueda en toda la tienda no hay categoría activa y la línea gruesa se desvanece. Con "reducir movimiento" no se desliza. */
 const TAB_SLIDE = "220ms cubic-bezier(0.77, 0, 0.175, 1)"
 
 export function CategoryBar({ active, onSelect, className }: {
@@ -47,6 +49,8 @@ export function CategoryBar({ active, onSelect, className }: {
   const reduce = useReducedMotion()
   const refs = useRef<Record<string, HTMLButtonElement | null>>({})
   const inner = useRef<HTMLDivElement>(null)
+  const scroller = useRef<HTMLDivElement>(null)
+  const [edges, setEdges] = useState({ left: false, right: false })   // is there more to the left / to the right?
   const last = useRef<ProductCategory>(active ?? CATEGORIES[0].id)  // the line stays where it was while it fades out
   const [bar, setBar] = useState({ x: 0, w: 0 })
   const [ready, setReady] = useState(false)    // no slide on first paint
@@ -56,22 +60,36 @@ export function CategoryBar({ active, onSelect, className }: {
     const el = refs.current[last.current]
     if (el) setBar({ x: el.offsetLeft, w: el.offsetWidth })
   }, [active])
+  const measureEdges = useCallback(() => {
+    const el = scroller.current
+    if (!el) return
+    const left = el.scrollLeft > 4
+    const right = el.scrollLeft + el.clientWidth < el.scrollWidth - 4
+    setEdges((e) => (e.left === left && e.right === right ? e : { left, right }))
+  }, [])
   useLayoutEffect(measure, [measure])
+  useLayoutEffect(measureEdges, [measureEdges])
   useEffect(() => {
     const box = inner.current
-    const ro = box ? new ResizeObserver(measure) : null   // the fonts loading or the window resizing move the tabs
-    if (box) ro?.observe(box)
+    const row = scroller.current
+    // the fonts loading or the window resizing move the tabs (and change how much fits)
+    const ro = new ResizeObserver(() => { measure(); measureEdges() })
+    if (box) ro.observe(box)
+    if (row) ro.observe(row)
     const id = requestAnimationFrame(() => requestAnimationFrame(() => setReady(true)))
-    return () => { ro?.disconnect(); cancelAnimationFrame(id) }
-  }, [measure])
+    return () => { ro.disconnect(); cancelAnimationFrame(id) }
+  }, [measure, measureEdges])
 
   return (
+    <div className={cn("relative mx-auto mb-2 max-w-[940px]", className)}>
     <div
+      ref={scroller}
+      onScroll={measureEdges}
       role="tablist"
       aria-label="Categorías"
-      className={cn("mx-auto mb-2 max-w-[940px] overflow-x-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden", className)}
+      className="overflow-x-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
     >
-      <div ref={inner} className="relative flex w-max min-w-full gap-7 sm:gap-8">
+      <div ref={inner} className="relative flex w-max min-w-full gap-7 pr-14 sm:gap-8 min-[1360px]:pr-0">
         <span aria-hidden className="pointer-events-none absolute inset-x-0 bottom-0 h-px bg-[var(--lila-light)]" />
         {CATEGORIES.map((cat) => {
           const on = active === cat.id
@@ -114,6 +132,10 @@ export function CategoryBar({ active, onSelect, className }: {
           }}
         />
       </div>
+    </div>
+    {/* The soft edges: they only show on the side where there is more (see the note above) */}
+    <span aria-hidden className={cn("pointer-events-none absolute inset-y-0 right-0 w-16 bg-gradient-to-l from-[var(--crema)] to-transparent transition-opacity duration-200", edges.right ? "opacity-100" : "opacity-0")} />
+    <span aria-hidden className={cn("pointer-events-none absolute inset-y-0 left-0 w-8 bg-gradient-to-r from-[var(--crema)] to-transparent transition-opacity duration-200", edges.left ? "opacity-100" : "opacity-0")} />
     </div>
   )
 }
