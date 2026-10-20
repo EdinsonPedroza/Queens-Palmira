@@ -6,7 +6,7 @@ import { ArrowUpRight, ShoppingBag, Menu, X, Search } from "lucide-react"
 import { InstagramIcon } from "./instagram-icon"
 import { useOptionalCart } from "@/context/cart-context"
 import { QueensLogo } from "./queens-logo"
-import { cn } from "@/lib/utils"
+import { cn, scrollBehavior } from "@/lib/utils"
 import { WA_SPA } from "@/lib/whatsapp"
 import { ANNOUNCEMENT, ANNOUNCEMENT_ABOUT, ANNOUNCEMENT_SPA, BUSINESS, CATALOG_FILTERS_ID, CATEGORY_ACTIVE_EVENT, CATEGORY_EVENT, NAV_LINKS, SEARCH_ACTIVE_EVENT, SEARCH_EVENT, faceLinkProps, type Face, type NavLink } from "@/lib/site"
 
@@ -89,7 +89,7 @@ export function Navbar({ face = "cosmetics", separate = false, announce = false 
   // Land on the catalog's filters row, not on the section's title: the products are right below it.
   const scrollToCatalog = () => {
     const target = document.getElementById(CATALOG_FILTERS_ID) ?? document.getElementById("catalogo")
-    target?.scrollIntoView({ behavior: "smooth", block: "start" })
+    target?.scrollIntoView({ behavior: scrollBehavior(), block: "start" })
     return !!target
   }
   const openCategory = (l: NavLink, e: React.MouseEvent) => {
@@ -196,6 +196,7 @@ export function Navbar({ face = "cosmetics", separate = false, announce = false 
           </Link>
 
           <nav
+            aria-label="Principal"
             className={cn(
               "hidden items-center",
               face === "cosmetics" ? "xl:flex xl:-translate-x-6 xl:gap-4 min-[1440px]:gap-6" : "lg:flex lg:gap-5 xl:gap-8",
@@ -340,8 +341,9 @@ export function Navbar({ face = "cosmetics", separate = false, announce = false 
         </div>
       )}
 
-      {/* Mobile menu */}
+      {/* Mobile menu. Closed it is only faded out, so `inert` keeps its links out of the Tab order and the screen-reader tree (like the search box above) */}
       <div
+        inert={!mobileOpen}
         className={cn(
           "inset-x-0 z-30 transition-all duration-400",
           inlineNav === "xl" ? "xl:hidden" : "lg:hidden",
@@ -351,7 +353,7 @@ export function Navbar({ face = "cosmetics", separate = false, announce = false 
             : "opacity-0 -translate-y-4 pointer-events-none",
         )}
       >
-        <nav className={cn("mx-4 max-h-[calc(100svh-var(--header-h)-1rem)] overflow-y-auto rounded-2xl p-5 shadow-2xl md:backdrop-blur-xl", s.panel)}>
+        <nav aria-label="Menú" className={cn("mx-4 max-h-[calc(100svh-var(--header-h)-1rem)] overflow-y-auto rounded-2xl p-5 shadow-2xl md:backdrop-blur-xl", s.panel)}>
           <ul className="flex flex-col gap-1">
             {links.map((l) => (
               <li key={l.category ?? l.href}>

@@ -191,9 +191,7 @@ const jsonLd = [
       addressCountry: "CO",
     },
     geo: { "@type": "GeoCoordinates", latitude: 3.509948, longitude: -76.2984773 },
-    openingHoursSpecification: [
-      { "@type": "OpeningHoursSpecification", dayOfWeek: ALL_DAYS, opens: "10:00", closes: "20:00" },
-    ],
+    // No opening hours: the spa works by appointment, every day, and has no fixed hours (the 10:00–20:00 that stood here were the store's).
   },
 ]
 

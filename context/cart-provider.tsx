@@ -23,6 +23,33 @@ interface CartItem {
   qty: number
 }
 
+/** Most units of one line. Nobody orders more by WhatsApp, and it keeps the quantity inside its 24 px box. */
+const MAX_QTY = 99
+
+/**
+ * The cart as it was saved. localStorage is not ours alone (an older build, DevTools, another extension), so the saved value is checked line by line:
+ * a line that is not a known product with a whole, positive quantity is dropped and repeated lines are merged. Without this a single `null` in the
+ * list threw while rendering and left the page blank on every visit, and a quantity such as "3" or -4 reached the totals.
+ */
+function readStoredCart(raw: string | null): CartItem[] {
+  if (!raw) return []
+  let parsed: unknown
+  try { parsed = JSON.parse(raw) } catch { return [] }
+  if (!Array.isArray(parsed)) return []
+  const lines = new Map<string, CartItem>()
+  for (const entry of parsed) {
+    if (typeof entry !== "object" || entry === null) continue
+    const { productId, variant, qty } = entry as Record<string, unknown>
+    if (typeof productId !== "string" || !PRODUCTS.some((p) => p.id === productId)) continue
+    if (typeof qty !== "number" || !Number.isFinite(qty) || qty < 1) continue
+    const tone = typeof variant === "string" && variant !== "" ? variant : undefined
+    const key = itemKey(productId, tone)
+    const units = Math.min(MAX_QTY, (lines.get(key)?.qty ?? 0) + Math.floor(qty))
+    lines.set(key, { productId, ...(tone !== undefined && { variant: tone }), qty: units })
+  }
+  return [...lines.values()]
+}
+
 interface CartState {
   items: CartItem[]
   last: { key: string; isNew: boolean; tick: number } | null
@@ -51,7 +78,7 @@ function reducer(state: CartState, action: CartAction): CartState {
           last,
           items: state.items.map((i) =>
             itemKey(i.productId, i.variant) === key
-              ? { ...i, qty: i.qty + 1 }
+              ? { ...i, qty: Math.min(MAX_QTY, i.qty + 1) }
               : i,
           ),
         }
@@ -75,7 +102,7 @@ function reducer(state: CartState, action: CartAction): CartState {
       return {
         ...state,
         items: state.items.map((i) =>
-          itemKey(i.productId, i.variant) === action.key ? { ...i, qty: action.qty } : i,
+          itemKey(i.productId, i.variant) === action.key ? { ...i, qty: Math.min(MAX_QTY, Math.floor(action.qty)) } : i,
         ),
       }
     }
@@ -96,15 +123,10 @@ export function CartProvider({ children }: { children: ReactNode }) {
   // Hydrate from localStorage
   useEffect(() => {
     try {
-      const raw = window.localStorage.getItem(STORAGE_KEY)
-      if (raw) {
-        const parsed = JSON.parse(raw) as CartItem[]
-        if (Array.isArray(parsed)) {
-          dispatch({ type: "hydrate", items: parsed })
-        }
-      }
+      const items = readStoredCart(window.localStorage.getItem(STORAGE_KEY))
+      if (items.length > 0) dispatch({ type: "hydrate", items })
     } catch {
-      /* ignore */
+      /* storage blocked (private mode, site data disabled): start with an empty cart */
     }
     // Reading localStorage is only possible after mount, so this one cascading
     // render is unavoidable — it is what gates the persist effect below.

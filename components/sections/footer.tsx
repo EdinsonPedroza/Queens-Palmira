@@ -10,13 +10,13 @@ import { WhatsAppIcon } from "@/components/whatsapp-icon"
 import { WA_DEFAULT, WA_NEWS } from "@/lib/whatsapp"
 import { CATEGORIES, type ProductCategory } from "@/lib/categories"
 import { BUSINESS, CATALOG_FILTERS_ID, CATEGORY_EVENT, VENUES, faceLinkProps, type Face } from "@/lib/site"
-import { cn } from "@/lib/utils"
+import { cn, scrollBehavior } from "@/lib/utils"
 
 const colVariants = {
   hidden: { opacity: 0, y: 32 },
   show:   (i: number) => ({
     opacity: 1, y: 0,
-    transition: { duration: 0.65, delay: i * 0.1, ease: [0.16, 1, 0.3, 1] },
+    transition: { duration: 0.65, delay: i * 0.1, ease: [0.16, 1, 0.3, 1] as const },
   }),
 }
 
@@ -121,7 +121,9 @@ export function Footer({ face = "cosmetics", tone = "ink" }: { face?: Face; tone
       {/* Gradient top border */}
       <div className="h-1 bg-queens-gradient-intense" />
 
-      <div className="relative mx-auto max-w-7xl px-6 md:px-10 py-16">
+      {/* The bottom padding (5.25rem) is the floating WhatsApp button's footprint (bottom-5 + h-14 = 4.75rem) plus a little air: at the very end of the page the
+          last row (legal links, city) stops under the button instead of being covered by it. The light footers set their own padding in globals.css. */}
+      <div className="relative mx-auto max-w-7xl px-6 pt-16 pb-21 md:px-10">
 
         {/* ── Columnas — entran en stagger ── */}
         <div className="grid md:grid-cols-[1.3fr_1fr_1fr_1fr] gap-10 mb-14">
@@ -147,7 +149,7 @@ export function Footer({ face = "cosmetics", tone = "ink" }: { face?: Face; tone
                   </div>
                   {/* From Hourglass's newsletter block: there is no backend here, so instead of an email box the way to hear first is WhatsApp (a ready-made message) */}
                   <div className="mt-7 max-w-xs border-t pt-5" style={{ borderColor: HAIRLINE }}>
-                    <h4 className="mb-2 text-[11px] font-bold uppercase tracking-[0.2em] text-[var(--face)]">Novedades y ofertas</h4>
+                    <h2 className="mb-2 text-[11px] font-bold uppercase tracking-[0.2em] text-[var(--face)]">Novedades y ofertas</h2>
                     <p className="text-sm leading-snug text-white/70">Entérate primero de los lanzamientos y las promociones.</p>
                     <a
                       href={WA_NEWS}
@@ -167,7 +169,7 @@ export function Footer({ face = "cosmetics", tone = "ink" }: { face?: Face; tone
               {i === 2 && <FooterCol title={colB.title} links={colB.links} />}
               {i === 3 && (
                 <div>
-                  <h4 className={HEADING}>Contacto</h4>
+                  <h2 className={HEADING}>Contacto</h2>
                   <ul className="space-y-4 text-sm text-white/80">
                     {/* Two venues — spell both out so nobody shows up at the wrong one. Each one carries its hours and a "Cómo llegar" link (Atenea's "tiendas y ubicaciones"). */}
                     {[VENUES.cosmetics, VENUES.spa].map((v) => (
@@ -183,7 +185,7 @@ export function Footer({ face = "cosmetics", tone = "ink" }: { face?: Face; tone
                             href={v.gmaps}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="mt-1 inline-block text-xs uppercase tracking-[0.14em] text-[var(--face)] underline decoration-[var(--face)]/40 underline-offset-4 transition-colors hover:decoration-[var(--face)]"
+                            className="tap-area mt-1 inline-block text-xs uppercase tracking-[0.14em] text-[var(--face)] underline decoration-[var(--face)]/40 underline-offset-4 transition-colors hover:decoration-[var(--face)]"
                           >
                             Cómo llegar
                           </a>
@@ -194,14 +196,14 @@ export function Footer({ face = "cosmetics", tone = "ink" }: { face?: Face; tone
                       <WhatsAppIcon className="h-4 w-4 shrink-0 mt-0.5 text-[var(--face)]" />
                       <span>
                         <span className="block text-xs font-semibold uppercase tracking-wider text-white/50">Servicio al cliente</span>
-                        <a href={WA_DEFAULT} target="_blank" rel="noopener noreferrer" className="hover:text-[var(--face)] transition">
+                        <a href={WA_DEFAULT} target="_blank" rel="noopener noreferrer" className="tap-area hover:text-[var(--face)] transition">
                           {BUSINESS.phoneDisplay}
                         </a>
                       </span>
                     </li>
                     <li className="flex items-start gap-2">
                       <InstagramIcon className="h-4 w-4 shrink-0 mt-0.5 text-[var(--face)]" />
-                      <a href={BUSINESS.instagramUrl} target="_blank" rel="noopener noreferrer" className="hover:text-[var(--face)] transition">
+                      <a href={BUSINESS.instagramUrl} target="_blank" rel="noopener noreferrer" className="tap-area hover:text-[var(--face)] transition">
                         {BUSINESS.instagram}
                       </a>
                     </li>
@@ -290,7 +292,7 @@ export function Footer({ face = "cosmetics", tone = "ink" }: { face?: Face; tone
             {/* From Montoc's footer: a way back to the top */}
             <button
               type="button"
-              onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+              onClick={() => window.scrollTo({ top: 0, behavior: scrollBehavior() })}
               aria-label="Volver arriba"
               data-testid="footer-top"
               style={{ borderColor: HAIRLINE }}
@@ -298,16 +300,17 @@ export function Footer({ face = "cosmetics", tone = "ink" }: { face?: Face; tone
             >
               <ArrowUp className="h-4 w-4" />
             </button>
-            <p>© {year} Queens Cosmetics. Todos los derechos reservados.</p>
+            {/* The page is prerendered at build time, so on 1 January the HTML still says last year until the next deploy: the year is allowed to differ on hydration */}
+            <p suppressHydrationWarning>© {year} Queens Cosmetics. Todos los derechos reservados.</p>
           </div>
-          <nav className="flex flex-wrap items-center justify-center gap-x-4 gap-y-2">
-            <Link href="/quienes-somos" className="hover:text-[var(--face)] transition-colors">
+          <nav aria-label="Información legal" className="flex flex-wrap items-center justify-center gap-x-4 gap-y-2">
+            <Link href="/quienes-somos" className="tap-area hover:text-[var(--face)] transition-colors">
               Quiénes somos
             </Link>
-            <Link href="/terminos" className="hover:text-[var(--face)] transition-colors">
+            <Link href="/terminos" className="tap-area hover:text-[var(--face)] transition-colors">
               Términos y Condiciones
             </Link>
-            <Link href="/privacidad" className="hover:text-[var(--face)] transition-colors">
+            <Link href="/privacidad" className="tap-area hover:text-[var(--face)] transition-colors">
               Privacidad
             </Link>
           </nav>
@@ -341,14 +344,14 @@ function openCategory(category: ProductCategory, e: React.MouseEvent) {
   const target = document.getElementById(CATALOG_FILTERS_ID) ?? document.getElementById("catalogo")
   if (target) {
     e.preventDefault()
-    target.scrollIntoView({ behavior: "smooth", block: "start" })
+    target.scrollIntoView({ behavior: scrollBehavior(), block: "start" })
   }
 }
 
 function FooterCol({ title, links }: { title: string; links: FooterLink[] }) {
   return (
     <div>
-      <h4 className={HEADING}>{title}</h4>
+      <h2 className={HEADING}>{title}</h2>
       <ul className="space-y-2.5 text-sm">
         {links.map((l, i) => (
           <m.li
@@ -359,15 +362,15 @@ function FooterCol({ title, links }: { title: string; links: FooterLink[] }) {
             transition={{ delay: i * 0.06, duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
           >
             {l.category ? (
-              <a href={l.href} onClick={(e) => openCategory(l.category!, e)} className="text-white/70 hover:text-[var(--face)] transition">
+              <a href={l.href} onClick={(e) => openCategory(l.category!, e)} className="tap-area text-white/70 hover:text-[var(--face)] transition">
                 {l.label}
               </a>
             ) : l.href.startsWith("/") ? (
-              <Link href={l.href} {...faceLinkProps(l.href)} className="text-white/70 hover:text-[var(--face)] transition">
+              <Link href={l.href} {...faceLinkProps(l.href)} className="tap-area text-white/70 hover:text-[var(--face)] transition">
                 {l.label}
               </Link>
             ) : (
-              <a href={l.href} className="text-white/70 hover:text-[var(--face)] transition">
+              <a href={l.href} className="tap-area text-white/70 hover:text-[var(--face)] transition">
                 {l.label}
               </a>
             )}

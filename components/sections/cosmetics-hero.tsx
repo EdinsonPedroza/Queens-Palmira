@@ -135,7 +135,7 @@ export function CosmeticsHero() {
             href={WA_VISIT}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-[1.2em] whitespace-nowrap text-xs font-medium uppercase tracking-[0.2em] text-ink transition-opacity hover:opacity-70 lg:text-[clamp(10px,0.95vw,14px)]"
+            className="tap-area inline-flex items-center gap-[1.2em] whitespace-nowrap text-xs font-medium uppercase tracking-[0.2em] text-ink transition-opacity hover:opacity-70 lg:text-[clamp(10px,0.95vw,14px)]"
           >
             Escríbenos
             <ArrowUpRight className="h-[1.1em] w-[1.1em]" strokeWidth={1.5} />
