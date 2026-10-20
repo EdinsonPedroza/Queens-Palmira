@@ -18,7 +18,7 @@ export default function MoreButtonPage() {
       <MotionProvider>
         <main data-face="cosmetics" className="relative overflow-x-hidden pb-28">
           <Navbar face="cosmetics" separate announce />
-          <section id="hero" className="mt-[var(--header-h)] px-6 pb-4 pt-10 text-center md:px-10">
+          <section id="hero" className="px-6 pb-4 pt-10 text-center md:px-10">
             <p className="text-xs font-semibold uppercase tracking-[0.3em] text-[var(--face-deep)]">Vista previa</p>
             <h1 className="mt-2 text-3xl md:text-5xl">Botón &ldquo;Ver más&rdquo;</h1>
             <p className="mx-auto mt-3 max-w-xl text-sm text-[var(--muted-foreground)]">

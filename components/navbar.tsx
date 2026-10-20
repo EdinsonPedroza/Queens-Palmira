@@ -2,30 +2,19 @@
 
 import { useEffect, useRef, useState } from "react"
 import Link from "next/link"
-import { ArrowUpRight, ShoppingBag, Menu, X, MessageCircle, Search } from "lucide-react"
+import { ArrowUpRight, ShoppingBag, Menu, X, Search } from "lucide-react"
 import { InstagramIcon } from "./instagram-icon"
 import { useOptionalCart } from "@/context/cart-context"
 import { QueensLogo } from "./queens-logo"
-import { Button } from "./ui/button"
 import { cn } from "@/lib/utils"
-import { WA_DEFAULT, WA_SPA, WA_VISIT } from "@/lib/whatsapp"
+import { WA_SPA } from "@/lib/whatsapp"
 import { ANNOUNCEMENT, ANNOUNCEMENT_ABOUT, ANNOUNCEMENT_SPA, BUSINESS, CATALOG_FILTERS_ID, CATEGORY_ACTIVE_EVENT, CATEGORY_EVENT, NAV_LINKS, SEARCH_ACTIVE_EVENT, SEARCH_EVENT, faceLinkProps, type Face, type NavLink } from "@/lib/site"
 
 /*
  * One bar. Every page is crema, so the accent (links, underline, CTA) comes from
- * --face (lila on /cosmetics, gold on /spa). Over the portal's hero, both halves
- * of which are crema too, the links are plain ink.
+ * --face (lila on the store, gold on /spa).
  */
 const FACE_STYLES = {
-  portal: {
-    overHero: "bg-transparent text-[var(--ink)]",
-    scrolled: "bg-white/95 md:bg-white/90 md:backdrop-blur-xl shadow-[0_4px_24px_-12px_color-mix(in_oklab,var(--face)_25%,transparent)]",
-    link: "text-[var(--face-deep)] hover:[text-shadow:0_0_10px_color-mix(in_oklab,var(--face)_80%,transparent)]",
-    underline: "bg-queens-gradient-intense",
-    logo: "default",
-    panel: "bg-white/98 text-[var(--ink)]",
-    panelLink: "text-[var(--ink)] hover:bg-[var(--face-light)]/30",
-  },
   about: {
     overHero: "bg-transparent text-[var(--ink)]",
     scrolled: "bg-white/95 md:bg-white/90 md:backdrop-blur-xl shadow-[0_4px_24px_-12px_color-mix(in_oklab,var(--face)_25%,transparent)]",
@@ -63,7 +52,7 @@ interface NavbarProps {
   announce?: boolean
 }
 
-export function Navbar({ face = "portal", separate = false, announce = false }: NavbarProps) {
+export function Navbar({ face = "cosmetics", separate = false, announce = false }: NavbarProps) {
   // Only /cosmetics mounts the cart; everywhere else this is null and the button is not drawn
   const cart = useOptionalCart()
   const [scrolled, setScrolled] = useState(false)
@@ -74,18 +63,12 @@ export function Navbar({ face = "portal", separate = false, announce = false }: 
   const [searchOpen, setSearchOpen] = useState(false)
   const [query, setQuery] = useState("")
   const searchRef = useRef<HTMLInputElement>(null)
-  const barRef = useRef<HTMLDivElement>(null)
-  // The three fixed pieces that hang from the announcement strip. --bar-offset is written on THEM, not on <html>: a custom
-  // property changed on the root is inherited by every element, so each write re-styled the whole page (~120 ms on a phone).
-  const headerRef = useRef<HTMLElement>(null)
-  const searchPanelRef = useRef<HTMLDivElement>(null)
-  const mobilePanelRef = useRef<HTMLDivElement>(null)
   const overHero = overHeroRaw && !separate
   const [mobileOpen, setMobileOpen] = useState(false)
 
   const s = FACE_STYLES[face]
   const links = NAV_LINKS[face]
-  // Only the spa header carries a button (it books through WhatsApp). The portal has its own "Contáctanos"; the store's "Escríbenos" was removed at the client's request
+  // Only the spa header carries a button (it books through WhatsApp). The store's "Escríbenos" was removed at the client's request
   // (WhatsApp is still one tap away from the floating button and the hero).
   const showCta = face === "spa"
   const ctaHref = WA_SPA
@@ -162,44 +145,26 @@ export function Navbar({ face = "portal", separate = false, announce = false }: 
   }, [])
 
   useEffect(() => {
-    // The strip's height does not change while the page scrolls: it is read once (and again if the window is resized), never inside
-    // the scroll handler, where reading layout right after a style write makes the browser recalculate it on the spot.
-    let barH = announce ? (barRef.current?.offsetHeight ?? 0) : 0
-    let lastOffset = Number.NaN
-    const applyOffset = (px: number) => {
-      if (px === lastOffset) return
-      lastOffset = px
-      for (const el of [headerRef.current, searchPanelRef.current, mobilePanelRef.current]) el?.style.setProperty("--bar-offset", `${px}px`)
-    }
+    // The strip and the header move with the page by themselves (with `separate`, the strip is in the flow and the header is `sticky`), so
+    // nothing here follows the scroll. They used to: a fixed header was moved from this handler on every scroll event, which on a phone runs
+    // a frame behind the finger and made the header jump and flicker while scrolling up and down (client report, 19 Oct 2026).
     const onScroll = () => {
       const y = window.scrollY
-      // Reads before writes. `overHero` only matters while the header floats over the hero; the store's separate header never does.
+      // `overHero` only matters while the header floats over the hero; the separate header never does.
       const heroBottom = separate ? null : (document.getElementById("hero")?.getBoundingClientRect().bottom ?? null)
-      // The strip scrolls away with the page; the fixed header (and what hangs from it) follows it up to the top via --bar-offset
-      if (announce) applyOffset(Math.max(0, barH - y))
       setScrolled(y > 40)
       if (!separate) setOverHero(heroBottom !== null ? heroBottom > 80 : false)
     }
-    const onResize = () => {
-      barH = announce ? (barRef.current?.offsetHeight ?? 0) : 0
-      lastOffset = Number.NaN
-      onScroll()
-    }
     onScroll()
     window.addEventListener("scroll", onScroll, { passive: true })
-    window.addEventListener("resize", onResize)
-    return () => {
-      window.removeEventListener("scroll", onScroll)
-      window.removeEventListener("resize", onResize)
-    }
-  }, [announce, separate])
+    return () => window.removeEventListener("scroll", onScroll)
+  }, [separate])
 
   return (
     <>
       {announce && (
         <div
-          ref={barRef}
-          className="absolute inset-x-0 top-0 z-30 flex h-[var(--bar-h)] items-center justify-center gap-3 overflow-hidden bg-[var(--ink)] px-4 text-center text-[12px] font-semibold tracking-[0.06em] text-[var(--face)] sm:text-[12.5px]"
+          className={cn(separate ? "relative" : "absolute inset-x-0 top-0", "z-30 flex h-[var(--bar-h)] items-center justify-center gap-3 overflow-hidden bg-[var(--ink)] px-4 text-center text-[12px] font-semibold tracking-[0.06em] text-[var(--face)] sm:text-[12.5px]")}
           data-testid="announcement"
         >
           <span aria-hidden className="hidden h-1.5 w-1.5 shrink-0 rotate-45 rounded-[1px] bg-[var(--crema)] sm:block" />
@@ -210,12 +175,12 @@ export function Navbar({ face = "portal", separate = false, announce = false }: 
           <span aria-hidden className="hidden h-1.5 w-1.5 shrink-0 rotate-45 rounded-[1px] bg-[var(--crema)] sm:block" />
         </div>
       )}
+      {/* With `separate` the strip above is in the flow and the header is STICKY: the browser moves both with the finger, no script follows the scroll
+          (the old fixed header moved from a scroll handler lagged a frame on phones and flickered). The search box and the phone menu hang from it. */}
       <header
-        ref={headerRef}
         className={cn(
-          "fixed left-0 right-0 z-40 transition-[background-color,box-shadow] duration-500",
-          announce ? "top-[var(--bar-offset,var(--bar-h))]" : "top-0",
-          separate && "h-[var(--nav-h)]",
+          "left-0 right-0 z-40 transition-[background-color,box-shadow] duration-500",
+          separate ? "sticky top-0 h-[var(--nav-h)]" : "fixed top-0",
           overHero ? s.overHero : lilaTop ? "bg-[var(--face)]" : separate ? "bg-[var(--crema)] shadow-[0_4px_24px_-12px_color-mix(in_oklab,var(--face)_25%,transparent)]" : scrolled ? s.scrolled : "bg-transparent",
         )}
       >
@@ -230,15 +195,13 @@ export function Navbar({ face = "portal", separate = false, announce = false }: 
             />
           </Link>
 
-          {/* With only two links the portal centers them on the page, not between the logo and an empty right side */}
           <nav
             className={cn(
               "hidden items-center",
               face === "cosmetics" ? "xl:flex xl:-translate-x-6 xl:gap-4 min-[1440px]:gap-6" : "lg:flex lg:gap-5 xl:gap-8",
-              face === "portal" && "lg:absolute lg:left-1/2 lg:-translate-x-1/2 lg:gap-12",
             )}
           >
-            {links.map((l, i) => (
+            {links.map((l) => (
               <NavItem
                 key={l.category ?? l.href}
                 href={l.href}
@@ -248,8 +211,6 @@ export function Navbar({ face = "portal", separate = false, announce = false }: 
                   "text-sm font-semibold transition-all relative group whitespace-nowrap",
                   ((l.category && l.category === markedCategory) || (!l.category && l.href === `#${activeSection}`)) && "font-bold",
                   overHero ? "text-current" : linkTone,
-                  // Portal only: nudge "Quiénes somos" left, leaving "Ubicaciones" where it is
-                  face === "portal" && i === 0 && "lg:-translate-x-3",
                 )}
                 underline={cn(
                   "absolute bottom-[-4px] left-0 h-[2px] transition-all duration-300 group-hover:w-full",
@@ -314,20 +275,6 @@ export function Navbar({ face = "portal", separate = false, announce = false }: 
               </button>
             )}
 
-            {/* Portal only: a quiet outline button to get in touch, on the crema right half (same look as the hero buttons) */}
-            {face === "portal" && (
-              <a
-                href={WA_DEFAULT}
-                target="_blank"
-                rel="noopener noreferrer"
-                data-testid="portal-contact"
-                className="hidden h-10 items-center gap-2 rounded-full border sm:ml-2.5 border-[var(--ink)] px-5 text-sm font-medium text-[var(--ink)] shadow-[0_0_18px_rgba(255,255,238,0.9)] transition-colors duration-300 hover:bg-[var(--ink)]/10 md:inline-flex 2xl:translate-x-20"
-              >
-                <MessageCircle className="h-4 w-4" />
-                Contáctanos
-              </a>
-            )}
-
             {showCta && (
               <a
                 href={ctaHref}
@@ -351,14 +298,12 @@ export function Navbar({ face = "portal", separate = false, announce = false }: 
             </button>
           </div>
         </div>
-      </header>
 
       {/* Search box (store only): drops under the header */}
       {face === "cosmetics" && (
         <div
-          ref={searchPanelRef}
           className={cn(
-            "fixed inset-x-0 top-[calc(var(--nav-h)+var(--bar-offset,0px))] z-30 bg-[var(--crema)] shadow-[0_18px_30px_-20px_rgba(30,15,34,0.35)] transition-all duration-300",
+            "absolute inset-x-0 top-full z-30 bg-[var(--crema)] shadow-[0_18px_30px_-20px_rgba(30,15,34,0.35)] transition-all duration-300",
             searchOpen ? "translate-y-0 opacity-100 pointer-events-auto" : "-translate-y-3 opacity-0 pointer-events-none",
           )}
           aria-hidden={!searchOpen}
@@ -397,11 +342,10 @@ export function Navbar({ face = "portal", separate = false, announce = false }: 
 
       {/* Mobile menu */}
       <div
-        ref={mobilePanelRef}
         className={cn(
-          "fixed inset-x-0 z-30 transition-all duration-400",
+          "inset-x-0 z-30 transition-all duration-400",
           inlineNav === "xl" ? "xl:hidden" : "lg:hidden",
-          separate ? "top-[calc(var(--nav-h)+var(--bar-offset,0px))]" : "top-[72px]",
+          separate ? "absolute top-full" : "fixed top-[72px]",
           mobileOpen
             ? "opacity-100 translate-y-0 pointer-events-auto"
             : "opacity-0 -translate-y-4 pointer-events-none",
@@ -419,15 +363,6 @@ export function Navbar({ face = "portal", separate = false, announce = false }: 
                 />
               </li>
             ))}
-            {face === "portal" && (
-              <li className="pt-3">
-                <Button asChild variant="default" size="lg" className="w-full">
-                  <a href={WA_DEFAULT} target="_blank" rel="noopener noreferrer">
-                    Contáctanos por WhatsApp
-                  </a>
-                </Button>
-              </li>
-            )}
             {showCta && (
               <li className="pt-3">
                 <a
@@ -444,6 +379,7 @@ export function Navbar({ face = "portal", separate = false, announce = false }: 
           </ul>
         </nav>
       </div>
+      </header>
     </>
   )
 }

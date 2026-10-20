@@ -1,15 +1,14 @@
 /*
  * Shared brand + navigation data for the three faces of the site:
- *   /          → portal: two doors, two addresses
- *   /cosmetics → Lado A, the store at Unicentro
- *   /spa       → Lado B, the spa on Carrera 25
+ *   /     → the store at Unicentro: the home. Its hero has the two doors, the catalog (this same page) and the spa
+ *   /spa  → the spa on Carrera 25, inside the same domain (queenscosmeticscol.com)
  * The two personalities are separate venues, so each carries its own address,
  * hours and map pin. Nothing else should hardcode them.
  */
 
 import { CATEGORIES, type ProductCategory } from "@/lib/categories"
 
-export type Face = "portal" | "about" | "cosmetics" | "spa"
+export type Face = "about" | "cosmetics" | "spa"
 
 /** Contact details both venues share. */
 export const BUSINESS = {
@@ -55,7 +54,7 @@ export const VENUES: Record<"cosmetics" | "spa", Venue> = {
     service:
       "Maquillaje, skincare, esmaltes y línea capilar de marcas originales. Te asesoramos con calma para que encuentres justo lo que buscas.",
     serviceCta: "Ver más",
-    href: "/cosmetics",
+    href: "/",
     coords: [3.5400896, -76.310776],
     gmaps: "https://maps.app.goo.gl/PKAKSgb6rRDPwBvUA",
     // The store's pin comes from the owner's real Google link, so the embed points at those exact coordinates (with a label).
@@ -85,13 +84,12 @@ export const VENUES: Record<"cosmetics" | "spa", Venue> = {
 }
 
 /**
- * Props for links that cross into one of the two personalities: /spa and
- * /cosmetics open in a new tab. Everything else — the portal, "Quiénes somos",
- * the legal pages, in-page anchors — stays in the current tab.
+ * Props for links between the store and the spa. They used to open in a new tab (two separate faces behind a portal); now the spa is just a section
+ * of the same site (`/spa`), so every internal link stays in the current tab. Kept as a function so the callers do not change.
  */
 export function faceLinkProps(href: string): { target?: "_blank"; rel?: string } {
-  const isPersonality = /^\/(spa|cosmetics)(?:[#/?]|$)/.test(href)
-  return isPersonality ? { target: "_blank", rel: "noopener noreferrer" } : {}
+  void href
+  return {}
 }
 
 export interface NavLink {
@@ -134,16 +132,11 @@ export const ANNOUNCEMENT_ABOUT = {
 }
 
 export const NAV_LINKS: Record<Face, NavLink[]> = {
-  // The portal header is deliberately bare: the two doors are the hero itself.
-  portal: [
-    { href: "/quienes-somos", label: "Quiénes somos" },
-    { href: "#ubicaciones", label: "Ubicaciones" },
-  ],
   about: [
     { href: "/", label: "Inicio" },
-    { href: "/cosmetics", label: "Cosmetics" },
+    { href: "/#catalogo", label: "Catálogo" },
     { href: "/spa", label: "Spa" },
-    { href: "/#ubicaciones", label: "Ubicaciones" },
+    { href: "/#ubicacion", label: "Ubicación" },
   ],
   // The store's header: its product categories, then Galería and Ubicación (client request), then the other face. Nine links
   // do not fit side by side below xl, so the navbar swaps to the hamburger menu under 1280 px on this face.
@@ -159,6 +152,6 @@ export const NAV_LINKS: Record<Face, NavLink[]> = {
     { href: "#testimonios-spa", label: "Experiencias" },
     { href: "#faq-spa", label: "Preguntas" },
     { href: "#ubicacion", label: "Ubicación" },
-    { href: "/cosmetics", label: "Cosmetics" },
+    { href: "/", label: "Cosmetics" },
   ],
 }

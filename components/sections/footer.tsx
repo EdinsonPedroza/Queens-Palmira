@@ -46,19 +46,22 @@ const HAIRLINE = "color-mix(in oklab, var(--crema) 20%, transparent)"
 
 /* Two link columns per face. In-page hashes stay on the current page; anything
  * starting with "/" crosses over to the other personality. */
-const COLUMNS: Record<Exclude<Face, "about">, [{ title: string; links: FooterLink[] }, { title: string; links: FooterLink[] }]> = {
-  portal: [
+const COLUMNS: Record<Face, [{ title: string; links: FooterLink[] }, { title: string; links: FooterLink[] }]> = {
+  // "Quiénes somos" is its own page: every link points back at the home or at the spa
+  about: [
     {
       title: "Cosmetics",
       links: [
-        { label: "Catálogo",       href: "/cosmetics#catalogo" },
-        { label: "Conócenos",      href: "/cosmetics#galeria" },
+        { label: "Catálogo",   href: "/#catalogo" },
+        { label: "Conócenos",  href: "/#galeria" },
+        { label: "Ubicación",  href: "/#ubicacion" },
       ],
     },
     {
       title: "Spa",
       links: [
         { label: "Servicios",    href: "/spa#servicios" },
+        { label: "Agendar cita", href: "/spa#agendar" },
         { label: "Experiencias", href: "/spa#testimonios-spa" },
         { label: "Preguntas",    href: "/spa#faq-spa" },
       ],
@@ -96,8 +99,8 @@ const COLUMNS: Record<Exclude<Face, "about">, [{ title: string; links: FooterLin
     {
       title: "Queens",
       links: [
-        { label: "Queens Cosmetics", href: "/cosmetics" },
-        { label: "Catálogo",         href: "/cosmetics#catalogo" },
+        { label: "Queens Cosmetics", href: "/" },
+        { label: "Catálogo",         href: "/#catalogo" },
         { label: "Ubicación",        href: "#ubicacion" },
         { label: "Inicio",           href: "/" },
       ],
@@ -106,13 +109,12 @@ const COLUMNS: Record<Exclude<Face, "about">, [{ title: string; links: FooterLin
 }
 
 /** `tone="crema"`: a light footer (the spa's, client request): the logo is the coloured one (gold, or lila in the store) instead of the crema one. Default "ink" is the dark block. */
-export function Footer({ face = "portal", tone = "ink" }: { face?: Face; tone?: "ink" | "crema" }) {
+export function Footer({ face = "cosmetics", tone = "ink" }: { face?: Face; tone?: "ink" | "crema" }) {
   const year = new Date().getFullYear()
   // The big lettering starts when it scrolls into view: this flag only switches the CSS animation on (Framer's own entrance blinked for a frame when it ended)
   const wordRef = useRef<HTMLDivElement>(null)
   const wordIn = useInView(wordRef, { once: true, margin: "-80px" })
-  // "Quiénes somos" is a portal-level page, so it shares the portal's columns
-  const [colA, colB] = COLUMNS[face === "about" ? "portal" : face]
+  const [colA, colB] = COLUMNS[face]
 
   return (
     <footer className="relative bg-[var(--ink)] text-white overflow-hidden">

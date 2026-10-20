@@ -186,6 +186,12 @@ body {
   border-color: var(--border);
 }
 
+/* No pull-to-refresh or rubber-band bounce at the top and bottom of the page on phones: dragging past the edge used to half-reload the page and
+   make it flicker (client report, 19 Oct 2026). Normal scrolling is untouched. */
+html, body {
+  overscroll-behavior-y: none;
+}
+
 html {
   scroll-behavior: smooth;
   /* The Seasons has a small x-height: +6% keeps body copy as readable as the sans it replaced */
@@ -579,10 +585,6 @@ main[data-palette="queens"] .bg-queens-gradient-intense { background: var(--lila
 /* Franja de anuncio de arriba (letras en crema) */
 main[data-palette="queens"] [data-testid="announcement"] { background: var(--lila); color: var(--pv-crema); }
 
-/* Portada: todo el texto en lila (el título es grande; el botón, lila con texto crema) */
-main[data-palette="queens"] #hero :is(h1, p, a, span):not([data-testid="cosmetics-hero-cta-catalog"]) { color: var(--lila); }
-main[data-palette="queens"] #hero [data-testid="cosmetics-hero-cta-catalog"] { background: var(--lila); color: var(--pv-crema); }
-main[data-palette="queens"] #hero [data-testid="cosmetics-hero-cta-catalog"]:hover { background: color-mix(in oklab, var(--lila) 72%, var(--pv-crema)); }
 
 /* Pie lila con todo su texto en crema (el de siempre: text-white es crema en esta marca) */
 main[data-palette="queens"] footer { --face: var(--pv-crema); background: var(--lila); color: var(--pv-crema); }

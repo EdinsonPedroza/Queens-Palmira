@@ -1,20 +1,17 @@
 import type { MetadataRoute } from "next"
 
-const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://queenscosmetics.co"
+const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://queenscosmeticscol.com"
+
+// The site is exported as static files (Cloudflare): this file is turned into /sitemap.xml at build time.
+export const dynamic = "force-static"
 
 export default function sitemap(): MetadataRoute.Sitemap {
   return [
     {
       url: BASE_URL,
       lastModified: new Date(),
-      changeFrequency: "monthly",
-      priority: 1,
-    },
-    {
-      url: `${BASE_URL}/cosmetics`,
-      lastModified: new Date(),
       changeFrequency: "weekly",
-      priority: 0.9,
+      priority: 1,
     },
     {
       url: `${BASE_URL}/spa`,
