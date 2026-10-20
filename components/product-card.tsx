@@ -42,7 +42,6 @@ const BADGE_COPY: Record<NonNullable<Product["badge"]>, { text: string; variant:
 
 const PHOTO_SIZES = "(max-width: 767px) 50vw, 260px"
 const PANEL = "bg-[color-mix(in_oklab,var(--ink)_5%,var(--crema))]"
-const EASE = [0.16, 1, 0.3, 1] as const
 /** How long the button keeps saying "Agregado" before it goes back to what it was. */
 const FLASH_MS = 1800
 
@@ -126,9 +125,9 @@ export function CartCount({ n, tone = "ink", className, still }: { n: number; to
       )}
     >
       <ShoppingBag className="h-3.5 w-3.5" strokeWidth={2} />
-      <m.span key={n} initial={still ? false : { y: 7, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ duration: 0.22, ease: EASE }} className="text-[12.5px] font-semibold">
+      <span key={n} className={cn("text-[12.5px] font-semibold", !still && "[--in-y:7px] motion-safe:animate-[enter-up_220ms_cubic-bezier(0.16,1,0.3,1)_backwards]")}>
         ({n})
-      </m.span>
+      </span>
     </span>
   )
 }
@@ -206,7 +205,12 @@ export function ToneMenu({ variants, selected, counts, onSelect, open, onClose, 
       if (panelRef.current?.contains(e.target as Node) || triggerRef.current?.contains(e.target as Node)) return
       onClose()
     }
-    const esc = (e: KeyboardEvent) => { if (e.key === "Escape") onClose() }
+    const esc = (e: KeyboardEvent) => {
+      if (e.key !== "Escape") return
+      // The focus is inside the panel (keyboard use): hand it back to the button before the panel goes away, or it would be lost on <body>.
+      if (panelRef.current?.contains(document.activeElement)) triggerRef.current?.focus({ preventScroll: true })
+      onClose()
+    }
     // Only a change of layout (resizing the window) moves the button relative to the document.
     document.addEventListener("mousedown", outside)
     document.addEventListener("keydown", esc)
@@ -217,6 +221,31 @@ export function ToneMenu({ variants, selected, counts, onSelect, open, onClose, 
       window.removeEventListener("resize", place)
     }
   }, [open, onClose, triggerRef, place])
+
+  // Keyboard: the panel lives in a portal at the end of <body>, so Tab from the button never reached it and a keyboard user could not pick a tone.
+  // When it opens the focus goes in (the chosen tone, else the first one); the arrows, Home and End move between tones; Tab and Esc hand the focus back
+  // to the button. For the mouse nothing changes: focus that follows a click is not "focus-visible", so no ring or underline shows.
+  const focusedOnOpen = useRef(false)
+  useEffect(() => {
+    if (!open) { focusedOnOpen.current = false; return }
+    if (focusedOnOpen.current || !pos) return
+    const options = Array.from(panelRef.current?.querySelectorAll<HTMLElement>('[role="option"]') ?? [])
+    if (options.length === 0) return
+    focusedOnOpen.current = true
+    ;(options.find((o) => o.getAttribute("aria-selected") === "true") ?? options[0]).focus({ preventScroll: true })
+  }, [open, pos])
+
+  const onListKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
+    const options = Array.from(panelRef.current?.querySelectorAll<HTMLElement>('[role="option"]') ?? [])
+    if (options.length === 0) return
+    const at = options.indexOf(document.activeElement as HTMLElement)
+    const go = (i: number) => { e.preventDefault(); options[i].focus({ preventScroll: true }) }
+    if (e.key === "ArrowDown") go((at + 1) % options.length)
+    else if (e.key === "ArrowUp") go(at <= 0 ? options.length - 1 : at - 1)
+    else if (e.key === "Home") go(0)
+    else if (e.key === "End") go(options.length - 1)
+    else if (e.key === "Tab") { triggerRef.current?.focus({ preventScroll: true }); onClose() }   // not prevented: the browser carries on from the button
+  }
 
   // The exit stays in Framer Motion (AnimatePresence keeps the panel until it has faded out); the ENTRANCE is the CSS animation
   // `tone-in` / `tone-in-up` (globals.css), which has no hand-over frame and so no flicker.
@@ -235,6 +264,7 @@ export function ToneMenu({ variants, selected, counts, onSelect, open, onClose, 
           ref={panelRef}
           role="listbox"
           aria-label="Tonos disponibles"
+          onKeyDown={onListKeyDown}
           initial={false}
           exit={exit}
           style={{ transformOrigin: up ? "50% 100%" : "50% 0%" }}
@@ -352,10 +382,10 @@ export function ActionButton({ s, product, kind }: { s: CardState; product: Prod
         aria-haspopup={waiting ? "listbox" : undefined}
         aria-expanded={waiting ? open : undefined}
         aria-label={flashing
-          ? `Agregado al carrito: ${added}`
+          ? `Agregado${lastTone ? ` · ${lastTone}` : ""}: ${product.name}`
           : picking
-            ? `Elegir tono de ${product.name}`
-            : `Agregar ${product.name}${selected ? ` — ${selected}` : ""} al carrito`}
+            ? `Elige un tono: ${product.name}`
+            : `Agregar al carrito: ${product.name}${selected ? ` — ${selected}` : ""}`}
         data-testid={`add-${product.name}`}
         style={style}
         className={cn(
@@ -372,12 +402,9 @@ export function ActionButton({ s, product, kind }: { s: CardState; product: Prod
         )}
       >
         {/* Each state is its own element, so the label rises into place when it changes. */}
-        <m.span
+        <span
           key={flashing ? "added" : picking ? "pick" : "add"}
-          initial={{ opacity: 0, y: 6 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.2, ease: EASE }}
-          className="flex min-w-0 items-center justify-center gap-2"
+          className="flex min-w-0 items-center justify-center gap-2 [--in-y:6px] motion-safe:animate-[enter-up_200ms_cubic-bezier(0.16,1,0.3,1)_backwards]"
         >
           {flashing ? (
             <>
@@ -397,7 +424,7 @@ export function ActionButton({ s, product, kind }: { s: CardState; product: Prod
           ) : (
             <><ShoppingBag className="h-3.5 w-3.5 shrink-0" />Agregar al carrito</>
           )}
-        </m.span>
+        </span>
         {kind === "outline" && !flashing && <BorderLines on={waiting && open} />}
       </button>
       <span role="status" aria-live="polite" className="sr-only">{flashing ? `${added}, agregado al carrito` : ""}</span>

@@ -6,6 +6,7 @@ import { ScrollProgress } from "@/components/scroll-progress"
 import { SpaHero } from "@/components/sections/spa-hero"
 import { Marquee } from "@/components/sections/marquee"
 import { WhatsAppFloat } from "@/components/whatsapp-float"
+import { openGraph } from "@/lib/seo"
 
 const SpaServices     = dynamic(() => import("@/components/sections/spa-services").then((m) => m.SpaServices))
 const SpaBooking      = dynamic(() => import("@/components/sections/spa-booking").then((m) => m.SpaBooking))
@@ -19,11 +20,11 @@ export const metadata: Metadata = {
   title: "Queens Spa — Uñas, Manicure y Pedicure en Palmira",
   description:
     "Spa de uñas en Palmira: manicure, pedicure spa, esmaltado semipermanente, uñas en gel y acrílico y nail art. Con cita previa en la Cra 25 #11-23. Reserva por WhatsApp.",
-  openGraph: {
-    title: "Queens Spa — Uñas, Manicure y Pedicure en Palmira",
-    description:
-      "La otra cara de la reina: un spa de uñas para consentir tus manos y pies. Cra 25 #11-23, Palmira.",
-  },
+  openGraph: openGraph(
+    "/spa",
+    "Queens Spa — Uñas, Manicure y Pedicure en Palmira",
+    "La otra cara de la reina: un spa de uñas para consentir tus manos y pies. Cra 25 #11-23, Palmira.",
+  ),
 }
 
 /* Lado B: the spa, bookings only — no cart here. Built in the store's language (strip + solid header, hero with a photo and the copy on the crema, flat square controls, fine lines)

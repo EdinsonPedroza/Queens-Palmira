@@ -300,7 +300,7 @@ export function SpaBooking() {
                   </button>
                   <label htmlFor="booking-consent" className="cursor-pointer text-[13px] leading-relaxed text-[var(--crema)]/70" onClick={(e) => { if ((e.target as HTMLElement).closest("a")) return; e.preventDefault(); toggleConsent() }}>
                     Autorizo el tratamiento de mis datos personales conforme a la{" "}
-                    <Link href="/privacidad" target="_blank" className="font-medium text-[var(--crema)] underline underline-offset-2 hover:text-[var(--face)]">
+                    <Link href="/privacidad" target="_blank" rel="noopener noreferrer" className="font-medium text-[var(--crema)] underline underline-offset-2 hover:text-[var(--face)]">
                       Política de Privacidad
                     </Link>{" "}
                     para ser contactada sobre mi cita. *

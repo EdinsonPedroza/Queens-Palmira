@@ -1,11 +1,17 @@
 import type { Metadata } from "next"
 import Link from "next/link"
 import { ArrowLeft } from "lucide-react"
+import { openGraph } from "@/lib/seo"
 
 export const metadata: Metadata = {
   title: "Política de Privacidad | Queens Cosmetics",
   description:
     "Política de tratamiento de datos personales de Queens Cosmetics conforme a la Ley 1581 de 2012 (Colombia).",
+  openGraph: openGraph(
+    "/privacidad",
+    "Política de Privacidad | Queens Cosmetics",
+    "Política de tratamiento de datos personales de Queens Cosmetics conforme a la Ley 1581 de 2012 (Colombia).",
+  ),
   robots: { index: true, follow: true },
 }
 
@@ -42,7 +48,7 @@ export default function PrivacidadPage() {
       <div className="mx-auto max-w-3xl px-6 py-16 md:py-24">
         <Link
           href="/"
-          className="inline-flex items-center gap-2 text-xs tracking-widest uppercase font-medium text-[var(--ink)]/65 hover:text-[var(--face-deep)] transition-colors duration-300 mb-12"
+          className="tap-area inline-flex items-center gap-2 text-xs tracking-widest uppercase font-medium text-[var(--ink)]/65 hover:text-[var(--face-deep)] transition-colors duration-300 mb-12"
         >
           <ArrowLeft className="w-4 h-4" /> Volver al inicio
         </Link>
@@ -66,7 +72,7 @@ export default function PrivacidadPage() {
 
         <p className="mt-14 pt-6 border-t border-[var(--ink)]/10 text-xs text-[var(--ink)]/65">
           Última actualización: julio de 2026 · Consulta también nuestros{" "}
-          <Link href="/terminos" className="text-[var(--face-deep)] hover:underline">
+          <Link href="/terminos" className="text-[var(--face-deep)] underline underline-offset-2 hover:decoration-2">
             Términos y Condiciones
           </Link>
         </p>

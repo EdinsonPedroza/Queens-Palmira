@@ -8,7 +8,7 @@ import { SubcategoryNav } from "@/components/subcategory-nav"
 import { SUBCATEGORIES, subcategoryOf } from "@/lib/subcategories"
 import { CATEGORIES, PRODUCTS, getProductsByCategory, type ProductCategory } from "@/lib/products"
 import { CATEGORY_ACTIVE_EVENT, CATEGORY_EVENT, CATALOG_FILTERS_ID, SEARCH_ACTIVE_EVENT, SEARCH_EVENT } from "@/lib/site"
-import { cn } from "@/lib/utils"
+import { cn, scrollBehavior } from "@/lib/utils"
 
 const PAGE_SIZE = 15
 
@@ -108,7 +108,7 @@ export function CategoryBar({ active, onSelect, className }: {
                 if (row) {
                   const c = row.getBoundingClientRect()
                   const r = e.currentTarget.getBoundingClientRect()
-                  row.scrollTo({ left: row.scrollLeft + (r.left - c.left) - (c.width - r.width) / 2, behavior: "smooth" })
+                  row.scrollTo({ left: row.scrollLeft + (r.left - c.left) - (c.width - r.width) / 2, behavior: scrollBehavior() })
                 }
               }}
               data-testid={`category-${cat.id}`}
@@ -388,11 +388,12 @@ export function Catalog({ cardStyle = "editorial" }: { cardStyle?: CardStyle }) 
               <AnimatePresence mode="wait">
                 <m.p
                   key={active + search + localQuery + group + "-tag"}
-                  initial={{ opacity: 0, y: 4 }}
+                  // The entrance is CSS (see "enter-up" in globals.css): Framer's own one blinked for a frame when it ended. Framer keeps the exit.
+                  initial={false}
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -4 }}
                   transition={{ duration: 0.2 }}
-                  className="text-sm font-semibold uppercase tracking-[0.08em] text-[var(--face-deep)]"
+                  className="text-sm font-semibold uppercase tracking-[0.08em] text-[var(--face-deep)] [--in-y:4px] motion-safe:animate-[enter-up_200ms_ease-out_backwards]"
                   data-testid="category-subtitle"
                 >
                   {search || localQuery.trim()
@@ -411,16 +412,9 @@ export function Catalog({ cardStyle = "editorial" }: { cardStyle?: CardStyle }) 
               )}
             </div>
 
-            <AnimatePresence mode="wait">
-              <m.span
-                key={filtered.length}
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                className="text-xs text-[var(--muted-foreground)]"
-              >
-                {filtered.length} producto{filtered.length !== 1 ? "s" : ""}
-              </m.span>
-            </AnimatePresence>
+            <span key={filtered.length} className="text-xs text-[var(--muted-foreground)] [--in-y:0px] motion-safe:animate-[enter-up_200ms_ease-out_backwards]">
+              {filtered.length} producto{filtered.length !== 1 ? "s" : ""}
+            </span>
 
 
           </div>
@@ -434,13 +428,7 @@ export function Catalog({ cardStyle = "editorial" }: { cardStyle?: CardStyle }) 
           {hasGroups && <SubcategoryNav items={groupItems} value={localQuery.trim() ? null : group} onChange={handleGroup} />}
           <div className="min-w-0">
           {visible.length === 0 ? (
-            <m.div
-              key="empty"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 0.2, ease: [0.23, 1, 0.32, 1] }}
-              className="py-24 text-center"
-            >
+            <div key="empty" className="py-24 text-center [--in-y:0px] motion-safe:animate-[enter-up_200ms_cubic-bezier(0.23,1,0.32,1)_backwards]">
               <Search className="mx-auto mb-4 h-10 w-10 text-[var(--muted-foreground)]" />
               <p className="font-display text-xl font-semibold text-[var(--ink)] mb-2">
                 Sin resultados
@@ -455,18 +443,18 @@ export function Catalog({ cardStyle = "editorial" }: { cardStyle?: CardStyle }) 
                   limpia la búsqueda
                 </button>
               </p>
-            </m.div>
+            </div>
           ) : (
             <div key={active + group + "-grid"} className={cn("grid", CARD_GRID[cardStyle], hasGroups && "lg:grid-cols-4 xl:grid-cols-4")}>
               {visible.map((p, i) => (
-                <m.div
+                <div
                   key={p.id}
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: Math.min(i, 7) * 0.03, duration: 0.25, ease: [0.23, 1, 0.32, 1] }}
+                  // The cards enter in a quick stagger (30 ms apart, the first eight). CSS, not Framer: see "enter-up" in globals.css.
+                  className="motion-safe:animate-[enter-up_250ms_cubic-bezier(0.23,1,0.32,1)_backwards]"
+                  style={{ animationDelay: `${Math.min(i, 7) * 30}ms` }}
                 >
                   <ProductCard product={p} cardStyle={cardStyle} />
-                </m.div>
+                </div>
               ))}
               {/* "Ver más" is one more square of the grid: translucent lila (see-through, ink text), the number of products left, nothing else (client's pick, "ficha tinta") */}
               {hasMore && (
