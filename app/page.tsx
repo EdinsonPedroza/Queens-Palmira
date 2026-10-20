@@ -1,39 +1,56 @@
 import type { Metadata } from "next"
 import dynamic from "next/dynamic"
-import { IntroScreen } from "@/components/intro-screen"
+import { CartProvider } from "@/context/cart-provider"
 import { MotionProvider } from "@/components/motion-provider"
 import { Navbar } from "@/components/navbar"
 import { ScrollProgress } from "@/components/scroll-progress"
-import { Hero } from "@/components/sections/hero"
+import { HomeHero } from "@/components/sections/home-hero"
 import { WhatsAppFloat } from "@/components/whatsapp-float"
+import { CartSidebar } from "@/components/cart-sidebar"
+import { CartFloat } from "@/components/cart-float"
 
-const Locations = dynamic(() => import("@/components/sections/locations").then((m) => m.Locations))
-const Footer    = dynamic(() => import("@/components/sections/footer").then((m) => m.Footer))
+const Catalog        = dynamic(() => import("@/components/sections/catalog").then((m) => m.Catalog))
+const Gallery        = dynamic(() => import("@/components/sections/gallery").then((m) => m.Gallery))
+const Testimonials   = dynamic(() => import("@/components/sections/testimonials").then((m) => m.Testimonials))
+const FAQ            = dynamic(() => import("@/components/sections/faq").then((m) => m.FAQ))
+const Location       = dynamic(() => import("@/components/sections/location").then((m) => m.Location))
+const Footer         = dynamic(() => import("@/components/sections/footer").then((m) => m.Footer))
 
 export const metadata: Metadata = {
-  title: "Queens — Cosmetics & Spa en Palmira",
+  title: "Queens Cosmetics — Cosmética Premium en Palmira",
   description:
-    "Dos casas en Palmira: Queens Cosmetics, cosmética premium en el Local 1-28 de Unicentro, y Queens Spa, spa de uñas con cita previa en la Cra 25 #11-23.",
+    "Tienda de cosméticos premium en Unicentro Palmira. Labiales, skincare, maquillaje, esmaltes y línea capilar. Productos 100% originales. Pide por WhatsApp.",
   openGraph: {
-    title: "Queens — Cosmetics & Spa en Palmira",
+    title: "Queens Cosmetics — Cosmética Premium en Palmira",
     description:
-      "Dos casas, una reina: cosmética premium en Unicentro y un spa de uñas en la Cra 25.",
+      "La belleza que mereces. Maquillaje, skincare, esmaltes y línea capilar premium en Unicentro Palmira.",
   },
 }
 
-/* The portal: two doors, then where each one is. */
-export default function Home() {
+/*
+ * El INICIO del sitio (queenscosmeticscol.com): la tienda. Abre con la portada de las dos puertas (catálogo y spa) y sigue con el catálogo, conócenos,
+ * reseñas, ubicación y preguntas. El spa vive en `/spa`, dentro del mismo dominio. El estado del carrito (y con él el catálogo) se monta aquí y en ningún
+ * otro sitio; el catálogo no tiene animaciones de layout, así que corre con el proveedor de animación ligero.
+ */
+export default function HomePage() {
   return (
-    <MotionProvider>
-      <main data-palette="spa" className="relative overflow-x-hidden">
-        <IntroScreen />
-        <ScrollProgress />
-        <Navbar face="portal" />
-        <Hero />
-        <Locations />
-        <Footer face="portal" tone="crema" />
-        <WhatsAppFloat />
-      </main>
-    </MotionProvider>
+    <CartProvider>
+      <MotionProvider>
+        <main data-face="cosmetics" data-palette="queens" className="relative flow-root overflow-x-clip">
+          <ScrollProgress />
+          <Navbar face="cosmetics" separate announce />
+          <HomeHero />
+          <Catalog />
+          <Gallery />
+          <Testimonials />
+          <Location face="cosmetics" />
+          <FAQ />
+          <Footer face="cosmetics" />
+          <WhatsAppFloat />
+          <CartFloat />
+          <CartSidebar />
+        </main>
+      </MotionProvider>
+    </CartProvider>
   )
 }

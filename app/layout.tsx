@@ -3,7 +3,7 @@ import Script from "next/script"
 import localFont from "next/font/local"
 import "./globals.css"
 
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://queenscosmetics.co"
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://queenscosmeticscol.com"
 const GA_ID = process.env.NEXT_PUBLIC_GA_ID
 
 // Brand typeface. Bold for titles, Regular for everything else.
@@ -154,11 +154,11 @@ const jsonLd = [
   {
     "@context": "https://schema.org",
     "@type": "Store",
-    "@id": `${SITE_URL}/cosmetics#store`,
+    "@id": `${SITE_URL}/#store`,
     name: "Queens Cosmetics",
     description:
       "Tienda de cosméticos premium en Unicentro Palmira: labiales, skincare, maquillaje, esmaltes y línea capilar. Productos 100% originales.",
-    url: `${SITE_URL}/cosmetics`,
+    url: `${SITE_URL}/`,
     image: `${SITE_URL}/og-image.jpg`,
     ...SHARED,
     address: {
@@ -208,7 +208,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       className={`${theSeasons.variable} ${theSeasonsItalic.variable} ${glyphFallback.variable} ${glyphFallbackItalic.variable}`}
     >
       <head>
-        {/* No preconnect to Unsplash: every image goes through /_next/image, so the browser never talks to it. */}
+        {/* No third-party image hosts: every image is a file of the site itself. */}
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
@@ -216,7 +216,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       </head>
       <body className="font-body antialiased">
         {/* Providers live in the pages that need them (motion on the animated ones, the cart on
-            /cosmetics), so the legal pages and the portal do not download what they never use. */}
+            the home), so the legal pages and the spa do not download what they never use. */}
         {children}
         {GA_ID && (
           <>

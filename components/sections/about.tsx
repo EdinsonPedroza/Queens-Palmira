@@ -167,7 +167,7 @@ export function About() {
         initial="hidden"
         animate="show"
         /* Starts below the strip + header (--header-h). lg+: fills the rest of the screen, like the store's and the spa's. */
-        className="relative mt-[var(--header-h)] overflow-hidden bg-white lg:flex lg:min-h-[calc(100svh_-_var(--header-h))] lg:items-center"
+        className="relative overflow-hidden bg-white lg:flex lg:min-h-[calc(100svh_-_var(--header-h))] lg:items-center"
       >
         <div className="relative mx-auto grid w-full max-w-7xl items-center gap-10 px-6 py-10 md:px-10 md:py-14 lg:grid-cols-[0.95fr_1.05fr] lg:gap-14 lg:py-12">
           <div>

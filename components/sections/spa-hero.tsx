@@ -41,7 +41,7 @@ export function SpaHero() {
       initial="hidden"
       animate="show"
       /* Starts below the strip + header (--header-h). lg+: fills the rest of the screen. */
-      className="relative mt-[var(--header-h)] flex min-h-[calc(100svh_-_var(--header-h))] flex-col overflow-hidden bg-white lg:block lg:h-[calc(100svh_-_var(--header-h))] lg:min-h-[540px] lg:max-h-[56.25vw]"
+      className="relative flex min-h-[calc(100svh_-_var(--header-h))] flex-col overflow-hidden bg-white lg:block lg:h-[calc(100svh_-_var(--header-h))] lg:min-h-[540px] lg:max-h-[56.25vw]"
     >
       {/* ── Photo ── */}
       <div

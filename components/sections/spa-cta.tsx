@@ -92,8 +92,8 @@ export function SpaCTA() {
           </a>
 
           <Link
-            href="/cosmetics"
-            {...faceLinkProps("/cosmetics")}
+            href="/"
+            {...faceLinkProps("/")}
             className="group inline-flex items-center gap-[1.2em] whitespace-nowrap text-xs font-medium uppercase tracking-[0.2em] text-ink transition-opacity hover:opacity-70"
           >
             ¿Buscabas la tienda?

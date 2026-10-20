@@ -1,5 +1,8 @@
 import type { MetadataRoute } from "next"
 
+// The site is exported as static files (Cloudflare): this file is turned into /manifest.webmanifest at build time.
+export const dynamic = "force-static"
+
 export default function manifest(): MetadataRoute.Manifest {
   return {
     name: "Queens Cosmetics",
