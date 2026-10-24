@@ -89,8 +89,8 @@ export function CategoryBar({ active, onSelect, className }: {
       aria-label="Categorías"
       className="overflow-x-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
     >
-      <div ref={inner} className="relative flex w-max min-w-full gap-7 pr-14 sm:gap-8 min-[1360px]:pr-0">
-        <span aria-hidden className="pointer-events-none absolute inset-x-0 bottom-0 h-px bg-[var(--lila-light)]" />
+      <div ref={inner} className="relative flex w-max min-w-full gap-1.5 pr-14 md:gap-8 min-[1360px]:pr-0">
+        <span aria-hidden className="pointer-events-none absolute inset-x-0 bottom-0 hidden h-px bg-[var(--lila-light)] md:block" />
         {CATEGORIES.map((cat) => {
           const on = active === cat.id
           return (
@@ -112,10 +112,16 @@ export function CategoryBar({ active, onSelect, className }: {
                 }
               }}
               data-testid={`category-${cat.id}`}
+              // Phones (client's pick, "pestañas cuadradas"): bordered square tabs like the search and sort boxes, the open one filled lila.
+              // From md up: the editorial text + sliding line. The border colour goes inline (see the `* { border-color }` note); md:border-0 hides it there.
+              style={{ borderColor: on ? "var(--lila)" : "color-mix(in oklab, var(--ink) 22%, transparent)" }}
               className={cn(
-                "flex-none cursor-pointer select-none whitespace-nowrap pb-3 pt-2.5 text-[1rem] leading-none transition-colors duration-200",
+                "flex-none cursor-pointer select-none whitespace-nowrap border px-4 py-3 text-[11.5px] uppercase leading-none tracking-[0.16em] transition-colors duration-200",
+                "md:border-0 md:px-0 md:pb-3 md:pt-2.5 md:text-[1rem] md:normal-case md:tracking-normal",
                 "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--face)",
-                on ? "font-bold text-[var(--ciruela)]" : "font-semibold text-[var(--lila-deep)] hover:text-[var(--ciruela)]",
+                on
+                  ? "bg-[var(--lila)] font-extrabold text-[var(--ciruela)] md:bg-transparent md:font-bold"
+                  : "bg-white font-medium text-[var(--ciruela)] hover:bg-[var(--lila)]/15 md:bg-transparent md:font-semibold md:text-[var(--lila-deep)] md:hover:bg-transparent md:hover:text-[var(--ciruela)]",
               )}
             >
               {cat.label}
@@ -124,7 +130,7 @@ export function CategoryBar({ active, onSelect, className }: {
         })}
         <span
           aria-hidden
-          className="pointer-events-none absolute bottom-0 left-0 h-[3px] w-px origin-left bg-[var(--ciruela)]"
+          className="pointer-events-none absolute bottom-0 left-0 hidden h-[3px] w-px origin-left bg-[var(--ciruela)] md:block"
           style={{
             transform: `translateX(${bar.x}px) scaleX(${bar.w})`,
             opacity: active ? 1 : 0,

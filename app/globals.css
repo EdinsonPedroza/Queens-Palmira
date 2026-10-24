@@ -597,7 +597,8 @@ em, i, .italic {
 
 main[data-palette="queens"] :is([class~="bg-[var(--ciruela)]"], [class~="bg-(--ciruela)"], [class~="bg-[var(--face-deep)]"]) { background: var(--lila); color: var(--ink); }
 main[data-palette="queens"] [role="option"][aria-selected="true"] { background: var(--lila); color: var(--ink); }
-main[data-palette="queens"] [data-testid^="subcategory-"]::before { background: var(--pv-crema); }
+/* sin la barrita de 3 px de la fila elegida: dejaba una franja crema a la izquierda */
+main[data-palette="queens"] button[data-testid^="subcategory-"]::before { content: none; }
 /* Índice de subcategorías: el texto en morado oscuro (no negro) */
 main[data-palette="queens"] button[data-testid^="subcategory-"] { color: var(--ciruela); }
 main[data-palette="queens"] button[data-testid^="subcategory-"] > span:last-child { color: color-mix(in oklab, var(--ciruela) 62%, transparent); }
