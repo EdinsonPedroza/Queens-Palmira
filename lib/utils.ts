@@ -6,6 +6,14 @@ export function cn(...inputs: ClassValue[]) {
 }
 
 /**
+ * "smooth" for scrollTo / scrollIntoView, unless the visitor asked for less motion (prefers-reduced-motion): the CSS `scroll-behavior` on <html> is
+ * switched off for them in globals.css, but a scroll started from script with an explicit behavior ignores it, so those calls use this.
+ */
+export function scrollBehavior(): ScrollBehavior {
+  return typeof window !== "undefined" && window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth"
+}
+
+/**
  * Deterministic pseudo-random in [0, 1) (mulberry32) — integer ops only, so it
  * yields identical values on the server and in every browser engine.
  *

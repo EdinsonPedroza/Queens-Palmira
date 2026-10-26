@@ -60,13 +60,13 @@ export function SpaTestimonials() {
       className="relative scroll-mt-[var(--nav-h)] overflow-hidden bg-white py-4 text-ink md:py-5"
     >
       {/* Left-aligned, one colour, no eyebrow: the same header as the store's reviews */}
-      <div className="mx-auto mb-3 max-w-7xl px-6 md:mb-4 md:px-10">
+      <div className="mb-3 px-6 md:mb-4 md:px-10">
         <h2
           id="testimonios-spa-title"
           className="font-display font-semibold text-ink"
           style={{ fontSize: "clamp(2rem, 4.5vw, 3.2rem)", letterSpacing: "-0.03em" }}
         >
-          Salen felices.
+          Lo que dicen nuestras reinas
         </h2>
       </div>
 

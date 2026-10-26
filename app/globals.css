@@ -186,10 +186,21 @@ body {
   border-color: var(--border);
 }
 
-/* No pull-to-refresh or rubber-band bounce at the top and bottom of the page on phones: dragging past the edge used to half-reload the page and
-   make it flicker (client report, 19 Oct 2026). Normal scrolling is untouched. */
-html, body {
-  overscroll-behavior-y: none;
+/* OJO: NO pongas `overscroll-behavior` en html/body. Se probó (`none`) para frenar un parpadeo al desplazar en celular y también apaga el «jalar para
+   recargar» del navegador: el cliente no podía recargar la página en el celular (20 oct 2026). El parpadeo venía del encabezado movido por JavaScript
+   (ver navbar.tsx), no del rebote. */
+/* Zona táctil. En pantallas táctiles los enlaces de texto sueltos (los del pie, «Escríbenos», «Cómo llegar»…) miden ~17 px de alto, poco para el dedo
+   (WCAG 2.2 pide 24 px como mínimo; lo cómodo son 44). Esto agranda SOLO el área que responde al toque con un pseudo-elemento invisible: no mueve nada ni
+   cambia cómo se ve. Se usa con la clase `tap-area` (no pongas `after:` en el mismo elemento). */
+@media (pointer: coarse) {
+  .tap-area {
+    position: relative;
+  }
+  .tap-area::after {
+    content: "";
+    position: absolute;
+    inset: -0.42rem -0.3rem;
+  }
 }
 
 html {
@@ -323,6 +334,16 @@ em, i, .italic {
 @keyframes cart-text-in  { from { opacity: 0; transform: translateY(6px); }  to { opacity: 1; transform: none; } }
 @keyframes cart-num-in   { from { opacity: 0.6; transform: translateY(5px); } to { opacity: 1; transform: none; } }
 @keyframes cart-check-pop { from { transform: scale(0.6); } to { transform: none; } }
+/* The catalog (components/sections/catalog.tsx, components/product-card.tsx): the cards that enter when a category opens, the category's phrase, the count and the button's
+   label are CSS entrances too. Framer's initial/animate handed each of them back to its `initial` style for one frame when it ended: measured per frame, EVERY card blinked once
+   at the end of its stagger on every category change. `--in-y` is how far below it starts. Fill-mode `backwards` only (they rest in their final state). */
+@keyframes enter-up { from { opacity: 0; transform: translateY(var(--in-y, 10px)); } to { opacity: 1; transform: none; } }
+/* The floating cart chip (components/cart-float.tsx): it pops in (a little overshoot, like the spring it replaces), its numbers roll in and the pale flash blooms and fades.
+   Same reason: each of the three blinked for a frame when Framer ended its animation (the whole chip vanished for one frame ~1 s after it appeared). The flash rests at
+   opacity 0 (its own class), so when it ends nothing can jump back. Framer keeps the exits. */
+@keyframes chip-in    { from { opacity: 0; transform: translateY(24px) scale(0); } to { opacity: 1; transform: none; } }
+@keyframes roll-in    { from { opacity: 0; transform: translateY(100%); } to { opacity: 1; transform: none; } }
+@keyframes chip-flash { from { opacity: 0.95; transform: scale(0.4); } to { opacity: 0; transform: scale(1.8); } }
 /* The big "Queens" of the footer (components/sections/footer.tsx): each letter of the logo's lettering flips up from below and settles with a little bounce
    (the overshoot of the curve). CSS, not Framer: Framer's entrance blinked for a frame when it ended (see above). The letters rest visible; they only
    start hidden until the footer scrolls into view (measured per frame). */
@@ -333,6 +354,14 @@ em, i, .italic {
 /* Spa (components/reveal.tsx and sections/spa-cta.tsx): a block rises into place as it scrolls into view, and the closing slab's words flip up one by one.
    Both rest visible and start from `backwards`, so nothing can jump back when they end (Framer's entrance did). */
 @keyframes reveal-up { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: none; } }
+/* A line that draws itself from the left (the caption of the spa's services) */
+@keyframes line-draw { from { transform: scaleX(0); } to { transform: none; } }
+/* A letter that rises out of a clipped line (names of the spa's services); at rest it is in its final place, so nothing can jump back when it ends */
+@keyframes char-rise { from { transform: translateY(110%); } to { transform: none; } }
+/* A photo that is wiped in from the left (the viewer of the spa's services when you go to the next one) */
+@keyframes clip-wipe { from { clip-path: inset(0 100% 0 0); } to { clip-path: inset(0 0 0 0); } }
+/* A photo that hangs from a pin and swings like a pendulum until it settles (the clothesline of the spa's services). It ends on 0deg, the resting value of the element. */
+@keyframes swing { 0% { rotate: 7deg; } 30% { rotate: -5deg; } 60% { rotate: 3deg; } 82% { rotate: -1deg; } 100% { rotate: 0deg; } }
 @keyframes flip-in {
   from { opacity: 0; transform: perspective(600px) translateY(48px) rotateX(-90deg); }
   to   { opacity: 1; transform: perspective(600px) translateY(0) rotateX(0deg); }
@@ -534,6 +563,10 @@ em, i, .italic {
 
 /* ── Respeto a prefers-reduced-motion ── */
 @media (prefers-reduced-motion: reduce) {
+  /* No gliding between sections either (the in-page jumps of the header, the footer and the catalog also check this in script: see scrollBehavior() in lib/utils.ts) */
+  html {
+    scroll-behavior: auto;
+  }
   .sparkle,
   .animate-marquee,
   .animate-marquee-reverse,
@@ -572,7 +605,8 @@ em, i, .italic {
 
 main[data-palette="queens"] :is([class~="bg-[var(--ciruela)]"], [class~="bg-(--ciruela)"], [class~="bg-[var(--face-deep)]"]) { background: var(--lila); color: var(--ink); }
 main[data-palette="queens"] [role="option"][aria-selected="true"] { background: var(--lila); color: var(--ink); }
-main[data-palette="queens"] [data-testid^="subcategory-"]::before { background: var(--pv-crema); }
+/* sin la barrita de 3 px de la fila elegida: dejaba una franja crema a la izquierda */
+main[data-palette="queens"] button[data-testid^="subcategory-"]::before { content: none; }
 /* Índice de subcategorías: el texto en morado oscuro (no negro) */
 main[data-palette="queens"] button[data-testid^="subcategory-"] { color: var(--ciruela); }
 main[data-palette="queens"] button[data-testid^="subcategory-"] > span:last-child { color: color-mix(in oklab, var(--ciruela) 62%, transparent); }
@@ -594,7 +628,7 @@ main[data-palette="queens"] #hero [data-testid="cosmetics-hero-cta-catalog"]:hov
 /* Pie lila con todo su texto en crema (el de siempre: text-white es crema en esta marca) */
 main[data-palette="queens"] footer { --face: var(--pv-crema); background: var(--lila); color: var(--pv-crema); }
 main[data-palette="queens"] footer > div:first-child { background: var(--pv-crema); }
-main[data-palette="queens"] footer h4 { color: var(--ciruela); font-size: 12px; }
+main[data-palette="queens"] footer h2 { color: var(--ciruela); font-size: 12px; }
 main[data-palette="queens"] footer [data-testid="footer-news"] { color: var(--pv-crema); }
 main[data-palette="queens"] footer a.underline { color: var(--pv-crema); }
 main[data-palette="queens"] footer [class*="text-white/"] { color: color-mix(in oklab, var(--pv-crema) 92%, transparent); }
@@ -610,12 +644,13 @@ main[data-palette="queens"] :is(#catalogo, #galeria, #testimonios, #ubicacion, #
 :root:has(main[data-palette="spa"]) { --pv-crema: var(--crema); }
 main[data-palette="spa"] footer { --crema: var(--dorado-deep); background: var(--pv-crema); color: var(--dorado-deep); }
 main[data-palette="spa"] footer > div:first-child { background: var(--dorado); }
-main[data-palette="spa"] footer h4 { color: var(--dorado-deep); font-size: 12px; }
+main[data-palette="spa"] footer h2 { color: var(--dorado-deep); font-size: 12px; }
 main[data-palette="spa"] footer [data-testid="footer-news"], main[data-palette="spa"] footer a.underline { color: var(--dorado-deep); }
 main[data-palette="spa"] footer .ambient-breathe { display: none; }
 main[data-palette="spa"] footer [class*="text-white/"] { color: color-mix(in oklab, var(--dorado-deep) 88%, transparent); }
 /* Pie claro (spa y portal) más bajo: menos aire arriba y abajo, columnas más pegadas al «Queens» y las letras más pequeñas (pedido del cliente, 19 oct 2026). */
-main[data-palette="spa"] footer > div:nth-child(2) { padding-block: 2rem 1.25rem; }
+/* (el aire de abajo, 5.25rem, es el espacio del botón flotante de WhatsApp: sin él tapaba la última fila del pie al llegar al final de la página) */
+main[data-palette="spa"] footer > div:nth-child(2) { padding-block: 2rem 5.25rem; }
 main[data-palette="spa"] footer .grid { margin-bottom: 1.5rem; gap: 1.75rem; }
 main[data-palette="spa"] footer [data-testid="footer-wordmark"] { width: min(58%, 700px); }
 main[data-palette="spa"] footer div.border-t.pt-12 { padding-top: 1.25rem; }
@@ -626,19 +661,15 @@ main[data-palette="spa"] footer .grid > div:first-child > div.mt-6 { margin-top:
 main[data-palette="spa"] footer .grid > div:first-child > div.mt-7 { margin-top: 1rem; padding-top: 0.85rem; }
 main[data-palette="spa"] footer .grid ul[class*="space-y-4"] > * + * { margin-top: 0.7rem; }
 main[data-palette="spa"] footer .grid ul[class*="space-y-2.5"] > * + * { margin-top: 0.4rem; }
-main[data-palette="spa"] footer h4 { margin-bottom: 0.7rem; }
+main[data-palette="spa"] footer h2 { margin-bottom: 0.7rem; }
 
 
 /* /spa sin fondos oscuros: el diseño de la tienda con el dorado en lugar del lila (pedido del cliente, 19 oct 2026). Solo la página /spa (`data-page="spa"`).
    - La franja de anuncio y la cinta de palabras van en dorado con letras crema (como la tienda en lila).
    - Los rellenos casi negros (botones de reservar) pasan a dorado con texto en tinta.
-   - «Agenda tu cita» deja el dorado noche: en esa sección `--dorado-noche` vale el dorado muy pálido y `--crema` el dorado oscuro, así su texto, sus campos y sus
-     líneas (todos escritos con esas dos variables) quedan claros sin tocar el formulario. */
+   - «Agenda tu cita» (`spa-booking.tsx`) ya se escribe claro con tokens (tinta sobre el dorado pálido): no necesita reglas aquí. */
 :root:has(main[data-page="spa"]) :is([class~="bg-ink"], [class~="bg-[var(--ink)]"], [class~="bg-(--ink)"]):not(.rounded-full, [data-testid="announcement"], footer) { background: var(--dorado); color: var(--ink); }
 main[data-page="spa"] [data-testid="announcement"] { background: var(--dorado); color: var(--pv-crema); }
 main[data-page="spa"] section[aria-hidden="true"] span { color: var(--pv-crema); }
-main[data-page="spa"] [data-testid="spa-cta-book"] { background: var(--pv-crema); color: var(--ink); }
-main[data-page="spa"] #agendar { --dorado-noche: var(--face-soft); --crema: var(--dorado-deep); }
-main[data-page="spa"] #agendar button[class*="h-12"] { color: var(--ink); }
-main[data-page="spa"] #agendar input[type="date"] { color-scheme: light; }
+/* El botón del cierre (`spa-cta-book`) ya es crema por sus propias clases: la regla de aquí lo pisaba y, por especificidad, ni siquiera ganaba (salía dorado sobre dorado); ahora es verde WhatsApp por su clase. */
 

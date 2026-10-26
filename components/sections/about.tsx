@@ -43,7 +43,6 @@ const fadeUp: Variants = {
 
 /* Fine lines, like the store's controls and the cart's: the `* { border-color }` rule of globals.css beats the utilities (see CLAUDE.md), so the colour goes inline. */
 const HAIRLINE = "color-mix(in oklab, var(--ink) 12%, transparent)"
-const HAIRLINE_STRONG = "color-mix(in oklab, var(--ink) 22%, transparent)"
 /** Cards drawn as one box whose cells are split by 1 px gaps (the gap shows the box's own colour), so the lines are right at every breakpoint.
  * The cell itself is static (white, with the hover); only what is INSIDE it is revealed, or the unrevealed cells would show the line colour as a solid block. */
 const CELLS = "grid gap-px p-px bg-[color-mix(in_oklab,var(--ink)_12%,transparent)]"
@@ -221,7 +220,7 @@ export function About() {
               <span aria-hidden className="hidden h-[3vw] w-px bg-ink/25 lg:block" />
               <a
                 href="#casas"
-                className="inline-flex items-center gap-[1.2em] whitespace-nowrap text-xs font-medium uppercase tracking-[0.2em] text-ink transition-opacity hover:opacity-70 lg:text-[clamp(10px,0.95vw,14px)]"
+                className="tap-area inline-flex items-center gap-[1.2em] whitespace-nowrap text-xs font-medium uppercase tracking-[0.2em] text-ink transition-opacity hover:opacity-70 lg:text-[clamp(10px,0.95vw,14px)]"
               >
                 Conoce nuestras casas
                 <ArrowDown className="h-[1.1em] w-[1.1em]" strokeWidth={1.5} />
@@ -380,14 +379,14 @@ export function About() {
               <WhatsAppIcon className="h-4 w-4" />
               Escríbenos por WhatsApp
             </a>
-            <Link
-              href="/#ubicaciones"
-              className="group inline-flex items-center gap-[1.2em] whitespace-nowrap text-xs font-medium uppercase tracking-[0.2em] text-ink transition-opacity hover:opacity-70"
+            <a
+              href="#casas"
+              className="tap-area group inline-flex items-center gap-[1.2em] whitespace-nowrap text-xs font-medium uppercase tracking-[0.2em] text-ink transition-opacity hover:opacity-70"
             >
               <MapPin className="h-[1.2em] w-[1.2em]" strokeWidth={1.5} />
               Cómo llegar
               <ArrowUpRight className="h-[1.1em] w-[1.1em] transition-transform duration-300 group-hover:rotate-45" strokeWidth={1.5} />
-            </Link>
+            </a>
           </Reveal>
         </div>
       </section>

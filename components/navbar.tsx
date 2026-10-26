@@ -2,13 +2,14 @@
 
 import { useEffect, useRef, useState } from "react"
 import Link from "next/link"
-import { ArrowUpRight, ShoppingBag, Menu, X, Search } from "lucide-react"
+import { MapPin, ShoppingBag, Menu, X, Search } from "lucide-react"
 import { InstagramIcon } from "./instagram-icon"
+import { WhatsAppIcon } from "./whatsapp-icon"
 import { useOptionalCart } from "@/context/cart-context"
 import { QueensLogo } from "./queens-logo"
-import { cn } from "@/lib/utils"
+import { cn, scrollBehavior } from "@/lib/utils"
 import { WA_SPA } from "@/lib/whatsapp"
-import { ANNOUNCEMENT, ANNOUNCEMENT_ABOUT, ANNOUNCEMENT_SPA, BUSINESS, CATALOG_FILTERS_ID, CATEGORY_ACTIVE_EVENT, CATEGORY_EVENT, NAV_LINKS, SEARCH_ACTIVE_EVENT, SEARCH_EVENT, faceLinkProps, type Face, type NavLink } from "@/lib/site"
+import { ANNOUNCEMENT, ANNOUNCEMENT_ABOUT, ANNOUNCEMENT_SPA, BUSINESS, CATALOG_FILTERS_ID, CATEGORY_ACTIVE_EVENT, CATEGORY_EVENT, NAV_LINKS, SEARCH_ACTIVE_EVENT, SEARCH_EVENT, VENUES, faceLinkProps, type Face, type NavLink } from "@/lib/site"
 
 /*
  * One bar. Every page is crema, so the accent (links, underline, CTA) comes from
@@ -68,12 +69,9 @@ export function Navbar({ face = "cosmetics", separate = false, announce = false 
 
   const s = FACE_STYLES[face]
   const links = NAV_LINKS[face]
-  // Only the spa header carries a button (it books through WhatsApp). The store's "Escríbenos" was removed at the client's request
-  // (WhatsApp is still one tap away from the floating button and the hero).
-  const showCta = face === "spa"
-  const ctaHref = WA_SPA
-  const ctaLabel = "Reservar cita"
-  const ctaLinkProps = { target: "_blank", rel: "noopener noreferrer" } as const
+  // The spa header has no "Reservar cita" button any more (the client asked for something like the store's icons): it carries Instagram, WhatsApp
+  // (the booking chat) and the map pin as round icon buttons.
+  const spaIcons = face === "spa"
   // The store's header carries ten links: the inline nav needs xl (1280 px); under that it is the hamburger menu
   const inlineNav = face === "cosmetics" ? "xl" : "lg"
   // `separate` (/cosmetics): the bar is always the crema version (lila logo and links). It used to be solid lila
@@ -89,7 +87,7 @@ export function Navbar({ face = "cosmetics", separate = false, announce = false 
   // Land on the catalog's filters row, not on the section's title: the products are right below it.
   const scrollToCatalog = () => {
     const target = document.getElementById(CATALOG_FILTERS_ID) ?? document.getElementById("catalogo")
-    target?.scrollIntoView({ behavior: "smooth", block: "start" })
+    target?.scrollIntoView({ behavior: scrollBehavior(), block: "start" })
     return !!target
   }
   const openCategory = (l: NavLink, e: React.MouseEvent) => {
@@ -196,6 +194,7 @@ export function Navbar({ face = "cosmetics", separate = false, announce = false 
           </Link>
 
           <nav
+            aria-label="Principal"
             className={cn(
               "hidden items-center",
               face === "cosmetics" ? "xl:flex xl:-translate-x-6 xl:gap-4 min-[1440px]:gap-6" : "lg:flex lg:gap-5 xl:gap-8",
@@ -275,16 +274,39 @@ export function Navbar({ face = "cosmetics", separate = false, announce = false 
               </button>
             )}
 
-            {showCta && (
+            {spaIcons && (
+              <>
               <a
-                href={ctaHref}
-                {...ctaLinkProps}
-                data-testid="header-cta"
-                className="hidden h-10 items-center gap-2 whitespace-nowrap bg-[var(--ink)] px-5 text-[11.5px] font-medium uppercase tracking-[0.18em] text-[var(--crema)] transition-colors duration-200 hover:bg-[var(--face)] hover:text-[var(--ink)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--ink)] active:scale-[0.98] sm:ml-2.5 md:inline-flex"
+                href={VENUES.spa.gmaps}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="relative rounded-full p-2 sm:p-2.5 text-ink opacity-80 transition cursor-pointer hover:bg-(--face-light)/30 hover:opacity-100 focus-visible:opacity-100"
+                aria-label={"Cómo llegar a Queens Spa en Google Maps"}
+                data-testid="header-map"
               >
-                {ctaLabel}
-                <ArrowUpRight className="h-3.5 w-3.5" strokeWidth={1.75} />
+                <MapPin className="h-5 w-5" strokeWidth={1.5} />
               </a>
+              <a
+                href={BUSINESS.instagramUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="relative rounded-full p-2 sm:p-2.5 text-ink opacity-80 transition cursor-pointer hover:bg-(--face-light)/30 hover:opacity-100 focus-visible:opacity-100"
+                aria-label={`Instagram ${BUSINESS.instagram}`}
+                data-testid="header-instagram"
+              >
+                <InstagramIcon className="h-5 w-5" />
+              </a>
+              <a
+                href={WA_SPA}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="relative rounded-full p-2 sm:p-2.5 text-ink opacity-80 transition cursor-pointer hover:bg-(--face-light)/30 hover:opacity-100 focus-visible:opacity-100"
+                aria-label={"Reservar cita por WhatsApp"}
+                data-testid="header-cta"
+              >
+                <WhatsAppIcon className="h-5 w-5" />
+              </a>
+              </>
             )}
 
             <button
@@ -340,8 +362,9 @@ export function Navbar({ face = "cosmetics", separate = false, announce = false 
         </div>
       )}
 
-      {/* Mobile menu */}
+      {/* Mobile menu. Closed it is only faded out, so `inert` keeps its links out of the Tab order and the screen-reader tree (like the search box above) */}
       <div
+        inert={!mobileOpen}
         className={cn(
           "inset-x-0 z-30 transition-all duration-400",
           inlineNav === "xl" ? "xl:hidden" : "lg:hidden",
@@ -351,7 +374,7 @@ export function Navbar({ face = "cosmetics", separate = false, announce = false 
             : "opacity-0 -translate-y-4 pointer-events-none",
         )}
       >
-        <nav className={cn("mx-4 max-h-[calc(100svh-var(--header-h)-1rem)] overflow-y-auto rounded-2xl p-5 shadow-2xl md:backdrop-blur-xl", s.panel)}>
+        <nav aria-label="Menú" className={cn("mx-4 max-h-[calc(100svh-var(--header-h)-1rem)] overflow-y-auto rounded-2xl p-5 shadow-2xl md:backdrop-blur-xl", s.panel)}>
           <ul className="flex flex-col gap-1">
             {links.map((l) => (
               <li key={l.category ?? l.href}>
@@ -363,19 +386,6 @@ export function Navbar({ face = "cosmetics", separate = false, announce = false 
                 />
               </li>
             ))}
-            {showCta && (
-              <li className="pt-3">
-                <a
-                  href={ctaHref}
-                  {...ctaLinkProps}
-                  onClick={() => setMobileOpen(false)}
-                  className="flex h-12 w-full items-center justify-center gap-2 bg-[var(--ink)] text-[12px] font-medium uppercase tracking-[0.18em] text-[var(--crema)] transition-colors duration-200 hover:bg-[var(--face)] hover:text-[var(--ink)]"
-                >
-                  {ctaLabel}
-                  <ArrowUpRight className="h-4 w-4" strokeWidth={1.75} />
-                </a>
-              </li>
-            )}
           </ul>
         </nav>
       </div>

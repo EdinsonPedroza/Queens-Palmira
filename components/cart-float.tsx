@@ -4,23 +4,28 @@ import { m, AnimatePresence, useAnimationControls, useReducedMotion } from "fram
 import { ShoppingBag } from "lucide-react"
 import { useCallback, useEffect, useRef, useState, type ReactNode } from "react"
 import { useCart } from "@/context/cart-context"
-import { formatCOP } from "@/lib/utils"
+import { cn, formatCOP } from "@/lib/utils"
 
 const OUT = [0.23, 1, 0.32, 1] as const
 
 /* A number that "rolls" like an odometer: the old value leaves upward while the new one rises into its place. Without motion, a fade. */
 function Roll({ value, children }: { value: string | number; children?: ReactNode }) {
   const reduce = useReducedMotion()
+  // A value that arrives after the first one rolls in. That entrance is CSS (see "roll-in" in globals.css): Framer's own one blinked the number for a frame when it
+  // ended. The first value just sits there, so `changes` counts the changes (adjusted while rendering, like the chip's numbers below).
+  const [changes, setChanges] = useState(0)
+  const [last, setLast] = useState(value)
+  if (last !== value) { setLast(value); setChanges(changes + 1) }
   return (
     <span className="relative inline-flex overflow-hidden" style={{ height: "1.25em" }}>
       <AnimatePresence mode="popLayout" initial={false}>
         <m.span
           key={value}
-          initial={reduce ? { opacity: 0 } : { opacity: 0, transform: "translateY(100%)" }}
+          initial={false}
           animate={{ opacity: 1, transform: "translateY(0%)" }}
           exit={reduce ? { opacity: 0 } : { opacity: 0, transform: "translateY(-100%)" }}
           transition={{ duration: 0.3, ease: OUT }}
-          className="inline-block"
+          className={cn("inline-block", changes > 0 && "motion-safe:animate-[roll-in_300ms_cubic-bezier(0.23,1,0.32,1)_backwards] motion-reduce:animate-[overlay-in_300ms_ease-out_backwards]")}
           style={{ lineHeight: 1.25 }}
         >
           {children ?? value}
@@ -68,8 +73,9 @@ export function CartFloat() {
     <AnimatePresence>
       {shown.count > 0 && (
         <m.div
-          className="fixed bottom-24 right-5 z-50"
-          initial={{ scale: 0, opacity: 0, y: 24 }}
+          // The entrance (a pop with a little overshoot) is CSS: see "chip-in" in globals.css. Framer keeps the exit.
+          className="fixed bottom-24 right-5 z-50 motion-safe:animate-[chip-in_450ms_cubic-bezier(0.25,1.25,0.5,1)_backwards]"
+          initial={false}
           animate={{ scale: 1, opacity: 1, y: 0 }}
           exit={{ scale: 0, opacity: 0, y: 24 }}
           transition={{ type: "spring", stiffness: 440, damping: 26 }}
@@ -97,13 +103,10 @@ export function CartFloat() {
             {/* A flash of light that blooms behind the bag when something was added (pale gold, brief, once) */}
             {flash > 0 && !reduce && (
               <span aria-hidden className="pointer-events-none absolute inset-0 overflow-hidden">
-                <m.span
+                <span
                   key={flash}
-                  className="absolute inset-0"
+                  className="absolute inset-0 opacity-0 [animation:chip-flash_700ms_cubic-bezier(0.23,1,0.32,1)]"
                   style={{ background: "radial-gradient(circle at 24% 50%, color-mix(in oklab, var(--dorado-soft) 88%, white) 0%, transparent 60%)" }}
-                  initial={{ opacity: 0.95, transform: "scale(0.4)" }}
-                  animate={{ opacity: 0, transform: "scale(1.8)" }}
-                  transition={{ duration: 0.7, ease: OUT }}
                 />
               </span>
             )}

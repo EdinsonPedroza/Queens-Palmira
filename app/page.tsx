@@ -8,6 +8,7 @@ import { CosmeticsHero } from "@/components/sections/cosmetics-hero"
 import { WhatsAppFloat } from "@/components/whatsapp-float"
 import { CartSidebar } from "@/components/cart-sidebar"
 import { CartFloat } from "@/components/cart-float"
+import { openGraph } from "@/lib/seo"
 
 const Catalog        = dynamic(() => import("@/components/sections/catalog").then((m) => m.Catalog))
 const Gallery        = dynamic(() => import("@/components/sections/gallery").then((m) => m.Gallery))
@@ -20,11 +21,11 @@ export const metadata: Metadata = {
   title: "Queens Cosmetics — Cosmética Premium en Palmira",
   description:
     "Tienda de cosméticos premium en Unicentro Palmira. Labiales, skincare, maquillaje, esmaltes y línea capilar. Productos 100% originales. Pide por WhatsApp.",
-  openGraph: {
-    title: "Queens Cosmetics — Cosmética Premium en Palmira",
-    description:
-      "La belleza que mereces. Maquillaje, skincare, esmaltes y línea capilar premium en Unicentro Palmira.",
-  },
+  openGraph: openGraph(
+    "/",
+    "Queens Cosmetics — Cosmética Premium en Palmira",
+    "La belleza que mereces. Maquillaje, skincare, esmaltes y línea capilar premium en Unicentro Palmira.",
+  ),
 }
 
 /*
