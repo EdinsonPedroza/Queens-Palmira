@@ -81,8 +81,8 @@ export function CosmeticsHero() {
       </div>
 
       {/* ── Behind the copy (lg+): the brand's own crema, #FFFFEE, and nothing else, so the text reads against a flat colour and not against the photo's backdrop (a yellower
-          gradient with faint streaks). It starts at 52vw, just past the Montoc pot (it ends at ~54vw at 16:9), and its left edge fades in over ~9vw along an eased (smoothstep-like) curve, solid from ~61vw where the title begins: the client asked to soften the white where the title sits. ── */}
-      <div aria-hidden className="pointer-events-none absolute inset-y-0 right-0 z-10 hidden w-[48vw] lg:block" style={{ background: "linear-gradient(to right, transparent 0%, color-mix(in oklab, var(--crema) 4%, transparent) 4%, color-mix(in oklab, var(--crema) 16%, transparent) 8%, color-mix(in oklab, var(--crema) 40%, transparent) 12%, color-mix(in oklab, var(--crema) 75%, transparent) 16%, var(--crema) 19%)" }} />
+          gradient with faint streaks). It starts at 52vw, just past the Montoc pot (it ends at ~54vw at 16:9), and its left edge fades in over ~9vw along an eased (smoothstep-like) curve, from ~61vw where the title begins it holds at 84 % crema (not 100 %), so the photo's soft backdrop still shows a little through it: the client asked to soften the white where the title sits and to see a bit more of the image. ── */}
+      <div aria-hidden className="pointer-events-none absolute inset-y-0 right-0 z-10 hidden w-[48vw] lg:block" style={{ background: "linear-gradient(to right, transparent 0%, color-mix(in oklab, var(--crema) 3%, transparent) 4%, color-mix(in oklab, var(--crema) 13%, transparent) 8%, color-mix(in oklab, var(--crema) 34%, transparent) 12%, color-mix(in oklab, var(--crema) 63%, transparent) 16%, color-mix(in oklab, var(--crema) 84%, transparent) 19%)" }} />
 
       {/* ── Copy ── */}
       <div className="relative z-20 mt-[47svh] px-6 pb-24 pt-2 md:mt-[52svh] md:px-10 lg:absolute lg:right-[8.5vw] lg:top-[63%] lg:mt-0 lg:w-[30vw] lg:-translate-y-1/2 lg:p-0">
