@@ -354,6 +354,14 @@ em, i, .italic {
 /* Spa (components/reveal.tsx and sections/spa-cta.tsx): a block rises into place as it scrolls into view, and the closing slab's words flip up one by one.
    Both rest visible and start from `backwards`, so nothing can jump back when they end (Framer's entrance did). */
 @keyframes reveal-up { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: none; } }
+/* A line that draws itself from the left (the caption of the spa's services) */
+@keyframes line-draw { from { transform: scaleX(0); } to { transform: none; } }
+/* A letter that rises out of a clipped line (names of the spa's services); at rest it is in its final place, so nothing can jump back when it ends */
+@keyframes char-rise { from { transform: translateY(110%); } to { transform: none; } }
+/* A photo that is wiped in from the left (the viewer of the spa's services when you go to the next one) */
+@keyframes clip-wipe { from { clip-path: inset(0 100% 0 0); } to { clip-path: inset(0 0 0 0); } }
+/* A photo that hangs from a pin and swings like a pendulum until it settles (the clothesline of the spa's services). It ends on 0deg, the resting value of the element. */
+@keyframes swing { 0% { rotate: 7deg; } 30% { rotate: -5deg; } 60% { rotate: 3deg; } 82% { rotate: -1deg; } 100% { rotate: 0deg; } }
 @keyframes flip-in {
   from { opacity: 0; transform: perspective(600px) translateY(48px) rotateX(-90deg); }
   to   { opacity: 1; transform: perspective(600px) translateY(0) rotateX(0deg); }
@@ -659,13 +667,9 @@ main[data-palette="spa"] footer h2 { margin-bottom: 0.7rem; }
 /* /spa sin fondos oscuros: el diseño de la tienda con el dorado en lugar del lila (pedido del cliente, 19 oct 2026). Solo la página /spa (`data-page="spa"`).
    - La franja de anuncio y la cinta de palabras van en dorado con letras crema (como la tienda en lila).
    - Los rellenos casi negros (botones de reservar) pasan a dorado con texto en tinta.
-   - «Agenda tu cita» deja el dorado noche: en esa sección `--dorado-noche` vale el dorado muy pálido y `--crema` el dorado oscuro, así su texto, sus campos y sus
-     líneas (todos escritos con esas dos variables) quedan claros sin tocar el formulario. */
+   - «Agenda tu cita» (`spa-booking.tsx`) ya se escribe claro con tokens (tinta sobre el dorado pálido): no necesita reglas aquí. */
 :root:has(main[data-page="spa"]) :is([class~="bg-ink"], [class~="bg-[var(--ink)]"], [class~="bg-(--ink)"]):not(.rounded-full, [data-testid="announcement"], footer) { background: var(--dorado); color: var(--ink); }
 main[data-page="spa"] [data-testid="announcement"] { background: var(--dorado); color: var(--pv-crema); }
 main[data-page="spa"] section[aria-hidden="true"] span { color: var(--pv-crema); }
-main[data-page="spa"] [data-testid="spa-cta-book"] { background: var(--pv-crema); color: var(--ink); }
-main[data-page="spa"] #agendar { --dorado-noche: var(--face-soft); --crema: var(--dorado-deep); }
-main[data-page="spa"] #agendar button[class*="h-12"] { color: var(--ink); }
-main[data-page="spa"] #agendar input[type="date"] { color-scheme: light; }
+/* El botón del cierre (`spa-cta-book`) ya es crema por sus propias clases: la regla de aquí lo pisaba y, por especificidad, ni siquiera ganaba (salía dorado sobre dorado); ahora es verde WhatsApp por su clase. */
 

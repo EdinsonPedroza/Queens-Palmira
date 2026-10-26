@@ -63,7 +63,7 @@ export function SpaFAQ() {
             className="font-display font-semibold text-ink"
             style={{ fontSize: "clamp(2rem, 4.5vw, 3.2rem)", letterSpacing: "-0.03em" }}
           >
-            Lo que preguntan.
+            Preguntas frecuentes
           </h2>
         </div>
 

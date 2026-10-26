@@ -80,6 +80,10 @@ export function CosmeticsHero() {
         </m.div>
       </div>
 
+      {/* ── Behind the copy (lg+): the brand's own crema, #FFFFEE, and nothing else, so the text reads against a flat colour and not against the photo's backdrop (a yellower
+          gradient with faint streaks). It starts at 56vw, past the Montoc pot (it ends at ~54vw at 16:9), and its left edge fades in over ~6vw so there is no seam. ── */}
+      <div aria-hidden className="pointer-events-none absolute inset-y-0 right-0 z-10 hidden w-[44vw] lg:block" style={{ background: "linear-gradient(to right, transparent 0%, var(--crema) 14%)" }} />
+
       {/* ── Copy ── */}
       <div className="relative z-20 mt-[47svh] px-6 pb-24 pt-2 md:mt-[52svh] md:px-10 lg:absolute lg:right-[8.5vw] lg:top-[63%] lg:mt-0 lg:w-[30vw] lg:-translate-y-1/2 lg:p-0">
         {/* Eyebrow + title (lg+: sit above the paragraph, anchored to it; below lg: in the flow). The whole title is the ink colour (the client's reference). */}

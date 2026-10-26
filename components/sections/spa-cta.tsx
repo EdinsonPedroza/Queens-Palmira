@@ -13,8 +13,7 @@ import { WA_SPA } from "@/lib/whatsapp"
 const WORDS = ["Tus", "manos", "te", "van", "a", "dar", "las", "gracias."]
 
 /*
- * The closing slab, flat like the store's blocks ("una losa del acento con texto casi negro"): solid gold, a one-colour title in the store's weight, and the
- * square near-black button that turns crema on hover. What stays from before: the soft light that drifts over the gold and the title's words flipping up one by one
+ * The closing slab, flat like the store's blocks ("una losa del acento con texto casi negro"): solid gold, a one-colour title in the store's weight, and two square buttons of the same size: WhatsApp in its GREEN (#25D366, ink text) and "¿Buscabas la tienda?" as an ink-outlined button that fills crema on hover (it used to be a bare text link and did not look like a button). What stays from before: the soft light that drifts over the gold and the title's words flipping up one by one
  * (now a CSS animation: Framer's entrance sent each word back to its start for a frame when it ended).
  */
 export function SpaCTA() {
@@ -85,7 +84,7 @@ export function SpaCTA() {
             target="_blank"
             rel="noopener noreferrer"
             data-testid="spa-cta-book"
-            className="inline-flex items-center gap-3 whitespace-nowrap bg-[var(--ink)] px-8 py-4 text-xs font-medium uppercase tracking-[0.2em] text-[var(--crema)] transition-colors duration-200 hover:bg-[var(--crema)] hover:text-[var(--ink)] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[var(--ink)]"
+            className="inline-flex items-center gap-3 whitespace-nowrap bg-[#25D366] px-8 py-4 text-xs font-semibold uppercase tracking-[0.2em] text-[var(--ink)] shadow-[0_14px_26px_-16px_color-mix(in_oklab,var(--ink)_60%,transparent)] transition-colors duration-200 hover:bg-[#1FBF5B] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[var(--ink)]"
           >
             <WhatsAppIcon className="h-4 w-4" />
             Reservar por WhatsApp
@@ -94,7 +93,8 @@ export function SpaCTA() {
           <Link
             href="/"
             {...faceLinkProps("/")}
-            className="tap-area group inline-flex items-center gap-[1.2em] whitespace-nowrap text-xs font-medium uppercase tracking-[0.2em] text-ink transition-opacity hover:opacity-70"
+            className="group inline-flex items-center gap-[1.2em] whitespace-nowrap px-8 py-4 text-xs font-medium uppercase tracking-[0.2em] text-ink transition-colors duration-200 hover:bg-[var(--crema)]"
+            style={{ boxShadow: "inset 0 0 0 1.5px var(--ink)" }}
           >
             ¿Buscabas la tienda?
             <ArrowUpRight className="h-[1.1em] w-[1.1em] transition-transform duration-300 group-hover:rotate-45" strokeWidth={1.5} />

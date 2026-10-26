@@ -4,7 +4,6 @@ import { MotionProvider } from "@/components/motion-provider"
 import { Navbar } from "@/components/navbar"
 import { ScrollProgress } from "@/components/scroll-progress"
 import { SpaHero } from "@/components/sections/spa-hero"
-import { Marquee } from "@/components/sections/marquee"
 import { WhatsAppFloat } from "@/components/whatsapp-float"
 import { openGraph } from "@/lib/seo"
 
@@ -32,12 +31,12 @@ export const metadata: Metadata = {
 export default function SpaPage() {
   return (
     <MotionProvider>
-      {/* flow-root: the hero's margin-top (the strip + header) must stay inside <main>, or the announcement strip, which hangs from the top of <main>, would slide down with it */}
-      <main data-palette="spa" data-page="spa" className="relative flow-root overflow-x-clip">
+      {/* No announcement strip on the spa (the client took it out), so what sits above the hero is only the header: `--header-h` (where the hero starts, and the height the hero's
+          calculations subtract) is the header's own height here. It is declared on <main> because the root's `--header-h` already has the strip's height added in. */}
+      <main data-palette="spa" data-page="spa" className="relative flow-root overflow-x-clip" style={{ ["--header-h" as string]: "var(--nav-h)" }}>
         <ScrollProgress />
-        <Navbar face="spa" separate announce />
+        <Navbar face="spa" separate />
         <SpaHero />
-        <Marquee face="spa" />
         <SpaServices />
         <SpaBooking />
         <SpaTestimonials />
