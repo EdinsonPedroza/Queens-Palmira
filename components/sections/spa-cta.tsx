@@ -21,7 +21,7 @@ export function SpaCTA() {
   const inView = useInView(ref, { once: true, margin: "-80px" })
 
   return (
-    <section ref={ref} className="relative overflow-hidden bg-[linear-gradient(135deg,color-mix(in_oklab,var(--face)_34%,var(--crema))_0%,color-mix(in_oklab,var(--face)_60%,var(--crema))_100%)] py-12 text-ink md:py-16">
+    <section ref={ref} className="relative overflow-hidden bg-[var(--face)] py-12 text-ink md:py-16">
       {/* Soft crema glows over the gold slab. They drift forever, so they are CSS loops (see
           "AMBIENT LOOPS" in globals.css) with their own pace and start; on phones they hold still. */}
       {[
