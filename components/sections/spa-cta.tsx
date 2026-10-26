@@ -21,7 +21,7 @@ export function SpaCTA() {
   const inView = useInView(ref, { once: true, margin: "-80px" })
 
   return (
-    <section ref={ref} className="relative overflow-hidden bg-[var(--face)] py-12 text-ink md:py-16">
+    <section ref={ref} className="relative overflow-hidden bg-[linear-gradient(135deg,color-mix(in_oklab,var(--face)_34%,var(--crema))_0%,color-mix(in_oklab,var(--face)_60%,var(--crema))_100%)] py-12 text-ink md:py-16">
       {/* Soft crema glows over the gold slab. They drift forever, so they are CSS loops (see
           "AMBIENT LOOPS" in globals.css) with their own pace and start; on phones they hold still. */}
       {[
@@ -93,11 +93,12 @@ export function SpaCTA() {
           <Link
             href="/"
             {...faceLinkProps("/")}
-            className="group inline-flex items-center gap-[1.2em] whitespace-nowrap px-8 py-4 text-xs font-medium uppercase tracking-[0.2em] text-ink transition-colors duration-200 hover:bg-[var(--crema)]"
-            style={{ boxShadow: "inset 0 0 0 1.5px var(--ink)" }}
+            className="group relative inline-flex items-center gap-[1.2em] whitespace-nowrap py-2 text-xs font-medium uppercase tracking-[0.2em] text-ink"
           >
             ¿Buscabas la tienda?
             <ArrowUpRight className="h-[1.1em] w-[1.1em] transition-transform duration-300 group-hover:rotate-45" strokeWidth={1.5} />
+            <span aria-hidden className="absolute inset-x-0 bottom-0 h-px bg-ink/35" />
+            <span aria-hidden className="absolute inset-x-0 bottom-0 h-px origin-left scale-x-0 bg-ink transition-transform duration-500 ease-[cubic-bezier(0.23,1,0.32,1)] group-hover:scale-x-100" />
           </Link>
         </Reveal>
       </div>
