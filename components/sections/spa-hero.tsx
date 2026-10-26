@@ -112,7 +112,7 @@ export function SpaHero() {
           <m.p
             variants={fadeUp}
             custom={0}
-            className="mt-4 max-w-md text-[1.1rem] leading-relaxed text-ink md:max-w-xl md:text-[1.15rem] lg:mt-[1vw] lg:max-w-none lg:text-[clamp(1rem,1.2vw,1.35rem)] lg:leading-[1.5]"
+            className="mt-4 max-w-md text-[1.05rem] leading-relaxed text-ink md:max-w-xl md:text-[1.1rem] lg:mt-[1vw] lg:max-w-none lg:text-[clamp(0.95rem,1.1vw,1.25rem)] lg:leading-[1.5]"
           >
             Un spa de uñas para consentir tus manos y pies. <br className="hidden lg:block" />
             Casa aparte de la tienda, en la Cra 25.
