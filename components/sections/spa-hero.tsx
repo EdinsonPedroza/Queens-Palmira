@@ -87,7 +87,7 @@ export function SpaHero() {
           <m.p
             variants={fadeUp}
             custom={-1}
-            className="mb-3 text-[11px] font-medium uppercase tracking-[0.3em] text-ink lg:mb-[1.6vw] lg:text-[clamp(9px,0.85vw,13px)]"
+            className="mb-3 text-[11px] font-medium uppercase tracking-[0.3em] text-[var(--dorado)] lg:mb-[1.6vw] lg:text-[clamp(9px,0.85vw,13px)]"
           >
             Queens Spa
           </m.p>
