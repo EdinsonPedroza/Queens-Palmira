@@ -2,11 +2,11 @@
 
 import { m, type Variants } from "framer-motion"
 import { ArrowDown, ArrowUpRight } from "lucide-react"
+import Link from "next/link"
 import { VENUES } from "@/lib/site"
-import { WA_VISIT } from "@/lib/whatsapp"
 
 /* Lado A's front door: a full-bleed product photo (Atenea concealer, Vogue mascara and a Montoc gel liner, on the left) with the copy, left-aligned,
- * in the empty right half (title on three lines; "Ver catálogo" and "Escríbenos" side by side). Under `lg` the photo becomes a band on top that fades into the crema, and the
+ * in the empty right half (title on three lines; "Ver catálogo" and "Queens Spa" (link to /spa) side by side). Under `lg` the photo becomes a band on top that fades into the crema, and the
  * copy sits below it. Sizes use vw so the whole composition scales with the width, as in the approved preview.
  *
  * The photo is the cover, so it is deliberately NOT run through next/image's optimizer (which re-encodes to
@@ -124,7 +124,7 @@ export function CosmeticsHero() {
         <m.div
           variants={fadeUp}
           custom={1}
-          className="mt-7 flex flex-wrap items-center gap-x-6 gap-y-4 lg:mt-[1.9vw] lg:flex-nowrap lg:gap-x-[1.8vw]"
+          className="mt-7 flex flex-wrap items-center gap-x-6 gap-y-4 lg:mt-[1.9vw] lg:flex-nowrap lg:gap-x-[1vw]"
         >
           <a
             href="#catalogo"
@@ -134,16 +134,14 @@ export function CosmeticsHero() {
             Ver catálogo
             <ArrowUpRight className="h-[1.1em] w-[1.1em]" strokeWidth={1.5} />
           </a>
-          <span aria-hidden className="hidden h-[3vw] w-px bg-ink/25 lg:block" />
-          <a
-            href={WA_VISIT}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="tap-area inline-flex items-center gap-[1.2em] whitespace-nowrap text-xs font-medium uppercase tracking-[0.2em] text-ink transition-opacity hover:opacity-70 lg:text-[clamp(10px,0.95vw,14px)]"
+          <Link
+            href="/spa"
+            data-testid="cosmetics-hero-cta-spa"
+            className="inline-flex items-center gap-[1.4em] whitespace-nowrap px-8 py-4 text-xs font-medium uppercase tracking-[0.2em] text-[var(--dorado)] shadow-[inset_2px_0_0_var(--dorado)] transition-colors duration-200 hover:bg-[var(--dorado)] hover:text-[var(--crema)] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-(--dorado) lg:px-[2.2vw] lg:py-[1.15vw] lg:text-[clamp(10px,0.95vw,14px)]"
           >
-            Escríbenos
+            Queens Spa
             <ArrowUpRight className="h-[1.1em] w-[1.1em]" strokeWidth={1.5} />
-          </a>
+          </Link>
         </m.div>
       </div>
 
