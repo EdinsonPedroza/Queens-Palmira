@@ -621,6 +621,8 @@ main[data-palette="queens"] [data-testid="announcement"] { background: var(--lil
 
 /* Portada: todo el texto en lila (el título es grande; el botón, lila con texto crema) */
 main[data-palette="queens"] #hero :is(h1, p, a, span):not([data-testid="cosmetics-hero-cta-catalog"]) { color: var(--lila); }
+main[data-palette="queens"] #hero a[data-testid="cosmetics-hero-cta-spa"] { color: var(--dorado); }
+main[data-palette="queens"] #hero a[data-testid="cosmetics-hero-cta-spa"]:hover { background: var(--dorado); color: var(--pv-crema); }
 main[data-palette="queens"] #hero [data-testid="cosmetics-hero-cta-catalog"] { background: var(--lila); color: var(--pv-crema); }
 main[data-palette="queens"] #hero [data-testid="cosmetics-hero-cta-catalog"]:hover { background: color-mix(in oklab, var(--lila) 72%, var(--pv-crema)); }
 

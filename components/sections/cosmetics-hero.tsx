@@ -124,7 +124,7 @@ export function CosmeticsHero() {
         <m.div
           variants={fadeUp}
           custom={1}
-          className="mt-7 flex flex-wrap items-center gap-x-6 gap-y-4 lg:mt-[1.9vw] lg:flex-nowrap lg:gap-x-[1.8vw]"
+          className="mt-7 flex flex-wrap items-center gap-x-6 gap-y-4 lg:mt-[1.9vw] lg:flex-nowrap lg:gap-x-[1vw]"
         >
           <a
             href="#catalogo"
@@ -134,11 +134,10 @@ export function CosmeticsHero() {
             Ver catálogo
             <ArrowUpRight className="h-[1.1em] w-[1.1em]" strokeWidth={1.5} />
           </a>
-          <span aria-hidden className="hidden h-[3vw] w-px bg-ink/25 lg:block" />
           <Link
             href="/spa"
             data-testid="cosmetics-hero-cta-spa"
-            className="tap-area inline-flex items-center gap-[1.2em] whitespace-nowrap text-xs font-medium uppercase tracking-[0.2em] text-[var(--dorado)] transition-opacity hover:opacity-70 lg:text-[clamp(10px,0.95vw,14px)]"
+            className="inline-flex items-center gap-[1.4em] whitespace-nowrap px-8 py-4 text-xs font-medium uppercase tracking-[0.2em] text-[var(--dorado)] shadow-[inset_2px_0_0_var(--dorado)] transition-colors duration-200 hover:bg-[var(--dorado)] hover:text-[var(--crema)] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-(--dorado) lg:px-[2.2vw] lg:py-[1.15vw] lg:text-[clamp(10px,0.95vw,14px)]"
           >
             Queens Spa
             <ArrowUpRight className="h-[1.1em] w-[1.1em]" strokeWidth={1.5} />
