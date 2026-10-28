@@ -51,7 +51,7 @@ const COPY: Record<VenueKey, {
   spa: {
     theme: "light",
     title: "Nuestro spa en",
-    place: "la Carrera 25",
+    place: "Alameda",
     lead: "Una casa aparte de la tienda, pensada para consentir tus uñas. Reserva tu cita y te esperamos con todo listo.",
     cta: { href: WA_SPA, label: "Reservar mi cita" },
   },
@@ -102,7 +102,7 @@ export function Location({ face = "cosmetics" }: { face?: VenueKey }) {
   const cards: InfoCard[] = [
     { icon: <MapPin className="h-5 w-5" />, title: "Dirección", lines: [venue.address, venue.region] },
     { icon: <Clock className="h-5 w-5" />, title: "Horario", lines: venue.hours },
-    { icon: <Phone className="h-5 w-5" />, title: "Contacto", lines: [`WhatsApp: ${BUSINESS.phoneDisplay}`] },
+    { icon: <Phone className="h-5 w-5" />, title: "Contacto", lines: [`WhatsApp: ${venue.phone}`] },
     { icon: <InstagramIcon className="h-5 w-5" />, title: "Síguenos", lines: [BUSINESS.instagram], href: BUSINESS.instagramUrl },
   ]
 

@@ -16,8 +16,8 @@ const FAQS = [
     a: `En ${VENUES.spa.address}, Palmira. Es una casa aparte de la tienda de cosméticos, que sigue en el Local 1-28 de Unicentro.`,
   },
   {
-    q: "¿Cuánto dura cada servicio?",
-    a: "Entre 40 y 120 minutos según el servicio; el nail art puede sumar tiempo. Cada servicio tiene su duración al lado del nombre en el menú. Te recomendamos llegar 10 minutos antes de tu cita.",
+    q: "¿Cuánto cuestan los servicios?",
+    a: "Cada servicio tiene su precio en el menú, en pesos colombianos y con impuestos incluidos: el manicure o pedicure tradicional desde $25.000 y el manicure en acrílico desde $100.000, que varía según el diseño. Te confirmamos el valor al agendar. Te recomendamos llegar 10 minutos antes de tu cita.",
   },
   {
     q: "¿Cuánto dura el esmaltado semipermanente?",
@@ -25,11 +25,11 @@ const FAQS = [
   },
   {
     q: "¿Puedo llevar un diseño que vi en una foto?",
-    a: "¡Claro! Llévalo o envíanoslo por WhatsApp y te decimos cómo lo hacemos y cuánto tiempo toma.",
+    a: "¡Claro! Llévalo o envíanoslo por WhatsApp y te decimos cómo lo hacemos y si cambia el precio.",
   },
   {
     q: "¿Retiran las uñas que me hice en otro lugar?",
-    a: "Sí, hacemos el retiro con cuidado para no maltratar tu uña. Cuéntanos qué tienes puesto cuando reserves.",
+    a: "Sí, hacemos el retiro con cuidado para no maltratar tu uña: $15.000 el semipermanente y $20.000 el acrílico. Cuéntanos qué tienes puesto cuando reserves.",
   },
   {
     q: "¿Qué pasa si no puedo asistir?",

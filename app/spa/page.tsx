@@ -6,6 +6,7 @@ import { ScrollProgress } from "@/components/scroll-progress"
 import { SpaHero } from "@/components/sections/spa-hero"
 import { WhatsAppFloat } from "@/components/whatsapp-float"
 import { openGraph } from "@/lib/seo"
+import { WA_SPA_INFO } from "@/lib/whatsapp"
 
 const SpaServices     = dynamic(() => import("@/components/sections/spa-services").then((m) => m.SpaServices))
 const SpaBooking      = dynamic(() => import("@/components/sections/spa-booking").then((m) => m.SpaBooking))
@@ -18,11 +19,11 @@ const Footer          = dynamic(() => import("@/components/sections/footer").the
 export const metadata: Metadata = {
   title: "Queens Spa — Uñas, Manicure y Pedicure en Palmira",
   description:
-    "Spa de uñas en Palmira: manicure, pedicure spa, esmaltado semipermanente, uñas en gel y acrílico y nail art. Con cita previa en la Cra 25 #11-23. Reserva por WhatsApp.",
+    "Spa de uñas en Palmira: manicure, pedicure, esmaltado semipermanente, uñas en gel y acrílico. Con cita previa en la Calle 69C #26-62, Alameda. Reserva por WhatsApp.",
   openGraph: openGraph(
     "/spa",
     "Queens Spa — Uñas, Manicure y Pedicure en Palmira",
-    "La otra cara de la reina: un spa de uñas para consentir tus manos y pies. Cra 25 #11-23, Palmira.",
+    "La otra cara de la reina: un spa de uñas para consentir tus manos y pies. Calle 69C #26-62, Alameda, Palmira.",
   ),
 }
 
@@ -44,7 +45,7 @@ export default function SpaPage() {
         <SpaCTA />
         <Location face="spa" />
         <Footer face="spa" tone="crema" />
-        <WhatsAppFloat />
+        <WhatsAppFloat href={WA_SPA_INFO} />
       </main>
     </MotionProvider>
   )

@@ -3,7 +3,8 @@
 import { useEffect, useState } from "react"
 import { WA_DEFAULT } from "@/lib/whatsapp"
 
-export function WhatsAppFloat() {
+/** `href`: where the button writes. The store's number by default; the spa passes its own. */
+export function WhatsAppFloat({ href = WA_DEFAULT }: { href?: string }) {
   const [visible, setVisible] = useState(false)
   const [showTip, setShowTip] = useState(false)
 
@@ -37,7 +38,7 @@ export function WhatsAppFloat() {
         </div>
       )}
       <a
-        href={WA_DEFAULT}
+        href={href}
         target="_blank"
         rel="noopener noreferrer"
         className="group relative flex h-14 w-14 items-center justify-center rounded-full text-white transition-all hover:scale-110"

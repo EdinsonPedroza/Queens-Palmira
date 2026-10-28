@@ -141,11 +141,6 @@ export function CosmeticsHero() {
             style={{ borderLeft: "2px solid var(--dorado)" }}
             className="inline-flex items-center gap-[1.4em] whitespace-nowrap px-8 py-4 text-xs font-medium uppercase tracking-[0.2em] text-[var(--dorado)] transition-colors duration-200 hover:bg-[var(--dorado)] hover:text-[var(--crema)] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-(--dorado) lg:px-[2.2vw] lg:py-[1.15vw] lg:text-[clamp(10px,0.95vw,14px)]"
           >
-            {/* The official isotipo (crown included) as a mask, so it takes the link's colour (gold, then crema on hover). It is an <i>, not a <span>: the hero palette in globals.css paints every span lila. */}
-            <i
-              aria-hidden
-              className="-ml-[0.2em] block h-[2.2em] w-[1.52em] bg-current [mask-image:url(/images/brand/isotipo-dorado.webp)] [mask-position:center] [mask-repeat:no-repeat] [mask-size:contain]"
-            />
             Queens Spa
             <ArrowUpRight className="h-[1.1em] w-[1.1em]" strokeWidth={1.5} />
           </Link>

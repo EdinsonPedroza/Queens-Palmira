@@ -20,7 +20,7 @@ const FAQS = [
   },
   {
     q: "¿Puedo devolver un producto?",
-    a: "Puedes cambiarlo dentro de los 7 días siguientes a la compra si no ha sido usado y conserva su empaque original. Por higiene no aceptamos devoluciones de labiales, skincare abierto ni productos íntimos.",
+    a: "Puedes cambiarlo dentro de los 7 días siguientes a la compra si no ha sido usado y conserva su empaque original; por higiene no hacemos cambios de labiales, skincare abierto ni productos íntimos. Si te lo enviamos y no lo has abierto, también puedes devolverlo dentro de los 5 días hábiles siguientes a la entrega y te reembolsamos. Y si llega defectuoso o vencido, te lo cambiamos o te devolvemos el dinero.",
   },
   {
     q: "¿Ofrecen asesoría personalizada?",

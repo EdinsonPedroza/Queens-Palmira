@@ -4,12 +4,13 @@ import { useCallback, useRef, useState, useSyncExternalStore, type PointerEvent 
 import Image from "next/image"
 import { useInView, useReducedMotion } from "framer-motion"
 import { Reveal } from "@/components/reveal"
-import { SPA_SERVICES as SERVICES, type SpaService } from "@/lib/spa-services"
+import { SPA_GROUPS as GROUPS, priceLabel, servicesOf, type SpaGroup } from "@/lib/spa-services"
+import { formatCOP } from "@/lib/utils"
 import { spaBookingLink } from "@/lib/whatsapp"
 
 const EASE = "cubic-bezier(0.16,1,0.3,1)" // strong ease-out: things arriving
 const EASE_UI = "cubic-bezier(0.23,1,0.32,1)" // strong ease-out for hover
-const ratio = (s: SpaService) => s.width / s.height
+const ratio = (g: SpaGroup) => g.width / g.height
 const RADIUS = "1.1rem"
 const GRADIENT = "linear-gradient(to top, color-mix(in oklab, var(--dorado-noche) 94%, transparent) 0%, color-mix(in oklab, var(--dorado-noche) 62%, transparent) 34%, transparent 66%)"
 
@@ -31,8 +32,8 @@ function useMedia(query: string, server: boolean) {
 }
 
 /*
- * One card of the gallery (the client's "Revelado": only the tag and the name are shown; the description unfolds when the card is pointed at, and always on a phone, where
- * nothing can be pointed at).
+ * One card of the gallery: the tag, the name and the services of the card WITH THEIR PRICES, always on screen (a price has to be seen, not found by pointing at the card: the
+ * first "Revelado" version unfolded a description on hover, and there is no description any more).
  *
  * ENTRANCE (once, when it scrolls into view; rows 140 ms apart, cards in a row 90 ms apart): each card FADES IN AND SETTLES: it rises 32 px and grows from 97 % while it fades
  * (0.8–1 s, strong ease-out) and its photo, which starts a little larger, eases back to its size behind it; then the tag, the name and the details fade up. Nothing
@@ -40,13 +41,18 @@ function useMedia(query: string, server: boolean) {
  * and the fine white lines that went with them are gone too).
  *
  * HOVER (mouse or keyboard focus; the cursor becomes the hand: the whole card is the booking link; everything on an ease-out): the card lifts 6 px, the photo drifts closer
- * (scale 1.08) and follows the cursor a few pixels the other way, a second layer deepens the gradient, the tag fills, the description
- * unfolds (grid rows) while its text rises into place, and a gold line draws itself along the bottom edge. Leaving, everything goes back at the same speed.
+ * (scale 1.08) and follows the cursor a few pixels the other way, a second layer deepens the gradient, the tag fills
+ * and a gold line draws itself along the bottom edge. Leaving, everything goes back at the same speed.
  *
- * Only `transform` and `opacity` move (the unfolding uses grid rows, the usual exception for an accordion). With "reduce motion" the cards are simply there and the
- * hover only fades and unfolds. The card is a `group` and each card writes its own transforms (nothing on a parent).
+ * Only `transform` and `opacity` move. With "reduce motion" the cards are simply there and the hover only fades. The card is a `group` and each card writes its own
+ * transforms (nothing on a parent).
  */
-function RevealCard({ s, n, row, fill, hoverable }: { s: SpaService; n: number; row: number; fill: boolean; hoverable: boolean }) {
+function RevealCard({ g, n, row, fill, hoverable }: { g: SpaGroup; n: number; row: number; fill: boolean; hoverable: boolean }) {
+  const items = servicesOf(g.id)
+  const single = items.length === 1
+  // One service: the card books that service; several: it books the kind ("Manicure") and the person says which in the chat
+  const book = single ? items[0].name : g.title
+  const fromPrice = single ? priceLabel(items[0]) : `Desde ${formatCOP(Math.min(...items.map((i) => i.price)))}`
   const slot = useRef<HTMLDivElement>(null) // what we watch: it is never clipped (a fully clipped element reports no intersection and would never open)
   const drift = useRef<HTMLDivElement>(null)
   const seenOnce = useInView(slot, { once: true, margin: "-60px" })
@@ -77,7 +83,7 @@ function RevealCard({ s, n, row, fill, hoverable }: { s: SpaService; n: number; 
   }
 
   return (
-    <div ref={slot} className="min-w-0" style={{ flex: fill ? "1 1 0%" : `${ratio(s)} 1 0%`, aspectRatio: ratio(s) }}>
+    <div ref={slot} className="min-w-0" style={{ flex: fill ? "1 1 0%" : `${ratio(g)} 1 0%`, aspectRatio: ratio(g) }}>
       <div className="relative h-full w-full" style={{ translate: on ? "0 -6px" : "0 0", transition: t(`translate 500ms ${EASE_UI}`) }}>
         {/* the shadows: a soft one always, a deeper one while pointed at (opacity only) */}
         <span aria-hidden className="pointer-events-none absolute inset-0" style={{ borderRadius: RADIUS, boxShadow: "0 26px 44px -34px color-mix(in oklab, var(--ink) 55%, transparent)", opacity: show ? 1 : 0, transition: t(`opacity 900ms ease-out ${delay}ms`) }} />
@@ -85,16 +91,16 @@ function RevealCard({ s, n, row, fill, hoverable }: { s: SpaService; n: number; 
 
         {/* The whole card is the booking link (the hand cursor says so). There is NO arrow on the photo: the client did not like the round one in the top right corner. */}
         <a
-          href={spaBookingLink(s.name)}
+          href={spaBookingLink(book)}
           target="_blank"
           rel="noopener noreferrer"
-          aria-label={`Reservar ${s.name} por WhatsApp`}
+          aria-label={`Reservar ${book} por WhatsApp`}
           onPointerEnter={enter}
           onPointerMove={point}
           onPointerLeave={leave}
           onFocus={() => setOn(true)}
           onBlur={() => setOn(false)}
-          className="group relative block h-full w-full cursor-pointer overflow-hidden outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-[var(--crema)]"
+          className="group @container relative block h-full w-full cursor-pointer overflow-hidden outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-[var(--crema)]"
           style={{
             borderRadius: RADIUS,
             opacity: show ? 1 : 0,
@@ -105,36 +111,45 @@ function RevealCard({ s, n, row, fill, hoverable }: { s: SpaService; n: number; 
           {/* the photo: hover drift on the outer layer, entrance (a slow settle from a little larger) on the inner one */}
           <div ref={drift} className="absolute inset-0" style={{ transition: t(`transform 1100ms ${EASE_UI}`) }}>
             <div className="absolute inset-0" style={{ transform: show ? "none" : "scale(1.1)", transition: t(`transform 1600ms ${EASE} ${delay}ms`) }}>
-              <Image src={s.photo} alt="" fill sizes="(min-width: 1024px) 520px, 90vw" draggable={false} className="object-cover" />
+              <Image src={g.photo} alt="" fill sizes="(min-width: 1024px) 520px, 90vw" draggable={false} className="object-cover" />
             </div>
           </div>
 
           <span aria-hidden className="pointer-events-none absolute inset-0" style={{ background: GRADIENT }} />
           <span aria-hidden className="pointer-events-none absolute inset-0 bg-[var(--dorado-noche)]" style={{ opacity: open ? 0.28 : 0, transition: t(`opacity 600ms ${EASE_UI}`) }} />
 
-          <div className="absolute inset-x-0 top-0 flex items-start p-5 md:p-6">
+          {/* The paddings and the size of the price rows follow the CARD's width (container queries), not the screen's: the manicure card is the narrowest (its photo is portrait) */}
+          <div className="absolute inset-x-0 top-0 flex items-start p-3.5 @min-[240px]:p-5 @min-[320px]:p-6">
             <span
               className="rounded-full px-3.5 py-1.5 text-[10.5px] font-medium uppercase tracking-[0.22em] text-[var(--crema)] backdrop-blur-sm"
               style={{ ...rise(0, 10), background: on ? "color-mix(in oklab, var(--crema) 30%, transparent)" : "color-mix(in oklab, var(--crema) 16%, transparent)" }}
             >
-              {s.tag}
+              {g.tag}
             </span>
           </div>
 
-          <div className="absolute inset-x-0 bottom-0 p-5 text-[var(--crema)] md:p-6">
+          <div className="absolute inset-x-0 bottom-0 p-3.5 text-[var(--crema)] @min-[240px]:p-5 @min-[320px]:p-6">
             <p role="heading" aria-level={3} className="font-display text-[1.4rem] leading-[1.05] tracking-[-0.01em] md:text-[1.7rem]" style={rise(60, 12)}>
-              {s.name}
+              {g.title}
             </p>
-            <div className={`grid ${open ? "grid-rows-[1fr]" : "grid-rows-[0fr]"}`} style={{ transition: t(`grid-template-rows 550ms ${EASE_UI}`) }}>
-              <div className="min-h-0 overflow-hidden">
-                <p className="max-w-[26rem] pt-2 text-[13.5px] leading-relaxed text-[var(--crema)]/85 md:text-[14px]" style={{ opacity: open ? 1 : 0, transform: open ? "none" : "translateY(10px)", transition: t(`opacity 450ms ease-out ${open ? 90 : 0}ms, transform 650ms ${EASE_UI} ${open ? 90 : 0}ms`) }}>
-                  {s.desc}
-                </p>
-              </div>
-            </div>
+            {/* The services of the card with their prices: always visible (several services), or the one-line note of a single service */}
+            {!single ? (
+              <ul className="max-w-[26rem] space-y-1 pt-2.5 text-[12px] leading-snug text-[var(--crema)]/90 @min-[240px]:text-[13px] @min-[320px]:text-[14px]" style={rise(100, 10)}>
+                {items.map((it) => (
+                  <li key={it.name} className="flex items-baseline justify-between gap-2">
+                    <span className="whitespace-nowrap">{it.label ?? it.name}</span>
+                    <span className="shrink-0 font-semibold [font-variant-numeric:lining-nums]">{formatCOP(it.price)}</span>
+                  </li>
+                ))}
+              </ul>
+            ) : g.note ? (
+              <p className="max-w-[26rem] pt-2 text-[13.5px] leading-relaxed text-[var(--crema)]/90 md:text-[14px]" style={rise(100, 10)}>
+                {g.note}
+              </p>
+            ) : null}
             <p className="mt-3.5 flex flex-wrap justify-between gap-x-6 gap-y-1 text-[11px] uppercase tracking-[0.2em] text-[var(--crema)]/80" style={rise(140, 10)}>
-              <span>{s.duration}</span>
-              <span>Precio: consultar</span>
+              <span className="[font-variant-numeric:lining-nums]">{fromPrice}</span>
+              <span>Con cita previa</span>
             </p>
           </div>
 
@@ -166,7 +181,7 @@ export function SpaServices() {
               Servicios Queens
             </h2>
           </div>
-          <p className="max-w-md text-sm leading-relaxed text-ink/70">Cada servicio se reserva con cita previa. Toca el servicio que quieras y te escribimos por WhatsApp para cuadrar el horario.</p>
+          <p className="max-w-md text-sm leading-relaxed text-ink/70">Precios en pesos colombianos, con impuestos incluidos. Cada servicio se reserva con cita previa: toca el que quieras y te escribimos por WhatsApp para cuadrar el horario.</p>
         </Reveal>
 
         {/* ── Gallery ── */}
@@ -174,7 +189,7 @@ export function SpaServices() {
           {rows.map((row, gi) => (
             <div key={`${wide}-${tablet}-${gi}`} className="flex justify-center gap-3 md:gap-5">
               {row.map((k, n) => (
-                <RevealCard key={k} s={SERVICES[k]} n={n} row={gi} fill={!tablet} hoverable={hoverable} />
+                <RevealCard key={k} g={GROUPS[k]} n={n} row={gi} fill={!tablet} hoverable={hoverable} />
               ))}
             </div>
           ))}
