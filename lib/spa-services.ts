@@ -26,6 +26,8 @@ export interface SpaGroup {
   title: string
   /** One line under the title when the card has a single service. */
   note?: string
+  /** The question the picker window asks (only the cards with several services open one). */
+  ask?: string
   photo: string
   focus: string
   /** Natural size of the photo, so it can be drawn whole (no crop) at its own proportion. */
@@ -50,12 +52,12 @@ export const SPA_SERVICES: SpaService[] = [
 
 /** The cards of the menu, in reading order (the photos keep the proportions the three-per-row layout was built for). */
 export const SPA_GROUPS: SpaGroup[] = [
-  { id: "manicure", tag: "Manos", title: "Manicure", photo: "/images/spa/nails-file.webp", width: 1400, height: 2097, focus: "45% 22%" },
-  { id: "pedicure", tag: "Pies", title: "Pedicure", photo: "/images/spa/oil.webp", width: 1600, height: 1067, focus: "72% 40%" },
+  { id: "manicure", tag: "Manos", title: "Manicure", ask: "¿Qué manicure quieres?", photo: "/images/spa/nails-file.webp", width: 1400, height: 2097, focus: "45% 22%" },
+  { id: "pedicure", tag: "Pies", title: "Pedicure", ask: "¿Qué pedicure quieres?", photo: "/images/spa/oil.webp", width: 1600, height: 1067, focus: "72% 40%" },
   { id: "softgel", tag: "Soft gel", title: "Manicure soft gel", photo: "/images/spa/nails-gold.webp", width: 1100, height: 1343, focus: "62% 40%" },
   { id: "gel", tag: "Gel", title: "Manicure en gel", note: "Polygel o base rubber.", photo: "/images/spa/nails-french.webp", width: 813, height: 1146, focus: "20% 70%" },
   { id: "acrilico", tag: "Acrílico", title: "Manicure en acrílico", note: "El precio varía según el diseño.", photo: "/images/spa/hero-manicura-1373.webp", width: 1373, height: 1146, focus: "80% 25%" },
-  { id: "retiro", tag: "Cuidado", title: "Retiros", photo: "/images/spa/nails-file.webp", width: 1400, height: 2097, focus: "35% 88%" },
+  { id: "retiro", tag: "Cuidado", title: "Retiros", ask: "¿Qué retiro necesitas?", photo: "/images/spa/nails-file.webp", width: 1400, height: 2097, focus: "35% 88%" },
 ]
 
 /** "$ 25.000", or "Desde $ 100.000" when the price depends on the design. */

@@ -7,6 +7,7 @@ import { cn } from "@/lib/utils"
 
 const Dialog = DialogPrimitive.Root
 const DialogPortal = DialogPrimitive.Portal
+const DialogTrigger = DialogPrimitive.Trigger
 
 /*
  * The open/close motion is plain CSS: the keyframes (overlay-in/out, sheet-in/out) live in
@@ -87,6 +88,7 @@ DialogDescription.displayName = DialogPrimitive.Description.displayName
 
 export {
   Dialog,
+  DialogTrigger,
   DialogPortal,
   DialogOverlay,
   DialogContent,

@@ -320,6 +320,20 @@ em, i, .italic {
   from { transform: translateX(0); }
   to   { transform: translateX(100%); }
 }
+/* Service picker of the spa menu (components/sections/spa-service-picker.tsx): a sheet that rises from the bottom on phones, a card that settles in from md up.
+   CSS like every entrance here (Framer blinks a frame when it ends); Radix keeps it mounted until the closing animation ends. Nothing moves with "reduce motion". */
+@keyframes picker-sheet-in  { from { transform: translateY(100%); } to { transform: none; } }
+@keyframes picker-sheet-out { from { transform: none; } to { transform: translateY(100%); } }
+@keyframes picker-in  { from { opacity: 0; transform: translateY(14px) scale(0.97); } to { opacity: 1; transform: none; } }
+@keyframes picker-out { from { opacity: 1; transform: none; } to { opacity: 0; transform: translateY(6px) scale(0.98); } }
+@media (prefers-reduced-motion: no-preference) {
+  .picker[data-state="open"]   { animation: picker-sheet-in 0.4s cubic-bezier(0.16, 1, 0.3, 1); }
+  .picker[data-state="closed"] { animation: picker-sheet-out 0.2s cubic-bezier(0.23, 1, 0.32, 1) forwards; }
+}
+@media (prefers-reduced-motion: no-preference) and (min-width: 768px) {
+  .picker[data-state="open"]   { animation: picker-in 0.35s cubic-bezier(0.16, 1, 0.3, 1); }
+  .picker[data-state="closed"] { animation: picker-out 0.18s cubic-bezier(0.23, 1, 0.32, 1) forwards; }
+}
 /* Tone menu of the product card: it enters with a CSS animation (not Framer Motion). The JS version left the panel blank for a frame
    while it handed over from the animation to the final style: the client saw it as a flicker. */
 @keyframes tone-in    { from { opacity: 0; transform: scale(0.96) translateY(-4px); } to { opacity: 1; transform: none; } }
