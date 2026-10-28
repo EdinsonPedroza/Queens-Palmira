@@ -69,7 +69,7 @@ export function SpaGallery() {
             </m.h2>
           </div>
           <m.p variants={fadeUp} custom={2} className="max-w-sm text-sm leading-relaxed text-ink/65 md:text-base">
-            Luz baja, aromas suaves y manos que saben. Así se siente bajar el ritmo en la Cra 25.
+            Luz baja, aromas suaves y manos que saben. Así se siente bajar el ritmo en Alameda.
           </m.p>
         </m.div>
 

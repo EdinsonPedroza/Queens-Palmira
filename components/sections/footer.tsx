@@ -7,9 +7,9 @@ import { ArrowUp, MapPin } from "lucide-react"
 import { InstagramIcon } from "@/components/instagram-icon"
 import { QueensLogo } from "@/components/queens-logo"
 import { WhatsAppIcon } from "@/components/whatsapp-icon"
-import { WA_DEFAULT, WA_NEWS } from "@/lib/whatsapp"
+import { WA_DEFAULT, WA_NEWS, WA_SPA_INFO } from "@/lib/whatsapp"
 import { CATEGORIES, type ProductCategory } from "@/lib/categories"
-import { BUSINESS, CATALOG_FILTERS_ID, CATEGORY_EVENT, VENUES, faceLinkProps, type Face } from "@/lib/site"
+import { BUSINESS, CATALOG_FILTERS_ID, CATEGORY_EVENT, LEGAL, VENUES, faceLinkProps, type Face } from "@/lib/site"
 import { cn, scrollBehavior } from "@/lib/utils"
 
 const colVariants = {
@@ -115,6 +115,8 @@ export function Footer({ face = "cosmetics", tone = "ink" }: { face?: Face; tone
   const wordRef = useRef<HTMLDivElement>(null)
   const wordIn = useInView(wordRef, { once: true, margin: "-80px" })
   const [colA, colB] = COLUMNS[face]
+  // Each venue has its own WhatsApp number: the spa's footer shows and writes to the spa's, every other page to the store's
+  const chat = face === "spa" ? { venue: VENUES.spa, href: WA_SPA_INFO, label: "WhatsApp del spa" } : { venue: VENUES.cosmetics, href: WA_DEFAULT, label: "Servicio al cliente" }
 
   return (
     <footer className="relative bg-[var(--ink)] text-white overflow-hidden">
@@ -145,7 +147,7 @@ export function Footer({ face = "cosmetics", tone = "ink" }: { face?: Face; tone
                   </p>
                   <div className="mt-6 flex gap-3">
                     <SocialLink href={BUSINESS.instagramUrl} icon={<InstagramIcon className="h-5 w-5" />} label="Instagram" />
-                    <SocialLink href={WA_DEFAULT} icon={<WhatsAppIcon className="h-5 w-5" />} label="WhatsApp" />
+                    <SocialLink href={chat.href} icon={<WhatsAppIcon className="h-5 w-5" />} label="WhatsApp" />
                   </div>
                   {/* From Hourglass's newsletter block: there is no backend here, so instead of an email box the way to hear first is WhatsApp (a ready-made message) */}
                   <div className="mt-7 max-w-xs border-t pt-5" style={{ borderColor: HAIRLINE }}>
@@ -195,9 +197,9 @@ export function Footer({ face = "cosmetics", tone = "ink" }: { face?: Face; tone
                     <li className="flex items-start gap-2">
                       <WhatsAppIcon className="h-4 w-4 shrink-0 mt-0.5 text-[var(--face)]" />
                       <span>
-                        <span className="block text-xs font-semibold uppercase tracking-wider text-white/50">Servicio al cliente</span>
-                        <a href={WA_DEFAULT} target="_blank" rel="noopener noreferrer" className="tap-area hover:text-[var(--face)] transition">
-                          {BUSINESS.phoneDisplay}
+                        <span className="block text-xs font-semibold uppercase tracking-wider text-white/50">{chat.label}</span>
+                        <a href={chat.href} target="_blank" rel="noopener noreferrer" className="tap-area hover:text-[var(--face)] transition">
+                          {chat.venue.phone}
                         </a>
                       </span>
                     </li>
@@ -313,6 +315,10 @@ export function Footer({ face = "cosmetics", tone = "ink" }: { face?: Face; tone
             <Link href="/privacidad" className="tap-area hover:text-[var(--face)] transition-colors">
               Privacidad
             </Link>
+            {/* Every Colombian online shop must link visibly to the consumer-protection authority (Ley 1480 de 2011, art. 50, parágrafo) */}
+            <a href={LEGAL.sic} target="_blank" rel="noopener noreferrer" className="tap-area hover:text-[var(--face)] transition-colors">
+              Superintendencia de Industria y Comercio
+            </a>
           </nav>
           <p>Palmira, Valle del Cauca · Colombia</p>
         </m.div>

@@ -142,7 +142,6 @@ export const viewport: Viewport = {
 
 const ALL_DAYS = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
 const SHARED = {
-  telephone: "+573148677230",
   priceRange: "$$",
   areaServed: { "@type": "City", name: "Palmira" },
   sameAs: ["https://www.instagram.com/queenscosmeticss/"],
@@ -160,6 +159,7 @@ const jsonLd = [
       "Tienda de cosméticos premium en Unicentro Palmira: labiales, skincare, maquillaje, esmaltes y línea capilar. Productos 100% originales.",
     url: `${SITE_URL}/`,
     image: `${SITE_URL}/og-image.jpg`,
+    telephone: "+573148677230",
     ...SHARED,
     address: {
       "@type": "PostalAddress",
@@ -179,19 +179,19 @@ const jsonLd = [
     "@id": `${SITE_URL}/spa#spa`,
     name: "Queens Spa",
     description:
-      "Spa de uñas en Palmira: manicure, pedicure spa, esmaltado semipermanente, uñas en gel y acrílico y nail art. Con cita previa.",
+      "Spa de uñas en Palmira: manicure, pedicure, esmaltado semipermanente, uñas en gel y acrílico. Con cita previa.",
     url: `${SITE_URL}/spa`,
     image: `${SITE_URL}/og-image.jpg`,
+    telephone: "+573103879484",
     ...SHARED,
     address: {
       "@type": "PostalAddress",
-      streetAddress: "Carrera 25 #11-23",
+      streetAddress: "Calle 69C #26-62, Alameda",
       addressLocality: "Palmira",
       addressRegion: "Valle del Cauca",
       addressCountry: "CO",
     },
-    geo: { "@type": "GeoCoordinates", latitude: 3.509948, longitude: -76.2984773 },
-    // No opening hours: the spa works by appointment, every day, and has no fixed hours (the 10:00–20:00 that stood here were the store's).
+    // No geo: we have no exact coordinates for the spa's new address (Alameda). No opening hours either: the spa works by appointment, every day, and has no fixed hours.
   },
 ]
 

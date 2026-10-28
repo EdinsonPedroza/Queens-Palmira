@@ -1,7 +1,6 @@
 import type { Product } from "./products"
+import { VENUES } from "./site"
 import { formatCOP } from "./utils"
-
-export const WHATSAPP_NUMBER = "573148677230"
 
 export interface CartLineItem {
   product: Product
@@ -9,8 +8,9 @@ export interface CartLineItem {
   qty: number
 }
 
-export function waLink(message: string): string {
-  return `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`
+/** A wa.me link with the message already written. The store and the spa each have their own WhatsApp number (`VENUES`): the store's is the default. */
+export function waLink(message: string, venue: "cosmetics" | "spa" = "cosmetics"): string {
+  return `https://wa.me/${VENUES[venue].whatsapp}?text=${encodeURIComponent(message)}`
 }
 
 export const WA_DEFAULT = waLink(
@@ -31,13 +31,30 @@ export const WA_ADVICE = waLink(
 
 export const WA_SPA = waLink(
   "Hola Queens Spa! Quiero reservar una cita, ¿qué horarios tienen disponibles?",
+  "spa",
+)
+
+/** The spa's floating button and footer: a general question, not a booking. */
+export const WA_SPA_INFO = waLink(
+  "Hola Queens Spa! Me gustaría recibir información sobre sus servicios.",
+  "spa",
+)
+
+/** The legal pages' channel for requests, complaints and data requests (peticiones, quejas, reclamos, habeas data): one per venue. */
+export const WA_REQUEST = waLink(
+  "Hola Queens! Quiero hacer una solicitud.",
+)
+export const WA_REQUEST_SPA = waLink(
+  "Hola Queens Spa! Quiero hacer una solicitud.",
+  "spa",
 )
 
 export interface BookingRequest {
   name: string
   phone?: string
   service: string
-  duration?: string
+  /** Already written out, e.g. "$ 25.000" or "desde $ 100.000". */
+  price?: string
   /** Already written out for a person, e.g. "lunes, 20 de octubre". */
   date: string
   time?: string
@@ -51,7 +68,7 @@ export function buildBookingMessage(r: BookingRequest): string {
     "",
     `• Nombre: ${r.name}`,
     ...(r.phone ? [`• Teléfono: ${r.phone}`] : []),
-    `• Servicio: ${r.service}${r.duration ? ` (${r.duration})` : ""}`,
+    `• Servicio: ${r.service}${r.price ? ` (${r.price})` : ""}`,
     `• Fecha: ${r.date}`,
   ]
   if (r.time) lines.push(`• Hora preferida: ${r.time}`)
@@ -61,7 +78,7 @@ export function buildBookingMessage(r: BookingRequest): string {
 }
 
 export function spaBookingLink(service: string): string {
-  return waLink(`Hola Queens Spa! Quiero reservar: ${service}. ¿Qué horarios tienen disponibles?`)
+  return waLink(`Hola Queens Spa! Quiero reservar: ${service}. ¿Qué horarios tienen disponibles?`, "spa")
 }
 
 export function buildOrderMessage(items: CartLineItem[]): string {

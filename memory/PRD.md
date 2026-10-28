@@ -8,20 +8,23 @@ Crear un sitio premium y femenino para **Queens**, marca con dos personalidades 
 ## Información del Negocio
 - **Nombre:** Queens — Queens Cosmetics (tienda) + Queens Spa
 - **Instagram:** [@queenscosmeticss](https://www.instagram.com/queenscosmeticss/) (compartido)
-- **WhatsApp:** +57 314 867 7230 (compartido)
-- **URL WhatsApp:** `https://wa.me/573148677230?text=Hola%20Queens,%20quiero%20hacer%20un%20pedido`
+- **WhatsApp tienda:** +57 314 867 7230 — `https://wa.me/573148677230?text=Hola%20Queens,%20quiero%20hacer%20un%20pedido`
+- **WhatsApp spa:** +57 310 387 9484 — `https://wa.me/573103879484` (cada sede tiene su número; viven en `VENUES.<sede>.phone` / `.whatsapp`, `lib/site.ts`)
 - **Público objetivo:** Mujeres 18–45 años, interesadas en belleza y autocuidado premium
 
 ### Sedes
 | | Queens Cosmetics | Queens Spa |
 |---|---|---|
-| **Dirección** | Local 1-28, Unicentro Palmira | Cra 25 #11-23 |
+| **Dirección** | Local 1-28, Unicentro Palmira | Calle 69C #26-62, Alameda (antes Cra 25 #11-23; cambio del 28 oct 2026) |
 | **Ciudad** | Palmira, Valle del Cauca | Palmira, Valle del Cauca |
 | **Horario** | Lun a Dom, 10:00 AM – 8:00 PM | Lun a Dom, con cita previa |
 | **Atención** | Sin cita | Solo con cita |
-| **Coordenadas** | `3.5400896, -76.310776` | `3.509948, -76.2984773` ⚠️ sin confirmar |
+| **Coordenadas** | `3.5400896, -76.310776` | sin coordenadas (Google resuelve la dirección) |
 
-⚠️ El pin del spa lo geocodifiqué del cruce Cra 25 × Calle 11 (OpenStreetMap), no es la puerta exacta. Pedir a la clienta el link de Google Maps de la sede y reemplazar `VENUES.spa` en `lib/site.ts`.
+⚠️ El spa se mudó a la Calle 69C #26-62 (Alameda): el mapa y "Cómo llegar" buscan por dirección y el JSON-LD del spa no lleva `geo`. Si la clienta manda el link de Google Maps de la sede, ponerlo en `VENUES.spa.gmaps` / `embed` (`lib/site.ts`).
+
+### Servicios y precios del spa (28 oct 2026, COP; `lib/spa-services.ts`)
+Manicure tradicional 25.000 · gel evolution 30.000 · semipermanente 45.000 · Pedicure tradicional 25.000 · gel evolution 30.000 · semipermanente 35.000 · Manicure soft gel 90.000 · Manicure gel (polygel o base rubber) 90.000 · Manicure en acrílico desde 100.000 (varía según el diseño) · Retiro acrílico 20.000 (la clienta escribió «20.0000»: se tomó como 20.000) · Retiro semipermanente 15.000. Sin duraciones.
 
 ## Brand Identity
 

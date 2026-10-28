@@ -8,7 +8,7 @@ import { InstagramIcon } from "@/components/instagram-icon"
 import { Reveal } from "@/components/reveal"
 import { WhatsAppIcon } from "@/components/whatsapp-icon"
 import { BUSINESS, VENUES } from "@/lib/site"
-import { SPA_SERVICES } from "@/lib/spa-services"
+import { SPA_SERVICES, priceLabel } from "@/lib/spa-services"
 import { WA_SPA, buildBookingMessage, waLink } from "@/lib/whatsapp"
 import { cn } from "@/lib/utils"
 
@@ -270,7 +270,7 @@ function ContactCard() {
           <CardAction href={VENUES.spa.gmaps} label="Cómo llegar" aria="Cómo llegar a Queens Spa en Google Maps" delay={120}>
             <MapPin className="h-5 w-5" strokeWidth={1.5} />
           </CardAction>
-          <CardAction href={WA_SPA} label="WhatsApp" aria={`Escribir por WhatsApp al ${BUSINESS.phoneDisplay}`} delay={200}>
+          <CardAction href={WA_SPA} label="WhatsApp" aria={`Escribir por WhatsApp al ${VENUES.spa.phone}`} delay={200}>
             <WhatsAppIcon className="h-5 w-5" />
           </CardAction>
           <CardAction href={BUSINESS.instagramUrl} label="Instagram" aria={`Instagram de Queens ${BUSINESS.instagram}`} delay={280}>
@@ -340,11 +340,12 @@ export function SpaBooking() {
         name: values.name.trim(),
         phone: values.phone.trim(),
         service: values.service,
-        duration: service?.duration,
+        price: service ? priceLabel(service) : undefined,
         date,
         time: values.time.trim() || undefined,
         notes: values.notes.trim() || undefined,
       }),
+      "spa",
     )
     setLink(url)
     // On a phone the WhatsApp app opens in this same tab (a new tab is often blocked); on a computer it opens in a new one
@@ -396,7 +397,7 @@ export function SpaBooking() {
                       id="booking-service"
                       value={values.service}
                       onChange={(v) => set("service")({ target: { value: v } })}
-                      options={SPA_SERVICES.map((s) => ({ value: s.name, label: s.name, hint: s.duration }))}
+                      options={SPA_SERVICES.map((s) => ({ value: s.name, label: s.name, hint: priceLabel(s) }))}
                       placeholder="Elige un servicio"
                       invalid={invalid("service")}
                       describedBy={describedBy("service")}

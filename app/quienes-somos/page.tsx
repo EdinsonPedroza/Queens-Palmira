@@ -16,7 +16,7 @@ export const metadata: Metadata = {
   openGraph: openGraph(
     "/quienes-somos",
     "Quiénes somos — Queens Cosmetics & Spa",
-    "Una casa de belleza en Palmira donde te sientes como en familia. Tienda de cosméticos en Unicentro y spa en la Cra 25.",
+    "Una casa de belleza en Palmira donde te sientes como en familia. Tienda de cosméticos en Unicentro y spa en Alameda.",
   ),
 }
 
