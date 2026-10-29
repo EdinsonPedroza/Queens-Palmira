@@ -330,7 +330,7 @@ em, i, .italic {
   .picker[data-state="open"]   { animation: picker-sheet-in 0.4s cubic-bezier(0.16, 1, 0.3, 1); }
   .picker[data-state="closed"] { animation: picker-sheet-out 0.2s cubic-bezier(0.23, 1, 0.32, 1) forwards; }
 }
-@media (prefers-reduced-motion: no-preference) and (min-width: 768px) {
+@media (prefers-reduced-motion: no-preference) and (min-width: 640px) {
   .picker[data-state="open"]   { animation: picker-in 0.35s cubic-bezier(0.16, 1, 0.3, 1); }
   .picker[data-state="closed"] { animation: picker-out 0.18s cubic-bezier(0.23, 1, 0.32, 1) forwards; }
 }
@@ -657,7 +657,7 @@ main[data-palette="queens"] #hero :is(h1, p, a, span):not([data-testid="cosmetic
 main[data-palette="queens"] #hero a[data-testid="cosmetics-hero-cta-spa"] { color: var(--dorado); }
 main[data-palette="queens"] #hero a[data-testid="cosmetics-hero-cta-spa"]:hover { background: var(--dorado); color: var(--pv-crema); }
 /* Teléfonos (pedido del cliente): el botón «Queens Spa» va RELLENO de dorado, para que se note, con el texto en BLANCO (crema; el cliente lo pidió así: crema sobre dorado da solo 2,5:1, es una decisión suya). En computador sigue con la línea dorada y se rellena al pasar el cursor (color del texto: --pv-crema). */
-@media (max-width: 767px) {
+@media (max-width: 639px) {
   main[data-palette="queens"] #hero a[data-testid="cosmetics-hero-cta-spa"],
   main[data-palette="queens"] #hero a[data-testid="cosmetics-hero-cta-spa"]:hover { background: var(--dorado); color: var(--pv-crema); }
 }

@@ -89,7 +89,7 @@ export function CategoryBar({ active, onSelect, className }: {
       aria-label="Categorías"
       className="overflow-x-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
     >
-      <div ref={inner} className="relative flex w-max min-w-full gap-5 pr-14 md:gap-8 min-[1360px]:pr-0">
+      <div ref={inner} className="relative flex w-max min-w-full gap-5 pr-14 sm:gap-8 min-[1360px]:pr-0">
         <span aria-hidden className="pointer-events-none absolute inset-x-0 bottom-0 h-px bg-[var(--lila-light)]" />
         {CATEGORIES.map((cat) => {
           const on = active === cat.id
@@ -271,17 +271,17 @@ export function Catalog({ cardStyle = "editorial" }: { cardStyle?: CardStyle }) 
       <div className="relative mx-auto max-w-7xl px-6 md:px-10">
 
         {/* ── Header ── */}
-        <div className="max-w-3xl text-left mb-4 md:mb-3">
+        <div className="max-w-3xl text-left mb-4 sm:mb-3">
           {/* On phones (client request): no "Nuestro catálogo" line and the title is just "Categorías", so the tabs under it read as what they are. From md up: as always. */}
-          <span className="hidden text-xs font-semibold tracking-[0.3em] uppercase text-[var(--face-deep)] mb-2.5 md:inline-block">
+          <span className="hidden text-xs font-semibold tracking-[0.3em] uppercase text-[var(--face-deep)] mb-2.5 sm:inline-block">
             Nuestro catálogo
           </span>
           <h2
             className="font-display font-semibold text-ink whitespace-nowrap"
             style={{ fontSize: "clamp(1.45rem, 3vw, 2.2rem)", lineHeight: 1.05, letterSpacing: "-0.03em" }}
           >
-            <span className="md:hidden">Categorías</span>
-            <span className="hidden md:inline">Productos para reinas</span>
+            <span className="sm:hidden">Categorías</span>
+            <span className="hidden sm:inline">Productos para reinas</span>
           </h2>
         </div>
 
@@ -295,10 +295,10 @@ export function Catalog({ cardStyle = "editorial" }: { cardStyle?: CardStyle }) 
               onSelect={handleCategoryChange}
               className="mx-0 mb-0 max-w-none min-[1360px]:min-w-0 min-[1360px]:flex-none"
             />
-            <div className="flex w-full items-end gap-3 max-md:items-center max-md:justify-end max-md:pt-1 sm:justify-end min-[1360px]:w-auto min-[1360px]:shrink-0">
+            <div className="flex w-full items-end gap-3 max-sm:items-center max-sm:justify-end max-sm:pt-1 sm:justify-end min-[1360px]:w-auto min-[1360px]:shrink-0">
               {/* Phones: "13 productos" sits at the LEFT of this row, level with the magnifier and the sort button (client request); it steps aside while the search box is open */}
               {!(searchOpen || localQuery) && (
-                <span key={filtered.length} className="mr-auto text-xs text-[var(--muted-foreground)] [--in-y:0px] motion-safe:animate-[enter-up_200ms_ease-out_backwards] md:hidden">
+                <span key={filtered.length} className="mr-auto text-xs text-[var(--muted-foreground)] [--in-y:0px] motion-safe:animate-[enter-up_200ms_ease-out_backwards] sm:hidden">
                   {filtered.length} producto{filtered.length !== 1 ? "s" : ""}
                 </span>
               )}
@@ -311,7 +311,7 @@ export function Catalog({ cardStyle = "editorial" }: { cardStyle?: CardStyle }) 
                   aria-expanded={searchOpen || !!localQuery}
                   data-testid="category-search-toggle"
                   className={cn(
-                    "grid h-10 w-10 shrink-0 cursor-pointer place-items-center text-[var(--ciruela)] transition-colors duration-200 hover:bg-[var(--ciruela)]/8 md:hidden",
+                    "grid h-10 w-10 shrink-0 cursor-pointer place-items-center text-[var(--ciruela)] transition-colors duration-200 hover:bg-[var(--ciruela)]/8 sm:hidden",
                     "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--face)",
                     (searchOpen || localQuery) && "hidden",
                   )}
@@ -325,9 +325,9 @@ export function Catalog({ cardStyle = "editorial" }: { cardStyle?: CardStyle }) 
                   className={cn(
                     "relative h-10 min-w-0 flex-1 transition-colors duration-200 sm:w-64 sm:flex-none",
                     // The box: a full outline from md up; on phones only a fine line under the text (no box, client request)
-                    "shadow-[inset_0_0_0_1px_color-mix(in_oklab,var(--ciruela)_38%,transparent)] max-md:shadow-[inset_0_-1px_0_color-mix(in_oklab,var(--ciruela)_38%,transparent)]",
-                    "focus-within:outline-2 focus-within:outline-offset-2 focus-within:outline-(--face) max-md:focus-within:outline-none",
-                    !(searchOpen || localQuery) && "max-md:hidden",
+                    "shadow-[inset_0_0_0_1px_color-mix(in_oklab,var(--ciruela)_38%,transparent)] max-sm:shadow-[inset_0_-1px_0_color-mix(in_oklab,var(--ciruela)_38%,transparent)]",
+                    "focus-within:outline-2 focus-within:outline-offset-2 focus-within:outline-(--face) max-sm:focus-within:outline-none",
+                    !(searchOpen || localQuery) && "max-sm:hidden",
                   )}
                 >
                   <Search className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-[var(--ciruela)]" />
@@ -421,9 +421,9 @@ export function Catalog({ cardStyle = "editorial" }: { cardStyle?: CardStyle }) 
 
           {/* ── Metadata row: the category's phrase, and how many products ── */}
           {/* On phones the row is empty unless there is a search (the count moved up to the controls row), so it is gone then */}
-          <div className={cn("mb-6 mt-5 flex flex-wrap items-center justify-between gap-x-4 gap-y-2 max-md:mt-3 max-md:mb-4", !(search || localQuery.trim()) && "max-md:hidden")}>
+          <div className={cn("mb-6 mt-5 flex flex-wrap items-center justify-between gap-x-4 gap-y-2 max-sm:mt-3 max-sm:mb-4", !(search || localQuery.trim()) && "max-sm:hidden")}>
             {/* The category's phrase, in semi-bold. Its name is the highlighted tab right above, so no title is repeated here (client request, final). */}
-            <div className={cn("flex min-w-0 flex-wrap items-center gap-x-5 gap-y-1", !(search || localQuery.trim()) && "max-md:hidden")}>
+            <div className={cn("flex min-w-0 flex-wrap items-center gap-x-5 gap-y-1", !(search || localQuery.trim()) && "max-sm:hidden")}>
               {/* On phones the phrase ("Besos de seda y color"…) is gone (client request); the results line still shows when there is a search */}
               <AnimatePresence mode="wait">
                 <m.p
@@ -452,7 +452,7 @@ export function Catalog({ cardStyle = "editorial" }: { cardStyle?: CardStyle }) 
               )}
             </div>
 
-            <span key={filtered.length} className="text-xs text-[var(--muted-foreground)] [--in-y:0px] motion-safe:animate-[enter-up_200ms_ease-out_backwards] max-md:hidden">
+            <span key={filtered.length} className="text-xs text-[var(--muted-foreground)] [--in-y:0px] motion-safe:animate-[enter-up_200ms_ease-out_backwards] max-sm:hidden">
               {filtered.length} producto{filtered.length !== 1 ? "s" : ""}
             </span>
 
