@@ -227,7 +227,8 @@ export function Navbar({ face = "cosmetics", separate = false, announce = false 
                 target="_blank"
                 rel="noopener noreferrer"
                 className={cn(
-                  "relative -mr-1.5 rounded-full p-2 sm:p-2.5 opacity-80 transition cursor-pointer hover:opacity-100 focus-visible:opacity-100",
+                  // Not on phones (client request): there the header keeps the search, the cart and the menu; Instagram is in the footer
+                  "relative -mr-1.5 rounded-full p-2 sm:p-2.5 opacity-80 transition cursor-pointer hover:opacity-100 focus-visible:opacity-100 max-md:hidden",
                   overHero ? "text-current hover:bg-current/10" : lilaTop ? "text-ink hover:bg-ink/10" : "text-ink hover:bg-(--face-light)/30",
                 )}
                 aria-label={`Instagram ${BUSINESS.instagram}`}

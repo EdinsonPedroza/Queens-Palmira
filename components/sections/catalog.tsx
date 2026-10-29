@@ -89,8 +89,8 @@ export function CategoryBar({ active, onSelect, className }: {
       aria-label="Categorías"
       className="overflow-x-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
     >
-      <div ref={inner} className="relative flex w-max min-w-full gap-1.5 pr-14 md:gap-8 min-[1360px]:pr-0">
-        <span aria-hidden className="pointer-events-none absolute inset-x-0 bottom-0 hidden h-px bg-[var(--lila-light)] md:block" />
+      <div ref={inner} className="relative flex w-max min-w-full gap-5 pr-14 md:gap-8 min-[1360px]:pr-0">
+        <span aria-hidden className="pointer-events-none absolute inset-x-0 bottom-0 h-px bg-[var(--lila-light)]" />
         {CATEGORIES.map((cat) => {
           const on = active === cat.id
           return (
@@ -112,16 +112,12 @@ export function CategoryBar({ active, onSelect, className }: {
                 }
               }}
               data-testid={`category-${cat.id}`}
-              // Phones (client's pick, "pestañas cuadradas"): bordered square tabs like the search and sort boxes, the open one filled lila.
-              // From md up: the editorial text + sliding line. The border colour goes inline (see the `* { border-color }` note); md:border-0 hides it there.
-              style={{ borderColor: on ? "var(--lila)" : "color-mix(in oklab, var(--ink) 22%, transparent)" }}
+              // The same editorial text + sliding line on phones and on computers (the client first picked square bordered tabs for phones, then asked for no boxes: "no les hagas
+              // esos recuadros", and less space between them). On phones the row scrolls sideways and the next tab peeks out (see the note above).
               className={cn(
-                "flex-none cursor-pointer select-none whitespace-nowrap border px-5 py-3.5 text-[12.5px] uppercase leading-none tracking-[0.16em] transition-colors duration-200",
-                "md:border-0 md:px-0 md:pb-3 md:pt-2.5 md:text-[1rem] md:normal-case md:tracking-normal",
+                "flex-none cursor-pointer select-none whitespace-nowrap px-0 pb-3 pt-2.5 text-[1rem] normal-case leading-none tracking-normal transition-colors duration-200",
                 "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--face)",
-                on
-                  ? "bg-[var(--lila)] font-extrabold text-[var(--ciruela)] md:bg-transparent md:font-bold"
-                  : "bg-white font-medium text-[var(--ciruela)] hover:bg-[var(--lila)]/15 md:bg-transparent md:font-semibold md:text-[var(--lila-deep)] md:hover:bg-transparent md:hover:text-[var(--ciruela)]",
+                on ? "font-bold text-[var(--ciruela)]" : "font-semibold text-[var(--lila-deep)] hover:text-[var(--ciruela)]",
               )}
             >
               {cat.label}
@@ -130,7 +126,7 @@ export function CategoryBar({ active, onSelect, className }: {
         })}
         <span
           aria-hidden
-          className="pointer-events-none absolute bottom-0 left-0 hidden h-[3px] w-px origin-left bg-[var(--ciruela)] md:block"
+          className="pointer-events-none absolute bottom-0 left-0 h-[3px] w-px origin-left bg-[var(--ciruela)]"
           style={{
             transform: `translateX(${bar.x}px) scaleX(${bar.w})`,
             opacity: active ? 1 : 0,
@@ -275,7 +271,7 @@ export function Catalog({ cardStyle = "editorial" }: { cardStyle?: CardStyle }) 
       <div className="relative mx-auto max-w-7xl px-6 md:px-10">
 
         {/* ── Header ── */}
-        <div className="max-w-3xl text-left mb-2 md:mb-3">
+        <div className="max-w-3xl text-left mb-4 md:mb-3">
           {/* On phones (client request): no "Nuestro catálogo" line and the title is just "Categorías", so the tabs under it read as what they are. From md up: as always. */}
           <span className="hidden text-xs font-semibold tracking-[0.3em] uppercase text-[var(--face-deep)] mb-2.5 md:inline-block">
             Nuestro catálogo
@@ -299,7 +295,13 @@ export function Catalog({ cardStyle = "editorial" }: { cardStyle?: CardStyle }) 
               onSelect={handleCategoryChange}
               className="mx-0 mb-0 max-w-none min-[1360px]:min-w-0 min-[1360px]:flex-none"
             />
-            <div className="flex w-full items-end gap-3 max-md:justify-end sm:justify-end min-[1360px]:w-auto min-[1360px]:shrink-0">
+            <div className="flex w-full items-end gap-3 max-md:items-center max-md:justify-end max-md:pt-1 sm:justify-end min-[1360px]:w-auto min-[1360px]:shrink-0">
+              {/* Phones: "13 productos" sits at the LEFT of this row, level with the magnifier and the sort button (client request); it steps aside while the search box is open */}
+              {!(searchOpen || localQuery) && (
+                <span key={filtered.length} className="mr-auto text-xs text-[var(--muted-foreground)] [--in-y:0px] motion-safe:animate-[enter-up_200ms_ease-out_backwards] md:hidden">
+                  {filtered.length} producto{filtered.length !== 1 ? "s" : ""}
+                </span>
+              )}
               {/* Phones: the search is a magnifier button next to the sort one; tapping it opens the box (below). It stays open while it has text. */}
               {!search && (
                 <button
@@ -313,7 +315,6 @@ export function Catalog({ cardStyle = "editorial" }: { cardStyle?: CardStyle }) 
                     "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--face)",
                     (searchOpen || localQuery) && "hidden",
                   )}
-                  style={{ boxShadow: "inset 0 0 0 1px color-mix(in oklab, var(--ciruela) 38%, transparent)" }}
                 >
                   <Search className="h-[18px] w-[18px]" />
                 </button>
@@ -323,10 +324,11 @@ export function Catalog({ cardStyle = "editorial" }: { cardStyle?: CardStyle }) 
                 <div
                   className={cn(
                     "relative h-10 min-w-0 flex-1 transition-colors duration-200 sm:w-64 sm:flex-none",
-                    "focus-within:outline-2 focus-within:outline-offset-2 focus-within:outline-(--face)",
+                    // The box: a full outline from md up; on phones only a fine line under the text (no box, client request)
+                    "shadow-[inset_0_0_0_1px_color-mix(in_oklab,var(--ciruela)_38%,transparent)] max-md:shadow-[inset_0_-1px_0_color-mix(in_oklab,var(--ciruela)_38%,transparent)]",
+                    "focus-within:outline-2 focus-within:outline-offset-2 focus-within:outline-(--face) max-md:focus-within:outline-none",
                     !(searchOpen || localQuery) && "max-md:hidden",
                   )}
-                  style={{ boxShadow: "inset 0 0 0 1px color-mix(in oklab, var(--ciruela) 38%, transparent)" }}
                 >
                   <Search className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-[var(--ciruela)]" />
                   <input
@@ -418,7 +420,8 @@ export function Catalog({ cardStyle = "editorial" }: { cardStyle?: CardStyle }) 
           </div>
 
           {/* ── Metadata row: the category's phrase, and how many products ── */}
-          <div className="mb-6 mt-5 flex flex-wrap items-center justify-between gap-x-4 gap-y-2">
+          {/* On phones the row is empty unless there is a search (the count moved up to the controls row), so it is gone then */}
+          <div className={cn("mb-6 mt-5 flex flex-wrap items-center justify-between gap-x-4 gap-y-2 max-md:mt-3 max-md:mb-4", !(search || localQuery.trim()) && "max-md:hidden")}>
             {/* The category's phrase, in semi-bold. Its name is the highlighted tab right above, so no title is repeated here (client request, final). */}
             <div className={cn("flex min-w-0 flex-wrap items-center gap-x-5 gap-y-1", !(search || localQuery.trim()) && "max-md:hidden")}>
               {/* On phones the phrase ("Besos de seda y color"…) is gone (client request); the results line still shows when there is a search */}
@@ -449,7 +452,7 @@ export function Catalog({ cardStyle = "editorial" }: { cardStyle?: CardStyle }) 
               )}
             </div>
 
-            <span key={filtered.length} className="text-xs text-[var(--muted-foreground)] [--in-y:0px] motion-safe:animate-[enter-up_200ms_ease-out_backwards]">
+            <span key={filtered.length} className="text-xs text-[var(--muted-foreground)] [--in-y:0px] motion-safe:animate-[enter-up_200ms_ease-out_backwards] max-md:hidden">
               {filtered.length} producto{filtered.length !== 1 ? "s" : ""}
             </span>
 
