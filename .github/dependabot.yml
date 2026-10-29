@@ -1,0 +1,13 @@
+# Dependabot: GitHub opens a pull request when a dependency of the site has a new version (security fixes included). Nothing is merged on its own: review
+# each pull request and let Cloudflare's preview build pass before merging.
+version: 2
+updates:
+  - package-ecosystem: "npm"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 5
+    groups:
+      # One pull request for the small updates instead of one per package
+      minor-and-patch:
+        update-types: ["minor", "patch"]
