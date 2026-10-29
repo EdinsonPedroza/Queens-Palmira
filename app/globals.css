@@ -334,6 +334,25 @@ em, i, .italic {
   .picker[data-state="open"]   { animation: picker-in 0.35s cubic-bezier(0.16, 1, 0.3, 1); }
   .picker[data-state="closed"] { animation: picker-out 0.18s cubic-bezier(0.23, 1, 0.32, 1) forwards; }
 }
+/* Hero entrances (components/sections/cosmetics-hero.tsx and spa-hero.tsx). They used to be Framer Motion variants that START at `opacity: 0`: on an iPad the title, the text,
+   the buttons, the address and the scroll arrow never appeared (the animation did not run to its end in Safari) and the hero was left with only its photo. Now the NORMAL state of
+   every piece is the FINAL one (visible) and the animation only says where it comes from (`backwards`): if it does not run, nothing is lost. The delay of each piece is inline. */
+@keyframes hero-fade-up { from { opacity: 0; transform: translateY(22px); } to { opacity: 1; transform: none; } }
+@keyframes hero-rise    { from { transform: translateY(112%); } to { transform: none; } }
+@keyframes hero-settle  { from { transform: scale(1.04); } to { transform: none; } }
+@media (prefers-reduced-motion: no-preference) {
+  .hero-fade-up { animation: hero-fade-up 850ms cubic-bezier(0.16, 1, 0.3, 1) backwards; }
+  .hero-rise    { animation: hero-rise 1000ms cubic-bezier(0.16, 1, 0.3, 1) backwards; }
+  .hero-settle  { animation: hero-settle 1600ms cubic-bezier(0.16, 1, 0.3, 1); }
+}
+
+/* Product cards (Stage in components/product-card.tsx): the tint of the silk is a layer with `mix-blend-mode: color`. Safari on iPhone and iPad paints that mode wrongly: the
+   silk of every tinted card came out in hot pink and white blotches (the cards with no tint were fine). There the tint layers are left out and the silk keeps its own pink, the
+   same as the products that have no tint. Chrome, Edge and Firefox keep the tint. */
+@supports (-webkit-touch-callout: none) {
+  .stage-tint { display: none; }
+}
+
 /* Tone menu of the product card: it enters with a CSS animation (not Framer Motion). The JS version left the panel blank for a frame
    while it handed over from the animation to the final style: the client saw it as a flicker. */
 @keyframes tone-in    { from { opacity: 0; transform: scale(0.96) translateY(-4px); } to { opacity: 1; transform: none; } }

@@ -207,29 +207,22 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     >
       <head>
         {/* No third-party image hosts: every image is a file of the site itself. */}
+        {/* `<` escaped: a "</script>" inside the data could never close the tag (the data is ours, but this costs nothing) */}
         <script
           type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c") }}
         />
       </head>
       <body className="font-body antialiased">
         {/* Providers live in the pages that need them (motion on the animated ones, the cart on
             the home), so the legal pages and the spa do not download what they never use. */}
         {children}
+        {/* Google Analytics, only when NEXT_PUBLIC_GA_ID is set at build time. Its bootstrap is a file (public/ga.js), not an inline script, so the strict
+            CSP lets it run; scripts/security-headers.mjs adds Google's hosts to the CSP only in that case. */}
         {GA_ID && (
           <>
-            <Script
-              src={`https://www.googletagmanager.com/gtag/js?id=${GA_ID}`}
-              strategy="afterInteractive"
-            />
-            <Script id="ga4-init" strategy="afterInteractive">
-              {`
-                window.dataLayer = window.dataLayer || [];
-                function gtag(){dataLayer.push(arguments);}
-                gtag('js', new Date());
-                gtag('config', '${GA_ID}', { anonymize_ip: true });
-              `}
-            </Script>
+            <Script src={`https://www.googletagmanager.com/gtag/js?id=${encodeURIComponent(GA_ID)}`} strategy="afterInteractive" />
+            <Script src="/ga.js" data-ga-id={GA_ID} strategy="afterInteractive" />
           </>
         )}
       </body>

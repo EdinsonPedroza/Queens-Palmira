@@ -542,8 +542,8 @@ export function Stage({ tint, backdrop = "seda" }: { tint?: { col: string; s: nu
     <>
       <Image src={`/images/backgrounds/${backdrop}.webp`} alt="" aria-hidden fill sizes={PHOTO_SIZES} quality={85} className="object-cover" />
       {/* Matiz del producto sobre la seda: "color" conserva las luces y sombras de la tela y solo le cambia el color. */}
-      {tint && <span aria-hidden className="absolute inset-0 mix-blend-color opacity-50" style={{ background: tint.col }} />}
-      {tint?.lift && <span aria-hidden className="absolute inset-0 mix-blend-screen opacity-15" style={{ background: "#ffe9ea" }} />}
+      {tint && <span aria-hidden className="stage-tint absolute inset-0 mix-blend-color opacity-50" style={{ background: tint.col }} />}
+      {tint?.lift && <span aria-hidden className="stage-tint absolute inset-0 mix-blend-screen opacity-15" style={{ background: "#ffe9ea" }} />}
       {/* Con el cursor sobre la ficha la seda rosa se funde en un fondo de estudio beige cálido (va debajo de la luz y la viñeta
           y aparece con un fundido). Se queda mientras el desplegable de tonos de esa ficha está abierto (`data-active`:
           el panel vive fuera de la ficha y el cursor "sale" de ella) y con el foco de teclado dentro. No usa `focus-within`:

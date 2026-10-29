@@ -1,6 +1,3 @@
-"use client"
-
-import { m, type Variants } from "framer-motion"
 import { ArrowDown, ArrowUpRight } from "lucide-react"
 import Link from "next/link"
 import { VENUES } from "@/lib/site"
@@ -23,31 +20,16 @@ import { VENUES } from "@/lib/site"
  * upscales of the 2247 px master and keep all of its detail; the 1920 one is a DOWNSCALE of it, and a render from it at 1440x900 has ~25 % less edge
  * detail (Laplacian variance of the labels 2706 vs 3765). It has the pixels but not the sharpness. */
 
-const EASE = [0.16, 1, 0.3, 1] as const
-
-const rise: Variants = {
-  hidden: { y: "112%" },
-  show: (i: number = 0) => ({ y: "0%", transition: { duration: 1, delay: 0.15 + i * 0.1, ease: EASE } }),
-}
-
-const fadeUp: Variants = {
-  hidden: { opacity: 0, y: 22 },
-  show: (i: number = 0) => ({ opacity: 1, y: 0, transition: { duration: 0.85, delay: 0.5 + i * 0.1, ease: EASE } }),
-}
-
-/* Scale only, no opacity: the photo is the LCP element and must paint right away. */
-const settle: Variants = {
-  hidden: { scale: 1.04 },
-  show: { scale: 1, transition: { duration: 1.6, ease: EASE } },
-}
+/* The entrances are CSS (`hero-fade-up`, `hero-rise`, `hero-settle` in globals.css), NOT Framer Motion: its variants started the copy and the buttons at `opacity: 0`,
+ * and on an iPad they never came out of it. Here every piece is visible by default and the animation only says where it comes from. The delays are the old ones:
+ * the title lines 0.15 s and 0.25 s (`hero-rise`), then eyebrow 0.4 s, text 0.5 s, buttons 0.6 s, address 0.7 s and the scroll arrow 0.9 s (`hero-fade-up`). The photo only scales
+ * (no opacity): it is the LCP element and must paint right away. */
 
 export function CosmeticsHero() {
   return (
-    <m.section
+    <section
       id="hero"
       aria-labelledby="cosmetics-hero-title"
-      initial="hidden"
-      animate="show"
       /* Starts below the announcement strip + header (--header-h, together as tall as the header alone used to be). lg+: fills the rest of the screen, but never wider than 16:9 — on squarer windows the photo would be cropped so far
        * that the lying gloss cap (it ends at ~60 % of the width at 16:9) slides under the copy, which starts at 62 %. */
       className="relative flex min-h-[calc(100svh_-_var(--header-h))] flex-col overflow-hidden bg-white lg:block lg:h-[calc(100svh_-_var(--header-h))] lg:max-h-[56.25vw] lg:min-h-[540px]"
@@ -57,7 +39,7 @@ export function CosmeticsHero() {
         aria-hidden
         className="absolute inset-x-0 top-0 h-[52svh] md:h-[56svh] [mask-image:linear-gradient(to_bottom,#000_72%,transparent)] lg:inset-0 lg:h-auto lg:[mask-image:none]"
       >
-        <m.div variants={settle} className="absolute inset-0 origin-[30%_50%]">
+        <div className="hero-settle absolute inset-0 origin-[30%_50%]">
           <picture className="contents">
             <source
               media="(min-width: 1024px)"
@@ -77,7 +59,7 @@ export function CosmeticsHero() {
               className="absolute inset-0 h-full w-full object-cover object-[50%_50%] lg:origin-[0%_31%] lg:scale-[1.03] lg:object-[0%_50%] xl:scale-[1.04]"
             />
           </picture>
-        </m.div>
+        </div>
       </div>
 
       {/* ── Behind the copy (lg+): a soft crema glow ONLY where the text is (an ellipse, 68 % crema in the middle and fading out to nothing), not a full-height strip: the client
@@ -88,43 +70,40 @@ export function CosmeticsHero() {
       <div className="relative z-20 mt-[47svh] px-6 pb-24 pt-2 md:mt-[52svh] md:px-10 lg:absolute lg:right-[8.5vw] lg:top-[63%] lg:mt-0 lg:w-[30vw] lg:-translate-y-1/2 lg:p-0">
         {/* Eyebrow + title (lg+: sit above the paragraph, anchored to it; below lg: in the flow). The whole title is the ink colour (the client's reference). */}
         <div className="lg:absolute lg:bottom-full lg:left-0 lg:mb-[0.4vw]">
-          <m.p
-            variants={fadeUp}
-            custom={-1}
-            className="mb-3 text-[11px] font-medium uppercase tracking-[0.3em] text-ink/80 lg:mb-[0.9vw] lg:text-[clamp(9px,0.85vw,13px)]"
+          <p
+            className="hero-fade-up mb-3 text-[11px] font-medium uppercase tracking-[0.3em] text-ink/80 lg:mb-[0.9vw] lg:text-[clamp(9px,0.85vw,13px)]"
+            style={{ animationDelay: "0.4s" }}
           >
             Belleza que inspira
-          </m.p>
+          </p>
           <h1
             id="cosmetics-hero-title"
             className="font-display text-[clamp(2.7rem,12.5vw,3.6rem)] uppercase leading-[0.88] tracking-[-0.025em] text-ink md:text-[clamp(3.4rem,9vw,5.2rem)] lg:whitespace-nowrap lg:text-[clamp(2.1rem,4.4vw,5.75rem)]"
           >
             <span className="block overflow-hidden pb-[0.04em]">
-              <m.span variants={rise} custom={0} className="block font-bold">
+              <span className="hero-rise block font-bold" style={{ animationDelay: "0.15s" }}>
                 Brilla como
-              </m.span>
+              </span>
             </span>
             <span className="block overflow-hidden pb-[0.1em]">
-              <m.span variants={rise} custom={1} className="block font-bold">
+              <span className="hero-rise block font-bold" style={{ animationDelay: "0.25s" }}>
                 reina.
-              </m.span>
+              </span>
             </span>
           </h1>
         </div>
 
-        <m.p
-          variants={fadeUp}
-          custom={0}
-          className="mt-3 max-w-md text-[1rem] leading-relaxed text-ink/85 md:max-w-xl md:text-[1.05rem] lg:mt-0 lg:max-w-none lg:text-[clamp(0.95rem,1.22vw,1.375rem)] lg:leading-[1.5]"
+        <p
+          className="hero-fade-up mt-3 max-w-md text-[1rem] leading-relaxed text-ink/85 md:max-w-xl md:text-[1.05rem] lg:mt-0 lg:max-w-none lg:text-[clamp(0.95rem,1.22vw,1.375rem)] lg:leading-[1.5]"
+          style={{ animationDelay: "0.5s" }}
         >
           Maquillaje, skincare, esmaltes y línea capilar. <br className="hidden lg:block" />
           Marcas originales, asesoría y envíos al instante.
-        </m.p>
+        </p>
 
-        <m.div
-          variants={fadeUp}
-          custom={1}
-          className="mt-7 flex flex-wrap items-center gap-x-6 gap-y-4 lg:mt-[1.9vw] lg:flex-nowrap lg:gap-x-[1vw]"
+        <div
+          className="hero-fade-up mt-7 flex flex-wrap items-center gap-x-6 gap-y-4 lg:mt-[1.9vw] lg:flex-nowrap lg:gap-x-[1vw]"
+          style={{ animationDelay: "0.6s" }}
         >
           <a
             href="#catalogo"
@@ -144,31 +123,29 @@ export function CosmeticsHero() {
             Queens Spa
             <ArrowUpRight className="h-[1.1em] w-[1.1em]" strokeWidth={1.5} />
           </Link>
-        </m.div>
+        </div>
       </div>
 
       {/* Address and hours, stacked, bottom-left of the hero, side by side (lg+; client request; the same info the hero already had) */}
-      <m.div
-        variants={fadeUp}
-        custom={2}
-        className={`absolute bottom-[1.6vw] left-[5vw] z-20 hidden flex-row flex-wrap items-center gap-x-[2.4vw] gap-y-1 text-[10px] font-semibold uppercase tracking-[0.26em] text-ink/90 lg:flex lg:text-[clamp(9px,0.72vw,11px)]`}
+      <div
+        className="hero-fade-up absolute bottom-[1.6vw] left-[5vw] z-20 hidden flex-row flex-wrap items-center gap-x-[2.4vw] gap-y-1 text-[10px] font-semibold uppercase tracking-[0.26em] text-ink/90 lg:flex lg:text-[clamp(9px,0.72vw,11px)]"
+        style={{ animationDelay: "0.7s" }}
       >
         <span>{VENUES.cosmetics.address}</span>
         <span>{VENUES.cosmetics.hoursShort}</span>
-      </m.div>
+      </div>
 
       {/* Scroll cue */}
-      <m.a
+      <a
         href="#catalogo"
         aria-label="Ver el catálogo"
-        variants={fadeUp}
-        custom={4}
-        className="absolute bottom-5 left-1/2 z-20 -translate-x-1/2 md:bottom-7"
+        className="hero-fade-up absolute bottom-5 left-1/2 z-20 -translate-x-1/2 md:bottom-7"
+        style={{ animationDelay: "0.9s" }}
       >
         <span className="flex h-11 w-11 items-center justify-center rounded-full border border-[var(--face)]/70 bg-white/70 text-[var(--face-deep)] shadow-[0_0_24px_color-mix(in_oklab,var(--face)_25%,transparent)] backdrop-blur transition hover:scale-110">
           <ArrowDown className="h-4 w-4 animate-bounce" />
         </span>
-      </m.a>
-    </m.section>
+      </a>
+    </section>
   )
 }

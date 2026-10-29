@@ -3,9 +3,15 @@ node_modules
 out
 build
 .vercel
+# Secrets never go into the repo (it is PUBLIC): any env file except the example, Cloudflare's local secrets, keys and certificates
 .env
-.env.local
-.env*.local
+.env.*
+!.env.example
+.dev.vars*
+*.pem
+*.key
+*.p12
+*.pfx
 *.log
 .DS_Store
 tsconfig.tsbuildinfo
