@@ -1,8 +1,7 @@
 "use client"
 
-import { useState } from "react"
+import { useId, useState } from "react"
 import Image from "next/image"
-import { Check } from "lucide-react"
 import { DialogContent, DialogDescription, DialogTitle } from "@/components/ui/dialog"
 import { WhatsAppIcon } from "@/components/whatsapp-icon"
 import type { SpaGroup, SpaService } from "@/lib/spa-services"
@@ -11,40 +10,42 @@ import { spaBookingLink } from "@/lib/whatsapp"
 
 /*
  * The window a menu card with SEVERAL services opens (the client: "cuando se seleccione se abra como una ventana donde se pueda seleccionar el servicio, pero que se vea todo
- * bonito"; then "que no se vea tan grande"; then, from five ideas, "el compacto pero más pequeño": the other four are gone). Phones get a sheet that rises from the bottom (a photo
- * strip on top, the options, and the booking button pinned under them); from md up it is a small card in the middle: the card's photo on the left, the choice on the right. Native
- * radios, so the arrow keys and the labels work for free. No service is chosen at first (the cheapest would be booked by accident) and the button says so until one is: then it
- * carries the service's price and opens WhatsApp, on the SPA's number, with that service in the message. It is mounted only while open, so every opening starts with nothing chosen.
- * Entrances are CSS (`.picker` in globals.css). Keep it small: the client asked twice for smaller text and elements.
+ * bonito"; then "que no se vea tan grande"; then, from five ideas, "el compacto pero más pequeño"; then, from five Apple-style refinements, "el de pastilla es perfecto": the
+ * other nine ideas are gone). Phones (under 640 px) get a sheet that rises from the bottom (a photo strip on top, the options, and the booking button pinned under them); from
+ * 640 px up, iPads included, it is a small card in the middle: the card's photo on the left, the choice on the right (the client wants the iPad to look like the computer).
+ *
+ * THE OPTIONS ("Pastilla"): one segmented control, vertical. A light pill sits behind the rows and SLIDES to the one you touch; every row is 3 rem tall, so its place is just its
+ * index (`translateY(index * 3rem)`): keep the rows at `h-12` and the two numbers in step. Native radios, so the arrow keys and the labels work for free. No service is chosen at
+ * first (the cheapest would be booked by accident), the pill is hidden and the button says so until one is: then it carries the service's price and opens WhatsApp, on the SPA's
+ * number, with that service in the message. It is mounted only while open, so every opening starts with nothing chosen. Entrances are CSS (`.picker` in globals.css). Keep it small.
  */
 
 const HAIRLINE = "color-mix(in oklab, var(--ink) 12%, transparent)"
-const IDLE =
-  "bg-[color-mix(in_oklab,var(--face)_8%,var(--crema))] shadow-[inset_0_0_0_1px_color-mix(in_oklab,var(--face-deep)_28%,transparent)] hover:shadow-[inset_0_0_0_1px_color-mix(in_oklab,var(--face-deep)_60%,transparent)]"
-const SELECTED = "bg-[var(--face-soft)] shadow-[inset_0_0_0_1.5px_var(--face-deep)]"
 const NUMS = "[font-variant-numeric:lining-nums]"
 
 export function ServicePickerContent({ group, items, onDone }: { group: SpaGroup; items: SpaService[]; onDone: () => void }) {
   const [picked, setPicked] = useState<string | null>(null)
+  const radioName = useId()
   const current = items.find((s) => s.name === picked)
+  const idx = items.findIndex((s) => s.name === picked)
 
   return (
     <DialogContent
       data-testid="spa-picker"
       className={cn(
-        // Phones: a sheet glued to the bottom. md and up: a card centred on the screen. (The base classes are the cart dialog's centred card: these override them.)
+        // Phones (under 640 px): a sheet glued to the bottom. From 640 px up (iPads too): a card centred on the screen. (The base classes are the cart dialog's centred card: these override them.)
         "picker left-0 top-auto bottom-0 grid max-h-[92svh] w-full max-w-none translate-x-0 translate-y-0 grid-rows-[auto_minmax(0,1fr)] gap-0 overflow-hidden rounded-t-[1.25rem] rounded-b-none p-0 text-ink",
-        "md:left-1/2 md:top-1/2 md:bottom-auto md:max-h-[88svh] md:w-[min(660px,calc(100vw-3rem))] md:-translate-x-1/2 md:-translate-y-1/2 md:grid-cols-[0.62fr_1.38fr] md:grid-rows-1 md:rounded-[1.25rem]",
+        "sm:left-1/2 sm:top-1/2 sm:bottom-auto sm:max-h-[88svh] sm:w-[min(660px,calc(100vw-3rem))] sm:-translate-x-1/2 sm:-translate-y-1/2 sm:grid-cols-[0.62fr_1.38fr] sm:grid-rows-1 sm:rounded-[1.25rem]",
       )}
-      closeClassName="right-2.5 top-2.5 grid h-9 w-9 place-items-center bg-[color-mix(in_oklab,var(--crema)_90%,transparent)] p-0 backdrop-blur-sm md:right-3 md:top-3 md:bg-transparent md:backdrop-blur-none [&_svg]:h-4 [&_svg]:w-4"
+      closeClassName="right-2.5 top-2.5 grid h-9 w-9 place-items-center bg-[color-mix(in_oklab,var(--crema)_90%,transparent)] p-0 backdrop-blur-sm sm:right-3 sm:top-3 sm:bg-transparent sm:backdrop-blur-none [&_svg]:h-4 [&_svg]:w-4"
     >
       {/* ── The photo of the card, with its name over it ── */}
-      <div className="relative h-24 shrink-0 md:h-full md:min-h-[340px]">
-        <Image src={group.photo} alt="" fill sizes="(min-width: 768px) 260px, 100vw" draggable={false} className="object-cover" style={{ objectPosition: group.focus }} />
+      <div className="relative h-24 shrink-0 sm:h-full sm:min-h-[340px]">
+        <Image src={group.photo} alt="" fill sizes="(min-width: 640px) 260px, 100vw" draggable={false} className="object-cover" style={{ objectPosition: group.focus }} />
         <span aria-hidden className="absolute inset-0 bg-[linear-gradient(to_top,color-mix(in_oklab,var(--dorado-noche)_88%,transparent)_0%,color-mix(in_oklab,var(--dorado-noche)_36%,transparent)_48%,transparent_82%)]" />
-        <div className="absolute inset-x-0 bottom-0 p-3.5 text-[var(--crema)] md:p-5">
+        <div className="absolute inset-x-0 bottom-0 p-3.5 text-[var(--crema)] sm:p-5">
           <span className="inline-block rounded-full bg-[color-mix(in_oklab,var(--crema)_20%,transparent)] px-2.5 py-0.5 text-[9.5px] font-medium uppercase tracking-[0.22em] backdrop-blur-sm">{group.tag}</span>
-          <p aria-hidden className="mt-1.5 font-display text-[1.25rem] leading-none tracking-[-0.01em] md:text-[1.6rem]">
+          <p aria-hidden className="mt-1.5 font-display text-[1.25rem] leading-none tracking-[-0.01em] sm:text-[1.6rem]">
             {group.title}
           </p>
         </div>
@@ -52,42 +53,43 @@ export function ServicePickerContent({ group, items, onDone }: { group: SpaGroup
 
       {/* ── The choice ── */}
       <div className="flex min-h-0 flex-col">
-        <div className="min-h-0 flex-1 overflow-y-auto px-4 pb-3 pt-3.5 md:px-6 md:pb-4 md:pt-7">
+        <div className="min-h-0 flex-1 overflow-y-auto px-4 pb-3 pt-3.5 sm:px-6 sm:pb-4 sm:pt-7">
           <p className="text-[9.5px] font-semibold uppercase tracking-[0.26em] text-[var(--face-deep)]">Elige tu servicio</p>
           <DialogTitle className="mt-1.5 text-[clamp(1.1rem,2vw,1.35rem)] font-semibold leading-[1.05] tracking-[-0.03em]">{group.ask}</DialogTitle>
           <DialogDescription className="mt-1 text-[12px] leading-relaxed text-ink/70">Toca una opción y te escribimos por WhatsApp para cuadrar el horario.</DialogDescription>
 
-          <fieldset className="mt-3 space-y-1.5">
+          <fieldset className="mt-3.5 rounded-2xl bg-[color-mix(in_oklab,var(--face)_14%,var(--crema))] p-1">
             <legend className="sr-only">{group.title}</legend>
-            {items.map((s) => {
-              const on = s.name === picked
-              return (
-                <label key={s.name} className="block cursor-pointer">
-                  <input type="radio" name="spa-service" value={s.name} checked={on} onChange={() => setPicked(s.name)} data-testid="spa-picker-option" className="peer sr-only" />
-                  <span
-                    className={cn(
-                      "flex items-center gap-2.5 rounded-lg px-3 py-2 transition-[background-color,box-shadow] duration-200 motion-reduce:transition-none",
-                      "peer-focus-visible:outline-2 peer-focus-visible:outline-offset-2 peer-focus-visible:outline-[var(--ink)]",
-                      on ? SELECTED : IDLE,
-                    )}
-                  >
+            <div className="relative">
+              <span
+                aria-hidden
+                className="absolute inset-x-0 top-0 h-12 rounded-xl bg-white shadow-[0_1px_2px_rgba(60,40,20,0.1),0_8px_18px_-10px_color-mix(in_oklab,var(--face-deep)_60%,transparent),inset_0_0_0_1px_color-mix(in_oklab,var(--face-deep)_35%,transparent)] transition-[transform,opacity] duration-300 ease-[cubic-bezier(0.32,0.72,0,1)] motion-reduce:transition-none"
+                style={{ transform: `translateY(calc(${Math.max(idx, 0)} * 3rem))`, opacity: idx < 0 ? 0 : 1 }}
+              />
+              {items.map((s) => {
+                const on = s.name === picked
+                return (
+                  <label key={s.name} className="block cursor-pointer">
+                    <input type="radio" name={radioName} value={s.name} checked={on} onChange={() => setPicked(s.name)} data-testid="spa-picker-option" className="peer sr-only" />
                     <span
-                      aria-hidden
-                      className={cn("grid h-4 w-4 shrink-0 place-items-center rounded-full transition-colors duration-200 motion-reduce:transition-none", on ? "bg-[var(--face)] text-[var(--ink)]" : "shadow-[inset_0_0_0_1.5px_color-mix(in_oklab,var(--ink)_35%,transparent)]")}
+                      className={cn(
+                        "relative flex h-12 items-center justify-between gap-3 rounded-xl px-4",
+                        "peer-focus-visible:outline-2 peer-focus-visible:-outline-offset-2 peer-focus-visible:outline-[var(--ink)]",
+                        !on && "hover:bg-[color-mix(in_oklab,var(--face)_14%,transparent)]",
+                      )}
                     >
-                      <Check className={cn("h-2.5 w-2.5 transition-opacity duration-150 motion-reduce:transition-none", on ? "opacity-100" : "opacity-0")} strokeWidth={3} />
+                      <span className={cn("font-display text-[1.05rem] leading-tight", on && "font-semibold")}>{s.label ?? s.name}</span>
+                      <span className={cn("text-[0.92rem] font-semibold", on ? "text-ink" : "text-ink/70", NUMS)}>{formatCOP(s.price)}</span>
                     </span>
-                    <span className="min-w-0 flex-1 font-display text-[0.92rem] leading-tight">{s.label ?? s.name}</span>
-                    <span className={cn("shrink-0 text-[0.85rem] font-semibold", NUMS)}>{formatCOP(s.price)}</span>
-                  </span>
-                </label>
-              )
-            })}
+                  </label>
+                )
+              })}
+            </div>
           </fieldset>
         </div>
 
         {/* ── Summary and booking, pinned under the options ── */}
-        <div className="shrink-0 border-t px-4 pb-[max(0.875rem,env(safe-area-inset-bottom))] pt-3 md:px-6 md:pb-4 md:pt-3.5" style={{ borderColor: HAIRLINE }}>
+        <div className="shrink-0 border-t px-4 pb-[max(0.875rem,env(safe-area-inset-bottom))] pt-3 sm:px-6 sm:pb-4 sm:pt-3.5" style={{ borderColor: HAIRLINE }}>
           <div className="mb-2.5 flex items-end justify-between gap-3">
             <div className="min-w-0">
               <p className="text-[9.5px] font-semibold uppercase tracking-[0.2em] text-ink/70">Tu selección</p>
