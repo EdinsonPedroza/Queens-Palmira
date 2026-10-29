@@ -116,7 +116,7 @@ export function CategoryBar({ active, onSelect, className }: {
               // From md up: the editorial text + sliding line. The border colour goes inline (see the `* { border-color }` note); md:border-0 hides it there.
               style={{ borderColor: on ? "var(--lila)" : "color-mix(in oklab, var(--ink) 22%, transparent)" }}
               className={cn(
-                "flex-none cursor-pointer select-none whitespace-nowrap border px-4 py-3 text-[11.5px] uppercase leading-none tracking-[0.16em] transition-colors duration-200",
+                "flex-none cursor-pointer select-none whitespace-nowrap border px-5 py-3.5 text-[12.5px] uppercase leading-none tracking-[0.16em] transition-colors duration-200",
                 "md:border-0 md:px-0 md:pb-3 md:pt-2.5 md:text-[1rem] md:normal-case md:tracking-normal",
                 "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--face)",
                 on
@@ -154,6 +154,8 @@ export function Catalog({ cardStyle = "editorial" }: { cardStyle?: CardStyle }) 
   const [sortOpen, setSortOpen]     = useState(false)
   const [visibleCount, setVisible]  = useState(PAGE_SIZE)
   const [group, setGroup]           = useState<string>("todo")   // subcategory of the open category ("Índice")
+  const [searchOpen, setSearchOpen] = useState(false)     // phones: the little search is a magnifier button until it is tapped
+  const searchRef = useRef<HTMLInputElement>(null)
 
   const activeCategory = CATEGORIES.find((c) => c.id === active)!
 
@@ -239,6 +241,11 @@ export function Catalog({ cardStyle = "editorial" }: { cardStyle?: CardStyle }) 
     window.dispatchEvent(new CustomEvent(SEARCH_ACTIVE_EVENT, { detail: search }))
   }, [search])
 
+  /* Tapping the phone's magnifier opens the box and puts the cursor in it */
+  useEffect(() => {
+    if (searchOpen) searchRef.current?.focus()
+  }, [searchOpen])
+
   const handleLocalSearch = useCallback((val: string) => {
     setLocalQuery(val)
     setVisible(PAGE_SIZE)
@@ -269,14 +276,16 @@ export function Catalog({ cardStyle = "editorial" }: { cardStyle?: CardStyle }) 
 
         {/* ── Header ── */}
         <div className="max-w-3xl text-left mb-2 md:mb-3">
-          <span className="inline-block text-xs font-semibold tracking-[0.3em] uppercase text-[var(--face-deep)] mb-2.5">
+          {/* On phones (client request): no "Nuestro catálogo" line and the title is just "Categorías", so the tabs under it read as what they are. From md up: as always. */}
+          <span className="hidden text-xs font-semibold tracking-[0.3em] uppercase text-[var(--face-deep)] mb-2.5 md:inline-block">
             Nuestro catálogo
           </span>
           <h2
             className="font-display font-semibold text-ink whitespace-nowrap"
             style={{ fontSize: "clamp(1.45rem, 3vw, 2.2rem)", lineHeight: 1.05, letterSpacing: "-0.03em" }}
           >
-            Productos para reinas
+            <span className="md:hidden">Categorías</span>
+            <span className="hidden md:inline">Productos para reinas</span>
           </h2>
         </div>
 
@@ -290,21 +299,42 @@ export function Catalog({ cardStyle = "editorial" }: { cardStyle?: CardStyle }) 
               onSelect={handleCategoryChange}
               className="mx-0 mb-0 max-w-none min-[1360px]:min-w-0 min-[1360px]:flex-none"
             />
-            <div className="flex w-full items-end gap-3 sm:justify-end min-[1360px]:w-auto min-[1360px]:shrink-0">
-              {/* The little search: this category only. It steps aside while the header's store-wide search is on. */}
+            <div className="flex w-full items-end gap-3 max-md:justify-end sm:justify-end min-[1360px]:w-auto min-[1360px]:shrink-0">
+              {/* Phones: the search is a magnifier button next to the sort one; tapping it opens the box (below). It stays open while it has text. */}
+              {!search && (
+                <button
+                  type="button"
+                  onClick={() => setSearchOpen(true)}
+                  aria-label={`Buscar en ${activeCategory.label.toLowerCase()}`}
+                  aria-expanded={searchOpen || !!localQuery}
+                  data-testid="category-search-toggle"
+                  className={cn(
+                    "grid h-10 w-10 shrink-0 cursor-pointer place-items-center text-[var(--ciruela)] transition-colors duration-200 hover:bg-[var(--ciruela)]/8 md:hidden",
+                    "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--face)",
+                    (searchOpen || localQuery) && "hidden",
+                  )}
+                  style={{ boxShadow: "inset 0 0 0 1px color-mix(in oklab, var(--ciruela) 38%, transparent)" }}
+                >
+                  <Search className="h-[18px] w-[18px]" />
+                </button>
+              )}
+              {/* The little search: this category only. It steps aside while the header's store-wide search is on. On phones it only shows once the magnifier was tapped. */}
               {!search && (
                 <div
                   className={cn(
                     "relative h-10 min-w-0 flex-1 transition-colors duration-200 sm:w-64 sm:flex-none",
                     "focus-within:outline-2 focus-within:outline-offset-2 focus-within:outline-(--face)",
+                    !(searchOpen || localQuery) && "max-md:hidden",
                   )}
                   style={{ boxShadow: "inset 0 0 0 1px color-mix(in oklab, var(--ciruela) 38%, transparent)" }}
                 >
                   <Search className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-[var(--ciruela)]" />
                   <input
+                    ref={searchRef}
                     type="search"
                     value={localQuery}
                     onChange={(e) => handleLocalSearch(e.target.value)}
+                    onBlur={() => { if (!localQuery) setSearchOpen(false) }}
                     onKeyDown={(e) => { if (e.key === "Escape") handleLocalSearch("") }}
                     placeholder="Buscar…"
                     aria-label={`Buscar en ${activeCategory.label.toLowerCase()}`}
@@ -390,7 +420,8 @@ export function Catalog({ cardStyle = "editorial" }: { cardStyle?: CardStyle }) 
           {/* ── Metadata row: the category's phrase, and how many products ── */}
           <div className="mb-6 mt-5 flex flex-wrap items-center justify-between gap-x-4 gap-y-2">
             {/* The category's phrase, in semi-bold. Its name is the highlighted tab right above, so no title is repeated here (client request, final). */}
-            <div className="flex min-w-0 flex-wrap items-center gap-x-5 gap-y-1">
+            <div className={cn("flex min-w-0 flex-wrap items-center gap-x-5 gap-y-1", !(search || localQuery.trim()) && "max-md:hidden")}>
+              {/* On phones the phrase ("Besos de seda y color"…) is gone (client request); the results line still shows when there is a search */}
               <AnimatePresence mode="wait">
                 <m.p
                   key={active + search + localQuery + group + "-tag"}
