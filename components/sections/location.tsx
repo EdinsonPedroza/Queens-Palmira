@@ -7,7 +7,10 @@ import { InstagramIcon } from "@/components/instagram-icon"
 import { Button } from "@/components/ui/button"
 import { GoogleMap } from "@/components/google-map"
 import { WhatsAppIcon } from "@/components/whatsapp-icon"
+import { Reveal } from "@/components/reveal"
 import { WhenNear } from "@/components/when-near"
+import { useSeen } from "@/hooks/use-seen"
+import { cn } from "@/lib/utils"
 import { WA_SPA, WA_VISIT } from "@/lib/whatsapp"
 import { BUSINESS, VENUES } from "@/lib/site"
 
@@ -64,37 +67,18 @@ interface InfoCard {
   href?: string
 }
 
-const EASE = [0.16, 1, 0.3, 1] as const
-
 /*
- * The header animates from its wrapper, not element by element. The h2 starts
- * translated a full line below its own box, and that box clips — so if the h2
- * carried its own `whileInView`, it would sit entirely outside the clip rect,
- * report zero intersection, and never be told to animate in. It would stay
- * invisible forever. Driving it from the unclipped wrapper avoids that.
+ * Every entrance in this section is CSS (`reveal-*`, `title-rise`, `line-grow` in globals.css) switched on by `useSeen` / `<Reveal>`, and everything is visible in the HTML:
+ * Framer's `initial` + `whileInView` wrote `opacity: 0` into the page and, on an iPad, never took it away, so the whole section (title, map, cards) came out blank.
+ * The header is watched from its wrapper, which is not clipped: the title starts a full line below its own `overflow-hidden` box, and an element that is entirely clipped is
+ * never reported as in view (the old Framer version of this section hit that once).
  */
-const headerVariants = {
-  hidden: {},
-  show: { transition: { staggerChildren: 0.12 } },
-}
-
-const labelRise = {
-  hidden: { opacity: 0, y: 20 },
-  show: { opacity: 1, y: 0, transition: { duration: 0.6, ease: EASE } },
-}
-
-const titleRise = {
-  hidden: { y: "110%" },
-  show: { y: "0%", transition: { duration: 0.9, ease: EASE } },
-}
-
-const leadRise = {
-  hidden: { opacity: 0, y: 24 },
-  show: { opacity: 1, y: 0, transition: { duration: 0.7, ease: EASE } },
-}
 
 export function Location({ face = "cosmetics" }: { face?: VenueKey }) {
   const sectionRef = useRef<HTMLElement>(null)
+  const headerRef = useRef<HTMLDivElement>(null)
+  const linesIn = useSeen(sectionRef, 0)
+  const headerIn = useSeen(headerRef, 60)
   const [hoveredCard, setHoveredCard] = useState<number | null>(null)
 
   const copy = COPY[face]
@@ -132,10 +116,14 @@ export function Location({ face = "cosmetics" }: { face?: VenueKey }) {
         aria-hidden
       >
         {Array.from({ length: 8 }).map((_, i) => (
-          <m.div
+          <div
             key={i}
-            className="absolute h-px w-full origin-left"
+            className={cn(
+              "absolute h-px w-full origin-left",
+              linesIn ? "motion-safe:animate-[line-grow_1400ms_cubic-bezier(0.16,1,0.3,1)_backwards]" : "opacity-0",
+            )}
             style={{
+              animationDelay: `${i * 80}ms`,
               top: `${10 + i * 12}%`,
               background:
                 i % 2 === 0
@@ -143,10 +131,6 @@ export function Location({ face = "cosmetics" }: { face?: VenueKey }) {
                   : "linear-gradient(90deg, transparent, color-mix(in oklab, var(--face) 10%, transparent), transparent)",
               transform: `rotate(${i % 2 === 0 ? -1.5 : 1.5}deg)`,
             }}
-            initial={{ scaleX: 0, opacity: 0 }}
-            whileInView={{ scaleX: 1, opacity: 1 }}
-            viewport={{ once: true, amount: 0.2 }}
-            transition={{ duration: 1.4, delay: i * 0.08, ease: [0.16, 1, 0.3, 1] }}
           />
         ))}
 
@@ -183,35 +167,38 @@ export function Location({ face = "cosmetics" }: { face?: VenueKey }) {
       <div className="relative z-10 mx-auto max-w-7xl px-6 md:px-10">
 
         {/* Header con slide brutal */}
-        <m.div
-          className="mb-3 md:mb-4"
-          variants={headerVariants}
-          initial="hidden"
-          whileInView="show"
-          viewport={{ once: true, margin: "-60px" }}
-        >
-          <m.span
-            className="mb-4 inline-block text-xs font-semibold uppercase tracking-[0.3em] text-[var(--loc-accent)]"
-            variants={labelRise}
+        <div ref={headerRef} className="mb-3 md:mb-4">
+          <span
+            className={cn(
+              "mb-4 inline-block text-xs font-semibold uppercase tracking-[0.3em] text-[var(--loc-accent)]",
+              headerIn ? "motion-safe:animate-[reveal-up_600ms_cubic-bezier(0.16,1,0.3,1)_backwards]" : "opacity-0",
+            )}
           >
             Visítanos
-          </m.span>
+          </span>
 
           <div className="overflow-hidden">
             {/* Same look as the catalog's title (client request): one bold line in the ink colour, no italic, no gradient */}
-            <m.h2
-              className="font-display font-bold text-[var(--loc-text)]"
+            <h2
+              className={cn(
+                "font-display font-bold text-[var(--loc-text)]",
+                headerIn ? "motion-safe:animate-[char-rise_900ms_cubic-bezier(0.16,1,0.3,1)_120ms_backwards]" : "opacity-0",
+              )}
               style={{ fontSize: "clamp(1.9rem, 4vw, 3rem)", letterSpacing: "-0.03em", lineHeight: 1.1 }}
-              variants={titleRise}
             >
               {copy.title} {copy.place}
-            </m.h2>
+            </h2>
           </div>
 
-          <m.p className="mt-4 max-w-lg text-[var(--loc-muted)] text-base md:text-lg" variants={leadRise}>
+          <p
+            className={cn(
+              "mt-4 max-w-lg text-[var(--loc-muted)] text-base md:text-lg",
+              headerIn ? "motion-safe:animate-[reveal-up_700ms_cubic-bezier(0.16,1,0.3,1)_240ms_backwards]" : "opacity-0",
+            )}
+          >
             {copy.lead}
-          </m.p>
-        </m.div>
+          </p>
+        </div>
 
         {/* Grid principal */}
         <div className="grid lg:grid-cols-[0.9fr_1fr] gap-8 lg:gap-14 items-start">
@@ -223,12 +210,10 @@ export function Location({ face = "cosmetics" }: { face?: VenueKey }) {
           >
 
             {/* Etiqueta flotante */}
-            <m.div
+            <Reveal
+              kind="pop"
+              delay={500}
               className="absolute -top-5 left-6 z-20 flex items-center gap-2 rounded-full border border-[var(--face)]/40 bg-[var(--loc-card)] px-4 py-2 shadow-lg"
-              initial={{ opacity: 0, y: 16, scale: 0.85 }}
-              whileInView={{ opacity: 1, y: 0, scale: 1 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6, delay: 0.5, ease: [0.16, 1, 0.3, 1] }}
             >
               <span className="relative flex h-2.5 w-2.5">
                 <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[var(--face-deep)] opacity-75" />
@@ -237,17 +222,10 @@ export function Location({ face = "cosmetics" }: { face?: VenueKey }) {
               <span className="text-xs font-semibold text-[var(--loc-text)]">
                 {venue.name} · {venue.address}
               </span>
-            </m.div>
+            </Reveal>
 
             {/* react-leaflet map */}
-            <m.div
-              className="relative overflow-hidden rounded-3xl shadow-2xl"
-              style={{ height: "clamp(340px, 44vw, 540px)" }}
-              initial={{ opacity: 0, scale: 0.96, y: 24 }}
-              whileInView={{ opacity: 1, scale: 1, y: 0 }}
-              viewport={{ once: true, amount: 0.3 }}
-              transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-            >
+            <Reveal kind="zoom" className="relative overflow-hidden rounded-3xl shadow-2xl" style={{ height: "clamp(340px, 44vw, 540px)" }}>
               <div
                 className="pointer-events-none absolute inset-0 z-10 rounded-3xl"
                 style={{ boxShadow: "inset 0 0 0 2px color-mix(in oklab, var(--face) 30%, transparent)" }}
@@ -266,24 +244,22 @@ export function Location({ face = "cosmetics" }: { face?: VenueKey }) {
                 data-testid="map-open"
                 className="absolute inset-0 z-20 cursor-pointer focus-visible:outline-2 focus-visible:outline-offset-[-4px] focus-visible:outline-(--face)"
               />
-            </m.div>
+            </Reveal>
 
             {/* Botón "Ver en Maps" */}
-            <m.a
-              href={venue.gmaps}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="absolute -bottom-5 right-6 z-20 flex items-center gap-2 rounded-full bg-[var(--ink)] px-4 py-2 text-xs font-semibold text-white shadow-xl"
-              initial={{ opacity: 0, scale: 0.8 }}
-              whileInView={{ opacity: 1, scale: 1 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: 0.7, ease: [0.16, 1, 0.3, 1] }}
-              whileHover={{ scale: 1.06, backgroundColor: "var(--face)" }}
-              whileTap={{ scale: 0.95 }}
-            >
-              <Navigation className="h-3.5 w-3.5" />
-              Abrir en Google Maps
-            </m.a>
+            <Reveal kind="grow" delay={700} className="absolute -bottom-5 right-6 z-20">
+              <m.a
+                href={venue.gmaps}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-2 rounded-full bg-[var(--ink)] px-4 py-2 text-xs font-semibold text-white shadow-xl"
+                whileHover={{ scale: 1.06, backgroundColor: "var(--face)" }}
+                whileTap={{ scale: 0.95 }}
+              >
+                <Navigation className="h-3.5 w-3.5" />
+                Abrir en Google Maps
+              </m.a>
+            </Reveal>
           </m.div>
 
           {/* ── INFO CARDS ── */}
@@ -300,13 +276,7 @@ export function Location({ face = "cosmetics" }: { face?: VenueKey }) {
             ))}
 
             {/* CTA WhatsApp */}
-            <m.div
-              className="pt-2"
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6, delay: 0.55, ease: [0.16, 1, 0.3, 1] }}
-            >
+            <Reveal delay={550} className="pt-2">
               <m.div
                 whileHover={{ scale: 1.03 }}
                 whileTap={{ scale: 0.97 }}
@@ -333,7 +303,7 @@ export function Location({ face = "cosmetics" }: { face?: VenueKey }) {
                   </a>
                 </Button>
               </m.div>
-            </m.div>
+            </Reveal>
           </div>
         </div>
       </div>
@@ -379,9 +349,6 @@ function MagneticCard({
         transformStyle: "preserve-3d",
         transformPerspective: 800,
       }}
-      initial={{ opacity: 0, x: 40, scale: 0.94 }}
-      whileInView={{ opacity: 1, x: 0, scale: 1 }}
-      viewport={{ once: true, amount: 0.3 }}
       transition={{
         duration: 0.65,
         delay: index * 0.1,
@@ -457,12 +424,18 @@ function MagneticCard({
     </m.div>
   )
 
+  // The card arrives from the right (CSS, visible in the HTML); what is hovered and tilted is the card inside
+  const arriving = (
+    <Reveal kind="right" delay={index * 100}>
+      {inner}
+    </Reveal>
+  )
   if (card.href) {
     return (
       <a href={card.href} target="_blank" rel="noopener noreferrer">
-        {inner}
+        {arriving}
       </a>
     )
   }
-  return inner
+  return arriving
 }

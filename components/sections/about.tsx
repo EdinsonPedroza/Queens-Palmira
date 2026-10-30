@@ -2,7 +2,6 @@
 
 import Image from "next/image"
 import Link from "next/link"
-import { m, type Variants } from "framer-motion"
 import {
   ArrowDown,
   ArrowUpRight,
@@ -26,20 +25,8 @@ import { WA_ADVICE } from "@/lib/whatsapp"
  * flat and square pieces with fine lines, small spaced-capitals eyebrows, one-colour titles, square near-black buttons and compact spacing. It stays the warm page:
  * the three shop photos are still left on the table like snapshots (white mat and a caption), now straight instead of tilted. Every claim comes from facts already on
  * the site (originals, advice, samples, exchanges, appointments); there is no founding story, year or name here until the client supplies one.
- * Entrances below the hero are CSS (`<Reveal>`): Framer's `initial`+`animate` blinked each block for a frame when it ended (see CLAUDE.md).
+ * Every entrance is CSS (the hero's `hero-fade-up` / `hero-rise`, the rest `<Reveal>`): Framer's `initial`+`animate` blinked each block for a frame when it ended and, on an iPad, left the title and the buttons invisible (see CLAUDE.md).
  */
-
-const EASE = [0.16, 1, 0.3, 1] as const
-
-const rise: Variants = {
-  hidden: { y: "112%" },
-  show: (i: number = 0) => ({ y: "0%", transition: { duration: 1, delay: 0.15 + i * 0.1, ease: EASE } }),
-}
-
-const fadeUp: Variants = {
-  hidden: { opacity: 0, y: 22 },
-  show: (i: number = 0) => ({ opacity: 1, y: 0, transition: { duration: 0.85, delay: 0.5 + i * 0.1, ease: EASE } }),
-}
 
 /* Fine lines, like the store's controls and the cart's: the `* { border-color }` rule of globals.css beats the utilities (see CLAUDE.md), so the colour goes inline. */
 const HAIRLINE = "color-mix(in oklab, var(--ink) 12%, transparent)"
@@ -160,52 +147,47 @@ export function About() {
   return (
     <>
       {/* ═════ Hero ═════ */}
-      <m.section
+      <section
         id="hero"
         aria-labelledby="about-title"
-        initial="hidden"
-        animate="show"
         /* Starts below the strip + header (--header-h). lg+: fills the rest of the screen, like the store's and the spa's. */
         className="relative overflow-hidden bg-white lg:flex lg:min-h-[calc(100svh_-_var(--header-h))] lg:items-center"
       >
         <div className="relative mx-auto grid w-full max-w-7xl items-center gap-10 px-6 py-10 md:px-10 md:py-14 lg:grid-cols-[0.95fr_1.05fr] lg:gap-14 lg:py-12">
           <div>
-            <m.p
-              variants={fadeUp}
-              custom={-1}
-              className="mb-3 text-[11px] font-medium uppercase tracking-[0.3em] text-ink/80 lg:mb-[1vw] lg:text-[clamp(9px,0.85vw,13px)]"
+            <p
+              className="hero-fade-up mb-3 text-[11px] font-medium uppercase tracking-[0.3em] text-ink/80 lg:mb-[1vw] lg:text-[clamp(9px,0.85vw,13px)]"
+              style={{ animationDelay: "0.4s" }}
             >
               Quiénes somos
-            </m.p>
+            </p>
 
             <h1
               id="about-title"
               className="font-display text-[clamp(2.7rem,12.5vw,3.6rem)] uppercase leading-[0.88] tracking-[-0.025em] text-ink md:text-[clamp(3.4rem,9vw,5.2rem)] lg:text-[clamp(2.4rem,5vw,5.6rem)]"
             >
               <span className="block overflow-hidden pb-[0.04em]">
-                <m.span variants={rise} custom={0} className="block font-bold">
+                <span className="hero-rise block font-bold" style={{ animationDelay: "0.15s" }}>
                   Hola, somos
-                </m.span>
+                </span>
               </span>
               <span className="block overflow-hidden pb-[0.1em]">
-                <m.span variants={rise} custom={1} className="block font-bold">
+                <span className="hero-rise block font-bold" style={{ animationDelay: "0.25s" }}>
                   Queens.
-                </m.span>
+                </span>
               </span>
             </h1>
 
-            <m.p
-              variants={fadeUp}
-              custom={0}
-              className="mt-4 max-w-md text-[1rem] leading-relaxed text-ink/85 md:max-w-xl md:text-[1.05rem] lg:mt-[1.2vw] lg:max-w-lg lg:text-[clamp(0.95rem,1.22vw,1.375rem)] lg:leading-[1.5]"
+            <p
+              className="hero-fade-up mt-4 max-w-md text-[1rem] leading-relaxed text-ink/85 md:max-w-xl md:text-[1.05rem] lg:mt-[1.2vw] lg:max-w-lg lg:text-[clamp(0.95rem,1.22vw,1.375rem)] lg:leading-[1.5]"
+              style={{ animationDelay: "0.5s" }}
             >
               Una casa de belleza en Palmira donde nos gusta que te sientas como en familia: bienvenida, escuchada y bien aconsejada.
-            </m.p>
+            </p>
 
-            <m.div
-              variants={fadeUp}
-              custom={1}
-              className="mt-7 flex flex-wrap items-center gap-x-6 gap-y-4 lg:mt-[1.9vw] lg:flex-nowrap lg:gap-x-[1.8vw]"
+            <div
+              className="hero-fade-up mt-7 flex flex-wrap items-center gap-x-6 gap-y-4 lg:mt-[1.9vw] lg:flex-nowrap lg:gap-x-[1.8vw]"
+              style={{ animationDelay: "0.6s" }}
             >
               <a
                 href={WA_ADVICE}
@@ -225,7 +207,7 @@ export function About() {
                 Conoce nuestras casas
                 <ArrowDown className="h-[1.1em] w-[1.1em]" strokeWidth={1.5} />
               </a>
-            </m.div>
+            </div>
           </div>
 
           {/* Snapshots, left on the table: a white mat and a caption each, straight and staggered */}
@@ -255,7 +237,7 @@ export function About() {
             ))}
           </div>
         </div>
-      </m.section>
+      </section>
 
       {/* ═════ Lo que nos mueve ═════ */}
       <section aria-labelledby="values-title" className="relative bg-gradient-to-b from-white to-[var(--dorado-soft)]/20 py-8 md:py-10">

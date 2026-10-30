@@ -3,31 +3,26 @@
 import { useEffect, useState } from "react"
 import { WA_DEFAULT } from "@/lib/whatsapp"
 
-/** `href`: where the button writes. The store's number by default; the spa passes its own. */
+/**
+ * `href`: where the button writes. The store's number by default; the spa passes its own.
+ *
+ * It is the page's main call to action, so it is in the HTML and visible: it arrives (after 1.5 s) with a CSS animation that only says where it comes from (`hero-fade-up`,
+ * `backwards`). It used to be hidden until a script switched it on, and on a device where the scripts do not run (an iPad with an old Safari) it never appeared.
+ */
 export function WhatsAppFloat({ href = WA_DEFAULT }: { href?: string }) {
-  const [visible, setVisible] = useState(false)
   const [showTip, setShowTip] = useState(false)
 
   useEffect(() => {
-    const t = setTimeout(() => setVisible(true), 1500)
     const tip = setTimeout(() => setShowTip(true), 3500)
     const tipOff = setTimeout(() => setShowTip(false), 9000)
     return () => {
-      clearTimeout(t)
       clearTimeout(tip)
       clearTimeout(tipOff)
     }
   }, [])
 
   return (
-    <div
-      className="fixed bottom-5 right-5 z-40 flex items-end gap-2"
-      style={{
-        opacity: visible ? 1 : 0,
-        transform: visible ? "translateY(0)" : "translateY(20px)",
-        transition: "all 0.6s cubic-bezier(0.16,1,0.3,1)",
-      }}
-    >
+    <div className="hero-fade-up fixed bottom-5 right-5 z-40 flex items-end gap-2" style={{ animationDelay: "1.5s" }}>
       {showTip && (
         <div
           className="mb-2 hidden sm:block rounded-2xl bg-white px-4 py-2.5 text-sm shadow-lg border border-[var(--face-light)] animate-fade-up"

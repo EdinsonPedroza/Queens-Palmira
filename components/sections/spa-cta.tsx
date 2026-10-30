@@ -2,9 +2,9 @@
 
 import { useRef } from "react"
 import Link from "next/link"
-import { useInView } from "framer-motion"
 import { ArrowUpRight } from "lucide-react"
 import { Reveal } from "@/components/reveal"
+import { useSeen } from "@/hooks/use-seen"
 import { WhatsAppIcon } from "@/components/whatsapp-icon"
 import { cn } from "@/lib/utils"
 import { VENUES, faceLinkProps } from "@/lib/site"
@@ -18,7 +18,7 @@ const WORDS = ["Tus", "manos", "te", "van", "a", "dar", "las", "gracias."]
  */
 export function SpaCTA() {
   const ref = useRef<HTMLElement>(null)
-  const inView = useInView(ref, { once: true, margin: "-80px" })
+  const inView = useSeen(ref, 80)
 
   return (
     <section ref={ref} className="relative overflow-hidden bg-[var(--face)] py-12 text-ink md:py-16">
