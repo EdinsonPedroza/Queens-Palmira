@@ -128,7 +128,7 @@ export function Footer({ face = "cosmetics", tone = "ink" }: { face?: Face; tone
             <Reveal key={i} delay={i * 100}>
               {i === 0 && (
                 <>
-                  <QueensLogo variant={tone === "crema" ? (face === "cosmetics" ? "lila" : "default") : "white"} cosmetics={face === "cosmetics"} />
+                  <QueensLogo variant={tone === "crema" ? (face === "cosmetics" ? "lila" : "default") : "white"} cosmetics={face === "cosmetics"} spa={face === "spa"} />
                   <p className="mt-5 text-sm text-white/70 leading-relaxed max-w-xs">
                     Cosmética premium y spa en Palmira. Dos personalidades, una
                     sola reina: tú.

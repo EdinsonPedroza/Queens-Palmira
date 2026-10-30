@@ -187,6 +187,7 @@ export function Navbar({ face = "cosmetics", separate = false, announce = false 
           <Link href="/" aria-label="Queens — inicio" className={cn("max-[430px]:[zoom:0.7] max-[380px]:[zoom:0.62]", announce && "translate-y-1")}>
             <QueensLogo
               cosmetics={face === "cosmetics"}
+              spa={face === "spa"}
               variant={logoVariant}
               size={89}
               priority

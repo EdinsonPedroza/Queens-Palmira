@@ -17,6 +17,11 @@ interface QueensLogoProps {
    * Only exists in lila and crema (the store's colours); any other variant ignores it.
    */
   cosmetics?: boolean
+  /**
+   * The same for the spa: "Queens" + "spa" (public/images/brand/lockup-spa-*.webp). Only exists in gold and crema (the spa's colours); lila ignores it, and so does
+   * `cosmetics` if both are set.
+   */
+  spa?: boolean
 }
 
 // Isotipo 556×803 and wordmark 640×170, both cut from the official imagotipo.
@@ -27,8 +32,11 @@ const WORDMARK_RATIO = 640 / 170
 const WORDMARK_TO_ISOTIPO = 0.42
 // "Queens" + "cosmetics" block, 1508×595 in the imagotipo (stored at 900 px wide). Its width is the width of "Queens".
 const LOCKUP_RATIO = 1508 / 595
+// "Queens" + "spa", 900×404: the "Queens" is the same cut as the cosmetics one; "spa" is The Seasons Regular at the size and tracking that reproduce the imagotipo's "cosmetics"
+// (checked by laying one over the other), centred under it. It is taller than the cosmetics block because the "p" has a descender.
+const SPA_LOCKUP_RATIO = 900 / 404
 
-export function QueensLogo({ className, variant = "default", size = 48, priority = false, cosmetics = false }: QueensLogoProps) {
+export function QueensLogo({ className, variant = "default", size = 48, priority = false, cosmetics = false, spa = false }: QueensLogoProps) {
   const ink = variant === "white" ? "crema" : variant === "lila" ? "lila" : variant === "deep" ? "dorado-deep" : "dorado"
   const wordmarkH = Math.round(size * WORDMARK_TO_ISOTIPO)
   // Both sides rounded from the real ratio. With a rounded width and an unrounded height, the browser
@@ -40,11 +48,13 @@ export function QueensLogo({ className, variant = "default", size = 48, priority
   const lockupInk = variant === "white" ? "crema" : variant === "lila" ? "lila" : null
   const lockupW = Math.round(wordmarkH * WORDMARK_RATIO)
   const lockupH = Math.round(lockupW / LOCKUP_RATIO)
+  const spaInk = variant === "lila" ? null : variant === "white" ? "crema" : "dorado"
+  const spaH = Math.round(lockupW / SPA_LOCKUP_RATIO)
   return (
     <div className={cn("inline-flex items-center gap-3", className)}>
       <Image
         src={`/images/brand/isotipo-${ink}.webp`}
-        alt="Queens Cosmetics"
+        alt={spa && spaInk ? "Queens Spa" : "Queens Cosmetics"}
         width={isotipoW}
         height={isotipoH}
         sizes={`${isotipoW}px`}
@@ -58,6 +68,17 @@ export function QueensLogo({ className, variant = "default", size = 48, priority
           alt=""
           width={lockupW}
           height={lockupH}
+          sizes={`${lockupW}px`}
+          quality={90}
+          className="shrink-0"
+          priority={priority}
+        />
+      ) : spa && spaInk ? (
+        <Image
+          src={`/images/brand/lockup-spa-${spaInk}.webp`}
+          alt=""
+          width={lockupW}
+          height={spaH}
           sizes={`${lockupW}px`}
           quality={90}
           className="shrink-0"
