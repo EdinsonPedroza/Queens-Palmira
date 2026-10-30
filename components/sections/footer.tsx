@@ -1,24 +1,18 @@
 "use client"
 
 import { useRef } from "react"
-import { m, useInView } from "framer-motion"
+import { m } from "framer-motion"
 import Link from "next/link"
 import { ArrowUp, MapPin } from "lucide-react"
 import { InstagramIcon } from "@/components/instagram-icon"
 import { QueensLogo } from "@/components/queens-logo"
+import { Reveal } from "@/components/reveal"
 import { WhatsAppIcon } from "@/components/whatsapp-icon"
 import { WA_DEFAULT, WA_NEWS, WA_SPA_INFO } from "@/lib/whatsapp"
 import { CATEGORIES, type ProductCategory } from "@/lib/categories"
 import { BUSINESS, CATALOG_FILTERS_ID, CATEGORY_EVENT, LEGAL, VENUES, faceLinkProps, type Face } from "@/lib/site"
+import { useSeen } from "@/hooks/use-seen"
 import { cn, scrollBehavior } from "@/lib/utils"
-
-const colVariants = {
-  hidden: { opacity: 0, y: 32 },
-  show:   (i: number) => ({
-    opacity: 1, y: 0,
-    transition: { duration: 0.65, delay: i * 0.1, ease: [0.16, 1, 0.3, 1] as const },
-  }),
-}
 
 /* The six letters of the logo's "Queens", cut from the original imagotipo (public/images/brand/queens-letter-0..5.webp, white with an alpha channel). x/y/w/h are
  * their exact boxes inside the 1520×413 lettering, so together they redraw it pixel for pixel; each one is animated on its own. */
@@ -111,9 +105,10 @@ const COLUMNS: Record<Face, [{ title: string; links: FooterLink[] }, { title: st
 /** `tone="crema"`: a light footer (the spa's, client request): the logo is the coloured one (gold, or lila in the store) instead of the crema one. Default "ink" is the dark block. */
 export function Footer({ face = "cosmetics", tone = "ink" }: { face?: Face; tone?: "ink" | "crema" }) {
   const year = new Date().getFullYear()
-  // The big lettering starts when it scrolls into view: this flag only switches the CSS animation on (Framer's own entrance blinked for a frame when it ended)
+  // The big lettering starts when it scrolls into view: this flag only switches the CSS animation on (Framer's own entrance blinked for a frame when it ended, and on an
+  // iPad it left the whole footer blank). Everything here is visible in the HTML; see hooks/use-seen.ts.
   const wordRef = useRef<HTMLDivElement>(null)
-  const wordIn = useInView(wordRef, { once: true, margin: "-80px" })
+  const wordIn = useSeen(wordRef, 80)
   const [colA, colB] = COLUMNS[face]
   // Each venue has its own WhatsApp number: the spa's footer shows and writes to the spa's, every other page to the store's
   const chat = face === "spa" ? { venue: VENUES.spa, href: WA_SPA_INFO, label: "WhatsApp del spa" } : { venue: VENUES.cosmetics, href: WA_DEFAULT, label: "Servicio al cliente" }
@@ -130,17 +125,10 @@ export function Footer({ face = "cosmetics", tone = "ink" }: { face?: Face; tone
         {/* ── Columnas — entran en stagger ── */}
         <div className="grid md:grid-cols-[1.3fr_1fr_1fr_1fr] gap-10 mb-14">
           {[0, 1, 2, 3].map((i) => (
-            <m.div
-              key={i}
-              custom={i}
-              variants={colVariants}
-              initial="hidden"
-              whileInView="show"
-              viewport={{ once: true, margin: "-40px" }}
-            >
+            <Reveal key={i} delay={i * 100}>
               {i === 0 && (
                 <>
-                  <QueensLogo variant={tone === "crema" ? (face === "cosmetics" ? "lila" : "default") : "white"} cosmetics={face === "cosmetics"} />
+                  <QueensLogo variant={tone === "crema" ? (face === "cosmetics" ? "lila" : "default") : "white"} cosmetics={face === "cosmetics"} spa={face === "spa"} />
                   <p className="mt-5 text-sm text-white/70 leading-relaxed max-w-xs">
                     Cosmética premium y spa en Palmira. Dos personalidades, una
                     sola reina: tú.
@@ -212,7 +200,7 @@ export function Footer({ face = "cosmetics", tone = "ink" }: { face?: Face; tone
                   </ul>
                 </div>
               )}
-            </m.div>
+            </Reveal>
           ))}
         </div>
 
@@ -220,14 +208,7 @@ export function Footer({ face = "cosmetics", tone = "ink" }: { face?: Face; tone
         <div className="relative border-t border-white/10 pt-12 overflow-hidden">
 
           {/* Glow de fondo pulsante */}
-          <m.div
-            className="pointer-events-none absolute inset-0 flex items-center justify-center"
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            viewport={{ once: true }}
-            transition={{ delay: 0.3, duration: 1 }}
-            aria-hidden
-          >
+          <Reveal kind="fade" delay={300} className="pointer-events-none absolute inset-0 flex items-center justify-center" aria-hidden>
             {/* Breathes forever, so it is a CSS loop (see "AMBIENT LOOPS" in globals.css), not Framer */}
             <div
               className="ambient-breathe h-56 w-3/4 rounded-full blur-[90px]"
@@ -242,7 +223,7 @@ export function Footer({ face = "cosmetics", tone = "ink" }: { face?: Face; tone
                 } as React.CSSProperties
               }
             />
-          </m.div>
+          </Reveal>
 
           {/* The lettering of the official logo (the "Queens" cut out of the imagotipo, never retyped in a font) in the palette's accent colour: the footer is the
               near-black block, so it takes --face (lila in the store, gold in the spa). It is a mask (public/images/brand/wordmark-mask.webp, 1520 px wide) filled with
@@ -283,13 +264,7 @@ export function Footer({ face = "cosmetics", tone = "ink" }: { face?: Face; tone
         </div>
 
         {/* Copyright */}
-        <m.div
-          className="mt-8 flex flex-col md:flex-row items-center justify-between gap-3 border-t border-white/10 pt-6 text-xs text-white/50"
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          viewport={{ once: true }}
-          transition={{ delay: 0.3, duration: 0.8 }}
-        >
+        <Reveal kind="fade" delay={300} className="mt-8 flex flex-col md:flex-row items-center justify-between gap-3 border-t border-white/10 pt-6 text-xs text-white/50">
           <div className="flex items-center gap-4">
             {/* From Montoc's footer: a way back to the top */}
             <button
@@ -321,7 +296,7 @@ export function Footer({ face = "cosmetics", tone = "ink" }: { face?: Face; tone
             </a>
           </nav>
           <p>Palmira, Valle del Cauca · Colombia</p>
-        </m.div>
+        </Reveal>
       </div>
     </footer>
   )
@@ -360,13 +335,7 @@ function FooterCol({ title, links }: { title: string; links: FooterLink[] }) {
       <h2 className={HEADING}>{title}</h2>
       <ul className="space-y-2.5 text-sm">
         {links.map((l, i) => (
-          <m.li
-            key={l.label}
-            initial={{ opacity: 0, x: -12 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay: i * 0.06, duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
-          >
+          <Reveal as="li" key={l.label} kind="left" delay={i * 60}>
             {l.category ? (
               <a href={l.href} onClick={(e) => openCategory(l.category!, e)} className="tap-area text-white/70 hover:text-[var(--face)] transition">
                 {l.label}
@@ -380,7 +349,7 @@ function FooterCol({ title, links }: { title: string; links: FooterLink[] }) {
                 {l.label}
               </a>
             )}
-          </m.li>
+          </Reveal>
         ))}
       </ul>
     </div>

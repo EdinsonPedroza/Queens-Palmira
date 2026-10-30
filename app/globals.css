@@ -387,6 +387,19 @@ em, i, .italic {
 /* Spa (components/reveal.tsx and sections/spa-cta.tsx): a block rises into place as it scrolls into view, and the closing slab's words flip up one by one.
    Both rest visible and start from `backwards`, so nothing can jump back when they end (Framer's entrance did). */
 @keyframes reveal-up { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: none; } }
+/* The other ways a block arrives (`kind` of components/reveal.tsx, also used by the gallery, the location and the footer). All of them rest visible and start from `backwards`. */
+@keyframes reveal-left  { from { opacity: 0; transform: translateX(-12px); } to { opacity: 1; transform: none; } }
+@keyframes reveal-right { from { opacity: 0; transform: translateX(40px) scale(0.94); } to { opacity: 1; transform: none; } }
+@keyframes reveal-fade  { from { opacity: 0; } to { opacity: 1; } }
+@keyframes reveal-pop   { from { opacity: 0; transform: translateY(16px) scale(0.85); } to { opacity: 1; transform: none; } }
+@keyframes reveal-grow  { from { opacity: 0; transform: scale(0.8); } to { opacity: 1; transform: none; } }
+@keyframes reveal-zoom  { from { opacity: 0; transform: translateY(24px) scale(0.96); } to { opacity: 1; transform: none; } }
+/* A title that rises out of a clipped line (the gallery's and the location's: 80 px, fading in) */
+@keyframes title-rise   { from { opacity: 0; transform: translateY(80px); } to { opacity: 1; transform: none; } }
+/* A gallery photo that flies in from its own direction (--from-x / --from-y) */
+@keyframes tile-in      { from { opacity: 0; transform: translate(var(--from-x, 0px), var(--from-y, 0px)) scale(0.88); } to { opacity: 1; transform: none; } }
+/* A thin line that grows from its left end. It uses the `scale` property (not `transform`) because those lines carry their own tilt in `transform` */
+@keyframes line-grow    { from { opacity: 0; scale: 0 1; } to { opacity: 1; scale: 1 1; } }
 /* A line that draws itself from the left (the caption of the spa's services) */
 @keyframes line-draw { from { transform: scaleX(0); } to { transform: none; } }
 /* A letter that rises out of a clipped line (names of the spa's services); at rest it is in its final place, so nothing can jump back when it ends */

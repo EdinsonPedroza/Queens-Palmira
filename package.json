@@ -21,6 +21,13 @@
     "react-dom": "19.2.4",
     "tailwind-merge": "^3.3.1"
   },
+  "browserslist": [
+    "iOS >= 14",
+    "Safari >= 14",
+    "Chrome >= 87",
+    "Edge >= 88",
+    "Firefox >= 78"
+  ],
   "overrides": {
     "sharp": "^0.35.3",
     "postcss": "^8.5.25"

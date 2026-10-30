@@ -1,7 +1,7 @@
 "use client"
 
 import { useEffect, useRef, useState, type ReactNode } from "react"
-import { useInView } from "framer-motion"
+import { onReached } from "@/hooks/use-seen"
 
 /** True once the page has finished loading and the main thread has had a quiet moment. */
 function usePageSettled() {
@@ -33,11 +33,22 @@ function usePageSettled() {
   return settled
 }
 
+/** False until the top of the box is within `ahead` px of the bottom of the screen (geometry on scroll, see hooks/use-seen.ts: not IntersectionObserver, which is not trusted on every iPad). */
+function useReached(ref: React.RefObject<Element | null>, ahead: number) {
+  const [reached, setReached] = useState(false)
+  useEffect(() => {
+    const el = ref.current
+    if (!el) return
+    return onReached(el, -ahead, () => setReached(true))
+  }, [ref, ahead])
+  return reached
+}
+
 interface WhenNearProps {
   children: ReactNode
   /** Shown in the same box until the real thing mounts. */
   fallback: ReactNode
-  /** How far ahead of the viewport to start. Any IntersectionObserver rootMargin. */
+  /** How far ahead of the viewport to start (the first number is the distance in px, above and below). */
   margin?: `${number}px` | `${number}px ${number}px`
   className?: string
 }
@@ -55,8 +66,8 @@ interface WhenNearProps {
  */
 export function WhenNear({ children, fallback, margin = "800px 0px", className }: WhenNearProps) {
   const ref = useRef<HTMLDivElement>(null)
-  const near = useInView(ref, { once: true, margin })
-  const visible = useInView(ref, { once: true })
+  const near = useReached(ref, parseInt(margin, 10) || 0)
+  const visible = useReached(ref, 0)
   const settled = usePageSettled()
 
   return (

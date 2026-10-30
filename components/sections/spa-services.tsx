@@ -2,9 +2,9 @@
 
 import { useCallback, useRef, useState, useSyncExternalStore, type PointerEvent as ReactPointerEvent } from "react"
 import Image from "next/image"
-import { useInView, useReducedMotion } from "framer-motion"
 import { ArrowUpRight } from "lucide-react"
 import { Reveal } from "@/components/reveal"
+import { useSeen } from "@/hooks/use-seen"
 import { ServicePickerContent } from "@/components/sections/spa-service-picker"
 import { Dialog, DialogTrigger } from "@/components/ui/dialog"
 import { SPA_GROUPS as GROUPS, priceLabel, servicesOf, type SpaGroup } from "@/lib/spa-services"
@@ -59,9 +59,10 @@ function RevealCard({ g, n, row, fill, hoverable }: { g: SpaGroup; n: number; ro
   const fromPrice = single ? priceLabel(items[0]) : `Desde ${formatCOP(Math.min(...items.map((i) => i.price)))}`
   const slot = useRef<HTMLDivElement>(null) // what we watch: it is never clipped (a fully clipped element reports no intersection and would never open)
   const drift = useRef<HTMLDivElement>(null)
-  const seenOnce = useInView(slot, { once: true, margin: "-60px" })
-  const reduce = useReducedMotion()
-  const show = seenOnce || !!reduce
+  // Visible in the HTML and until the page runs; only a card still below the screen waits (transparent) for its turn: see hooks/use-seen.ts
+  const seenOnce = useSeen(slot, 60)
+  const reduce = useMedia("(prefers-reduced-motion: reduce)", false)
+  const show = seenOnce || reduce
   const [on, setOn] = useState(false)
   const [pickOpen, setPickOpen] = useState(false) // the picker window (only the cards with several services have one)
   const delay = row * 140 + n * 90

@@ -5,7 +5,7 @@ import Image from "next/image"
 import Link from "next/link"
 import { ArrowUpRight } from "lucide-react"
 import { cn } from "@/lib/utils"
-import { m, useInView } from "framer-motion"
+import { useSeen } from "@/hooks/use-seen"
 
 // Photos of the store at Unicentro. `pos` is the object-position focal point:
 // the shots are tall phone photos cropped into square-ish tiles.
@@ -28,6 +28,7 @@ const IMAGES: GalleryImage[] = [
   { src: "/images/cosmetics/store-makeup.webp", pos: "38% 46%", alt: "Estantes de maquillaje junto a la pared lila" },
 ]
 
+/* Each photo flies in from its own direction (`tile-in` in globals.css reads these as --from-x / --from-y). The photos are visible in the HTML and the entrance is CSS: see hooks/use-seen.ts. */
 const DIRS = [
   { x: -60, y: -30 },
   { x: 60,  y: -40 },
@@ -39,15 +40,13 @@ const DIRS = [
 /** The portrait that links to /quienes-somos: the photo IS the card (edge to edge), in a column as wide as the photo is, so nothing is cropped or blown up. A pill on it says it is a link. */
 function AboutCard({ img, i, inView, mobile = false }: { img: GalleryImage; i: number; inView: boolean; mobile?: boolean }) {
   return (
-    <m.div
+    <div
       className={cn(
-        "group relative overflow-hidden rounded-2xl",
+        "group relative overflow-hidden rounded-2xl transition-[scale] duration-300 ease-[cubic-bezier(0.23,1,0.32,1)] hover:z-10 hover:scale-[1.02]",
+        tileIn(inView),
         mobile ? "mb-3 aspect-[893/1263] md:hidden" : "hidden md:col-span-1 md:row-span-2 md:block",
       )}
-      initial={{ opacity: 0, x: DIRS[i].x, y: DIRS[i].y, scale: 0.88 }}
-      animate={inView ? { opacity: 1, x: 0, y: 0, scale: 1 } : {}}
-      transition={{ duration: 0.9, delay: i * 0.12, ease: [0.16, 1, 0.3, 1] }}
-      whileHover={{ scale: 1.02, zIndex: 10 }}
+      style={tileStyle(i)}
     >
       <Image
         src={img.src}
@@ -68,13 +67,18 @@ function AboutCard({ img, i, inView, mobile = false }: { img: GalleryImage; i: n
         data-testid={mobile ? "gallery-about-link-mobile" : "gallery-about-link"}
         className="absolute inset-0 z-10 rounded-2xl focus-visible:outline-2 focus-visible:outline-offset-[-4px] focus-visible:outline-(--ink)"
       />
-    </m.div>
+    </div>
   )
 }
 
+/** Visible until the page is running and the photo is still below the screen (then transparent until its turn); `backwards` keeps it from jumping back when it ends */
+const tileIn = (inView: boolean) => (inView ? "motion-safe:animate-[tile-in_900ms_cubic-bezier(0.16,1,0.3,1)_backwards]" : "opacity-0")
+const tileStyle = (i: number): React.CSSProperties =>
+  ({ "--from-x": `${DIRS[i].x}px`, "--from-y": `${DIRS[i].y}px`, animationDelay: `${i * 120}ms` }) as React.CSSProperties
+
 export function Gallery() {
   const ref = useRef<HTMLElement>(null)
-  const inView = useInView(ref, { once: true, margin: "-80px" })
+  const inView = useSeen(ref, 80)
 
   return (
     <section
@@ -96,25 +100,25 @@ export function Gallery() {
 
       <div className="relative mx-auto max-w-7xl px-6 md:px-10">
         <div className="text-center mb-3 md:mb-4 overflow-hidden">
-          <m.span
-            className="inline-block text-xs font-semibold tracking-[0.3em] uppercase text-(--face-deep) mb-3"
-            initial={{ opacity: 0, y: 20 }}
-            animate={inView ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+          <span
+            className={cn(
+              "inline-block text-xs font-semibold tracking-[0.3em] uppercase text-(--face-deep) mb-3",
+              inView ? "motion-safe:animate-[reveal-up_600ms_cubic-bezier(0.16,1,0.3,1)_backwards]" : "opacity-0",
+            )}
           >
             Conócenos
-          </m.span>
+          </span>
 
           <div className="overflow-hidden">
-            <m.h2
-              className="font-display font-bold text-(--ink)"
+            <h2
+              className={cn(
+                "font-display font-bold text-(--ink)",
+                inView ? "motion-safe:animate-[title-rise_800ms_cubic-bezier(0.16,1,0.3,1)_100ms_backwards]" : "opacity-0",
+              )}
               style={{ fontSize: "clamp(2rem, 4.5vw, 3.5rem)", letterSpacing: "-0.02em" }}
-              initial={{ y: 80, opacity: 0 }}
-              animate={inView ? { y: 0, opacity: 1 } : {}}
-              transition={{ duration: 0.8, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
             >
               Momentos Queens
-            </m.h2>
+            </h2>
           </div>
         </div>
 
@@ -125,13 +129,14 @@ export function Gallery() {
           {IMAGES.map((img, i) => img.href ? (
             <AboutCard key={i} img={img} i={i} inView={inView} />
           ) : (
-            <m.div
+            <div
               key={i}
-              className={`group relative overflow-hidden rounded-2xl ${img.span ?? ""}`}
-              initial={{ opacity: 0, x: DIRS[i].x, y: DIRS[i].y, scale: 0.88 }}
-              animate={inView ? { opacity: 1, x: 0, y: 0, scale: 1 } : {}}
-              transition={{ duration: 0.9, delay: i * 0.12, ease: [0.16, 1, 0.3, 1] }}
-              whileHover={{ scale: 1.02, zIndex: 10 }}
+              className={cn(
+                "group relative overflow-hidden rounded-2xl transition-[scale] duration-300 ease-[cubic-bezier(0.23,1,0.32,1)] hover:z-10 hover:scale-[1.02]",
+                tileIn(inView),
+                img.span,
+              )}
+              style={tileStyle(i)}
             >
               <Image
                 src={img.src}
@@ -160,7 +165,7 @@ export function Gallery() {
                   <p className="font-serif italic text-lg">{img.caption}</p>
                 </div>
               )}
-            </m.div>
+            </div>
           ))}
         </div>
       </div>
