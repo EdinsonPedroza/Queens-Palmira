@@ -2,7 +2,7 @@
 
 Lo que falta para que el catálogo quede completo. Cuando el cliente dé un precio, se cambia `price: null` por el número en `lib/products.ts` y el producto se vuelve comprable solo. Cuando haya una foto, se pone en `public/images/products/`, se cambia `NO_PHOTO` por su ruta y se corre `node scripts/product-tints.mjs`.
 
-- Productos en la tienda: **498** · con foto: **498** · sin foto: **0** · sin precio («Consultar»): **6**
+- Productos en la tienda: **498** · con foto: **469** · sin foto: **29** · sin precio («Consultar»): **6**
 
 ## 1. Sin precio (aparecen como «Precio por consultar»)
 
