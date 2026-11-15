@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useReducer, useState, type ReactNode } from "react"
 import { PRODUCTS } from "@/lib/products"
+import { isPriced } from "@/lib/product-utils"
 import { CartContext, type CartContextValue, type CartLineExpanded } from "./cart-context"
 
 /*
@@ -40,7 +41,8 @@ function readStoredCart(raw: string | null): CartItem[] {
   for (const entry of parsed) {
     if (typeof entry !== "object" || entry === null) continue
     const { productId, variant, qty } = entry as Record<string, unknown>
-    if (typeof productId !== "string" || !PRODUCTS.some((p) => p.id === productId)) continue
+    // A product that is no longer in the catalog (the catalog was replaced in Nov 2026) or has no price cannot be in the cart.
+    if (typeof productId !== "string" || !PRODUCTS.some((p) => p.id === productId && isPriced(p))) continue
     if (typeof qty !== "number" || !Number.isFinite(qty) || qty < 1) continue
     const tone = typeof variant === "string" && variant !== "" ? variant : undefined
     const key = itemKey(productId, tone)
@@ -152,7 +154,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
     const expanded: CartLineExpanded[] = state.items
       .flatMap((ci) => {
         const product = PRODUCTS.find((p) => p.id === ci.productId)
-        if (!product) return []
+        if (!product || !isPriced(product)) return []
         const line: CartLineExpanded = {
           product,
           qty: ci.qty,

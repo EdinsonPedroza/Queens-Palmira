@@ -1,7 +1,7 @@
 "use client"
 
 import { createContext, useContext } from "react"
-import type { Product } from "@/lib/products"
+import type { PricedProduct } from "@/lib/product-utils"
 
 /*
  * The cart's context and hooks, and nothing else. Keep this file free of runtime
@@ -11,7 +11,8 @@ import type { Product } from "@/lib/products"
  */
 
 export interface CartLineExpanded {
-  product: Product
+  /** Only products with a price can be in the cart (the others say «Consultar precio»). */
+  product: PricedProduct
   variant?: string
   qty: number
   key: string

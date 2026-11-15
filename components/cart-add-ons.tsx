@@ -7,6 +7,7 @@ import { ChevronDown, Plus } from "lucide-react"
 import { getAddOns } from "@/lib/add-ons"
 import { cn, formatCOP } from "@/lib/utils"
 import type { Product } from "@/lib/products"
+import { hasPhoto, type PricedProduct } from "@/lib/product-utils"
 
 const OUT = [0.23, 1, 0.32, 1] as const
 /** How many suggestions the row holds. */
@@ -21,7 +22,7 @@ const HAIRLINE = "color-mix(in oklab, var(--ink) 12%, transparent)"
  * of small, cheap products that complement what is in the cart: one tap adds one unit (no tone to choose; see lib/add-ons.ts), it joins the list above
  * like any other add and is replaced by the next suggestion. `-mb-4` cancels the 16 px `gap-4` that the drawer (DialogContent) puts between its children, which left a wide empty band between the cards and the line above the total. The panel opens and closes by animating the grid row from 0fr to 1fr (no height measuring).
  */
-export function CartAddOns({ items, onAdd }: { items: { product: Product }[]; onAdd: (product: Product) => void }) {
+export function CartAddOns({ items, onAdd }: { items: { product: Product }[]; onAdd: (product: PricedProduct) => void }) {
   const [open, setOpen] = useState(false)
   const touched = useRef(false)   // the client already folded or unfolded it by hand: the automatic opening gives way
   // The suggestions are kept STABLE: adding one only takes that one out of the row and puts the next suggestion at the END; the others do not
@@ -88,7 +89,8 @@ export function CartAddOns({ items, onAdd }: { items: { product: Product }[]; on
                       re-wrap its text or move its "+" (it did, when the card followed the shrinking <li>) */}
                   <div className="w-[68px]">
                   <div className="relative aspect-square overflow-hidden bg-(--face-light)/25">
-                    <Image src={p.image} alt={p.name} fill sizes="68px" className="object-contain p-1.5" />
+                    {/* No photo yet: the Queens isotype, smaller and softer, instead of a product shot */}
+                    <Image src={p.image} alt={hasPhoto(p) ? p.name : ""} fill sizes="68px" className={cn("object-contain", hasPhoto(p) ? "p-1.5" : "p-4 opacity-70")} />
                     <button
                       type="button"
                       onClick={() => onAdd(p)}

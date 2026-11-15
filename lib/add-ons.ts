@@ -1,5 +1,6 @@
 import { PRODUCTS, type Product, type ProductCategory } from "./products"
 import { capilarGroup } from "./capilar-groups"
+import { hasPhoto, isPriced, type PricedProduct } from "./product-utils"
 
 /*
  * "¿Un último antojo?": small, cheap things that go with what is already in the cart, offered at the bottom of the cart drawer.
@@ -21,8 +22,9 @@ const AFFINITY: Record<ProductCategory, Partial<Record<ProductCategory, number>>
 
 const NOT_AN_IMPULSE = /barber|afeitar|talco|depilatoria|decolor|oxigenada|oxy cream|recamier deco/i
 
-function isAddOn(p: Product): boolean {
-  if (p.price > ADD_ON_MAX_PRICE || (p.variants?.length ?? 0) > 1) return false
+function isAddOn(p: Product): p is PricedProduct {
+  // Without a price it cannot be added to the cart; the cheap ones also need to be a one-tap add
+  if (!isPriced(p) || p.price > ADD_ON_MAX_PRICE || (p.variants?.length ?? 0) > 1) return false
   if (NOT_AN_IMPULSE.test(p.name)) return false
   if (p.category === "capilar") {
     const g = capilarGroup(p)
@@ -32,16 +34,16 @@ function isAddOn(p: Product): boolean {
 }
 
 /** Up to `limit` suggestions for a cart, never repeating a product already in it and never more than two from one category. */
-export function getAddOns(inCart: { product: Product }[], limit = 6): Product[] {
+export function getAddOns(inCart: { product: Product }[], limit = 6): PricedProduct[] {
   if (inCart.length === 0) return []
   const have = new Set(inCart.map((i) => i.product.id))
   const cats = inCart.map((i) => i.product.category)
-  const scored = PRODUCTS.filter((p) => isAddOn(p) && !have.has(p.id))
+  const scored = PRODUCTS.filter((p): p is PricedProduct => isAddOn(p) && !have.has(p.id))
     .map((p) => ({ p, score: cats.reduce((s, c) => s + (AFFINITY[c][p.category] ?? 0), 0) }))
-    // best pairing first, then the cheapest
-    .sort((a, b) => b.score - a.score || a.p.price - b.p.price)
+    // best pairing first, then the ones that have a photo (a suggestion is a thumbnail), then the cheapest
+    .sort((a, b) => b.score - a.score || Number(hasPhoto(b.p)) - Number(hasPhoto(a.p)) || a.p.price - b.p.price)
 
-  const out: Product[] = []
+  const out: PricedProduct[] = []
   const perCategory: Partial<Record<ProductCategory, number>> = {}
   for (const { p } of scored) {
     if ((perCategory[p.category] ?? 0) >= 2) continue

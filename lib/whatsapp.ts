@@ -1,9 +1,9 @@
-import type { Product } from "./products"
+import type { PricedProduct } from "./product-utils"
 import { VENUES } from "./site"
 import { formatCOP } from "./utils"
 
 export interface CartLineItem {
-  product: Product
+  product: PricedProduct
   variant?: string
   qty: number
 }

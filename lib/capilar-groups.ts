@@ -1,14 +1,14 @@
 import type { Product } from "./products"
 
-/* Subcategorías de Línea Capilar (75 productos). Hoy solo las usa la vista previa temporal /cosmetics/capilar:
- * si el cliente las aprueba, lo mejor es un campo `group` explícito en cada producto de `lib/products.ts`
- * y borrar este deducido por nombre. Gana la primera regla que coincida. */
+/* Subcategorías de Línea Capilar (239 productos). Cada producto del catálogo actual ya trae su `group` explícito en `lib/products.ts`
+ * (`subcategoryOf` lo usa primero); este deducido por nombre solo queda de respaldo para un producto agregado sin `group`.
+ * Gana la primera regla que coincida. */
 export type CapilarGroupId = "shampoo" | "tratamientos" | "tintes" | "decoloracion" | "peinado" | "accesorios"
 
 export const CAPILAR_GROUPS: { id: CapilarGroupId; label: string; tagline: string }[] = [
   { id: "shampoo",      label: "Shampoo y acondicionador", tagline: "La limpieza de todos los días" },
   { id: "tratamientos", label: "Tratamientos",             tagline: "Mascarillas, ampolletas y anticaída" },
-  { id: "tintes",       label: "Tintes",                   tagline: "Color con cobertura y brillo" },
+  { id: "tintes",       label: "Tintes y matizantes",      tagline: "Color con cobertura y brillo" },
   { id: "decoloracion", label: "Decolorantes y oxidantes", tagline: "Para aclarar y revelar" },
   { id: "peinado",      label: "Peinado",                  tagline: "Fijación, rizos y brillo" },
   { id: "accesorios",   label: "Accesorios y extensiones", tagline: "Cepillos, rulos y kanekalon" },

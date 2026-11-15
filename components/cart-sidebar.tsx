@@ -10,6 +10,7 @@ import { useCart } from "@/context/cart-context"
 import { Dialog, DialogContent, DialogTitle, DialogDescription } from "./ui/dialog"
 import { cn, formatCOP } from "@/lib/utils"
 import { buildOrderMessage, waLink } from "@/lib/whatsapp"
+import { hasPhoto } from "@/lib/product-utils"
 import { arrivingNow, burst, cartOpener } from "@/lib/cart-fx"
 import { FREE_SHIPPING_MIN } from "@/lib/site"
 
@@ -224,10 +225,11 @@ export function CartSidebar() {
                   <div data-cart-thumb="" className="relative h-[94px] w-[94px] shrink-0 overflow-hidden bg-(--face-light)/25">
                     <Image
                       src={product.image}
-                      alt={product.name}
+                      alt={hasPhoto(product) ? product.name : ""}
                       fill
                       sizes="94px"
-                      className="object-contain p-1.5"
+                      // No photo yet: the Queens isotype, smaller and softer, instead of a product shot
+                      className={cn("object-contain", hasPhoto(product) ? "p-1.5" : "p-6 opacity-70")}
                     />
                   </div>
                   <div className="relative flex min-w-0 flex-1 flex-col justify-between">
