@@ -1,6 +1,6 @@
 /*
  * The six product categories. Kept apart from lib/products.ts on purpose: the navbar needs the labels on every
- * page, and importing products.ts would pull the whole 171-product catalog into pages that have no cart.
+ * page, and importing products.ts would pull the whole catalog (463 products) into pages that have no cart.
  */
 
 export type ProductCategory =

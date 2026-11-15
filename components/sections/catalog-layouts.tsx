@@ -250,7 +250,7 @@ function BigTile({ product, dark }: { product: Product; dark: boolean }) {
             <div className="flex items-end justify-between gap-3">
               <div>
                 {s.discount > 0 && <p className="text-xs line-through opacity-70">{formatCOP(product.originalPrice!)}</p>}
-                <p className="font-display text-2xl font-bold">{formatCOP(product.price)}</p>
+                <p className="font-display text-2xl font-bold">{product.price === null ? "Precio por consultar" : formatCOP(product.price)}</p>
               </div>
               <button
                 ref={s.triggerRef}
@@ -323,7 +323,7 @@ function MenuRow({ product }: { product: Product }) {
             <div className="flex items-baseline">
               <h3 className="line-clamp-2 min-w-0 text-[12.5px] font-bold uppercase leading-snug tracking-[0.03em] text-[var(--ink)]">{product.name}</h3>
               <span className="mx-2 mb-1 min-w-4 flex-1 self-end" style={{ borderBottom: "1.5px dotted color-mix(in oklab, var(--ink) 40%, transparent)" }} aria-hidden />
-              <span className="shrink-0 text-[14px] font-semibold text-[var(--ink)]">{formatCOP(product.price)}</span>
+              <span className="shrink-0 text-[14px] font-semibold text-[var(--ink)]">{product.price === null ? "Precio por consultar" : formatCOP(product.price)}</span>
             </div>
             <p className="mt-0.5 line-clamp-1 text-[12px] text-[var(--muted-foreground)]">{product.description}</p>
             <div className="mt-0.5 flex flex-wrap items-center gap-x-3">
@@ -376,7 +376,7 @@ function Spotlight({ product, label, index, total, onStep }: { product: Product;
   const [added, setAdded] = useState(false)
   const hasVariants = (product.variants?.length ?? 0) > 0
   const canAdd = !hasVariants || selected !== ""
-  const discount = product.originalPrice && product.originalPrice > product.price ? Math.round((1 - product.price / product.originalPrice) * 100) : 0
+  const discount = product.price !== null && product.originalPrice && product.originalPrice > product.price ? Math.round((1 - product.price / product.originalPrice) * 100) : 0
 
   const inCartTotal = items.reduce((sum, l) => (l.product.id === product.id ? sum + l.qty : sum), 0)
 

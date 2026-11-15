@@ -181,8 +181,9 @@ export function Catalog({ cardStyle = "editorial" }: { cardStyle?: CardStyle }) 
       : defs && group !== "todo"
         ? raw.filter((p) => subcategoryOf(p) === group)   // a subcategory; any text search looks across the whole category instead
         : raw
-    if (sortOrder === "price-asc")  return [...hit].sort((a, b) => a.price - b.price)
-    if (sortOrder === "price-desc") return [...hit].sort((a, b) => b.price - a.price)
+    // «Consultar precio» products (price null) go last in both directions: they have no price to compare
+    if (sortOrder === "price-asc")  return [...hit].sort((a, b) => (a.price ?? Infinity) - (b.price ?? Infinity) || 0)
+    if (sortOrder === "price-desc") return [...hit].sort((a, b) => (a.price === null ? 1 : b.price === null ? -1 : b.price - a.price))
     return hit
   }, [active, search, localQuery, sortOrder, group, defs])
 

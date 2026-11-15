@@ -6,7 +6,10 @@ import { useState, useRef, useEffect, useLayoutEffect, useCallback, useMemo } fr
 import Image from "next/image"
 import { m, AnimatePresence, useReducedMotion } from "framer-motion"
 import type { Product } from "@/lib/products"
+import { hasPhoto, priceRequestMessage } from "@/lib/product-utils"
+import { waLink } from "@/lib/whatsapp"
 import { Badge } from "./ui/badge"
+import { WhatsAppIcon } from "./whatsapp-icon"
 import { useCart } from "@/context/cart-context"
 import { cartOpener, flyToCart, markArrival } from "@/lib/cart-fx"
 import { PRODUCT_TINTS } from "@/lib/product-tints"
@@ -58,7 +61,7 @@ export function useCardState(product: Product) {
 
   const hasVariants = (product.variants?.length ?? 0) > 0
   const canAdd      = !hasVariants || selected !== ""
-  const discount    = product.originalPrice && product.originalPrice > product.price
+  const discount    = product.price !== null && product.originalPrice && product.originalPrice > product.price
     ? Math.round((1 - product.price / product.originalPrice) * 100)
     : 0
   const badge = product.badge ? BADGE_COPY[product.badge] : null
@@ -90,9 +93,11 @@ export function useCardState(product: Product) {
 
   /* Sin tono elegido, el botón principal despliega las opciones; con tono, agrega. */
   const onAction = useCallback(() => {
+    // No price in the catalog yet: the card (photo included) asks the store for it on WhatsApp instead of adding to the cart
+    if (product.price === null) { window.open(waLink(priceRequestMessage(product.name)), "_blank", "noopener,noreferrer"); return }
     if (!canAdd) { setOpen((o) => !o); return }
     add(selected || undefined)
-  }, [add, canAdd, selected])
+  }, [add, canAdd, product.name, product.price, selected])
 
   const close = useCallback(() => setOpen(false), [])
   /* Elegir un tono lo agrega al carrito de una vez, y la tarjeta vuelve a "Elige un tono" para poder escoger otro. */
@@ -343,7 +348,33 @@ function BorderLines({ on }: { on: boolean }) {
   )
 }
 
+/* A product with no price in the catalog: the same button, but a link that opens WhatsApp with «quiero consultar el precio de…». It never touches the cart. */
+function ConsultButton({ product, kind }: { product: Product; kind: ActionKind }) {
+  const base = {
+    outline: "group relative w-full px-3 py-2.5 text-[11.5px] uppercase tracking-[0.12em] font-medium text-[var(--ink)] [transition:transform_150ms,background-color_150ms,color_150ms,letter-spacing_500ms_cubic-bezier(0.23,1,0.32,1)] hover:tracking-[0.17em] active:scale-[0.98] motion-reduce:transition-none",
+    small:   "w-full border rounded-full px-3 py-2 text-[10.5px] uppercase tracking-[0.14em] font-medium text-[var(--face-deep)] hover:bg-[var(--face-deep)] hover:text-[var(--crema)]",
+    pill:    "w-full rounded-full px-3 py-2.5 text-xs font-bold tracking-wide bg-queens-gradient-intense text-[var(--ink)] hover:brightness-95",
+  }[kind]
+  return (
+    <a
+      href={waLink(priceRequestMessage(product.name))}
+      target="_blank"
+      rel="noopener noreferrer"
+      aria-label={`Consultar precio por WhatsApp: ${product.name}`}
+      data-testid={`consult-${product.name}`}
+      style={kind === "small" ? { borderColor: "var(--face-deep)" } : undefined}
+      className={cn("@container flex cursor-pointer items-center justify-center gap-2 transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--face)]", base)}
+    >
+      <WhatsAppIcon className="h-3.5 w-3.5 shrink-0" />
+      {/* The label depends on the width of the BUTTON (a card in a narrow grid cell is ~140 px inside), not on the screen: there it says only «Consultar» */}
+      <span className="truncate">Consultar<span className="@max-[185px]:hidden"> precio</span></span>
+      {kind === "outline" && <BorderLines on={false} />}
+    </a>
+  )
+}
+
 export function ActionButton({ s, product, kind }: { s: CardState; product: Product; kind: ActionKind }) {
+  if (product.price === null) return <ConsultButton product={product} kind={kind} />
   const { canAdd, justAdded, lastTone, open, onAction, selected, triggerRef } = s
   const picking  = !canAdd
   /* "Agregado" for a moment; if the tone menu is open again the button is back to "Elige un tono". */
@@ -434,6 +465,20 @@ export function ActionButton({ s, product, kind }: { s: CardState; product: Prod
 
 /* Círculo "+" del estilo Minimal: mismo comportamiento que el botón principal. */
 function QuickAdd({ s, product }: { s: CardState; product: Product }) {
+  if (product.price === null) {
+    return (
+      <a
+        href={waLink(priceRequestMessage(product.name))}
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label={`Consultar precio por WhatsApp: ${product.name}`}
+        data-testid={`consult-${product.name}`}
+        className="absolute bottom-1 right-1 z-10 grid h-9 w-9 place-items-center rounded-full bg-[var(--crema)] text-[var(--ink)] shadow-sm transition-all duration-200 hover:bg-[var(--ink)] hover:text-[var(--crema)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--face)]"
+      >
+        <WhatsAppIcon className="h-4 w-4" />
+      </a>
+    )
+  }
   const { canAdd, justAdded, lastTone, open, onAction, selected, triggerRef } = s
   const flashing = justAdded && !open
   const added = `${product.name}${lastTone ? ` — ${lastTone}` : ""}`
@@ -471,6 +516,23 @@ function QuickAdd({ s, product }: { s: CardState; product: Product }) {
 /* ─── Piezas comunes ───────────────────────────────────────── */
 /* `seated`: el producto se apoya abajo de su caja, sobre el suelo del fondo de estudio. */
 export function Photo({ product, pad, seated }: { product: Product; pad: string; seated?: boolean }) {
+  // A full studio photo (its own backdrop included): it fills the box, no cut-out, no reflection or contact shadow
+  if (product.imageBleed) {
+    return <Image src={product.image} alt={product.name} fill sizes={PHOTO_SIZES} className="object-cover transition-transform duration-700 ease-out group-hover:scale-[1.04]" />
+  }
+  // No photo yet: the Queens isotype as a soft emblem on the silk (no reflection, no contact shadow: it is not an object that stands on the floor)
+  if (!hasPhoto(product)) {
+    return (
+      <Image
+        src={product.image}
+        alt=""
+        aria-hidden
+        fill
+        sizes={PHOTO_SIZES}
+        className="object-contain px-[31%] pb-[22%] pt-[15%] opacity-80 drop-shadow-[0_6px_10px_rgba(95,45,60,0.16)] transition-transform duration-700 ease-out group-hover:scale-[1.04]"
+      />
+    )
+  }
   return (
     <>
     {seated && (
@@ -598,6 +660,18 @@ export function StageFx({ tint }: { tint?: { col: string; s: number } | null }) 
   )
 }
 
+/* Aviso discreto cuando la foto es de un producto PARECIDO y no del mismo (`photoRef`): vidrio translúcido en la esquina de la foto, letra chica
+ * y mayúsculas espaciadas, igual que las otras etiquetas del catálogo. No tapa el producto: la foto se ve completa. */
+function RefChip() {
+  return (
+    <span
+      className="pointer-events-none absolute left-2 top-2 z-10 bg-[color-mix(in_oklab,var(--crema)_58%,transparent)] px-2 py-1 text-[8.5px] font-semibold uppercase leading-none tracking-[0.16em] text-[var(--ink)]/65 backdrop-blur-md [box-shadow:0_0_0_1px_color-mix(in_oklab,var(--crema)_80%,transparent)]"
+    >
+      Foto referencial
+    </span>
+  )
+}
+
 /* Tono elegido, sobre la foto. */
 export function ToneOnPhoto({ selected, round }: { selected: string; round?: boolean }) {
   return (
@@ -619,6 +693,14 @@ export function ToneOnPhoto({ selected, round }: { selected: string; round?: boo
 }
 
 export function PriceLine({ product, discount, className }: { product: Product; discount: number; className?: string }) {
+  // No price in the catalog yet (the button says what to do: it asks the store on WhatsApp)
+  if (product.price === null) {
+    return (
+      <div className={cn("flex items-baseline gap-2", className)}>
+        <span className="text-[13px] font-medium text-[var(--ink)]/70">Precio por consultar</span>
+      </div>
+    )
+  }
   return (
     <div className={cn("flex items-baseline gap-2", className)}>
       {discount > 0 && (
@@ -665,6 +747,7 @@ function EditorialCard({ product, s }: { product: Product; s: CardState }) {
         <Stage tint={tint} backdrop={stageBackdrop(product)} />
         <Photo product={product} pad={STAGE_PAD} seated />
         <StageFx tint={tint} />
+        {product.photoRef && <RefChip />}
         <ToneOnPhoto selected={s.selected} />
         <InCartChip count={s.inCart.total} />
       </div>
@@ -712,8 +795,14 @@ function SuaveCard({ product, s }: { product: Product; s: CardState }) {
         </div>
         <div className="flex flex-wrap items-end justify-between gap-x-2 gap-y-1">
           <div className="flex items-baseline gap-1.5">
-            {s.discount > 0 && <span className="text-[11px] text-[var(--muted-foreground)] line-through">{formatCOP(product.originalPrice!)}</span>}
-            <span className="font-display text-lg font-bold leading-none text-[var(--face-deep)]">{formatCOP(product.price)}</span>
+            {product.price === null ? (
+              <span className="text-[13px] font-medium text-[var(--ink)]/70">Precio por consultar</span>
+            ) : (
+              <>
+                {s.discount > 0 && <span className="text-[11px] text-[var(--muted-foreground)] line-through">{formatCOP(product.originalPrice!)}</span>}
+                <span className="font-display text-lg font-bold leading-none text-[var(--face-deep)]">{formatCOP(product.price)}</span>
+              </>
+            )}
           </div>
           {product.rating != null && <RatingRow rating={product.rating} reviews={product.reviews} />}
         </div>

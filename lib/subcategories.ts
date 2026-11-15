@@ -18,6 +18,7 @@ export const SUBCATEGORIES: Partial<Record<ProductCategory, Subcategory[]>> = {
     { id: "liquidos", label: "Líquidos y tintas", tagline: "Color intenso que no se corre" },
     { id: "barra",    label: "En barra",          tagline: "El clásico de siempre" },
     { id: "gloss",    label: "Gloss y brillos",   tagline: "Labios jugosos y brillantes" },
+    { id: "cuidado",  label: "Cuidado de labios", tagline: "Labios suaves y cuidados" },
   ],
   rostro: [
     { id: "bases",       label: "Bases",                  tagline: "La piel perfecta, a tu medida" },
@@ -41,9 +42,10 @@ export const SUBCATEGORIES: Partial<Record<ProductCategory, Subcategory[]>> = {
     { id: "barberia", label: "Barbería",            tagline: "Para el cuidado de él" },
   ],
   unas: [
-    { id: "esmaltes",   label: "Esmaltes",    tagline: "Color en tus manos" },
+    { id: "esmaltes",   label: "Esmaltes y geles", tagline: "Color en tus manos" },
     { id: "removedores", label: "Removedores", tagline: "Para empezar de cero" },
     { id: "cuticula",   label: "Cutículas",   tagline: "Uñas sanas y cuidadas" },
+    { id: "herramientas", label: "Herramientas y accesorios", tagline: "Para limar, cortar y pulir" },
   ],
   capilar: CAPILAR_GROUPS,
 }
@@ -81,6 +83,9 @@ const RULES: Partial<Record<ProductCategory, { id: string; re: RegExp; on?: "nam
 
 /** The subcategory id of a product, or undefined when its category has none. */
 export function subcategoryOf(p: Product): string | undefined {
+  // Every product of the current catalog (the client's «productos queens.docx») carries its own `group`: that is the truth.
+  // The name rules below only catch a product added later without one.
+  if (p.group && SUBCATEGORIES[p.category]?.some((g) => g.id === p.group)) return p.group
   if (p.category === "capilar") return capilarGroup(p)
   const defs = SUBCATEGORIES[p.category]
   if (!defs) return undefined
