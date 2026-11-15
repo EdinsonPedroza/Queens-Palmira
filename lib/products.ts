@@ -53,7 +53,6 @@ export const PRODUCTS: Product[] = [
     group: "gloss",
     description: "Bloomshell · Gloss y brillos",
     image: "/images/products/Gloss Magico pH Meow Bloomshell.webp",
-    imageBleed: true,
   },
   {
     id: "lip-gloss-bonita-ani-k",
@@ -85,7 +84,6 @@ export const PRODUCTS: Product[] = [
     group: "liquidos",
     description: "Atenea · Líquidos y tintas",
     image: "/images/products/Lipstick Macchiato Atenea.webp",
-    imageBleed: true,
   },
   {
     id: "lip-nailen-mate",
@@ -105,7 +103,6 @@ export const PRODUCTS: Product[] = [
     group: "barra",
     description: "SP PRO · En barra",
     image: "/images/products/Labiales en Barra SP PRO.webp",
-    photoRef: true,
   },
   {
     id: "tinta-para-labios-en-paleta-engol",
@@ -133,7 +130,6 @@ export const PRODUCTS: Product[] = [
     group: "cuidado",
     description: "Jelly Enkor · Cuidado de labios",
     image: "/images/products/Balsamo de Labios Jelly Enkor.webp",
-    imageBleed: true,
   },
   {
     id: "mascarilla-para-labios-samy",
@@ -274,7 +270,6 @@ export const PRODUCTS: Product[] = [
     group: "bases",
     description: "Bloomshell · Bases",
     image: "/images/products/Base 2 en 1 Bloomshell.webp",
-    imageBleed: true,
   },
   {
     id: "polvo-suelto-bloomshell",
@@ -303,7 +298,6 @@ export const PRODUCTS: Product[] = [
     group: "contorno",
     description: "Bloomshell · Contorno e iluminador",
     image: "/images/products/Contorno en Polvo Bloomshell.webp",
-    imageBleed: true,
   },
   {
     id: "rubor-blush-shell-bloomshell",
@@ -313,7 +307,6 @@ export const PRODUCTS: Product[] = [
     group: "rubor",
     description: "Bloomshell · Rubor",
     image: "/images/products/Rubor Blush Shell Bloomshell.webp",
-    imageBleed: true,
   },
   {
     id: "bloom-floral-liquid-bloomshell",
@@ -323,7 +316,6 @@ export const PRODUCTS: Product[] = [
     group: "rubor",
     description: "Bloomshell · Rubor líquido",
     image: "/images/products/Bloom Floral Liquid Bloomshell.webp",
-    imageBleed: true,
   },
   {
     id: "llavero-bloom-porta-cosmeticos-bloomshell",
@@ -333,7 +325,6 @@ export const PRODUCTS: Product[] = [
     group: "accesorios",
     description: "Bloomshell · Fijador y accesorios",
     image: "/images/products/Llavero Bloom Mocha con Espejo Bloomshell.webp",
-    imageBleed: true,
     photoRef: true,
   },
   {
@@ -344,7 +335,6 @@ export const PRODUCTS: Product[] = [
     group: "accesorios",
     description: "Bloomshell · Fijador y accesorios",
     image: "/images/products/Llavero Bloom Mocha con Espejo Bloomshell.webp",
-    imageBleed: true,
   },
   {
     id: "llavero-mimosa-bloomshell",
@@ -354,7 +344,6 @@ export const PRODUCTS: Product[] = [
     group: "accesorios",
     description: "Bloomshell · Fijador y accesorios",
     image: "/images/products/Llavero Bloom Mocha con Espejo Bloomshell.webp",
-    imageBleed: true,
     photoRef: true,
   },
   {
@@ -365,7 +354,6 @@ export const PRODUCTS: Product[] = [
     group: "accesorios",
     description: "Bloomshell · Fijador y accesorios",
     image: "/images/products/Cosmetiquera Bloomshell.webp",
-    imageBleed: true,
   },
   {
     id: "brocha-polvo-suelto-bloomshell",
@@ -374,9 +362,7 @@ export const PRODUCTS: Product[] = [
     category: "rostro",
     group: "accesorios",
     description: "Bloomshell · Fijador y accesorios",
-    image: "/images/products/Llavero Bloom Mocha con Espejo Bloomshell.webp",
-    imageBleed: true,
-    photoRef: true,
+    image: "/images/products/Brocha Polvo Suelto Bloomshell.webp",
   },
   {
     id: "base-y-corrector-2-en-1-ani-k",
@@ -422,7 +408,6 @@ export const PRODUCTS: Product[] = [
     group: "rubor",
     description: "Masglo · Rubor",
     image: "/images/products/Rubor Metalizado Masglo.webp",
-    photoRef: true,
   },
   {
     id: "base-humide-montoc",
@@ -489,7 +474,6 @@ export const PRODUCTS: Product[] = [
     group: "contorno",
     description: "Engol · Contorno e iluminador",
     image: "/images/products/Bronceador Sun Kissed Engol.webp",
-    photoRef: true,
   },
   {
     id: "rubor-liquido-engol",
@@ -517,7 +501,6 @@ export const PRODUCTS: Product[] = [
     group: "bases",
     description: "Jelly Enkor · Bases",
     image: "/images/products/Base con Filtro Solar Jelly Enkor.webp",
-    imageBleed: true,
   },
   {
     id: "polvos-compactos-con-filtro-solar-jelly-enkor",
@@ -537,7 +520,6 @@ export const PRODUCTS: Product[] = [
     group: "rubor",
     description: "Jelly Enkor · Rubor",
     image: "/images/products/Rubores en Polvo Jelly Enkor.webp",
-    imageBleed: true,
   },
   {
     id: "cosmetiquera-pastel-jelly-enkor",
@@ -547,7 +529,6 @@ export const PRODUCTS: Product[] = [
     group: "accesorios",
     description: "Jelly Enkor · Fijador y accesorios",
     image: "/images/products/Cosmetiquera Pastel Jelly Enkor.webp",
-    imageBleed: true,
   },
   {
     id: "rubor-blush-duo-samy",
@@ -583,7 +564,7 @@ export const PRODUCTS: Product[] = [
     category: "rostro",
     group: "accesorios",
     description: "Samy · Fijador y accesorios",
-    image: "/images/products/Brocha Rostro 2 #F4 Iluminador Samy.webp",
+    image: "/images/products/Brocha Rostro 2 F4 Iluminador Samy.webp",
   },
   {
     id: "brocha-ojos-e2-difuminadora-samy",
@@ -592,7 +573,7 @@ export const PRODUCTS: Product[] = [
     category: "rostro",
     group: "accesorios",
     description: "Samy · Fijador y accesorios",
-    image: "/images/products/Brocha Ojos #E2 Difuminadora Samy.webp",
+    image: "/images/products/Brocha Ojos E2 Difuminadora Samy.webp",
   },
   {
     id: "brocha-ojos-e3-angular-samy",
@@ -601,7 +582,7 @@ export const PRODUCTS: Product[] = [
     category: "rostro",
     group: "accesorios",
     description: "Samy · Fijador y accesorios",
-    image: "/images/products/Brocha Ojos #E3 Angular Samy.webp",
+    image: "/images/products/Brocha Ojos E3 Angular Samy.webp",
   },
   {
     id: "brocha-ojos-difuminadora-e1-samy",
@@ -610,7 +591,7 @@ export const PRODUCTS: Product[] = [
     category: "rostro",
     group: "accesorios",
     description: "Samy · Fijador y accesorios",
-    image: "/images/products/Brocha Ojos Difuminadora #E1 Samy.webp",
+    image: "/images/products/Brocha Ojos Difuminadora E1 Samy.webp",
   },
   {
     id: "pad-limpiador-de-brochas-flower-samy",
@@ -860,8 +841,6 @@ export const PRODUCTS: Product[] = [
     group: "polvos",
     description: "Raquel · Polvos",
     image: "/images/products/Polvo Suelto Pearl Raquel.webp",
-    imageBleed: true,
-    photoRef: true,
   },
   {
     id: "polvo-suelto-traslucido-raquel",
@@ -871,7 +850,6 @@ export const PRODUCTS: Product[] = [
     group: "polvos",
     description: "Raquel · Polvos",
     image: "/images/products/Polvo Suelto Traslucido Raquel.webp",
-    imageBleed: true,
   },
   {
     id: "polvo-suelto-banana-traslucido-raquel",
@@ -881,8 +859,6 @@ export const PRODUCTS: Product[] = [
     group: "polvos",
     description: "Raquel · Polvos",
     image: "/images/products/Polvo Suelto Banana Traslucido Raquel.webp",
-    imageBleed: true,
-    photoRef: true,
   },
   {
     id: "polvo-suelto-miel-raquel",
@@ -892,8 +868,6 @@ export const PRODUCTS: Product[] = [
     group: "polvos",
     description: "Raquel · Polvos",
     image: "/images/products/Polvo Suelto Miel Raquel.webp",
-    imageBleed: true,
-    photoRef: true,
   },
   {
     id: "polvo-suelto-raquel",
@@ -912,7 +886,6 @@ export const PRODUCTS: Product[] = [
     group: "rubor",
     description: "Raquel · Rubor",
     image: "/images/products/Rubores en Polvo Raquel.webp",
-    imageBleed: true,
   },
   {
     id: "maquillaje-artistico-soft-cream-pintucaritas-raquel",
@@ -922,8 +895,6 @@ export const PRODUCTS: Product[] = [
     group: "accesorios",
     description: "Raquel · Pintucaritas",
     image: "/images/products/Maquillaje Artistico Soft Cream Pintucaritas Raquel.webp",
-    imageBleed: true,
-    photoRef: true,
   },
   {
     id: "corrector-ojeras-ligne-d-or",
@@ -961,7 +932,6 @@ export const PRODUCTS: Product[] = [
     group: "accesorios",
     description: "Fijador y accesorios",
     image: "/images/products/Pomos de Maquillaje.webp",
-    photoRef: true,
   },
   {
     id: "beauty-blender",
@@ -988,8 +958,7 @@ export const PRODUCTS: Product[] = [
     category: "rostro",
     group: "accesorios",
     description: "Fijador y accesorios",
-    image: "/images/products/Brocha Rubor Enkor.webp",
-    photoRef: true,
+    image: "/images/products/Brocha Polvo Enkor.webp",
   },
   {
     id: "brocha-base-enkor",
@@ -998,8 +967,7 @@ export const PRODUCTS: Product[] = [
     category: "rostro",
     group: "accesorios",
     description: "Fijador y accesorios",
-    image: "/images/products/Brocha Rubor Enkor.webp",
-    photoRef: true,
+    image: "/images/products/Brocha Base Enkor.webp",
   },
   {
     id: "cosmetiquera-retro",
@@ -1009,7 +977,6 @@ export const PRODUCTS: Product[] = [
     group: "accesorios",
     description: "Fijador y accesorios",
     image: "/images/products/Cosmetiquera Retro.webp",
-    photoRef: true,
   },
 
   // ═══════════════ OJOS ═══════════════
@@ -1022,8 +989,6 @@ export const PRODUCTS: Product[] = [
     group: "pestaninas",
     description: "Prosa · Pestañinas",
     image: "/images/products/Pestaninas Prosa.webp",
-    imageBleed: true,
-    photoRef: true,
   },
   {
     id: "delineador-gel-montoc",
@@ -1061,7 +1026,6 @@ export const PRODUCTS: Product[] = [
     group: "pestaninas",
     description: "Engol · Pestañinas",
     image: "/images/products/Encrespador de Pestanas Engol.webp",
-    photoRef: true,
   },
   {
     id: "libro-de-pestanas-rusas-engol",
@@ -1071,7 +1035,6 @@ export const PRODUCTS: Product[] = [
     group: "postizas",
     description: "Engol · Pestañas y pegantes",
     image: "/images/products/Libro de Pestanas Rusas Engol.webp",
-    photoRef: true,
   },
   {
     id: "plumon-para-cejas-efecto-pelo-a-pelo-3d-engol",
@@ -1081,7 +1044,6 @@ export const PRODUCTS: Product[] = [
     group: "cejas",
     description: "Engol · Cejas",
     image: "/images/products/Plumon para Cejas Efecto Pelo a Pelo 3D Engol.webp",
-    photoRef: true,
   },
   {
     id: "delineador-en-plumon-engol",
@@ -1100,7 +1062,6 @@ export const PRODUCTS: Product[] = [
     group: "postizas",
     description: "Jelly Enkor · Pestañas y pegantes",
     image: "/images/products/Pestanas Punto a Punto 30D Jelly Enkor.webp",
-    photoRef: true,
     variants: ["10 mm", "12 mm", "14 mm"],
   },
   {
@@ -1234,7 +1195,6 @@ export const PRODUCTS: Product[] = [
     group: "pestaninas",
     description: "Raquel · Pestañinas",
     image: "/images/products/Pestanina Transparente para Cejas y Pestanas de Bambu Raquel.webp",
-    imageBleed: true,
   },
   {
     id: "delineador-raquel",
@@ -1244,8 +1204,6 @@ export const PRODUCTS: Product[] = [
     group: "delineador",
     description: "Raquel · Delineadores",
     image: "/images/products/Delineador Raquel.webp",
-    imageBleed: true,
-    photoRef: true,
     variants: ["Negro", "Café"],
   },
   {
@@ -1284,8 +1242,6 @@ export const PRODUCTS: Product[] = [
     group: "postizas",
     description: "Most Beauty · Pestañas y pegantes",
     image: "/images/products/Pestanas Punto a Punto Talla M Most Beauty.webp",
-    imageBleed: true,
-    photoRef: true,
   },
   {
     id: "pestanas-punto-a-punto-mixta-most-beauty",
@@ -1295,8 +1251,6 @@ export const PRODUCTS: Product[] = [
     group: "postizas",
     description: "Most Beauty · Pestañas y pegantes",
     image: "/images/products/Pestanas Punto a Punto Mixta Most Beauty.webp",
-    imageBleed: true,
-    photoRef: true,
   },
   {
     id: "libro-de-pestanas-enteras-14-pares-most-beauty",
@@ -1306,8 +1260,6 @@ export const PRODUCTS: Product[] = [
     group: "postizas",
     description: "Most Beauty · Pestañas y pegantes",
     image: "/images/products/Libro de Pestanas Enteras 14 Pares Most Beauty.webp",
-    imageBleed: true,
-    photoRef: true,
   },
   {
     id: "henna-cejas-moonlight",
@@ -1326,8 +1278,7 @@ export const PRODUCTS: Product[] = [
     category: "ojos",
     group: "postizas",
     description: "Pestañas y pegantes",
-    image: "/images/products/Pegante De Pestanas Salon Pro.webp",
-    photoRef: true,
+    image: "/images/products/Pegante Adoro.webp",
   },
   {
     id: "pegante-salon-pro",
@@ -1356,7 +1307,6 @@ export const PRODUCTS: Product[] = [
     group: "pestaninas",
     description: "Pestañinas",
     image: "/images/products/Repuesto para Encrespador.webp",
-    photoRef: true,
   },
   {
     id: "perfilador-x3",
@@ -1375,7 +1325,6 @@ export const PRODUCTS: Product[] = [
     group: "cejas",
     description: "Cejas",
     image: "/images/products/Brocha Doble Punta Cejas Enkor.webp",
-    photoRef: true,
   },
   {
     id: "brocha-doble-punta-cejas-enkor",
@@ -1394,7 +1343,6 @@ export const PRODUCTS: Product[] = [
     group: "cejas",
     description: "Cejas",
     image: "/images/products/Brocha Doble Punta Cejas Enkor.webp",
-    photoRef: true,
   },
   {
     id: "brocha-enkor-cejas",
@@ -1404,7 +1352,6 @@ export const PRODUCTS: Product[] = [
     group: "cejas",
     description: "Cejas",
     image: "/images/products/Brocha Doble Punta Cejas Enkor.webp",
-    photoRef: true,
   },
   {
     id: "brocha-difuminador-enkor",
@@ -1435,16 +1382,6 @@ export const PRODUCTS: Product[] = [
     image: "/images/products/Brocha Difuminador Enkor.webp",
     photoRef: true,
   },
-  {
-    id: "pincel-de-cejas-doble-punta-yasser",
-    name: "Pincel de Cejas Doble Punta Yasser",
-    price: 5200,
-    category: "ojos",
-    group: "cejas",
-    description: "Cejas",
-    image: "/images/products/Brocha Doble Punta Cejas Enkor.webp",
-    photoRef: true,
-  },
 
   // ═══════════════ SKIN CARE ═══════════════
 
@@ -1456,7 +1393,6 @@ export const PRODUCTS: Product[] = [
     group: "facial",
     description: "Bloomshell · Parches para acné",
     image: "/images/products/Bloom Stop Bloomshell.webp",
-    imageBleed: true,
   },
   {
     id: "papel-absorbente-bye-bye-brillo-bloomshell",
@@ -1466,7 +1402,6 @@ export const PRODUCTS: Product[] = [
     group: "facial",
     description: "Bloomshell · Cuidado facial",
     image: "/images/products/Papel Absorbente Bye Bye Brillo Bloomshell.webp",
-    imageBleed: true,
   },
   {
     id: "aceite-4-en-1-prosa",
@@ -1476,7 +1411,6 @@ export const PRODUCTS: Product[] = [
     group: "facial",
     description: "Prosa · Cuidado facial",
     image: "/images/products/Aceite 4 en 1 Prosa.webp",
-    imageBleed: true,
   },
   {
     id: "protector-nude-spf100",
@@ -1523,7 +1457,6 @@ export const PRODUCTS: Product[] = [
     group: "solar",
     description: "Jelly Enkor · Solar y bronceado",
     image: "/images/products/Protector Solar en Barra Jelly Enkor.webp",
-    imageBleed: true,
   },
   {
     id: "papel-control-brillo-facial-jelly-enkor",
@@ -1532,9 +1465,7 @@ export const PRODUCTS: Product[] = [
     category: "skincare",
     group: "facial",
     description: "Jelly Enkor · Cuidado facial",
-    image: "/images/products/Papel Absorbente Bye Bye Brillo Bloomshell.webp",
-    imageBleed: true,
-    photoRef: true,
+    image: "/images/products/Papel Control Brillo Facial Jelly Enkor.webp",
   },
   {
     id: "crema-hidratante-luminosa-samy",
@@ -1608,7 +1539,6 @@ export const PRODUCTS: Product[] = [
     group: "facial",
     description: "Garnier · Cuidado facial",
     image: "/images/products/Serum Anti Manchas Vitamina C Noche Garnier.webp",
-    photoRef: true,
   },
   {
     id: "gel-de-limpieza-renovador-revitalift-l-oreal",
@@ -1645,7 +1575,6 @@ export const PRODUCTS: Product[] = [
     group: "facial",
     description: "Garnier · Cuidado facial",
     image: "/images/products/Agua Micelar Acido Salicilico Garnier.webp",
-    photoRef: true,
   },
   {
     id: "agua-micelar-rosas-garnier",
@@ -1673,7 +1602,6 @@ export const PRODUCTS: Product[] = [
     group: "facial",
     description: "Garnier · Cuidado facial",
     image: "/images/products/Agua Micelar Vitamina C 100 ml Garnier.webp",
-    photoRef: true,
   },
   {
     id: "mascarilla-garnier",
@@ -1693,7 +1621,6 @@ export const PRODUCTS: Product[] = [
     group: "facial",
     description: "Garnier · Cuidado facial",
     image: "/images/products/Crema Toque Seco Garnier.webp",
-    photoRef: true,
   },
   {
     id: "tonico-facial-agua-de-rosas-ligne-d-or",
@@ -1765,8 +1692,7 @@ export const PRODUCTS: Product[] = [
     category: "skincare",
     group: "solar",
     description: "Ligne D'Or · Solar y bronceado",
-    image: "/images/products/Protector Solar Nude SPF100 Sachet.webp",
-    photoRef: true,
+    image: "/images/products/Protector Solar 50+ en Sobre Ligne DOr.webp",
   },
   {
     id: "cera-depil-bella",
@@ -1776,7 +1702,6 @@ export const PRODUCTS: Product[] = [
     group: "cuerpo",
     description: "Depil Bella · Cuerpo y depilación",
     image: "/images/products/Cera Depil Bella.webp",
-    photoRef: true,
   },
   {
     id: "dispositivo-para-la-cera-depil-bella",
@@ -1785,8 +1710,7 @@ export const PRODUCTS: Product[] = [
     category: "skincare",
     group: "cuerpo",
     description: "Depil Bella · Cuerpo y depilación",
-    image: "/images/products/Cera en Perlas.webp",
-    photoRef: true,
+    image: "/images/products/Dispositivo para la Cera Depil Bella.webp",
   },
   {
     id: "perfume-pink-anyeluz",
@@ -1814,7 +1738,6 @@ export const PRODUCTS: Product[] = [
     group: "cuerpo",
     description: "Maxybelt · Cuerpo y depilación",
     image: "/images/products/Crema Exfoliante de Coco para Manos y Cuerpo Maxybelt.webp",
-    photoRef: true,
   },
   {
     id: "crema-para-manos-y-cuerpo-perfumada-maxybelt",
@@ -1824,7 +1747,6 @@ export const PRODUCTS: Product[] = [
     group: "cuerpo",
     description: "Maxybelt · Cuerpo y depilación",
     image: "/images/products/Crema para Manos y Cuerpo Perfumada Maxybelt.webp",
-    photoRef: true,
   },
   {
     id: "gel-de-afeitar-don-barbero-maxybelt",
@@ -1852,7 +1774,6 @@ export const PRODUCTS: Product[] = [
     group: "barberia",
     description: "Maxybelt · Barbería",
     image: "/images/products/Kit Don Barbero Maxybelt.webp",
-    photoRef: true,
   },
   {
     id: "gel-afeitar-barber",
@@ -1889,7 +1810,6 @@ export const PRODUCTS: Product[] = [
     group: "cuerpo",
     description: "Duvy Class · Cuerpo y depilación",
     image: "/images/products/Cera Miel Duvy Class.webp",
-    photoRef: true,
   },
   {
     id: "protector-solar-la-guajira-meicys",
@@ -1917,7 +1837,6 @@ export const PRODUCTS: Product[] = [
     group: "cuerpo",
     description: "Lander · Cuerpo y depilación",
     image: "/images/products/Talcos Lander.webp",
-    photoRef: true,
   },
   {
     id: "talcos-para-bebe-lander",
@@ -1954,7 +1873,6 @@ export const PRODUCTS: Product[] = [
     group: "cuerpo",
     description: "Lander · Cuerpo y depilación",
     image: "/images/products/Kit Baby de Lander.webp",
-    photoRef: true,
   },
   {
     id: "cubre-pezon-engol",
@@ -1972,8 +1890,7 @@ export const PRODUCTS: Product[] = [
     category: "skincare",
     group: "cuerpo",
     description: "Cuerpo y depilación",
-    image: "/images/products/Cera en Perlas.webp",
-    photoRef: true,
+    image: "/images/products/Lienzo Depilatorio en Tela y Sintetico.webp",
   },
   {
     id: "cera-en-perlas",
@@ -1983,7 +1900,6 @@ export const PRODUCTS: Product[] = [
     group: "cuerpo",
     description: "Cuerpo y depilación",
     image: "/images/products/Cera en Perlas.webp",
-    photoRef: true,
   },
   {
     id: "cubre-pezon",
@@ -1992,8 +1908,7 @@ export const PRODUCTS: Product[] = [
     category: "skincare",
     group: "cuerpo",
     description: "Cuerpo y depilación",
-    image: "/images/products/Cera en Perlas.webp",
-    photoRef: true,
+    image: "/images/products/Cubre Pezon.webp",
   },
   {
     id: "cuchillas-dorco",
@@ -2002,8 +1917,7 @@ export const PRODUCTS: Product[] = [
     category: "skincare",
     group: "cuerpo",
     description: "Cuerpo y depilación",
-    image: "/images/products/Cera en Perlas.webp",
-    photoRef: true,
+    image: "/images/products/Cuchillas Dorco.webp",
   },
   {
     id: "lampina-corporal-y-facial",
@@ -2012,8 +1926,7 @@ export const PRODUCTS: Product[] = [
     category: "skincare",
     group: "cuerpo",
     description: "Cuerpo y depilación",
-    image: "/images/products/Cera en Perlas.webp",
-    photoRef: true,
+    image: "/images/products/Lampina Corporal y Facial.webp",
   },
 
   // ═══════════════ UÑAS ═══════════════
@@ -2026,7 +1939,6 @@ export const PRODUCTS: Product[] = [
     group: "esmaltes",
     description: "Brescia · Esmaltes y geles",
     image: "/images/products/Esmaltes Brescia.webp",
-    photoRef: true,
   },
   {
     id: "palas-para-pies-brescia",
@@ -2035,8 +1947,7 @@ export const PRODUCTS: Product[] = [
     category: "unas",
     group: "herramientas",
     description: "Brescia · Herramientas y accesorios",
-    image: "/images/products/Limas para Unas.webp",
-    photoRef: true,
+    image: "/images/products/Palas para Pies Brescia.webp",
   },
   {
     id: "removedor-cuticula-brescia",
@@ -2099,8 +2010,7 @@ export const PRODUCTS: Product[] = [
     category: "unas",
     group: "herramientas",
     description: "Brescia · Herramientas y accesorios",
-    image: "/images/products/Limas para Unas.webp",
-    photoRef: true,
+    image: "/images/products/Limas Grandes Brescia.webp",
   },
   {
     id: "limas-pequenas-brescia",
@@ -2109,8 +2019,7 @@ export const PRODUCTS: Product[] = [
     category: "unas",
     group: "herramientas",
     description: "Brescia · Herramientas y accesorios",
-    image: "/images/products/Limas para Unas.webp",
-    photoRef: true,
+    image: "/images/products/Limas Pequenas Brescia.webp",
   },
   {
     id: "corta-cuticulas-brescia",
@@ -2119,8 +2028,7 @@ export const PRODUCTS: Product[] = [
     category: "unas",
     group: "herramientas",
     description: "Brescia · Herramientas y accesorios",
-    image: "/images/products/Limas para Unas.webp",
-    photoRef: true,
+    image: "/images/products/Corta Cuticulas Brescia.webp",
   },
   {
     id: "diluyente-de-esmalte-brescia",
@@ -2139,7 +2047,6 @@ export const PRODUCTS: Product[] = [
     group: "esmaltes",
     description: "Lander · Esmaltes y geles",
     image: "/images/products/Esmaltes Lander.webp",
-    photoRef: true,
   },
   {
     id: "removedor-esmalte-lander",
@@ -2234,7 +2141,6 @@ export const PRODUCTS: Product[] = [
     group: "herramientas",
     description: "Engol · Herramientas y accesorios",
     image: "/images/products/Unas Press On Decoradas Engol.webp",
-    photoRef: true,
   },
   {
     id: "unas-postizas-sin-decorar",
@@ -2243,8 +2149,7 @@ export const PRODUCTS: Product[] = [
     category: "unas",
     group: "herramientas",
     description: "Herramientas y accesorios",
-    image: "/images/products/Limas para Unas.webp",
-    photoRef: true,
+    image: "/images/products/Unas Postizas sin Decorar.webp",
   },
   {
     id: "palas-para-los-pies",
@@ -2253,8 +2158,7 @@ export const PRODUCTS: Product[] = [
     category: "unas",
     group: "herramientas",
     description: "Herramientas y accesorios",
-    image: "/images/products/Limas para Unas.webp",
-    photoRef: true,
+    image: "/images/products/Palas para los Pies.webp",
   },
   {
     id: "limas-para-unas",
@@ -2264,7 +2168,6 @@ export const PRODUCTS: Product[] = [
     group: "herramientas",
     description: "Herramientas y accesorios",
     image: "/images/products/Limas para Unas.webp",
-    photoRef: true,
   },
   {
     id: "bloque-pulidor",
@@ -2273,8 +2176,8 @@ export const PRODUCTS: Product[] = [
     category: "unas",
     group: "herramientas",
     description: "Herramientas y accesorios",
-    image: "/images/products/Limas para Unas.webp",
-    photoRef: true,
+    image: "/images/products/Bloque Pulidor.webp",
+    imageBleed: true,
   },
   {
     id: "lima-pico-de-loro",
@@ -2293,7 +2196,6 @@ export const PRODUCTS: Product[] = [
     group: "herramientas",
     description: "Herramientas y accesorios",
     image: "/images/products/Piedra Pomez Sintetica.webp",
-    photoRef: true,
   },
   {
     id: "pata-de-cabra",
@@ -2302,8 +2204,7 @@ export const PRODUCTS: Product[] = [
     category: "unas",
     group: "herramientas",
     description: "Herramientas y accesorios",
-    image: "/images/products/Limas para Unas.webp",
-    photoRef: true,
+    image: "/images/products/Pata de Cabra.webp",
   },
   {
     id: "palitos-de-naranjo",
@@ -2313,7 +2214,6 @@ export const PRODUCTS: Product[] = [
     group: "herramientas",
     description: "Herramientas y accesorios",
     image: "/images/products/Palitos de Naranjo.webp",
-    photoRef: true,
   },
   {
     id: "algodon",
@@ -2322,8 +2222,8 @@ export const PRODUCTS: Product[] = [
     category: "unas",
     group: "herramientas",
     description: "Herramientas y accesorios",
-    image: "/images/products/Limas para Unas.webp",
-    photoRef: true,
+    image: "/images/products/Algodon.webp",
+    imageBleed: true,
   },
   {
     id: "sticker-para-unas",
@@ -2332,8 +2232,8 @@ export const PRODUCTS: Product[] = [
     category: "unas",
     group: "herramientas",
     description: "Herramientas y accesorios",
-    image: "/images/products/Limas para Unas.webp",
-    photoRef: true,
+    image: "/images/products/Sticker para Unas.webp",
+    imageBleed: true,
   },
   {
     id: "corta-unas",
@@ -2342,8 +2242,7 @@ export const PRODUCTS: Product[] = [
     category: "unas",
     group: "herramientas",
     description: "Herramientas y accesorios",
-    image: "/images/products/Limas para Unas.webp",
-    photoRef: true,
+    image: "/images/products/Corta Unas.webp",
   },
   {
     id: "brocha-iluminador",
@@ -2353,7 +2252,6 @@ export const PRODUCTS: Product[] = [
     group: "esmaltes",
     description: "Esmaltes y geles",
     image: "/images/products/Brocha Iluminador.webp",
-    photoRef: true,
   },
   {
     id: "brocha-iluminador-enkor",
@@ -2381,8 +2279,7 @@ export const PRODUCTS: Product[] = [
     category: "unas",
     group: "herramientas",
     description: "Herramientas y accesorios",
-    image: "/images/products/Limas para Unas.webp",
-    photoRef: true,
+    image: "/images/products/Separador de Dedos.webp",
   },
 
   // ═══════════════ LÍNEA CAPILAR ═══════════════
@@ -2395,7 +2292,6 @@ export const PRODUCTS: Product[] = [
     group: "shampoo",
     description: "Yellow · Shampoo y acondicionador",
     image: "/images/products/Shampoo Nueva Presentacion Yellow.webp",
-    photoRef: true,
   },
   {
     id: "acondicionador-nueva-presentacion-yellow",
@@ -2405,7 +2301,6 @@ export const PRODUCTS: Product[] = [
     group: "shampoo",
     description: "Yellow · Shampoo y acondicionador",
     image: "/images/products/Acondicionador Nueva Presentacion Yellow.webp",
-    photoRef: true,
   },
   {
     id: "shampoo-reparative-yellow",
@@ -2541,7 +2436,6 @@ export const PRODUCTS: Product[] = [
     group: "tratamientos",
     description: "Yellow · Tratamientos",
     image: "/images/products/Liss Mascarilla 300 ml Yellow.webp",
-    photoRef: true,
   },
   {
     id: "liss-10-en-1-serum-yellow",
@@ -2577,8 +2471,7 @@ export const PRODUCTS: Product[] = [
     category: "capilar",
     group: "tratamientos",
     description: "Yellow · Tratamientos",
-    image: "/images/products/Oleo Curls Yellow.webp",
-    photoRef: true,
+    image: "/images/products/Oleo Nutritivo Yellow.webp",
   },
   {
     id: "tratamiento-leave-in-nutritive-yellow",
@@ -2606,7 +2499,6 @@ export const PRODUCTS: Product[] = [
     group: "peinado",
     description: "Yellow · Peinado",
     image: "/images/products/Style Gel de Fijacion Extrema Yellow.webp",
-    photoRef: true,
   },
   {
     id: "curls-creator-crema-de-peinar-yellow",
@@ -2796,7 +2688,6 @@ export const PRODUCTS: Product[] = [
     group: "tintes",
     description: "Yellow · Para cabellos rojos y rubios",
     image: "/images/products/Color Care Refresh Mask Yellow.webp",
-    photoRef: true,
   },
   {
     id: "color-mask-cool-brown-yellow",
@@ -2832,8 +2723,7 @@ export const PRODUCTS: Product[] = [
     category: "capilar",
     group: "tratamientos",
     description: "Yellow · Tratamientos",
-    image: "/images/products/Mascarilla Reparative Yellow.webp",
-    photoRef: true,
+    image: "/images/products/Lamination Paso 1 y Paso 2 Yellow.webp",
   },
   {
     id: "liss-keratina-yellow",
@@ -2861,7 +2751,6 @@ export const PRODUCTS: Product[] = [
     group: "decoloracion",
     description: "Yellow · Decolorantes y oxidantes",
     image: "/images/products/Decolorante en Polvo Yellow.webp",
-    photoRef: true,
   },
   {
     id: "tintes-yellow-profesional",
@@ -2870,8 +2759,7 @@ export const PRODUCTS: Product[] = [
     category: "capilar",
     group: "tintes",
     description: "Yellow · Tintes y matizantes",
-    image: "/images/products/Color Care Refresh Mask Yellow.webp",
-    photoRef: true,
+    image: "/images/products/Tintes Yellow Profesional.webp",
   },
   {
     id: "ampolleta-scalp-yellow",
@@ -2880,8 +2768,7 @@ export const PRODUCTS: Product[] = [
     category: "capilar",
     group: "tratamientos",
     description: "Yellow · Tratamientos",
-    image: "/images/products/Ampolletas capilares Alfaparf.webp",
-    photoRef: true,
+    image: "/images/products/Ampolleta Scalp Yellow.webp",
   },
   {
     id: "ampolleta-blue-glow-care-yellow",
@@ -2891,7 +2778,6 @@ export const PRODUCTS: Product[] = [
     group: "tratamientos",
     description: "Yellow · Tratamientos",
     image: "/images/products/Ampolleta Blue Glow Care Yellow.webp",
-    photoRef: true,
   },
   {
     id: "oxigenada-de-litro-yellow",
@@ -2900,8 +2786,7 @@ export const PRODUCTS: Product[] = [
     category: "capilar",
     group: "decoloracion",
     description: "Yellow · Decolorantes y oxidantes",
-    image: "/images/products/Decolorante 7 Tonos Alfaparf.webp",
-    photoRef: true,
+    image: "/images/products/Oxigenada de Litro Yellow.webp",
   },
   {
     id: "semi-di-lino-shampoo-reparative-alfaparf",
@@ -2983,7 +2868,6 @@ export const PRODUCTS: Product[] = [
     group: "peinado",
     description: "Alfaparf · Peinado",
     image: "/images/products/Semi di Lino Laca Iluminadora Alfaparf.webp",
-    photoRef: true,
   },
   {
     id: "semi-di-lino-thermal-protector-alfaparf",
@@ -3038,7 +2922,6 @@ export const PRODUCTS: Product[] = [
     group: "tratamientos",
     description: "Alfaparf · Tratamientos",
     image: "/images/products/Ampolleta Scalp Protector Alfaparf.webp",
-    photoRef: true,
   },
   {
     id: "acondicionador-reparador-rigen-alfaparf",
@@ -3048,7 +2931,6 @@ export const PRODUCTS: Product[] = [
     group: "shampoo",
     description: "Alfaparf · Shampoo y acondicionador",
     image: "/images/products/Acondicionador Reparador Rigen Alfaparf.webp",
-    photoRef: true,
   },
   {
     id: "shampoo-nutritivo-rigen-alfaparf",
@@ -3058,7 +2940,6 @@ export const PRODUCTS: Product[] = [
     group: "shampoo",
     description: "Alfaparf · Shampoo y acondicionador",
     image: "/images/products/Shampoo Nutritivo Rigen Alfaparf.webp",
-    photoRef: true,
   },
   {
     id: "acondicionador-nutritivo-rigen-alfaparf",
@@ -3068,7 +2949,6 @@ export const PRODUCTS: Product[] = [
     group: "shampoo",
     description: "Alfaparf · Shampoo y acondicionador",
     image: "/images/products/Acondicionador Nutritivo Rigen Alfaparf.webp",
-    photoRef: true,
   },
   {
     id: "mascarilla-nutritiva-rigen-alfaparf",
@@ -3078,7 +2958,6 @@ export const PRODUCTS: Product[] = [
     group: "tratamientos",
     description: "Alfaparf · Tratamientos",
     image: "/images/products/Mascarilla Nutritiva Rigen Alfaparf.webp",
-    photoRef: true,
   },
   {
     id: "tinte-evolution-con-amoniaco-alfaparf",
@@ -3088,7 +2967,6 @@ export const PRODUCTS: Product[] = [
     group: "tintes",
     description: "Alfaparf · Tintes y matizantes",
     image: "/images/products/Tinte Evolution con Amoniaco Alfaparf.webp",
-    photoRef: true,
   },
   {
     id: "tinte-shine-sin-amoniaco-alfaparf",
@@ -3098,7 +2976,6 @@ export const PRODUCTS: Product[] = [
     group: "tintes",
     description: "Alfaparf · Tintes y matizantes",
     image: "/images/products/Tinte Shine sin Amoniaco Alfaparf.webp",
-    photoRef: true,
   },
   {
     id: "tinte-colorwear-alfaparf",
@@ -3117,7 +2994,6 @@ export const PRODUCTS: Product[] = [
     group: "decoloracion",
     description: "Alfaparf · Decolorantes y oxidantes",
     image: "/images/products/Decolorante 7 Tonos Alfaparf.webp",
-    photoRef: true,
   },
   {
     id: "shampoo-densificador-loreal",
@@ -3162,8 +3038,7 @@ export const PRODUCTS: Product[] = [
     category: "capilar",
     group: "tratamientos",
     description: "L'Oréal · Tratamientos",
-    image: "/images/products/Prolonger Mascarilla LOreal.webp",
-    photoRef: true,
+    image: "/images/products/Absolut Repair Mascarilla LOreal.webp",
   },
   {
     id: "shampoo-vitamino-loreal",
@@ -3226,8 +3101,7 @@ export const PRODUCTS: Product[] = [
     category: "capilar",
     group: "tratamientos",
     description: "L'Oréal · Tratamientos",
-    image: "/images/products/Prolonger Mascarilla LOreal.webp",
-    photoRef: true,
+    image: "/images/products/Absolut Repair Oil LOreal.webp",
   },
   {
     id: "magic-retouch-l-oreal",
@@ -3282,7 +3156,6 @@ export const PRODUCTS: Product[] = [
     group: "tratamientos",
     description: "Elvive · Tratamientos",
     image: "/images/products/Oleo Dream Liso Elvive.webp",
-    photoRef: true,
   },
   {
     id: "shampoo-collagen-lifter-elvive",
@@ -3309,8 +3182,7 @@ export const PRODUCTS: Product[] = [
     category: "capilar",
     group: "tratamientos",
     description: "Elvive · Tratamientos",
-    image: "/images/products/Oleo Extraordinario Elvive.webp",
-    photoRef: true,
+    image: "/images/products/Shot Capilar Elvive.webp",
   },
   {
     id: "shampoo-manteca-de-cacao-garnier",
@@ -3517,8 +3389,7 @@ export const PRODUCTS: Product[] = [
     category: "capilar",
     group: "tratamientos",
     description: "Anyeluz · Tratamientos",
-    image: "/images/products/Mascarilla Banano Anyeluz.webp",
-    photoRef: true,
+    image: "/images/products/Mascarilla Cebolla Anyeluz.webp",
   },
   {
     id: "tonico-de-cebolla-anyeluz",
@@ -3771,7 +3642,6 @@ export const PRODUCTS: Product[] = [
     group: "peinado",
     description: "Maxybelt · Peinado",
     image: "/images/products/Crema de Peinar Don Barbero Maxybelt.webp",
-    photoRef: true,
   },
   {
     id: "tinte-con-amoniaco-maxybelt",
@@ -3780,8 +3650,7 @@ export const PRODUCTS: Product[] = [
     category: "capilar",
     group: "tintes",
     description: "Maxybelt · Tintes y matizantes",
-    image: "/images/products/Tinte Colorwear Sin Amoniaco Alfaparf.webp",
-    photoRef: true,
+    image: "/images/products/Tinte con Amoniaco Maxybelt.webp",
   },
   {
     id: "tinte-sin-amoniaco-maxybelt",
@@ -3790,8 +3659,7 @@ export const PRODUCTS: Product[] = [
     category: "capilar",
     group: "tintes",
     description: "Maxybelt · Tintes y matizantes",
-    image: "/images/products/Tinte Colorwear Sin Amoniaco Alfaparf.webp",
-    photoRef: true,
+    image: "/images/products/Tinte sin Amoniaco Maxybelt.webp",
   },
   {
     id: "kit-de-liso-asiatico-maxybelt",
@@ -3810,7 +3678,6 @@ export const PRODUCTS: Product[] = [
     group: "tratamientos",
     description: "Maxybelt · Tratamientos",
     image: "/images/products/Nanoplastia Capilar Maxybelt.webp",
-    photoRef: true,
   },
   {
     id: "polvo-decolorante-9-tonos-maxybelt",
@@ -3820,7 +3687,6 @@ export const PRODUCTS: Product[] = [
     group: "decoloracion",
     description: "Maxybelt · Decolorantes y oxidantes",
     image: "/images/products/Polvo Decolorante 9 Tonos Maxybelt.webp",
-    photoRef: true,
   },
   {
     id: "tono-sobre-tono-mechas-blancas-sobre-maxybelt",
@@ -3830,7 +3696,6 @@ export const PRODUCTS: Product[] = [
     group: "tintes",
     description: "Maxybelt · Tintes y matizantes",
     image: "/images/products/Tono Sobre Tono Mechas Blancas Sobre Maxybelt.webp",
-    photoRef: true,
   },
   {
     id: "crema-de-peinar-lisos-sobre-maxybelt",
@@ -3840,7 +3705,6 @@ export const PRODUCTS: Product[] = [
     group: "peinado",
     description: "Maxybelt · Peinado",
     image: "/images/products/Crema de Peinar Lisos Sobre Maxybelt.webp",
-    photoRef: true,
   },
   {
     id: "shampoo-detox-carbon-en-sobre-maxybelt",
@@ -3850,7 +3714,6 @@ export const PRODUCTS: Product[] = [
     group: "shampoo",
     description: "Maxybelt · Shampoo y acondicionador",
     image: "/images/products/Shampoo Detox Carbon en Sobre Maxybelt.webp",
-    photoRef: true,
   },
   {
     id: "tratamiento-de-acido-glicolico-en-sobre-maxybelt",
@@ -3860,7 +3723,6 @@ export const PRODUCTS: Product[] = [
     group: "tratamientos",
     description: "Maxybelt · Tratamientos",
     image: "/images/products/Tratamiento de Acido Glicolico en Sobre Maxybelt.webp",
-    photoRef: true,
   },
   {
     id: "shampoo-lissia",
@@ -3870,7 +3732,6 @@ export const PRODUCTS: Product[] = [
     group: "shampoo",
     description: "Lissia · Shampoo y acondicionador",
     image: "/images/products/Shampoo Lissia.webp",
-    photoRef: true,
   },
   {
     id: "acondicionador-lissia",
@@ -3898,7 +3759,6 @@ export const PRODUCTS: Product[] = [
     group: "shampoo",
     description: "Lissia · Shampoo y acondicionador",
     image: "/images/products/Shampoo con Keratina Lissia.webp",
-    photoRef: true,
   },
   {
     id: "shampoo-crece-pelo-lissia",
@@ -4008,7 +3868,6 @@ export const PRODUCTS: Product[] = [
     group: "tratamientos",
     description: "Lissia · Tratamientos",
     image: "/images/products/Tratamiento de Embrion de Pato Lissia.webp",
-    photoRef: true,
   },
   {
     id: "tratamiento-sellante-de-cuticula-lissia",
@@ -4018,7 +3877,6 @@ export const PRODUCTS: Product[] = [
     group: "tratamientos",
     description: "Lissia · Tratamientos",
     image: "/images/products/Tratamiento Sellante de Cuticula Lissia.webp",
-    photoRef: true,
   },
   {
     id: "ablandador-de-canas-lissia",
@@ -4027,8 +3885,7 @@ export const PRODUCTS: Product[] = [
     category: "capilar",
     group: "tratamientos",
     description: "Lissia · Tratamientos",
-    image: "/images/products/Mascarilla Reparative Yellow.webp",
-    photoRef: true,
+    image: "/images/products/Ablandador de Canas Lissia.webp",
   },
   {
     id: "tinte-con-amoniaco-lissia",
@@ -4037,8 +3894,7 @@ export const PRODUCTS: Product[] = [
     category: "capilar",
     group: "tintes",
     description: "Lissia · Tintes y matizantes",
-    image: "/images/products/Tinte Colorwear Sin Amoniaco Alfaparf.webp",
-    photoRef: true,
+    image: "/images/products/Tinte con Amoniaco Lissia.webp",
   },
   {
     id: "shampoo-control-caida-barber",
@@ -4065,8 +3921,7 @@ export const PRODUCTS: Product[] = [
     category: "capilar",
     group: "tratamientos",
     description: "Duvy Class · Tratamientos",
-    image: "/images/products/Mascarilla Reparative Yellow.webp",
-    photoRef: true,
+    image: "/images/products/Kerassilk 3 Pasos en Sobre Duvy Class.webp",
   },
   {
     id: "polvo-deco-plex-duvy",
@@ -4114,7 +3969,6 @@ export const PRODUCTS: Product[] = [
     group: "shampoo",
     description: "Duvy Class · Shampoo y acondicionador",
     image: "/images/products/Acondicionador Proteccion Color Duvy Class.webp",
-    photoRef: true,
   },
   {
     id: "acondicionador-cabello-normal-duvy-class",
@@ -4124,7 +3978,6 @@ export const PRODUCTS: Product[] = [
     group: "shampoo",
     description: "Duvy Class · Shampoo y acondicionador",
     image: "/images/products/Acondicionador Cabello Normal Duvy Class.webp",
-    photoRef: true,
   },
   {
     id: "acondicionador-equino-duvy-class",
@@ -4134,7 +3987,6 @@ export const PRODUCTS: Product[] = [
     group: "shampoo",
     description: "Duvy Class · Shampoo y acondicionador",
     image: "/images/products/Acondicionador Equino Duvy Class.webp",
-    photoRef: true,
   },
   {
     id: "acondicionador-cebolla-duvy-class",
@@ -4144,7 +3996,6 @@ export const PRODUCTS: Product[] = [
     group: "shampoo",
     description: "Duvy Class · Shampoo y acondicionador",
     image: "/images/products/Acondicionador Cebolla Duvy Class.webp",
-    photoRef: true,
   },
   {
     id: "acondicionador-reestructurante-duvy-class",
@@ -4163,7 +4014,6 @@ export const PRODUCTS: Product[] = [
     group: "peinado",
     description: "Duvy Class · Peinado",
     image: "/images/products/Crema de Peinar Magic Cream con Termoprotector en Sobre Duvy Class.webp",
-    photoRef: true,
   },
   {
     id: "shampoo-de-ajo-meicys",
@@ -4210,7 +4060,6 @@ export const PRODUCTS: Product[] = [
     group: "shampoo",
     description: "Meicys · Shampoo y acondicionador",
     image: "/images/products/Shampoo Sellante de Cuticula Meicys.webp",
-    photoRef: true,
   },
   {
     id: "tratamiento-sellante-de-cuticula-meicys",
@@ -4220,7 +4069,6 @@ export const PRODUCTS: Product[] = [
     group: "tratamientos",
     description: "Meicys · Tratamientos",
     image: "/images/products/Tratamiento Sellante de Cuticula Meicys.webp",
-    photoRef: true,
   },
   {
     id: "mascarilla-blanco-puro-meicys",
@@ -4266,8 +4114,6 @@ export const PRODUCTS: Product[] = [
     group: "tintes",
     description: "Meicys · Tintes y matizantes",
     image: "/images/products/Matizante Violeta Profundo Meicys.webp",
-    imageBleed: true,
-    photoRef: true,
   },
   {
     id: "tinte-deep-roots",
@@ -4286,7 +4132,6 @@ export const PRODUCTS: Product[] = [
     group: "shampoo",
     description: "Deep Roots · Shampoo y acondicionador",
     image: "/images/products/Shampoo Control Caspa Deep Roots.webp",
-    photoRef: true,
   },
   {
     id: "tratamiento-amino-keratina-deep-roots",
@@ -4296,7 +4141,6 @@ export const PRODUCTS: Product[] = [
     group: "tratamientos",
     description: "Deep Roots · Tratamientos",
     image: "/images/products/Tratamiento Amino Keratina Deep Roots.webp",
-    photoRef: true,
   },
   {
     id: "tratamiento-a-base-de-frutas-deep-roots",
@@ -4306,7 +4150,6 @@ export const PRODUCTS: Product[] = [
     group: "tratamientos",
     description: "Deep Roots · Tratamientos",
     image: "/images/products/Tratamiento a Base de Frutas Deep Roots.webp",
-    photoRef: true,
   },
   {
     id: "tratamiento-color-sachet",
@@ -4336,8 +4179,6 @@ export const PRODUCTS: Product[] = [
     group: "tintes",
     description: "Nikols · Tintes y matizantes",
     image: "/images/products/Matizantes en Sobre Nikols.webp",
-    imageBleed: true,
-    photoRef: true,
   },
   {
     id: "matizantes-en-tarro-nikols",
@@ -4347,8 +4188,6 @@ export const PRODUCTS: Product[] = [
     group: "tintes",
     description: "Nikols · Tintes y matizantes",
     image: "/images/products/Matizantes en Tarro Nikols.webp",
-    imageBleed: true,
-    photoRef: true,
   },
   {
     id: "matizante-rojo-nikols",
@@ -4358,8 +4197,6 @@ export const PRODUCTS: Product[] = [
     group: "tintes",
     description: "Nikols · Tintes y matizantes",
     image: "/images/products/Matizante Rojo Nikols.webp",
-    imageBleed: true,
-    photoRef: true,
   },
   {
     id: "matizante-beige-perla-nikols",
@@ -4369,8 +4206,6 @@ export const PRODUCTS: Product[] = [
     group: "tintes",
     description: "Nikols · Tintes y matizantes",
     image: "/images/products/Matizante Beige Perla Nikols.webp",
-    imageBleed: true,
-    photoRef: true,
   },
   {
     id: "matizante-negro-nikols",
@@ -4380,8 +4215,6 @@ export const PRODUCTS: Product[] = [
     group: "tintes",
     description: "Nikols · Tintes y matizantes",
     image: "/images/products/Matizante Negro Nikols.webp",
-    imageBleed: true,
-    photoRef: true,
   },
   {
     id: "matizante-cenizo-nikols",
@@ -4391,8 +4224,6 @@ export const PRODUCTS: Product[] = [
     group: "tintes",
     description: "Nikols · Tintes y matizantes",
     image: "/images/products/Matizante Cenizo Nikols.webp",
-    imageBleed: true,
-    photoRef: true,
   },
   {
     id: "matizante-marsalla-nikols",
@@ -4402,8 +4233,6 @@ export const PRODUCTS: Product[] = [
     group: "tintes",
     description: "Nikols · Tintes y matizantes",
     image: "/images/products/Matizante Marsalla Nikols.webp",
-    imageBleed: true,
-    photoRef: true,
   },
   {
     id: "matizante-chocolate-nikols",
@@ -4413,8 +4242,6 @@ export const PRODUCTS: Product[] = [
     group: "tintes",
     description: "Nikols · Tintes y matizantes",
     image: "/images/products/Matizante Chocolate Nikols.webp",
-    imageBleed: true,
-    photoRef: true,
   },
   {
     id: "matizante-cobrizo-nikols",
@@ -4424,8 +4251,6 @@ export const PRODUCTS: Product[] = [
     group: "tintes",
     description: "Nikols · Tintes y matizantes",
     image: "/images/products/Matizante Cobrizo Nikols.webp",
-    imageBleed: true,
-    photoRef: true,
   },
   {
     id: "matizante-caramelo-nikols",
@@ -4435,8 +4260,6 @@ export const PRODUCTS: Product[] = [
     group: "tintes",
     description: "Nikols · Tintes y matizantes",
     image: "/images/products/Matizante Caramelo Nikols.webp",
-    imageBleed: true,
-    photoRef: true,
   },
   {
     id: "termo-protector-sobre-nikols",
@@ -4446,7 +4269,6 @@ export const PRODUCTS: Product[] = [
     group: "peinado",
     description: "Nikols · Peinado",
     image: "/images/products/Termo Protector Sobre Nikols.webp",
-    imageBleed: true,
   },
   {
     id: "aceite-de-coco-sobre-nikols",
@@ -4456,7 +4278,6 @@ export const PRODUCTS: Product[] = [
     group: "tratamientos",
     description: "Nikols · Tratamientos",
     image: "/images/products/Aceite de Coco Sobre Nikols.webp",
-    imageBleed: true,
   },
   {
     id: "fitogloss-reparador-de-puntas-mas-silicona-sobre-nikols",
@@ -4466,7 +4287,6 @@ export const PRODUCTS: Product[] = [
     group: "tratamientos",
     description: "Nikols · Tratamientos",
     image: "/images/products/Fitogloss Reparador de Puntas mas Silicona Sobre Nikols.webp",
-    imageBleed: true,
   },
   {
     id: "aceite-de-coco-60-ml-nikols",
@@ -4476,8 +4296,6 @@ export const PRODUCTS: Product[] = [
     group: "tratamientos",
     description: "Nikols · Tratamientos",
     image: "/images/products/Aceite de Coco 60 ml Nikols.webp",
-    imageBleed: true,
-    photoRef: true,
   },
   {
     id: "fitogloss-60-ml-nikols",
@@ -4487,8 +4305,6 @@ export const PRODUCTS: Product[] = [
     group: "tratamientos",
     description: "Nikols · Tratamientos",
     image: "/images/products/Fitogloss 60 ml Nikols.webp",
-    imageBleed: true,
-    photoRef: true,
   },
   {
     id: "shampoo-romero-y-quina-fresh-co",
@@ -4498,7 +4314,6 @@ export const PRODUCTS: Product[] = [
     group: "shampoo",
     description: "Fresh&Co · Shampoo y acondicionador",
     image: "/images/products/Shampoo Romero y Quina FreshCo.webp",
-    imageBleed: true,
   },
   {
     id: "tratamiento-romero-quina",
@@ -4526,7 +4341,6 @@ export const PRODUCTS: Product[] = [
     group: "tratamientos",
     description: "Fresh&Co · Tratamientos",
     image: "/images/products/Repolarizador FreshCo.webp",
-    imageBleed: true,
   },
   {
     id: "cubre-canas-fresh-co",
@@ -4546,7 +4360,6 @@ export const PRODUCTS: Product[] = [
     group: "tratamientos",
     description: "Fresh&Co · Tratamientos",
     image: "/images/products/Tratamiento No Enjuagable Gusano de Seda Sobre FreshCo.webp",
-    imageBleed: true,
     photoRef: true,
   },
   {
@@ -4557,8 +4370,6 @@ export const PRODUCTS: Product[] = [
     group: "tintes",
     description: "Fresh&Co · Tintes y matizantes",
     image: "/images/products/Tinte Fresh Azul con Amoniaco FreshCo.webp",
-    imageBleed: true,
-    photoRef: true,
   },
   {
     id: "tinte-fresh-touch-rosado-sin-amoniaco-fresh-co",
@@ -4568,19 +4379,6 @@ export const PRODUCTS: Product[] = [
     group: "tintes",
     description: "Fresh&Co · Tintes y matizantes",
     image: "/images/products/Tinte Fresh Touch Rosado sin Amoniaco FreshCo.webp",
-    imageBleed: true,
-    photoRef: true,
-  },
-  {
-    id: "tintura-en-crema-para-el-cabello-brescia",
-    name: "Tintura en Crema para el Cabello Brescia",
-    price: 7000,
-    category: "capilar",
-    group: "tintes",
-    description: "Brescia · Tintes y matizantes",
-    image: "/images/products/Color Care Refresh Mask Yellow.webp",
-    photoRef: true,
-    variants: ["Chocolate", "Castaño oscuro", "Negro"],
   },
   {
     id: "cepillo-coleccion-mafalda-pequeno",
@@ -4589,8 +4387,7 @@ export const PRODUCTS: Product[] = [
     category: "capilar",
     group: "accesorios",
     description: "Accesorios y extensiones",
-    image: "/images/products/Cepillo Doble Rizos Enkor.webp",
-    photoRef: true,
+    image: "/images/products/Cepillo Coleccion Mafalda Pequeno.webp",
   },
   {
     id: "cepillo-coleccion-mafalda-grande",
@@ -4599,8 +4396,7 @@ export const PRODUCTS: Product[] = [
     category: "capilar",
     group: "accesorios",
     description: "Accesorios y extensiones",
-    image: "/images/products/Cepillo Doble Rizos Enkor.webp",
-    photoRef: true,
+    image: "/images/products/Cepillo Coleccion Mafalda Grande.webp",
   },
   {
     id: "cepillo-doble-rizos-enkor",
@@ -4666,7 +4462,6 @@ export const PRODUCTS: Product[] = [
     group: "accesorios",
     description: "Accesorios y extensiones",
     image: "/images/products/Cepillo Desenredante Enkor.webp",
-    photoRef: true,
   },
   {
     id: "mega-growth-alisadora-en-sobre",
@@ -4675,8 +4470,7 @@ export const PRODUCTS: Product[] = [
     category: "capilar",
     group: "tratamientos",
     description: "Tratamientos",
-    image: "/images/products/Ampolletas capilares Alfaparf.webp",
-    photoRef: true,
+    image: "/images/products/Mega Growth Alisadora en Sobre.webp",
   },
   {
     id: "gel-fawy-vibrante-370",
@@ -4685,8 +4479,7 @@ export const PRODUCTS: Product[] = [
     category: "capilar",
     group: "peinado",
     description: "Peinado",
-    image: "/images/products/Laca Fijacion Fuerte Yellow Alfaparf.webp",
-    photoRef: true,
+    image: "/images/products/Gel Fawy Vibrante 370.webp",
   },
   {
     id: "gel-fawy-vibrante-130",
@@ -4695,8 +4488,7 @@ export const PRODUCTS: Product[] = [
     category: "capilar",
     group: "peinado",
     description: "Peinado",
-    image: "/images/products/Laca Fijacion Fuerte Yellow Alfaparf.webp",
-    photoRef: true,
+    image: "/images/products/Gel Fawy Vibrante 130.webp",
   },
   {
     id: "donas-para-el-cabello",
@@ -4724,8 +4516,7 @@ export const PRODUCTS: Product[] = [
     category: "capilar",
     group: "accesorios",
     description: "Accesorios y extensiones",
-    image: "/images/products/Gorro de Mechas.webp",
-    photoRef: true,
+    image: "/images/products/Gorro de Satin.webp",
   },
   {
     id: "gorro-de-mechas",
@@ -4743,8 +4534,7 @@ export const PRODUCTS: Product[] = [
     category: "capilar",
     group: "accesorios",
     description: "Accesorios y extensiones",
-    image: "/images/products/Gorro de Mechas.webp",
-    photoRef: true,
+    image: "/images/products/Gorro de Aluminio.webp",
   },
   {
     id: "anillos-para-trenzas",
@@ -4753,8 +4543,7 @@ export const PRODUCTS: Product[] = [
     category: "capilar",
     group: "accesorios",
     description: "Accesorios y extensiones",
-    image: "/images/products/Cepillo Doble Rizos Enkor.webp",
-    photoRef: true,
+    image: "/images/products/Anillos para Trenzas.webp",
   },
   {
     id: "kanekalon-cabello-sintetico",
@@ -4763,8 +4552,7 @@ export const PRODUCTS: Product[] = [
     category: "capilar",
     group: "accesorios",
     description: "Accesorios y extensiones",
-    image: "/images/products/Ligas para Cabello Enkor.webp",
-    photoRef: true,
+    image: "/images/products/Kanekalon Cabello Sintetico.webp",
   },
   {
     id: "chumis-para-el-cabello",
@@ -4774,7 +4562,6 @@ export const PRODUCTS: Product[] = [
     group: "accesorios",
     description: "Accesorios y extensiones",
     image: "/images/products/Chumis para el Cabello.webp",
-    photoRef: true,
   },
   {
     id: "ampolleta-embrion-de-pato",
@@ -4783,8 +4570,7 @@ export const PRODUCTS: Product[] = [
     category: "capilar",
     group: "tratamientos",
     description: "Tratamientos",
-    image: "/images/products/Tratamiento Embrion de Pato Fresh Co.webp",
-    photoRef: true,
+    image: "/images/products/Ampolleta Embrion de Pato.webp",
   },
   {
     id: "ampolleta-de-vitamina-e",
@@ -4793,8 +4579,7 @@ export const PRODUCTS: Product[] = [
     category: "capilar",
     group: "tratamientos",
     description: "Tratamientos",
-    image: "/images/products/Ampolletas capilares Alfaparf.webp",
-    photoRef: true,
+    image: "/images/products/Ampolleta de Vitamina E.webp",
   },
   {
     id: "ampolleta-de-ortiga",
@@ -4803,8 +4588,7 @@ export const PRODUCTS: Product[] = [
     category: "capilar",
     group: "tratamientos",
     description: "Tratamientos",
-    image: "/images/products/Ampolletas capilares Alfaparf.webp",
-    photoRef: true,
+    image: "/images/products/Ampolleta de Ortiga.webp",
   },
 
 ]

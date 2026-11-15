@@ -129,9 +129,14 @@ export const metadata: Metadata = {
   robots: { index: true, follow: true },
   // Set NEXT_PUBLIC_GSC_VERIFICATION in Vercel to verify Search Console via meta tag
   // (or verify the domain via DNS, which is preferred)
-  verification: process.env.NEXT_PUBLIC_GSC_VERIFICATION
-    ? { google: process.env.NEXT_PUBLIC_GSC_VERIFICATION }
-    : undefined,
+  // Bing Webmaster Tools: NEXT_PUBLIC_BING_VERIFICATION = the code of the msvalidate.01 meta tag (an alternative to uploading BingSiteAuth.xml to public/).
+  verification:
+    process.env.NEXT_PUBLIC_GSC_VERIFICATION || process.env.NEXT_PUBLIC_BING_VERIFICATION
+      ? {
+          ...(process.env.NEXT_PUBLIC_GSC_VERIFICATION ? { google: process.env.NEXT_PUBLIC_GSC_VERIFICATION } : {}),
+          ...(process.env.NEXT_PUBLIC_BING_VERIFICATION ? { other: { "msvalidate.01": process.env.NEXT_PUBLIC_BING_VERIFICATION } } : {}),
+        }
+      : undefined,
 }
 
 export const viewport: Viewport = {
