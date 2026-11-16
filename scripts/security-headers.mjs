@@ -16,8 +16,10 @@ import path from "node:path"
 const OUT = path.resolve("out")
 const GA = Boolean(process.env.NEXT_PUBLIC_GA_ID)
 const GA_SCRIPT = "https://www.googletagmanager.com"
-const GA_CONNECT = "https://www.google-analytics.com https://*.google-analytics.com https://*.analytics.google.com https://www.googletagmanager.com"
-const GA_IMG = "https://www.google-analytics.com https://www.googletagmanager.com"
+// GA4 sends its hits to analytics.google.com (a wildcard *.analytics.google.com does NOT cover the bare host), and, with Google signals on, also to
+// stats.g.doubleclick.net and www.google.com / www.google.com.co (seen in the browser on 16 Nov 2026: each one was a CSP violation until listed here).
+const GA_CONNECT = "https://www.google-analytics.com https://*.google-analytics.com https://analytics.google.com https://*.analytics.google.com https://www.googletagmanager.com https://stats.g.doubleclick.net https://www.google.com https://www.google.com.co"
+const GA_IMG = "https://www.google-analytics.com https://*.google-analytics.com https://www.googletagmanager.com https://stats.g.doubleclick.net https://www.google.com https://www.google.com.co"
 
 // The script types a browser runs. An inline <script> of any other type (the JSON-LD) is data: CSP neither runs nor blocks it.
 const JS_TYPES = new Set(["", "text/javascript", "application/javascript", "module", "text/ecmascript"])
@@ -74,10 +76,20 @@ for (const file of htmlFiles(OUT)) {
 const headersFile = path.join(OUT, "_headers")
 let headers = fs.readFileSync(headersFile, "utf8")
 if (GA) {
-  headers = headers
-    .replace(/(script-src [^;]*)/, `$1 ${GA_SCRIPT}`)
-    .replace(/(connect-src [^;]*)/, `$1 ${GA_CONNECT}`)
-    .replace(/(img-src [^;]*)/, `$1 ${GA_IMG}`)
+  // Only on the Content-Security-Policy line: the comments at the top of _headers also mention "script-src", and a plain replace() hit the comment instead
+  // of the header, so Google's script was blocked while connect-src and img-src did get their hosts.
+  let cspLines = 0
+  headers = headers.replace(/^(\s*Content-Security-Policy:.*)$/gm, (line) => {
+    cspLines++
+    return line
+      .replace(/(script-src [^;]*)/, `$1 ${GA_SCRIPT}`)
+      .replace(/(connect-src [^;]*)/, `$1 ${GA_CONNECT}`)
+      .replace(/(img-src [^;]*)/, `$1 ${GA_IMG}`)
+  })
+  if (!cspLines) {
+    console.error("security-headers: no Content-Security-Policy line in _headers, so Google Analytics' hosts could not be added")
+    process.exit(1)
+  }
 }
 // Cloudflare ignores a line longer than 2,000 characters: better to fail the build than to ship a site without its security headers
 const long = headers.split(/\r?\n/).find((l) => l.length > 2000)
